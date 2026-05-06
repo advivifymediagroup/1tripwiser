@@ -27,7 +27,7 @@
                     <li><a href="#">India Trips</a></li>
                     <li><a href="#">International</a></li>
                     <li><a href="#">Honeymoon</a></li>
-                    <li><a href="#">Group Tours</a></li>
+                    <li><a href="<?php echo esc_url(get_post_type_archive_link("travel_package")); ?>">Group Tours</a></li>
                 </ul>
             </div>
 
@@ -38,8 +38,8 @@
                     <li><a href="<?php echo get_permalink(
                         get_option("page_for_posts")
                     ); ?>">Blog</a></li>
-                    <li><a href="#">Careers</a></li>
-                    <li><a href="#">Contact</a></li>
+                    <li><a href="<?php echo esc_url(get_post_type_archive_link("travel_package")); ?>">Packages</a></li>
+                    <li><a href="<?php echo esc_url(mytheme_get_plan_trip_url()); ?>">Plan a Trip</a></li>
                 </ul>
             </div>
 

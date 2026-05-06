@@ -4,16 +4,224 @@
     <section class="hero-section">
         <div class="container">
             <div class="hero-content">
-                <h1>Welcome to <?php bloginfo("name"); ?></h1>
+
+            <div class="pill">
+                <p>India's Most Trusted Travel Community · 300K+ on Instagram</p>
+            </div>
+                
+                <h1>1TRIPWISER
+</h1>
+                <span class="hero-kicker">Wiser trips. Better memories.</span>
                 <p><?php bloginfo("description"); ?></p>
-                <a href="#featured-posts" class="btn-primary">Explore Destinations</a>
+                <div class="hero-actions">
+                    <a href="#featured-packages" class="btn-primary">Explore Packages</a>
+                    <a href="<?php echo esc_url(
+                        mytheme_get_plan_trip_url()
+                    ); ?>" class="btn-secondary hero-secondary">Plan a Trip</a>
+                </div>
+            </div>
+           <div class="tag-pills">
+                <span class="tag-pill">⛰️Mountains</span>
+                <span class="tag-pill">🏖️Beaches</span>
+                <span class="tag-pill">🌴Offbeat</span>
+                <span class="tag-pill">💍Honeymoon</span>
+                <span class="tag-pill">👥Group Trips</span>
+                <span class="tag-pill">💰Budget</span>
+                <span class="tag-pill">🌍International</span>
+             
+           </div>
+        </div>
+    </section>
+
+    <section class="stats-section">
+        <div class="stat">
+            <h3>300K+</h3>
+            <p>Instagram Community</p>
+        </div>
+        <div class="stat">
+            <h3>1000+</h3>
+            <p>Trips Planned</p>
+        </div>
+        <div class="stat">
+            <h3>58+</h3>
+            <p>Destinations</p>
+        </div>
+        <div class="stat">
+            <h3>4.9⭐</h3>
+            <p>Average Rating</p>
+        </div>
+
+        <div class="stat">
+            <h3>₹0</h3>
+            <p>Planning Fee</p>
+        </div>
+
+        
+
+
+    </section>
+
+    <section id="featured-packages" class="featured-posts travel-section">
+        <div class="container">
+            <div class="section-heading">
+                <span>Curated trips</span>
+                <h2>Popular Travel Packages</h2>
+            </div>
+            <div class="posts-grid">
+                <?php
+                $packages = new WP_Query([
+                    "post_type" => "travel_package",
+                    "posts_per_page" => 3,
+                    "post_status" => "publish",
+                ]);
+                if ($packages->have_posts()):
+                    while ($packages->have_posts()):
+
+                        $packages->the_post();
+                        $duration = get_post_meta(
+                            get_the_ID(),
+                            "_trip_duration",
+                            true
+                        );
+                        $price = get_post_meta(
+                            get_the_ID(),
+                            "_starting_price",
+                            true
+                        );
+                        $destination = get_post_meta(
+                            get_the_ID(),
+                            "_destination_name",
+                            true
+                        );
+                        ?>
+                    <article class="post-card travel-card">
+                        <?php if (has_post_thumbnail()): ?>
+                            <div class="post-thumbnail">
+                                <a href="<?php the_permalink(); ?>">
+                                    <?php the_post_thumbnail("medium"); ?>
+                                </a>
+                            </div>
+                        <?php endif; ?>
+                        <div class="post-content">
+                            <h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
+                            <div class="travel-meta">
+                                <?php if (
+                                    $destination
+                                ): ?><span><?php echo esc_html(
+    $destination
+); ?></span><?php endif; ?>
+                                <?php if (
+                                    $duration
+                                ): ?><span><?php echo esc_html(
+    $duration
+); ?></span><?php endif; ?>
+                                <?php if ($price): ?><span><?php echo esc_html(
+    $price
+); ?></span><?php endif; ?>
+                            </div>
+                            <div class="post-excerpt">
+                                <?php the_excerpt(); ?>
+                            </div>
+                            <a href="<?php the_permalink(); ?>" class="read-more">View Package</a>
+                        </div>
+                    </article>
+                <?php
+                    endwhile;
+                    wp_reset_postdata();
+                else:
+                     ?>
+                    <div class="no-posts">
+                        <p>Add Travel Packages in WordPress admin to show them here.</p>
+                    </div>
+                <?php
+                endif;
+                ?>
+            </div>
+            <div class="view-all">
+                <a href="<?php echo esc_url(
+                    get_post_type_archive_link("travel_package")
+                ); ?>" class="btn-secondary">View All Packages</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="featured-posts itinerary-section">
+        <div class="container">
+            <div class="section-heading">
+                <span>Ready-made routes</span>
+                <h2>Featured Itineraries</h2>
+            </div>
+            <div class="posts-grid">
+                <?php
+                $itineraries = new WP_Query([
+                    "post_type" => "itinerary",
+                    "posts_per_page" => 3,
+                    "post_status" => "publish",
+                ]);
+                if ($itineraries->have_posts()):
+                    while ($itineraries->have_posts()):
+
+                        $itineraries->the_post();
+                        $duration = get_post_meta(
+                            get_the_ID(),
+                            "_trip_duration",
+                            true
+                        );
+                        $best_time = get_post_meta(
+                            get_the_ID(),
+                            "_best_time",
+                            true
+                        );
+                        ?>
+                    <article class="post-card travel-card">
+                        <?php if (has_post_thumbnail()): ?>
+                            <div class="post-thumbnail">
+                                <a href="<?php the_permalink(); ?>">
+                                    <?php the_post_thumbnail("medium"); ?>
+                                </a>
+                            </div>
+                        <?php endif; ?>
+                        <div class="post-content">
+                            <h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
+                            <div class="travel-meta">
+                                <?php if (
+                                    $duration
+                                ): ?><span><?php echo esc_html(
+    $duration
+); ?></span><?php endif; ?>
+                                <?php if (
+                                    $best_time
+                                ): ?><span><?php echo esc_html(
+    $best_time
+); ?></span><?php endif; ?>
+                            </div>
+                            <div class="post-excerpt">
+                                <?php the_excerpt(); ?>
+                            </div>
+                            <a href="<?php the_permalink(); ?>" class="read-more">Open Itinerary</a>
+                        </div>
+                    </article>
+                <?php
+                    endwhile;
+                    wp_reset_postdata();
+                else:
+                     ?>
+                    <div class="no-posts">
+                        <p>Add Itineraries in WordPress admin to show them here.</p>
+                    </div>
+                <?php
+                endif;
+                ?>
             </div>
         </div>
     </section>
 
     <section id="featured-posts" class="featured-posts">
         <div class="container">
-            <h2>Latest Travel Stories</h2>
+            <div class="section-heading">
+                <span>From the blog</span>
+                <h2>Latest Travel Stories</h2>
+            </div>
             <div class="posts-grid">
                 <?php
                 $featured_posts = new WP_Query([
