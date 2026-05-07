@@ -11,27 +11,7 @@
         <?php if (have_posts()) : ?>
             <div class="posts-grid">
                 <?php while (have_posts()) : the_post(); ?>
-                    <article class="post-card travel-card">
-                        <?php if (has_post_thumbnail()) : ?>
-                            <div class="post-thumbnail">
-                                <a href="<?php the_permalink(); ?>">
-                                    <?php the_post_thumbnail('medium'); ?>
-                                </a>
-                            </div>
-                        <?php endif; ?>
-                        <div class="post-content">
-                            <h2><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
-                            <div class="travel-meta">
-                                <?php foreach (mytheme_travel_detail_items() as $detail) : ?>
-                                    <span><?php echo esc_html($detail['value']); ?></span>
-                                <?php endforeach; ?>
-                            </div>
-                            <div class="post-excerpt">
-                                <?php the_excerpt(); ?>
-                            </div>
-                            <a href="<?php the_permalink(); ?>" class="read-more">View Package</a>
-                        </div>
-                    </article>
+                    <?php mytheme_package_card(); ?>
                 <?php endwhile; ?>
             </div>
 

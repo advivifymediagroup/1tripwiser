@@ -76,55 +76,9 @@
                 ]);
                 if ($packages->have_posts()):
                     while ($packages->have_posts()):
-
                         $packages->the_post();
-                        $duration = get_post_meta(
-                            get_the_ID(),
-                            "_trip_duration",
-                            true
-                        );
-                        $price = get_post_meta(
-                            get_the_ID(),
-                            "_starting_price",
-                            true
-                        );
-                        $destination = get_post_meta(
-                            get_the_ID(),
-                            "_destination_name",
-                            true
-                        );
+                        mytheme_package_card();
                         ?>
-                    <article class="post-card travel-card">
-                        <?php if (has_post_thumbnail()): ?>
-                            <div class="post-thumbnail">
-                                <a href="<?php the_permalink(); ?>">
-                                    <?php the_post_thumbnail("medium"); ?>
-                                </a>
-                            </div>
-                        <?php endif; ?>
-                        <div class="post-content">
-                            <h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
-                            <div class="travel-meta">
-                                <?php if (
-                                    $destination
-                                ): ?><span><?php echo esc_html(
-    $destination
-); ?></span><?php endif; ?>
-                                <?php if (
-                                    $duration
-                                ): ?><span><?php echo esc_html(
-    $duration
-); ?></span><?php endif; ?>
-                                <?php if ($price): ?><span><?php echo esc_html(
-    $price
-); ?></span><?php endif; ?>
-                            </div>
-                            <div class="post-excerpt">
-                                <?php the_excerpt(); ?>
-                            </div>
-                            <a href="<?php the_permalink(); ?>" class="read-more">View Package</a>
-                        </div>
-                    </article>
                 <?php
                     endwhile;
                     wp_reset_postdata();
@@ -148,8 +102,8 @@
     <section class="featured-posts itinerary-section">
         <div class="container">
             <div class="section-heading">
-                <span>Ready-made routes</span>
-                <h2>Featured Itineraries</h2>
+                <span>CURATED BY OUR EXPERTS</span>
+                <h2>UPCOMING TRIPS</h2>
             </div>
             <div class="posts-grid">
                 <?php
@@ -162,16 +116,9 @@
                     while ($itineraries->have_posts()):
 
                         $itineraries->the_post();
-                        $duration = get_post_meta(
-                            get_the_ID(),
-                            "_trip_duration",
-                            true
-                        );
-                        $best_time = get_post_meta(
-                            get_the_ID(),
-                            "_best_time",
-                            true
-                        );
+                        $duration = mytheme_get_travel_field("itinerary_duration");
+                        $best_time = mytheme_get_travel_field("itinerary_best_time");
+                        $route_summary = mytheme_get_travel_field("itinerary_route_summary");
                         ?>
                     <article class="post-card travel-card">
                         <?php if (has_post_thumbnail()): ?>
@@ -196,7 +143,7 @@
 ); ?></span><?php endif; ?>
                             </div>
                             <div class="post-excerpt">
-                                <?php the_excerpt(); ?>
+                                <?php echo $route_summary ? wp_kses_post(wpautop($route_summary)) : get_the_excerpt(); ?>
                             </div>
                             <a href="<?php the_permalink(); ?>" class="read-more">Open Itinerary</a>
                         </div>
@@ -266,6 +213,60 @@
                 <a href="<?php echo get_permalink(
                     get_option("page_for_posts")
                 ); ?>" class="btn-secondary">View All Posts</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="community-section-container">
+        <div class="container">
+            <div class="community-section">
+                <div class="community-heading">
+                    <span>Join Our Community</span>
+                    <h2>1TRIPWISER <span class="highlight">
+                         TRIBE
+                    </span>
+                    </h2>
+                    
+                    <p>Connect, share, and grow with 300K+ travel enthusiasts. Ask questions, share tips, and get inspired by real travelers.</p>
+                </div>
+                <div class="community-stats">
+                    <div class="community-stat">
+                        <strong>12.5K</strong>
+                        <span>active members</span>
+                    </div>
+                    <div class="community-stat">
+                        <strong>48K+</strong>
+                        <span>discussions</span>
+                    </div>
+                    <div class="community-stat">
+                        <strong>1M+</strong>
+                        <span>Trip Photos</span>
+                    </div>
+                    <div class="community-stat">
+                        <strong>500+</strong>
+                        <span>Weekly Posts</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="free-itinerary-section">
+        <div class="container">
+            <div class="free-itinerary-content">
+                <div class="free-itinerary-copy">
+                    <h2>GET A <span class="highlight">
+                        FREE
+
+                    </span>
+                     ITINERARY</h2>
+                    <p>Tell us your dream destination — we'll craft a personalised trip plan in 24 hours. No charges, ever.</p>
+                </div>
+                <form class="free-itinerary-form" action="<?php echo esc_url(mytheme_get_plan_trip_url()); ?>" method="get">
+                    <label class="screen-reader-text" for="free-itinerary-email">Email address</label>
+                    <input id="free-itinerary-email" type="email" name="email" placeholder="your@email.com" required>
+                    <button type="submit">Plan My Trip</button>
+                </form>
             </div>
         </div>
     </section>

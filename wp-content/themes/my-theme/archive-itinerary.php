@@ -22,12 +22,16 @@
                         <div class="post-content">
                             <h2><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
                             <div class="travel-meta">
-                                <?php foreach (mytheme_travel_detail_items() as $detail) : ?>
-                                    <span><?php echo esc_html($detail['value']); ?></span>
-                                <?php endforeach; ?>
+                                <?php $duration = mytheme_get_travel_field('itinerary_duration'); ?>
+                                <?php $best_time = mytheme_get_travel_field('itinerary_best_time'); ?>
+                                <?php if ($duration) : ?><span><?php echo esc_html($duration); ?></span><?php endif; ?>
+                                <?php if ($best_time) : ?><span><?php echo esc_html($best_time); ?></span><?php endif; ?>
                             </div>
                             <div class="post-excerpt">
-                                <?php the_excerpt(); ?>
+                                <?php
+                                $route_summary = mytheme_get_travel_field('itinerary_route_summary');
+                                echo $route_summary ? wp_kses_post(wpautop($route_summary)) : get_the_excerpt();
+                                ?>
                             </div>
                             <a href="<?php the_permalink(); ?>" class="read-more">Open Itinerary</a>
                         </div>
