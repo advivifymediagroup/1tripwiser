@@ -47,7 +47,7 @@
 
                 <footer class="post-footer travel-cta">
                     <a href="<?php echo esc_url($book_url); ?>" class="btn-primary">Book Now</a>
-                    <a href="<?php echo esc_url(mytheme_get_plan_trip_url()); ?>" class="btn-secondary">Customize Trip</a>
+                    <!-- <a href="<?php echo esc_url(mytheme_get_plan_trip_url()); ?>" class="btn-secondary">Customize Trip</a> -->
                     <a href="<?php echo esc_url(get_post_type_archive_link('travel_package')); ?>" class="btn-secondary">All Packages</a>
                 </footer>
             </article>

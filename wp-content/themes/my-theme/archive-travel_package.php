@@ -8,6 +8,8 @@
             <p class="archive-description">Choose a ready-to-book trip, then customize the pace, stays and experiences around your travel style.</p>
         </header>
 
+        <?php mytheme_travel_filter_box('travel_package', 'package_filter', get_post_type_archive_link('travel_package')); ?>
+
         <?php if (have_posts()) : ?>
             <div class="posts-grid">
                 <?php while (have_posts()) : the_post(); ?>

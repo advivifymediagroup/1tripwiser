@@ -8,6 +8,8 @@
             <p class="archive-description">Browse day-wise routes, practical travel notes and inspiration for your next journey.</p>
         </header>
 
+        <?php mytheme_travel_filter_box('itinerary', 'itinerary_filter', get_post_type_archive_link('itinerary')); ?>
+
         <?php if (have_posts()) : ?>
             <div class="posts-grid">
                 <?php while (have_posts()) : the_post(); ?>

@@ -67,13 +67,20 @@
                 <span>Curated trips</span>
                 <h2>Popular Travel Packages</h2>
             </div>
+            <?php mytheme_travel_filter_box('travel_package', 'package_filter', home_url('/'), '#featured-packages'); ?>
             <div class="posts-grid">
                 <?php
-                $packages = new WP_Query([
+                $package_filter = mytheme_get_active_travel_filter("package_filter", "travel_package");
+                $package_args = [
                     "post_type" => "travel_package",
                     "posts_per_page" => 3,
                     "post_status" => "publish",
-                ]);
+                ];
+                $package_meta_query = mytheme_build_travel_filter_meta_query("travel_package", $package_filter);
+                if (!empty($package_meta_query)) {
+                    $package_args["meta_query"] = $package_meta_query;
+                }
+                $packages = new WP_Query($package_args);
                 if ($packages->have_posts()):
                     while ($packages->have_posts()):
                         $packages->the_post();
@@ -85,7 +92,7 @@
                 else:
                      ?>
                     <div class="no-posts">
-                        <p>Add Travel Packages in WordPress admin to show them here.</p>
+                        <p>No travel packages found with the selected filters.</p>
                     </div>
                 <?php
                 endif;
@@ -99,19 +106,26 @@
         </div>
     </section>
 
-    <section class="featured-posts itinerary-section">
+    <section id="upcoming-trips" class="featured-posts itinerary-section">
         <div class="container">
             <div class="section-heading">
                 <span>CURATED BY OUR EXPERTS</span>
                 <h2>UPCOMING TRIPS</h2>
             </div>
+            <?php mytheme_travel_filter_box('itinerary', 'itinerary_filter', home_url('/'), '#upcoming-trips'); ?>
             <div class="posts-grid">
                 <?php
-                $itineraries = new WP_Query([
+                $itinerary_filter = mytheme_get_active_travel_filter("itinerary_filter", "itinerary");
+                $itinerary_args = [
                     "post_type" => "itinerary",
                     "posts_per_page" => 3,
                     "post_status" => "publish",
-                ]);
+                ];
+                $itinerary_meta_query = mytheme_build_travel_filter_meta_query("itinerary", $itinerary_filter);
+                if (!empty($itinerary_meta_query)) {
+                    $itinerary_args["meta_query"] = $itinerary_meta_query;
+                }
+                $itineraries = new WP_Query($itinerary_args);
                 if ($itineraries->have_posts()):
                     while ($itineraries->have_posts()):
 
@@ -142,9 +156,19 @@
     $best_time
 ); ?></span><?php endif; ?>
                             </div>
-                            <div class="post-excerpt">
-                                <?php echo $route_summary ? wp_kses_post(wpautop($route_summary)) : get_the_excerpt(); ?>
-                            </div>
+                          <div class="post-excerpt">
+    <?php
+    $summary = $route_summary
+        ? wp_strip_all_tags($route_summary)
+        : get_the_excerpt();
+
+    echo wp_trim_words($summary, 28, '...');
+    ?>
+    
+    <a href="<?php the_permalink(); ?>" class="inline-read-more">
+        Read More
+    </a>
+</div>
                             <a href="<?php the_permalink(); ?>" class="read-more">Open Itinerary</a>
                         </div>
                     </article>
@@ -154,7 +178,7 @@
                 else:
                      ?>
                     <div class="no-posts">
-                        <p>Add Itineraries in WordPress admin to show them here.</p>
+                        <p>No itineraries found with the selected filters.</p>
                     </div>
                 <?php
                 endif;
@@ -257,7 +281,6 @@
                 <div class="free-itinerary-copy">
                     <h2>GET A <span class="highlight">
                         FREE
-
                     </span>
                      ITINERARY</h2>
                     <p>Tell us your dream destination — we'll craft a personalised trip plan in 24 hours. No charges, ever.</p>

@@ -622,6 +622,154 @@ function mytheme_get_destination_data($post_id = null) {
     );
 }
 
+function mytheme_travel_filter_options($post_type) {
+    if ($post_type === 'travel_package') {
+        return array(
+            'all' => __('All', 'mytheme'),
+            'india' => __('India', 'mytheme'),
+            'international' => __('International', 'mytheme'),
+            'budget-under-30k' => __('Budget < 30K', 'mytheme'),
+            'bestseller' => __('Bestseller', 'mytheme'),
+            'trending' => __('Trending', 'mytheme'),
+            'new' => __('New', 'mytheme'),
+        );
+    }
+
+    if ($post_type === 'itinerary') {
+        return array(
+            'all' => __('All', 'mytheme'),
+            'india' => __('India', 'mytheme'),
+            'international' => __('International', 'mytheme'),
+            'budget-under-30k' => __('Budget < 30K', 'mytheme'),
+        );
+    }
+
+    return array(
+        'all' => __('All', 'mytheme'),
+        'india' => __('India', 'mytheme'),
+        'international' => __('International', 'mytheme'),
+    );
+}
+
+function mytheme_get_active_travel_filter($param, $post_type) {
+    $options = mytheme_travel_filter_options($post_type);
+    $filter = isset($_GET[$param]) ? sanitize_key(wp_unslash($_GET[$param])) : 'all';
+
+    return array_key_exists($filter, $options) ? $filter : 'all';
+}
+
+function mytheme_build_travel_filter_meta_query($post_type, $filter) {
+    if ($filter === 'all') {
+        return array();
+    }
+
+    if ($post_type === 'travel_package') {
+        if (in_array($filter, array('india', 'international'), true)) {
+            return array(
+                array(
+                    'key' => 'package_region',
+                    'value' => $filter,
+                    'compare' => '=',
+                ),
+            );
+        }
+
+        if ($filter === 'budget-under-30k') {
+            return array(
+                array(
+                    'key' => 'package_amount',
+                    'value' => 30000,
+                    'type' => 'NUMERIC',
+                    'compare' => '<=',
+                ),
+            );
+        }
+
+        if (in_array($filter, array('bestseller', 'trending', 'new'), true)) {
+            return array(
+                array(
+                    'key' => 'package_tag',
+                    'value' => $filter,
+                    'compare' => '=',
+                ),
+            );
+        }
+    }
+
+    if ($post_type === 'itinerary') {
+        if (in_array($filter, array('india', 'international'), true)) {
+            return array(
+                array(
+                    'key' => 'itinerary_region',
+                    'value' => $filter,
+                    'compare' => '=',
+                ),
+            );
+        }
+
+        if ($filter === 'budget-under-30k') {
+            return array(
+                array(
+                    'key' => 'itinerary_budget',
+                    'value' => 30000,
+                    'type' => 'NUMERIC',
+                    'compare' => '<=',
+                ),
+            );
+        }
+    }
+
+    return array();
+}
+
+function mytheme_travel_filter_box($post_type, $param, $base_url, $anchor = '') {
+    $options = mytheme_travel_filter_options($post_type);
+    $active_filter = mytheme_get_active_travel_filter($param, $post_type);
+    ?>
+    <div class="travel-filter-box" aria-label="<?php esc_attr_e('Travel filters', 'mytheme'); ?>">
+        <span class="travel-filter-label"><?php esc_html_e('Filter by', 'mytheme'); ?></span>
+        <div class="travel-filter-options">
+            <?php foreach ($options as $value => $label) : ?>
+                <?php
+                $url = $value === 'all'
+                    ? remove_query_arg($param, $base_url)
+                    : add_query_arg($param, $value, $base_url);
+                $url = remove_query_arg('paged', $url);
+                ?>
+                <a class="<?php echo $active_filter === $value ? 'active' : ''; ?>" href="<?php echo esc_url($url . $anchor); ?>">
+                    <?php echo esc_html($label); ?>
+                </a>
+            <?php endforeach; ?>
+        </div>
+    </div>
+    <?php
+}
+
+function mytheme_apply_travel_archive_filters($query) {
+    if (is_admin() || !$query->is_main_query()) {
+        return;
+    }
+
+    if ($query->is_post_type_archive('travel_package')) {
+        $filter = mytheme_get_active_travel_filter('package_filter', 'travel_package');
+        $meta_query = mytheme_build_travel_filter_meta_query('travel_package', $filter);
+
+        if (!empty($meta_query)) {
+            $query->set('meta_query', $meta_query);
+        }
+    }
+
+    if ($query->is_post_type_archive('itinerary')) {
+        $filter = mytheme_get_active_travel_filter('itinerary_filter', 'itinerary');
+        $meta_query = mytheme_build_travel_filter_meta_query('itinerary', $filter);
+
+        if (!empty($meta_query)) {
+            $query->set('meta_query', $meta_query);
+        }
+    }
+}
+add_action('pre_get_posts', 'mytheme_apply_travel_archive_filters');
+
 // ── Nav Walker: adds tw-nav-link class to every <a> in the primary menu ──
 if (!class_exists('TW_Nav_Walker')) {
     class TW_Nav_Walker extends Walker_Nav_Menu {

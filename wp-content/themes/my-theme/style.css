@@ -322,16 +322,17 @@ body {
 
 .post-card {
   background: white;
-  border-radius: 10px;
+  border-radius: 5px;
   overflow: hidden;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  padding-top: 1rem;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
   transition:
     transform 0.3s,
     box-shadow 0.3s;
 }
 
 .post-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-3px);
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
 }
 
@@ -788,6 +789,56 @@ body {
   text-align: start;
 }
 
+.travel-filter-box {
+  align-items: center;
+  background: #ffffff;
+  border: 1px solid #e7eaf0;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(13, 21, 38, 0.06);
+  display: flex;
+  gap: 14px;
+  justify-content: space-between;
+  margin: -14px 0 28px;
+  padding: 14px;
+}
+
+.travel-filter-label {
+  color: #667085;
+  flex: 0 0 auto;
+  font-size: 0.84rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.travel-filter-options {
+  display: flex;
+  flex: 1;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.travel-filter-options a {
+  background: #f8fbfc;
+  border: 1px solid #dceff3;
+  border-radius: 999px;
+  color: #0d1526;
+  font-size: 0.88rem;
+  font-weight: 800;
+  padding: 8px 13px;
+  text-decoration: none;
+  transition:
+    background 0.2s,
+    border-color 0.2s,
+    color 0.2s;
+}
+
+.travel-filter-options a:hover,
+.travel-filter-options a.active {
+  background: #0692af;
+  border-color: #0692af;
+  color: #ffffff;
+}
+
 .travel-card .post-content {
   padding: 20px;
 }
@@ -945,7 +996,7 @@ body {
 .travel-archive-header {
   max-width: 760px;
   /* border: 2px solid red; */
-  margin-top: 1rem;
+  margin: 2rem 0rem;
   /* text-align: start; */
   margin-left: auto;
   margin-right: auto;
@@ -1411,6 +1462,11 @@ body {
 
   .posts-grid {
     grid-template-columns: 1fr;
+  }
+
+  .travel-filter-box {
+    align-items: flex-start;
+    flex-direction: column;
   }
 
   .travel-tabs-inner {
