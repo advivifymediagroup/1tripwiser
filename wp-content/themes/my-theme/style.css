@@ -485,10 +485,10 @@ body {
 /* Page Content */
 .page-content {
   background: white;
-  border-radius: 10px;
+  border-radius: 5px;
   padding: 30px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-  margin-bottom: 30px;
+  /* box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); */
+  margin: 4rem 0;
 }
 
 .page-content h1 {
