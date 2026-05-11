@@ -464,7 +464,11 @@ function mytheme_travel_tabs() {
         <div class="container travel-tabs-inner">
             <a class="<?php echo $home_active ? 'active' : ''; ?>" href="<?php echo esc_url(home_url('/')); ?>">🏡Homepage</a>
             <a class="<?php echo $package_active ? 'active' : ''; ?>" href="<?php echo esc_url(get_post_type_archive_link('travel_package')); ?>">📦Packages</a>
-            <a class="<?php echo $plan_active ? 'active' : ''; ?>" href="#">💰Blogs + Affiliates</a>
+            <?php
+            $blog_page   = get_page_by_path('blog-affiliates');
+            $blog_active = $blog_page && is_page($blog_page->ID);
+            ?>
+            <a class="<?php echo $blog_active ? 'active' : ''; ?>" href="<?php echo esc_url(home_url('/blog-affiliates/')); ?>">💰Blogs + Affiliates</a>
             <a class="<?php echo $plan_active ? 'active' : ''; ?>" href="<?php echo esc_url(mytheme_get_plan_trip_url()); ?>">✈️Plan a Trip</a>
         </div>
     </nav>
@@ -618,6 +622,34 @@ function mytheme_get_destination_data($post_id = null) {
     );
 }
 
+// ── Nav Walker: adds tw-nav-link class to every <a> in the primary menu ──
+if (!class_exists('TW_Nav_Walker')) {
+    class TW_Nav_Walker extends Walker_Nav_Menu {
+        public function start_el(&$output, $item, $depth = 0, $args = null, $id = 0) {
+            $classes  = empty($item->classes) ? array() : (array) $item->classes;
+            $active   = in_array('current-menu-item', $classes) ? ' tw-active' : '';
+            $atts     = array(
+                'href'   => !empty($item->url) ? $item->url : '#',
+                'target' => !empty($item->target) ? $item->target : '',
+                'rel'    => !empty($item->xfn) ? $item->xfn : '',
+                'class'  => 'tw-nav-link' . $active,
+                'title'  => !empty($item->attr_title) ? $item->attr_title : '',
+            );
+            $attributes = '';
+            foreach ($atts as $attr => $value) {
+                if ($value !== '') {
+                    $attributes .= ' ' . $attr . '="' . esc_attr($value) . '"';
+                }
+            }
+            $output .= '<li class="tw-menu-item">';
+            $output .= '<a' . $attributes . '>' . esc_html($item->title) . '</a>';
+        }
+        public function end_el(&$output, $item, $depth = 0, $args = null) {
+            $output .= '</li>';
+        }
+    }
+}
+
 // Register navigation menus
 function mytheme_register_menus() {
     register_nav_menus(array(
@@ -635,6 +667,268 @@ function mytheme_theme_support() {
     add_theme_support('html5', array('search-form'));
 }
 add_action('after_setup_theme', 'mytheme_theme_support');
+
+// ============================================================
+// AFFILIATE LINKS — Custom Post Type
+// ============================================================
+function mytheme_register_affiliate_cpt() {
+    register_post_type('tw_affiliate', array(
+        'labels' => array(
+            'name'               => __('Affiliate Links', 'mytheme'),
+            'singular_name'      => __('Affiliate Link', 'mytheme'),
+            'add_new'            => __('Add New Affiliate', 'mytheme'),
+            'add_new_item'       => __('Add New Affiliate Link', 'mytheme'),
+            'edit_item'          => __('Edit Affiliate Link', 'mytheme'),
+            'new_item'           => __('New Affiliate Link', 'mytheme'),
+            'view_item'          => __('View Affiliate Link', 'mytheme'),
+            'search_items'       => __('Search Affiliates', 'mytheme'),
+            'not_found'          => __('No affiliates found', 'mytheme'),
+            'all_items'          => __('All Affiliates', 'mytheme'),
+            'menu_name'          => __('Affiliates', 'mytheme'),
+        ),
+        'public'       => false,
+        'show_ui'      => true,
+        'show_in_menu' => false, // we add it under our custom menu manually
+        'show_in_rest' => false,
+        'supports'     => array('title', 'excerpt', 'thumbnail'),
+        'menu_icon'    => 'dashicons-admin-links',
+    ));
+}
+add_action('init', 'mytheme_register_affiliate_cpt');
+
+// ── Affiliate meta box ────────────────────────────────────────
+function mytheme_add_affiliate_cpt_meta_box() {
+    add_meta_box(
+        'tw_affiliate_details',
+        __('Affiliate Details', 'mytheme'),
+        'mytheme_render_affiliate_cpt_meta_box',
+        'tw_affiliate',
+        'normal',
+        'high'
+    );
+}
+add_action('add_meta_boxes', 'mytheme_add_affiliate_cpt_meta_box');
+
+function mytheme_render_affiliate_cpt_meta_box($post) {
+    wp_nonce_field('mytheme_save_affiliate_cpt', 'mytheme_affiliate_cpt_nonce');
+
+    $url        = get_post_meta($post->ID, '_taff_url',        true);
+    $category   = get_post_meta($post->ID, '_taff_category',   true);
+    $commission = get_post_meta($post->ID, '_taff_commission',  true);
+    $icon       = get_post_meta($post->ID, '_taff_icon',        true);
+    $cta        = get_post_meta($post->ID, '_taff_cta',         true);
+    $order      = get_post_meta($post->ID, '_taff_order',       true);
+
+    $categories = array('Hotels', 'Flights', 'Tours & Activities', 'Travel Insurance', 'Car Rental', 'Other');
+    ?>
+    <table class="form-table" style="margin-top:0">
+        <tr>
+            <th style="width:160px"><label for="taff_icon"><?php esc_html_e('Icon (emoji)', 'mytheme'); ?></label></th>
+            <td>
+                <input type="text" id="taff_icon" name="taff_icon" value="<?php echo esc_attr($icon ?: '🔗'); ?>" style="width:80px;font-size:1.4rem;text-align:center" />
+                <p class="description">e.g. 🏨 ✈️ 🎟️ 🛡️ 🚗</p>
+            </td>
+        </tr>
+        <tr>
+            <th><label for="taff_url"><?php esc_html_e('Affiliate URL', 'mytheme'); ?></label></th>
+            <td>
+                <input type="url" id="taff_url" name="taff_url" value="<?php echo esc_attr($url); ?>" style="width:100%" placeholder="https://your-affiliate-link.com" />
+                <p class="description">Full affiliate link including tracking parameters</p>
+            </td>
+        </tr>
+        <tr>
+            <th><label for="taff_category"><?php esc_html_e('Category', 'mytheme'); ?></label></th>
+            <td>
+                <select id="taff_category" name="taff_category" style="width:220px">
+                    <option value=""><?php esc_html_e('— Select category —', 'mytheme'); ?></option>
+                    <?php foreach ($categories as $cat) : ?>
+                        <option value="<?php echo esc_attr($cat); ?>" <?php selected($category, $cat); ?>><?php echo esc_html($cat); ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <th><label for="taff_commission"><?php esc_html_e('Commission Rate', 'mytheme'); ?></label></th>
+            <td>
+                <input type="text" id="taff_commission" name="taff_commission" value="<?php echo esc_attr($commission); ?>" style="width:140px" placeholder="e.g. 4–6%" />
+                <p class="description">Shown on the affiliate table for transparency</p>
+            </td>
+        </tr>
+        <tr>
+            <th><label for="taff_cta"><?php esc_html_e('Button Label', 'mytheme'); ?></label></th>
+            <td>
+                <input type="text" id="taff_cta" name="taff_cta" value="<?php echo esc_attr($cta ?: 'Book'); ?>" style="width:160px" placeholder="Book, Compare, Explore…" />
+            </td>
+        </tr>
+        <tr>
+            <th><label for="taff_order"><?php esc_html_e('Display Order', 'mytheme'); ?></label></th>
+            <td>
+                <input type="number" id="taff_order" name="taff_order" value="<?php echo esc_attr($order ?: 10); ?>" style="width:80px" min="0" step="1" />
+                <p class="description">Lower number = shown first. 1=Booking.com, 2=Skyscanner, etc.</p>
+            </td>
+        </tr>
+    </table>
+    <?php
+}
+
+function mytheme_save_affiliate_cpt_meta($post_id) {
+    if (!isset($_POST['mytheme_affiliate_cpt_nonce']) ||
+        !wp_verify_nonce($_POST['mytheme_affiliate_cpt_nonce'], 'mytheme_save_affiliate_cpt')) {
+        return;
+    }
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
+    if (!current_user_can('edit_post', $post_id)) return;
+
+    $text_fields = array('taff_icon', 'taff_category', 'taff_commission', 'taff_cta');
+    foreach ($text_fields as $f) {
+        if (isset($_POST[$f])) {
+            update_post_meta($post_id, '_' . $f, sanitize_text_field(wp_unslash($_POST[$f])));
+        }
+    }
+    if (isset($_POST['taff_url'])) {
+        update_post_meta($post_id, '_taff_url', esc_url_raw(wp_unslash($_POST['taff_url'])));
+    }
+    if (isset($_POST['taff_order'])) {
+        update_post_meta($post_id, '_taff_order', absint($_POST['taff_order']));
+    }
+}
+add_action('save_post_tw_affiliate', 'mytheme_save_affiliate_cpt_meta');
+
+// ============================================================
+// ADMIN MENUS — three separate top-level menus
+// ============================================================
+function mytheme_register_admin_menus() {
+
+    // ── 1. BLOG POSTS ─────────────────────────────────────
+    add_menu_page(
+        __('Blog Posts', 'mytheme'),
+        __('Blog Posts', 'mytheme'),
+        'edit_posts',
+        'tw-blog-posts',
+        'mytheme_blog_posts_redirect',
+        'dashicons-edit-page',
+        26
+    );
+    add_submenu_page(
+        'tw-blog-posts',
+        __('All Blog Posts', 'mytheme'),
+        __('All Posts', 'mytheme'),
+        'edit_posts',
+        'tw-blog-posts',
+        'mytheme_blog_posts_redirect'
+    );
+    add_submenu_page(
+        'tw-blog-posts',
+        __('Add New Blog Post', 'mytheme'),
+        __('Add New Post', 'mytheme'),
+        'edit_posts',
+        'post-new.php',
+        ''
+    );
+
+    // ── 2. AFFILIATE LINKS ────────────────────────────────
+    add_menu_page(
+        __('Affiliate Links', 'mytheme'),
+        __('Affiliate Links', 'mytheme'),
+        'manage_options',
+        'tw-affiliates',
+        'mytheme_affiliates_redirect',
+        'dashicons-admin-links',
+        27
+    );
+    add_submenu_page(
+        'tw-affiliates',
+        __('All Affiliates', 'mytheme'),
+        __('All Affiliates', 'mytheme'),
+        'manage_options',
+        'tw-affiliates',
+        'mytheme_affiliates_redirect'
+    );
+    add_submenu_page(
+        'tw-affiliates',
+        __('Add New Affiliate', 'mytheme'),
+        __('Add New Affiliate', 'mytheme'),
+        'manage_options',
+        'post-new.php?post_type=tw_affiliate',
+        ''
+    );
+
+    // ── 3. TRIP INQUIRIES + PAGE SETTINGS ─────────────────
+    add_menu_page(
+        __('Trip Inquiries', 'mytheme'),
+        __('Trip Inquiries', 'mytheme'),
+        'manage_options',
+        'trip-inquiries',
+        'mytheme_render_inquiries_page',
+        'dashicons-email-alt',
+        28
+    );
+    add_submenu_page(
+        'trip-inquiries',
+        __('All Inquiries', 'mytheme'),
+        __('All Inquiries', 'mytheme'),
+        'manage_options',
+        'trip-inquiries',
+        'mytheme_render_inquiries_page'
+    );
+    add_submenu_page(
+        'trip-inquiries',
+        __('Page Settings', 'mytheme'),
+        __('Page Settings', 'mytheme'),
+        'manage_options',
+        'tripwiser-settings',
+        'mytheme_render_settings_page'
+    );
+}
+add_action('admin_menu', 'mytheme_register_admin_menus');
+
+// Redirect tw-blog-posts and tw-affiliates menu slugs BEFORE any output is sent
+function mytheme_admin_early_redirects() {
+    if (!is_admin() || !current_user_can('edit_posts')) return;
+    $page = isset($_GET['page']) ? sanitize_key($_GET['page']) : '';
+    if ($page === 'tw-blog-posts') {
+        wp_safe_redirect(admin_url('edit.php'));
+        exit;
+    }
+    if ($page === 'tw-affiliates') {
+        wp_safe_redirect(admin_url('edit.php?post_type=tw_affiliate'));
+        exit;
+    }
+}
+add_action('admin_init', 'mytheme_admin_early_redirects');
+
+// Stub callbacks (admin_init redirect fires first, these are never actually rendered)
+function mytheme_blog_posts_redirect() { wp_safe_redirect(admin_url('edit.php')); exit; }
+function mytheme_affiliates_redirect()  { wp_safe_redirect(admin_url('edit.php?post_type=tw_affiliate')); exit; }
+
+// ── Highlight correct top-level menu when editing posts / affiliates ──────────
+function mytheme_highlight_admin_menu($parent_file) {
+    global $current_screen;
+    if (!$current_screen) return $parent_file;
+
+    if ($current_screen->post_type === 'post') {
+        return 'tw-blog-posts';
+    }
+    if ($current_screen->post_type === 'tw_affiliate') {
+        return 'tw-affiliates';
+    }
+    return $parent_file;
+}
+add_filter('parent_file', 'mytheme_highlight_admin_menu');
+
+function mytheme_highlight_admin_submenu($submenu_file) {
+    global $current_screen, $pagenow;
+    if (!$current_screen) return $submenu_file;
+
+    if ($current_screen->post_type === 'post') {
+        return ($pagenow === 'post-new.php') ? 'post-new.php' : 'tw-blog-posts';
+    }
+    if ($current_screen->post_type === 'tw_affiliate') {
+        return ($pagenow === 'post-new.php') ? 'post-new.php?post_type=tw_affiliate' : 'tw-affiliates';
+    }
+    return $submenu_file;
+}
+add_filter('submenu_file', 'mytheme_highlight_admin_submenu');
 
 // Default menu fallback
 function default_menu() {
@@ -660,3 +954,458 @@ function mytheme_search_form($form) {
     return $form;
 }
 add_filter('get_search_form', 'mytheme_search_form');
+
+// ============================================================
+// TRIP INQUIRY CUSTOM POST TYPE (stores Plan A Trip form submissions)
+// ============================================================
+function mytheme_register_trip_inquiry_cpt() {
+    register_post_type('trip_inquiry', array(
+        'labels' => array(
+            'name'          => __('Trip Inquiries', 'mytheme'),
+            'singular_name' => __('Trip Inquiry', 'mytheme'),
+            'all_items'     => __('All Inquiries', 'mytheme'),
+            'view_item'     => __('View Inquiry', 'mytheme'),
+            'search_items'  => __('Search Inquiries', 'mytheme'),
+        ),
+        'public'       => false,
+        'show_ui'      => true,
+        'show_in_menu' => false,
+        'supports'     => array('title'),
+        'menu_icon'    => 'dashicons-email-alt',
+    ));
+}
+add_action('init', 'mytheme_register_trip_inquiry_cpt');
+
+// (Admin menus are now registered in mytheme_register_admin_menus below)
+
+// ============================================================
+// TRIP INQUIRIES LIST PAGE (Admin view)
+// ============================================================
+function mytheme_render_inquiries_page() {
+    $paged    = isset($_GET['paged']) ? max(1, intval($_GET['paged'])) : 1;
+    $per_page = 20;
+    $query    = new WP_Query(array(
+        'post_type'      => 'trip_inquiry',
+        'posts_per_page' => $per_page,
+        'paged'          => $paged,
+        'post_status'    => 'publish',
+        'orderby'        => 'date',
+        'order'          => 'DESC',
+    ));
+    ?>
+    <div class="wrap">
+        <h1><?php esc_html_e('Trip Inquiries', 'mytheme'); ?>
+            <span style="font-size:14px;font-weight:normal;color:#666;margin-left:8px;">
+                <?php echo esc_html($query->found_posts); ?> total
+            </span>
+        </h1>
+        <table class="wp-list-table widefat fixed striped" style="margin-top:12px">
+            <thead>
+                <tr>
+                    <th style="width:30px">#</th>
+                    <th><?php esc_html_e('Name', 'mytheme'); ?></th>
+                    <th><?php esc_html_e('Phone', 'mytheme'); ?></th>
+                    <th><?php esc_html_e('Email', 'mytheme'); ?></th>
+                    <th><?php esc_html_e('Destination', 'mytheme'); ?></th>
+                    <th><?php esc_html_e('Travel Date', 'mytheme'); ?></th>
+                    <th><?php esc_html_e('Budget', 'mytheme'); ?></th>
+                    <th><?php esc_html_e('Adults', 'mytheme'); ?></th>
+                    <th><?php esc_html_e('Children', 'mytheme'); ?></th>
+                    <th><?php esc_html_e('Trip Type', 'mytheme'); ?></th>
+                    <th><?php esc_html_e('Submitted', 'mytheme'); ?></th>
+                </tr>
+            </thead>
+            <tbody>
+            <?php if ($query->have_posts()) :
+                $i = ($paged - 1) * $per_page + 1;
+                while ($query->have_posts()) : $query->the_post();
+                    $id = get_the_ID(); ?>
+                    <tr>
+                        <td><?php echo esc_html($i++); ?></td>
+                        <td><strong><?php echo esc_html(get_post_meta($id, '_ti_name', true)); ?></strong></td>
+                        <td><?php echo esc_html(get_post_meta($id, '_ti_phone', true)); ?></td>
+                        <td><?php echo esc_html(get_post_meta($id, '_ti_email', true)); ?></td>
+                        <td><?php echo esc_html(get_post_meta($id, '_ti_destination', true)); ?></td>
+                        <td><?php echo esc_html(get_post_meta($id, '_ti_date', true)); ?></td>
+                        <td><?php echo esc_html(get_post_meta($id, '_ti_budget', true)); ?></td>
+                        <td><?php echo esc_html(get_post_meta($id, '_ti_adults', true)); ?></td>
+                        <td><?php echo esc_html(get_post_meta($id, '_ti_children', true)); ?></td>
+                        <td><?php echo esc_html(get_post_meta($id, '_ti_trip_type', true)); ?></td>
+                        <td><?php echo esc_html(get_the_date('d M Y, g:i a')); ?></td>
+                    </tr>
+                <?php endwhile;
+                wp_reset_postdata();
+            else : ?>
+                <tr><td colspan="11" style="text-align:center;padding:24px;color:#666;"><?php esc_html_e('No inquiries yet. Form submissions will appear here.', 'mytheme'); ?></td></tr>
+            <?php endif; ?>
+            </tbody>
+        </table>
+        <?php
+        $total_pages = $query->max_num_pages;
+        if ($total_pages > 1) {
+            echo '<div style="margin-top:16px">';
+            echo paginate_links(array(
+                'base'    => add_query_arg('paged', '%#%'),
+                'format'  => '',
+                'current' => $paged,
+                'total'   => $total_pages,
+            ));
+            echo '</div>';
+        }
+        ?>
+    </div>
+    <?php
+}
+
+// ============================================================
+// SETTINGS: Register options for Plan A Trip + Blog pages
+// ============================================================
+function mytheme_register_page_settings() {
+    // Plan A Trip
+    foreach (array('tw_pat_kicker', 'tw_pat_title', 'tw_pat_subtitle', 'tw_pat_whatsapp') as $key) {
+        register_setting('tripwiser_plan_trip_settings', $key, array('sanitize_callback' => 'sanitize_text_field'));
+    }
+    // Blog & Affiliates
+    register_setting('tripwiser_blog_settings', 'tw_blog_kicker',      array('sanitize_callback' => 'sanitize_text_field'));
+    register_setting('tripwiser_blog_settings', 'tw_blog_title',       array('sanitize_callback' => 'sanitize_text_field'));
+    register_setting('tripwiser_blog_settings', 'tw_blog_subtitle',    array('sanitize_callback' => 'sanitize_text_field'));
+    register_setting('tripwiser_blog_settings', 'tw_blog_aff_heading', array('sanitize_callback' => 'sanitize_text_field'));
+    register_setting('tripwiser_blog_settings', 'tw_blog_aff_text',    array('sanitize_callback' => 'wp_kses_post'));
+    // Affiliate URLs are now managed via the Affiliate Links CPT — not stored as options
+}
+add_action('admin_init', 'mytheme_register_page_settings');
+
+// ============================================================
+// SETTINGS PAGE RENDERER
+// ============================================================
+function mytheme_render_settings_page() {
+    $tab = isset($_GET['tab']) ? sanitize_key($_GET['tab']) : 'plan-trip';
+    ?>
+    <div class="wrap">
+        <h1><?php esc_html_e('1TripWiser Page Settings', 'mytheme'); ?></h1>
+        <nav class="nav-tab-wrapper" style="margin-bottom:0">
+            <a href="?page=tripwiser-settings&tab=plan-trip" class="nav-tab <?php echo $tab === 'plan-trip' ? 'nav-tab-active' : ''; ?>">✈ Plan A Trip</a>
+            <a href="?page=tripwiser-settings&tab=blog"      class="nav-tab <?php echo $tab === 'blog'      ? 'nav-tab-active' : ''; ?>">📰 Blog &amp; Affiliates</a>
+        </nav>
+
+        <?php if ($tab === 'plan-trip') : ?>
+        <div style="background:#fff;border:1px solid #ccd0d4;border-top:none;padding:20px 24px">
+        <form method="post" action="options.php">
+            <?php settings_fields('tripwiser_plan_trip_settings'); ?>
+            <table class="form-table">
+                <tr>
+                    <th><label for="tw_pat_kicker"><?php esc_html_e('Hero Kicker', 'mytheme'); ?></label></th>
+                    <td><input type="text" id="tw_pat_kicker" name="tw_pat_kicker" value="<?php echo esc_attr(get_option('tw_pat_kicker', 'YOUR PERSONALISED TRIP PLANNER')); ?>" class="regular-text" />
+                    <p class="description">Small text shown above the main title</p></td>
+                </tr>
+                <tr>
+                    <th><label for="tw_pat_title"><?php esc_html_e('Hero Title', 'mytheme'); ?></label></th>
+                    <td><input type="text" id="tw_pat_title" name="tw_pat_title" value="<?php echo esc_attr(get_option('tw_pat_title', 'PLAN YOUR DREAM TRIP')); ?>" class="regular-text" /></td>
+                </tr>
+                <tr>
+                    <th><label for="tw_pat_subtitle"><?php esc_html_e('Hero Subtitle', 'mytheme'); ?></label></th>
+                    <td><textarea id="tw_pat_subtitle" name="tw_pat_subtitle" class="large-text" rows="3"><?php echo esc_textarea(get_option('tw_pat_subtitle', "Tell us your dream destination, travel dates, and budget — we'll craft a personalised itinerary just for you.")); ?></textarea></td>
+                </tr>
+                <tr>
+                    <th><label for="tw_pat_whatsapp"><?php esc_html_e('WhatsApp Number', 'mytheme'); ?></label></th>
+                    <td><input type="text" id="tw_pat_whatsapp" name="tw_pat_whatsapp" value="<?php echo esc_attr(get_option('tw_pat_whatsapp', '919999999999')); ?>" class="regular-text" />
+                    <p class="description">Country code + number, no spaces or +. Example: 919876543210</p></td>
+                </tr>
+            </table>
+            <?php submit_button('Save Plan A Trip Settings'); ?>
+        </form>
+        </div>
+
+        <?php elseif ($tab === 'blog') : ?>
+        <div style="background:#fff;border:1px solid #ccd0d4;border-top:none;padding:20px 24px">
+        <form method="post" action="options.php">
+            <?php settings_fields('tripwiser_blog_settings'); ?>
+            <h2 style="margin-top:0"><?php esc_html_e('Hero Section', 'mytheme'); ?></h2>
+            <table class="form-table">
+                <tr>
+                    <th><label for="tw_blog_kicker"><?php esc_html_e('Hero Kicker', 'mytheme'); ?></label></th>
+                    <td><input type="text" id="tw_blog_kicker" name="tw_blog_kicker" value="<?php echo esc_attr(get_option('tw_blog_kicker', 'TRAVEL GUIDES & AFFILIATE PICKS')); ?>" class="regular-text" /></td>
+                </tr>
+                <tr>
+                    <th><label for="tw_blog_title"><?php esc_html_e('Hero Title', 'mytheme'); ?></label></th>
+                    <td><input type="text" id="tw_blog_title" name="tw_blog_title" value="<?php echo esc_attr(get_option('tw_blog_title', 'BLOGS + AFFILIATES')); ?>" class="regular-text" /></td>
+                </tr>
+                <tr>
+                    <th><label for="tw_blog_subtitle"><?php esc_html_e('Hero Subtitle', 'mytheme'); ?></label></th>
+                    <td><textarea id="tw_blog_subtitle" name="tw_blog_subtitle" class="large-text" rows="3"><?php echo esc_textarea(get_option('tw_blog_subtitle', 'Honest travel guides. Trusted tools. Every link we share is something we actually use and believe in.')); ?></textarea></td>
+                </tr>
+                <tr>
+                    <th><label for="tw_blog_aff_heading"><?php esc_html_e('Affiliate Banner Heading', 'mytheme'); ?></label></th>
+                    <td><input type="text" id="tw_blog_aff_heading" name="tw_blog_aff_heading" value="<?php echo esc_attr(get_option('tw_blog_aff_heading', 'Our Trusted Travel Partners')); ?>" class="regular-text" /></td>
+                </tr>
+                <tr>
+                    <th><label for="tw_blog_aff_text"><?php esc_html_e('Affiliate Banner Text', 'mytheme'); ?></label></th>
+                    <td><textarea id="tw_blog_aff_text" name="tw_blog_aff_text" class="large-text" rows="3"><?php echo esc_textarea(get_option('tw_blog_aff_text', "We partner with travel platforms we personally trust. When you book through our links, you support our free content at no extra cost to you.")); ?></textarea></td>
+                </tr>
+            </table>
+            <div style="background:#f0f6ff;border:1px solid #c3d9ff;border-radius:6px;padding:12px 16px;margin-top:16px">
+                <p style="margin:0;font-size:13px">
+                    <strong>💡 Affiliate partner links</strong> are now managed under the
+                    <a href="<?php echo esc_url(admin_url('edit.php?post_type=tw_affiliate')); ?>"><strong>Affiliate Links</strong></a>
+                    menu — add or edit each partner there.
+                </p>
+            </div>
+            <?php submit_button('Save Blog & Affiliates Settings'); ?>
+        </form>
+        </div>
+        <?php endif; ?>
+    </div>
+    <?php
+}
+
+// ============================================================
+// AJAX: Save Trip Inquiry (Plan A Trip form submission)
+// ============================================================
+function mytheme_submit_trip_inquiry() {
+    check_ajax_referer('tw_trip_inquiry_nonce', 'nonce');
+
+    $name        = isset($_POST['name'])        ? sanitize_text_field(wp_unslash($_POST['name']))        : '';
+    $phone       = isset($_POST['phone'])       ? sanitize_text_field(wp_unslash($_POST['phone']))       : '';
+    $email       = isset($_POST['email'])       ? sanitize_email(wp_unslash($_POST['email']))            : '';
+    $destination = isset($_POST['destination']) ? sanitize_text_field(wp_unslash($_POST['destination'])) : '';
+    $date        = isset($_POST['date'])        ? sanitize_text_field(wp_unslash($_POST['date']))        : '';
+    $duration    = isset($_POST['duration'])    ? sanitize_text_field(wp_unslash($_POST['duration']))    : '';
+    $time_pref   = isset($_POST['time_pref'])   ? sanitize_text_field(wp_unslash($_POST['time_pref']))   : '';
+    $trip_type   = isset($_POST['trip_type'])   ? sanitize_text_field(wp_unslash($_POST['trip_type']))   : '';
+    $adults      = isset($_POST['adults'])      ? absint($_POST['adults'])                               : 1;
+    $children    = isset($_POST['children'])    ? absint($_POST['children'])                             : 0;
+    $budget      = isset($_POST['budget'])      ? sanitize_text_field(wp_unslash($_POST['budget']))      : '';
+    $departing   = isset($_POST['departing'])   ? sanitize_text_field(wp_unslash($_POST['departing']))   : '';
+    $notes       = isset($_POST['notes'])       ? sanitize_textarea_field(wp_unslash($_POST['notes']))   : '';
+
+    if (empty($name) || empty($phone)) {
+        wp_send_json_error(array('message' => 'Name and phone are required.'));
+        return;
+    }
+
+    $post_id = wp_insert_post(array(
+        'post_type'   => 'trip_inquiry',
+        'post_title'  => sanitize_text_field(sprintf('%s — %s — %s', $name, $destination, $date)),
+        'post_status' => 'publish',
+    ));
+
+    if (is_wp_error($post_id)) {
+        wp_send_json_error(array('message' => 'Could not save inquiry.'));
+        return;
+    }
+
+    $meta = array(
+        '_ti_name'        => $name,
+        '_ti_phone'       => $phone,
+        '_ti_email'       => $email,
+        '_ti_destination' => $destination,
+        '_ti_date'        => $date,
+        '_ti_duration'    => $duration,
+        '_ti_time_pref'   => $time_pref,
+        '_ti_trip_type'   => $trip_type,
+        '_ti_adults'      => $adults,
+        '_ti_children'    => $children,
+        '_ti_budget'      => $budget,
+        '_ti_departing'   => $departing,
+        '_ti_notes'       => $notes,
+    );
+    foreach ($meta as $key => $value) {
+        update_post_meta($post_id, $key, $value);
+    }
+
+    wp_send_json_success(array('message' => 'Inquiry saved successfully.', 'id' => $post_id));
+}
+add_action('wp_ajax_submit_trip_inquiry',        'mytheme_submit_trip_inquiry');
+add_action('wp_ajax_nopriv_submit_trip_inquiry', 'mytheme_submit_trip_inquiry');
+
+// ============================================================
+// META BOX: Affiliate links on individual Blog Posts
+// ============================================================
+function mytheme_add_affiliate_meta_box() {
+    add_meta_box(
+        'mytheme_blog_affiliates',
+        __('Affiliate Links for this Post', 'mytheme'),
+        'mytheme_render_affiliate_meta_box',
+        'post',
+        'normal',
+        'default'
+    );
+}
+add_action('add_meta_boxes', 'mytheme_add_affiliate_meta_box');
+
+function mytheme_render_affiliate_meta_box($post) {
+    wp_nonce_field('mytheme_save_affiliate_meta', 'mytheme_affiliate_meta_nonce');
+    $fields = array(
+        '_aff_booking_label' => 'Booking.com — Label (e.g. "Book your hotel here")',
+        '_aff_booking_url'   => 'Booking.com — URL',
+        '_aff_flight_label'  => 'Skyscanner — Label (e.g. "Compare cheap flights")',
+        '_aff_flight_url'    => 'Skyscanner — URL',
+        '_aff_tours_label'   => 'Viator — Label (e.g. "Book local experiences")',
+        '_aff_tours_url'     => 'Viator — URL',
+        '_aff_insure_label'  => 'SafetyWing — Label (e.g. "Get travel insurance")',
+        '_aff_insure_url'    => 'SafetyWing — URL',
+    );
+    echo '<p style="color:#666;font-size:12px;margin:0 0 12px">Leave blank to use the global affiliate links from <a href="' . esc_url(admin_url('admin.php?page=tripwiser-settings&tab=blog')) . '">Page Settings</a>.</p>';
+    foreach ($fields as $key => $label) {
+        $value = get_post_meta($post->ID, $key, true);
+        $type  = (strpos($key, '_url') !== false) ? 'url' : 'text';
+        echo '<p style="margin:0 0 10px"><label for="' . esc_attr($key) . '" style="display:block;font-weight:600;font-size:12px;margin-bottom:4px">' . esc_html($label) . '</label>';
+        echo '<input type="' . esc_attr($type) . '" id="' . esc_attr($key) . '" name="' . esc_attr($key) . '" value="' . esc_attr($value) . '" style="width:100%" /></p>';
+    }
+}
+
+function mytheme_save_affiliate_meta($post_id) {
+    if (!isset($_POST['mytheme_affiliate_meta_nonce']) || !wp_verify_nonce($_POST['mytheme_affiliate_meta_nonce'], 'mytheme_save_affiliate_meta')) {
+        return;
+    }
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
+    if (!current_user_can('edit_post', $post_id)) return;
+
+    $url_keys  = array('_aff_booking_url', '_aff_flight_url', '_aff_tours_url', '_aff_insure_url');
+    $text_keys = array('_aff_booking_label', '_aff_flight_label', '_aff_tours_label', '_aff_insure_label');
+
+    foreach ($url_keys as $key) {
+        if (isset($_POST[$key])) {
+            update_post_meta($post_id, $key, esc_url_raw(wp_unslash($_POST[$key])));
+        }
+    }
+    foreach ($text_keys as $key) {
+        if (isset($_POST[$key])) {
+            update_post_meta($post_id, $key, sanitize_text_field(wp_unslash($_POST[$key])));
+        }
+    }
+}
+add_action('save_post_post', 'mytheme_save_affiliate_meta');
+
+// ============================================================
+// Localize AJAX data for front-end scripts
+// ============================================================
+function mytheme_localize_ajax_data() {
+    wp_localize_script('custom-js', 'twAjax', array(
+        'url'   => admin_url('admin-ajax.php'),
+        'nonce' => wp_create_nonce('tw_trip_inquiry_nonce'),
+    ));
+}
+add_action('wp_enqueue_scripts', 'mytheme_localize_ajax_data', 20);
+
+// ============================================================
+// AJAX: Front-end blog post submission
+// ============================================================
+function tw_handle_blog_submission() {
+    // Security check
+    if ( ! isset( $_POST['tw_blog_nonce'] ) ||
+         ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['tw_blog_nonce'] ) ), 'tw_blog_submit_nonce' ) ) {
+        wp_send_json_error( 'Security check failed. Please refresh the page and try again.' );
+    }
+
+    // Required fields
+    $title   = isset( $_POST['sb_title'] )   ? sanitize_text_field( wp_unslash( $_POST['sb_title'] ) )   : '';
+    $content = isset( $_POST['sb_content'] ) ? wp_kses_post( wp_unslash( $_POST['sb_content'] ) )         : '';
+
+    if ( empty( $title ) ) {
+        wp_send_json_error( 'Post title is required.' );
+    }
+    if ( strlen( strip_tags( $content ) ) < 50 ) {
+        wp_send_json_error( 'Post content is too short.' );
+    }
+
+    // Optional fields
+    $excerpt       = isset( $_POST['sb_excerpt'] )        ? sanitize_textarea_field( wp_unslash( $_POST['sb_excerpt'] ) )   : '';
+    $tags_raw      = isset( $_POST['sb_tags'] )           ? sanitize_text_field( wp_unslash( $_POST['sb_tags'] ) )           : '';
+    $cat_id        = isset( $_POST['sb_category'] )       ? intval( $_POST['sb_category'] )                                   : 0;
+    $new_cat_name  = isset( $_POST['sb_new_category'] )   ? sanitize_text_field( wp_unslash( $_POST['sb_new_category'] ) )   : '';
+    $author_name   = isset( $_POST['sb_author_name'] )    ? sanitize_text_field( wp_unslash( $_POST['sb_author_name'] ) )    : '';
+    $author_email  = isset( $_POST['sb_author_email'] )   ? sanitize_email( wp_unslash( $_POST['sb_author_email'] ) )        : '';
+    $author_bio    = isset( $_POST['sb_author_bio'] )     ? sanitize_text_field( wp_unslash( $_POST['sb_author_bio'] ) )     : '';
+
+    // Determine status & author
+    $post_status = 'pending'; // default — require review
+    $post_author = 1;         // default to site admin
+
+    if ( is_user_logged_in() ) {
+        $post_author = get_current_user_id();
+        if ( current_user_can( 'publish_posts' ) ) {
+            $post_status = 'publish';
+        }
+    } else {
+        // Guest submission — basic spam guard
+        if ( empty( $author_name ) || empty( $author_email ) || ! is_email( $author_email ) ) {
+            wp_send_json_error( 'Please provide a valid name and email address.' );
+        }
+    }
+
+    // Handle "new category" option
+    if ( $cat_id === 0 && ! empty( $new_cat_name ) ) {
+        $new_cat = wp_insert_category( array(
+            'cat_name'             => $new_cat_name,
+            'category_description' => '',
+            'category_nicename'    => sanitize_title( $new_cat_name ),
+        ) );
+        if ( ! is_wp_error( $new_cat ) ) {
+            $cat_id = $new_cat;
+        }
+    }
+
+    // Insert the post
+    $post_data = array(
+        'post_title'    => $title,
+        'post_content'  => $content,
+        'post_excerpt'  => $excerpt,
+        'post_status'   => $post_status,
+        'post_type'     => 'post',
+        'post_author'   => $post_author,
+    );
+    if ( $cat_id > 0 ) {
+        $post_data['post_category'] = array( $cat_id );
+    }
+
+    $post_id = wp_insert_post( $post_data, true );
+    if ( is_wp_error( $post_id ) ) {
+        wp_send_json_error( $post_id->get_error_message() );
+    }
+
+    // Tags
+    if ( ! empty( $tags_raw ) ) {
+        $tags_arr = array_filter( array_map( 'trim', explode( ',', $tags_raw ) ) );
+        wp_set_post_tags( $post_id, $tags_arr, false );
+    }
+
+    // Guest author meta
+    if ( ! is_user_logged_in() ) {
+        update_post_meta( $post_id, '_guest_author_name',  $author_name );
+        update_post_meta( $post_id, '_guest_author_email', $author_email );
+        update_post_meta( $post_id, '_guest_author_bio',   $author_bio );
+    }
+
+    // Featured image upload
+    if ( ! empty( $_FILES['sb_image']['tmp_name'] ) ) {
+        require_once ABSPATH . 'wp-admin/includes/image.php';
+        require_once ABSPATH . 'wp-admin/includes/file.php';
+        require_once ABSPATH . 'wp-admin/includes/media.php';
+
+        $attachment_id = media_handle_upload( 'sb_image', $post_id );
+        if ( ! is_wp_error( $attachment_id ) ) {
+            set_post_thumbnail( $post_id, $attachment_id );
+        }
+    }
+
+    // Notify admin of new pending post
+    if ( $post_status === 'pending' ) {
+        $admin_email = get_option( 'admin_email' );
+        $subject     = '[1TripWiser] New blog submission: ' . $title;
+        $body        = "A new blog post has been submitted and is awaiting review.\n\n";
+        $body       .= 'Title: ' . $title . "\n";
+        if ( ! is_user_logged_in() ) {
+            $body   .= 'From: ' . $author_name . ' <' . $author_email . ">\n";
+        }
+        $body       .= 'Review: ' . admin_url( 'post.php?post=' . $post_id . '&action=edit' ) . "\n";
+        wp_mail( $admin_email, $subject, $body );
+    }
+
+    wp_send_json_success( array(
+        'status' => $post_status,
+        'url'    => get_permalink( $post_id ),
+    ) );
+}
+add_action( 'wp_ajax_tw_submit_blog',        'tw_handle_blog_submission' );
+add_action( 'wp_ajax_nopriv_tw_submit_blog', 'tw_handle_blog_submission' );

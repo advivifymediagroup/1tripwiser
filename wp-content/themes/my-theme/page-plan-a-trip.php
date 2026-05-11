@@ -1,4 +1,12 @@
-<?php get_header(); ?>
+<?php
+get_header();
+
+// Pull editable content from WP Options (Admin → Trip Inquiries → Page Settings)
+$pat_kicker    = get_option('tw_pat_kicker',   'YOUR PERSONALISED TRIP PLANNER');
+$pat_title     = get_option('tw_pat_title',    'PLAN YOUR DREAM TRIP');
+$pat_subtitle  = get_option('tw_pat_subtitle', "Tell us your dream destination, travel dates, and budget — we'll craft a personalised itinerary just for you.");
+$pat_whatsapp  = get_option('tw_pat_whatsapp', '919999999999');
+?>
 
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 
@@ -51,53 +59,7 @@
   --reset-color: rgba(26,37,53,0.35);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    /* surfaces */
-    --page-bg:    #0d1526;
-    --card-bg:    #111e33;
-    --raised-bg:  #172240;
-    --input-bg:   #0f1a2e;
-
-    /* text */
-    --text:       rgba(255,255,255,0.92);
-    --text-head:  #ffffff;
-    --muted:      rgba(255,255,255,0.45);
-    --label:      rgba(255,255,255,0.6);
-
-    /* borders */
-    --border:     rgba(255,255,255,0.08);
-    --border-mid: rgba(255,255,255,0.13);
-
-    /* hero */
-    --hero-start: #0d1526;
-    --hero-mid:   rgba(6,146,175,0.08);
-
-    /* summary box */
-    --sum-bg:     rgba(6,146,175,0.08);
-    --sum-border: rgba(6,146,175,0.25);
-    --sum-val:    rgba(255,255,255,0.92);
-
-    /* progress circles */
-    --circle-bg:  #172240;
-
-    /* back button */
-    --back-bg:    transparent;
-    --back-hover: #ffffff;
-
-    /* select arrow (light stroke for dark bg) */
-    --arrow-url: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='rgba(255,255,255,0.4)' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-
-    /* card shadow */
-    --card-shadow: 0 8px 32px rgba(0,0,0,0.4);
-
-    /* reset button */
-    --reset-color: rgba(255,255,255,0.35);
-  }
-
-  /* select option background (can't use CSS vars here) */
-  select.fi option { background: #111e33; }
-}
+/* Light theme only — no dark mode */
 
 /* ═══════════════════════════════════════════
    COMPONENT STYLES (theme-agnostic via vars)
@@ -491,9 +453,14 @@ select.fi {
 </style>
 
 <div class="plan-hero">
-  <div class="plan-hero-kicker">Free · No obligation · 24-hour response</div>
-  <h1 class="plan-hero-title">PLAN YOUR <span class="accent">PERFECT TRIP</span></h1>
-  <p class="plan-hero-sub">Answer 3 quick questions — we'll send a custom quote to your WhatsApp within 24 hours.</p>
+  <div class="plan-hero-kicker"><?php echo esc_html($pat_kicker); ?></div>
+  <h1 class="plan-hero-title"><?php
+    // Split title at last space to make last word gold-accented
+    $words = explode(' ', $pat_title);
+    $last  = array_pop($words);
+    echo esc_html(implode(' ', $words)) . ' <span class="accent">' . esc_html($last) . '</span>';
+  ?></h1>
+  <p class="plan-hero-sub"><?php echo esc_html($pat_subtitle); ?></p>
 </div>
 
 <div class="plan-body">
@@ -874,6 +841,9 @@ select.fi {
     document.querySelector('.plan-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
+  /* WhatsApp number from WP settings (localised via PHP) */
+  var twWaNumber = <?php echo json_encode(preg_replace('/\D/', '', $pat_whatsapp)); ?>;
+
   window.submitTrip = function () {
     collectData();
 
@@ -900,15 +870,38 @@ select.fi {
       'Please send me a custom itinerary! 🙏'
     ].filter(function (l) { return l !== null; }).join('\n');
 
-    
+    /* ── Save to WordPress database via AJAX ── */
+    if (typeof twAjax !== 'undefined' && twAjax.url) {
+      var fd = new FormData();
+      fd.append('action',      'submit_trip_inquiry');
+      fd.append('nonce',       twAjax.nonce);
+      fd.append('name',        tripData.name);
+      fd.append('phone',       tripData.phone);
+      fd.append('email',       tripData.email);
+      fd.append('destination', tripData.dest);
+      fd.append('date',        tripData.date);
+      fd.append('duration',    tripData.dur);
+      fd.append('time_pref',   tripData.time);
+      fd.append('trip_type',   tripData.type);
+      fd.append('adults',      tripData.adults);
+      fd.append('children',    tripData.child);
+      fd.append('budget',      tripData.budget);
+      fd.append('departing',   tripData.from);
+      fd.append('notes',       tripData.notes);
+
+      fetch(twAjax.url, { method: 'POST', body: fd })
+        .catch(function (err) { console.warn('1TW: inquiry save failed', err); });
+    }
+
+    /* ── Show success screen ── */
     document.getElementById('pstep3').classList.remove('active');
     document.getElementById('ps3').classList.remove('active');
     document.getElementById('ps3').classList.add('done');
     document.getElementById('pstep-success').classList.add('active');
 
-    /* Build WhatsApp link — replace with real number */
+    /* Build WhatsApp deep-link */
     document.getElementById('wa-link').href =
-      'https://wa.me/919999999999?text=' + encodeURIComponent(msg);
+      'https://wa.me/' + twWaNumber + '?text=' + encodeURIComponent(msg);
 
     document.querySelector('.plan-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
   };

@@ -2,6 +2,16 @@
 if (post_password_required()) {
     return;
 }
+
+// Properly initialise all variables required by comment_form() fields
+$commenter     = wp_get_current_commenter();
+$req           = get_option('require_name_email');
+$aria_req      = ($req ? " aria-required='true'" : '');
+global $user_identity;
+if (empty($user_identity)) {
+    $current_user  = wp_get_current_user();
+    $user_identity = $current_user->exists() ? $current_user->display_name : '';
+}
 ?>
 
 <div id="comments" class="comments-area">
