@@ -453,6 +453,11 @@ function mytheme_get_plan_trip_url() {
     return $page ? get_permalink($page) : home_url('/plan-a-trip/');
 }
 
+function mytheme_get_page_url_by_path($path) {
+    $page = get_page_by_path($path);
+    return $page ? get_permalink($page) : home_url('/' . trim($path, '/') . '/');
+}
+
 function mytheme_travel_tabs() {
     $current_type = get_post_type();
     $home_active = is_front_page() || is_home();
