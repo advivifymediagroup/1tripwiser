@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html <?php language_attributes(); ?>>
 <head>
-    <meta charset="<?php bloginfo('charset'); ?>">
+    <meta charset="<?php bloginfo("charset"); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php wp_title('|', true, 'right'); bloginfo('name'); ?></title>
+    <title><?php
+    wp_title("|", true, "right");
+    bloginfo("name");
+    ?></title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
@@ -19,16 +22,25 @@
     <div class="tw-nav-inner">
 
         <!-- Brand / Logo -->
-        <a class="tw-brand" href="<?php echo esc_url(home_url('/')); ?>" aria-label="<?php bloginfo('name'); ?> Home">
+        <a class="tw-brand" href="<?php echo esc_url(
+            home_url("/")
+        ); ?>" aria-label="<?php bloginfo("name"); ?> Home">
             <div class="tw-logo-ring">
-                <svg class="tw-compass" viewBox="0 0 36 36" aria-hidden="true" focusable="false">
+                 <div class="logo">
+    <a href="<?php echo home_url(); ?>">
+        <img src="<?php echo get_template_directory_uri(); ?>/assets/images/logo-light.png" alt="<?php bloginfo(
+    "name"
+); ?>">
+    </a>
+        </div>
+                <!-- <svg class="tw-compass" viewBox="0 0 36 36" aria-hidden="true" focusable="false">
                     <circle cx="18" cy="18" r="16" fill="none" stroke="#306C35" stroke-width="2"/>
                     <circle cx="18" cy="10" r="7" fill="#D5374F" opacity="0.9"/>
                     <circle cx="18" cy="26" r="7" fill="#0692AF" opacity="0.9"/>
                     <polygon points="18,3 15,15 18,13 21,15" fill="#FCB415"/>
                     <polygon points="18,33 15,21 18,23 21,21" fill="#FCB415" opacity="0.7"/>
                     <line x1="2" y1="18" x2="34" y2="18" stroke="#306C35" stroke-width="1.5"/>
-                </svg>
+                </svg> -->
             </div>
             <div class="tw-brand-text">
                 <div class="tw-brand-name"><span class="tw-gold">1</span>TRIPWISER</div>
@@ -39,18 +51,20 @@
         <!-- Desktop Nav Links -->
         <nav class="tw-links" aria-label="Primary navigation">
             <?php
-            $walker_args = array(
-                'theme_location' => 'primary',
-                'container'      => false,
-                'menu_class'     => 'tw-menu',
-                'fallback_cb'    => 'tw_default_nav',
-            );
-            if (class_exists('TW_Nav_Walker')) {
-                $walker_args['walker'] = new TW_Nav_Walker();
+            $walker_args = [
+                "theme_location" => "primary",
+                "container" => false,
+                "menu_class" => "tw-menu",
+                "fallback_cb" => "tw_default_nav",
+            ];
+            if (class_exists("TW_Nav_Walker")) {
+                $walker_args["walker"] = new TW_Nav_Walker();
             }
             wp_nav_menu($walker_args);
             ?>
-            <a class="tw-cta" href="<?php echo esc_url(mytheme_get_plan_trip_url()); ?>">
+            <a class="tw-cta" href="<?php echo esc_url(
+                mytheme_get_plan_trip_url()
+            ); ?>">
                 <span aria-hidden="true">✈</span> Plan My Trip
             </a>
         </nav>
@@ -63,42 +77,51 @@
 
     <!-- Mobile drawer -->
     <div class="tw-mobile-menu" id="tw-mobile-menu" aria-hidden="true">
-        <?php
-        wp_nav_menu(array(
-            'theme_location' => 'primary',
-            'container'      => false,
-            'menu_class'     => 'tw-mobile-list',
-            'fallback_cb'    => 'tw_default_mobile_nav',
-        ));
-        ?>
-        <a class="tw-cta tw-cta-mobile" href="<?php echo esc_url(mytheme_get_plan_trip_url()); ?>">✈ Plan My Trip</a>
+        <?php wp_nav_menu([
+            "theme_location" => "primary",
+            "container" => false,
+            "menu_class" => "tw-mobile-list",
+            "fallback_cb" => "tw_default_mobile_nav",
+        ]); ?>
+        <a class="tw-cta tw-cta-mobile" href="<?php echo esc_url(
+            mytheme_get_plan_trip_url()
+        ); ?>">✈ Plan My Trip</a>
     </div>
 </header>
 
 <?php
-
-function tw_default_nav() {
+function tw_default_nav()
+{
     $plan_url = mytheme_get_plan_trip_url();
-    $pkg_url  = esc_url(get_post_type_archive_link('travel_package'));
-    $blog_url = esc_url(home_url('/blog-affiliates/'));
+    $pkg_url = esc_url(get_post_type_archive_link("travel_package"));
+    $blog_url = esc_url(home_url("/blog-affiliates/"));
     echo '<ul class="tw-menu">';
-    echo '<li class="tw-menu-item"><a href="' . esc_url(home_url('/')) . '" class="tw-nav-link">Home</a></li>';
-    echo '<li class="tw-menu-item"><a href="' . $pkg_url . '" class="tw-nav-link">Packages</a></li>';
-    echo '<li class="tw-menu-item"><a href="' . $blog_url . '" class="tw-nav-link">Blog</a></li>';
-    echo '<li class="tw-menu-item"><a href="' . esc_url($plan_url) . '" class="tw-nav-link">Plan a Trip</a></li>';
-    echo '</ul>';
+    echo '<li class="tw-menu-item"><a href="' .
+        esc_url(home_url("/")) .
+        '" class="tw-nav-link">Home</a></li>';
+    echo '<li class="tw-menu-item"><a href="' .
+        $pkg_url .
+        '" class="tw-nav-link">Packages</a></li>';
+    echo '<li class="tw-menu-item"><a href="' .
+        $blog_url .
+        '" class="tw-nav-link">Blog</a></li>';
+    echo '<li class="tw-menu-item"><a href="' .
+        esc_url($plan_url) .
+        '" class="tw-nav-link">Plan a Trip</a></li>';
+    echo "</ul>";
 }
 
-function tw_default_mobile_nav() {
+function tw_default_mobile_nav()
+{
     $plan_url = mytheme_get_plan_trip_url();
-    $pkg_url  = esc_url(get_post_type_archive_link('travel_package'));
-    $blog_url = esc_url(home_url('/blog-affiliates/'));
+    $pkg_url = esc_url(get_post_type_archive_link("travel_package"));
+    $blog_url = esc_url(home_url("/blog-affiliates/"));
     echo '<ul class="tw-mobile-list">';
-    echo '<li><a href="' . esc_url(home_url('/')) . '">Home</a></li>';
+    echo '<li><a href="' . esc_url(home_url("/")) . '">Home</a></li>';
     echo '<li><a href="' . $pkg_url . '">Packages</a></li>';
     echo '<li><a href="' . $blog_url . '">Blog</a></li>';
     echo '<li><a href="' . esc_url($plan_url) . '">Plan a Trip</a></li>';
-    echo '</ul>';
+    echo "</ul>";
 }
 ?>
 
@@ -321,4 +344,6 @@ function tw_default_mobile_nav() {
 </script>
 
 <!-- ===== SUB-HEADER TABS ===== -->
-<?php if (function_exists('mytheme_travel_tabs')) { mytheme_travel_tabs(); } ?>
+<?php if (function_exists("mytheme_travel_tabs")) {
+    mytheme_travel_tabs();
+} ?>
