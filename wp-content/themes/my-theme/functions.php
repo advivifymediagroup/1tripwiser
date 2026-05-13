@@ -19,12 +19,131 @@ add_action('wp_enqueue_scripts', 'load_js');
 function mytheme_enqueue_styles() {
     wp_enqueue_style('main-style', get_stylesheet_uri());
     wp_enqueue_style('font-awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css');
+    // Animations CSS (global)
+    wp_enqueue_style('tw-animations', get_template_directory_uri() . '/assets/css/tw-animations.css', array(), '1.1');
     wp_enqueue_script('jquery');
-    wp_enqueue_script('custom-js', get_template_directory_uri() . '/assets/js/custom.js', array('jquery'), '1.0', true);
+    // Custom JS placeholder (kept for legacy localize_script hook)
+    if ( file_exists( get_template_directory() . '/assets/js/custom.js' ) ) {
+        wp_enqueue_script('custom-js', get_template_directory_uri() . '/assets/js/custom.js', array('jquery'), '1.0', true);
+    } else {
+        // Register a dummy handle so localize_script still works
+        wp_register_script('custom-js', '', array('jquery'), '1.0', true);
+        wp_enqueue_script('custom-js');
+    }
+    // Global animations (canvas bubbles, scroll reveal, tilt, ripple)
+    wp_enqueue_script('tw-animations', get_template_directory_uri() . '/assets/js/tw-animations.js', array(), '1.1', true);
 }
 
-
 add_action('wp_enqueue_scripts', 'mytheme_enqueue_styles');
+
+// ============================================================
+// Hide WordPress admin bar on the frontend (keeps it in wp-admin)
+// ============================================================
+add_filter('show_admin_bar', '__return_false');
+
+// ============================================================
+// Enable user registration (required for Register page)
+// ============================================================
+add_action('init', function () {
+    if ( ! get_option('users_can_register') ) {
+        update_option('users_can_register', 1);
+    }
+}, 5);
+
+// ============================================================
+// AJAX: Custom Login
+// ============================================================
+function tw_ajax_login() {
+    if ( ! isset( $_POST['tw_login_nonce'] ) ||
+         ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['tw_login_nonce'] ) ), 'tw_login_nonce' ) ) {
+        wp_send_json_error( 'Security check failed.' );
+    }
+
+    $creds = array(
+        'user_login'    => sanitize_text_field( wp_unslash( $_POST['tw_username'] ?? '' ) ),
+        'user_password' => wp_unslash( $_POST['tw_password'] ?? '' ),
+        'remember'      => ! empty( $_POST['tw_remember'] ),
+    );
+
+    if ( empty( $creds['user_login'] ) || empty( $creds['user_password'] ) ) {
+        wp_send_json_error( 'Please enter your username and password.' );
+    }
+
+    $user = wp_signon( $creds, is_ssl() );
+    if ( is_wp_error( $user ) ) {
+        wp_send_json_error( 'Incorrect username or password.' );
+    }
+
+    $redirect = isset( $_POST['redirect_to'] ) ? esc_url_raw( wp_unslash( $_POST['redirect_to'] ) ) : home_url('/');
+    wp_send_json_success( array( 'redirect' => $redirect ) );
+}
+add_action( 'wp_ajax_nopriv_tw_ajax_login', 'tw_ajax_login' );
+add_action( 'wp_ajax_tw_ajax_login',        'tw_ajax_login' ); // allow logged-in reload
+
+// ============================================================
+// AJAX: Custom Register
+// ============================================================
+function tw_ajax_register() {
+    if ( ! isset( $_POST['tw_register_nonce'] ) ||
+         ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['tw_register_nonce'] ) ), 'tw_register_nonce' ) ) {
+        wp_send_json_error( 'Security check failed.' );
+    }
+
+    if ( ! get_option('users_can_register') ) {
+        wp_send_json_error( 'Registrations are currently closed.' );
+    }
+
+    $username  = sanitize_user( wp_unslash( $_POST['tw_reg_username'] ?? '' ) );
+    $email     = sanitize_email( wp_unslash( $_POST['tw_reg_email']   ?? '' ) );
+    $password  = wp_unslash( $_POST['tw_reg_password'] ?? '' );
+    $fname     = sanitize_text_field( wp_unslash( $_POST['tw_first_name'] ?? '' ) );
+    $lname     = sanitize_text_field( wp_unslash( $_POST['tw_last_name']  ?? '' ) );
+
+    // Validate
+    if ( empty( $username ) || strlen( $username ) < 3 ) {
+        wp_send_json_error( 'Username must be at least 3 characters.' );
+    }
+    if ( ! preg_match('/^[a-zA-Z0-9_\-]+$/', $username) ) {
+        wp_send_json_error( 'Username contains invalid characters.' );
+    }
+    if ( username_exists( $username ) ) {
+        wp_send_json_error( 'That username is already taken. Please choose another.' );
+    }
+    if ( empty( $email ) || ! is_email( $email ) ) {
+        wp_send_json_error( 'Please enter a valid email address.' );
+    }
+    if ( email_exists( $email ) ) {
+        wp_send_json_error( 'That email is already registered. Try logging in instead.' );
+    }
+    if ( strlen( $password ) < 8 ) {
+        wp_send_json_error( 'Password must be at least 8 characters.' );
+    }
+
+    // Create user
+    $user_id = wp_create_user( $username, $password, $email );
+    if ( is_wp_error( $user_id ) ) {
+        wp_send_json_error( $user_id->get_error_message() );
+    }
+
+    // Update display name & bio
+    wp_update_user( array(
+        'ID'           => $user_id,
+        'first_name'   => $fname,
+        'last_name'    => $lname,
+        'display_name' => trim( $fname . ' ' . $lname ) ?: $username,
+        'role'         => 'author', // can publish their own posts
+    ) );
+
+    // Auto-login
+    wp_set_current_user( $user_id );
+    wp_set_auth_cookie( $user_id, false, is_ssl() );
+
+    // Welcome email
+    wp_new_user_notification( $user_id, null, 'user' );
+
+    wp_send_json_success( array( 'redirect' => home_url('/') ) );
+}
+add_action( 'wp_ajax_nopriv_tw_ajax_register', 'tw_ajax_register' );
 
 // Register travel content types and taxonomies
 function mytheme_register_travel_content() {
@@ -816,7 +935,13 @@ add_action('init', 'mytheme_register_menus');
 function mytheme_theme_support() {
     add_theme_support('post-thumbnails');
     add_theme_support('title-tag');
-    add_theme_support('custom-logo');
+    add_theme_support('custom-logo', array(
+        'height'      => 96,   // max display height (px) — doubled for retina
+        'width'       => 400,
+        'flex-height' => true, // allow shorter logos
+        'flex-width'  => true,
+        'header-text' => array('tw-brand-name', 'tw-brand-tag'),
+    ));
     add_theme_support('html5', array('search-form'));
 }
 add_action('after_setup_theme', 'mytheme_theme_support');
@@ -1562,3 +1687,145 @@ function tw_handle_blog_submission() {
 }
 add_action( 'wp_ajax_tw_submit_blog',        'tw_handle_blog_submission' );
 add_action( 'wp_ajax_nopriv_tw_submit_blog', 'tw_handle_blog_submission' );
+
+// ============================================================
+// AJAX: Update profile personal info
+// ============================================================
+function tw_update_profile_info() {
+    if ( ! is_user_logged_in() ) {
+        wp_send_json_error( 'You must be logged in.' );
+    }
+    if ( ! isset( $_POST['tw_profile_nonce'] ) ||
+         ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['tw_profile_nonce'] ) ), 'tw_profile_update' ) ) {
+        wp_send_json_error( 'Security check failed.' );
+    }
+
+    $user_id      = get_current_user_id();
+    $first_name   = sanitize_text_field( wp_unslash( $_POST['pf_fname']   ?? '' ) );
+    $last_name    = sanitize_text_field( wp_unslash( $_POST['pf_lname']   ?? '' ) );
+    $display_name = sanitize_text_field( wp_unslash( $_POST['pf_display'] ?? '' ) );
+    $description  = sanitize_textarea_field( wp_unslash( $_POST['pf_bio'] ?? '' ) );
+    $email        = sanitize_email( wp_unslash( $_POST['pf_email']        ?? '' ) );
+
+    if ( empty( $email ) || ! is_email( $email ) ) {
+        wp_send_json_error( 'Please enter a valid email address.' );
+    }
+
+    // Check email uniqueness (allow own email)
+    $existing = get_user_by( 'email', $email );
+    if ( $existing && (int) $existing->ID !== $user_id ) {
+        wp_send_json_error( 'That email address is already in use by another account.' );
+    }
+
+    $result = wp_update_user( array(
+        'ID'           => $user_id,
+        'first_name'   => $first_name,
+        'last_name'    => $last_name,
+        'display_name' => $display_name ?: ( trim( $first_name . ' ' . $last_name ) ?: get_userdata( $user_id )->user_login ),
+        'description'  => $description,
+        'user_email'   => $email,
+    ) );
+
+    if ( is_wp_error( $result ) ) {
+        wp_send_json_error( $result->get_error_message() );
+    }
+
+    wp_send_json_success( array( 'message' => 'Profile updated successfully.' ) );
+}
+add_action( 'wp_ajax_tw_update_profile_info', 'tw_update_profile_info' );
+
+// ============================================================
+// AJAX: Update profile password
+// ============================================================
+function tw_update_profile_password() {
+    if ( ! is_user_logged_in() ) {
+        wp_send_json_error( 'You must be logged in.' );
+    }
+    if ( ! isset( $_POST['tw_pw_nonce'] ) ||
+         ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['tw_pw_nonce'] ) ), 'tw_profile_update' ) ) {
+        wp_send_json_error( 'Security check failed.' );
+    }
+
+    $user_id      = get_current_user_id();
+    $current_pass = wp_unslash( $_POST['pf_cur_pw']  ?? '' );
+    $new_pass     = wp_unslash( $_POST['pf_new_pw']  ?? '' );
+    $confirm_pass = wp_unslash( $_POST['pf_conf_pw'] ?? '' );
+
+    // Verify current password
+    $user = get_userdata( $user_id );
+    if ( ! wp_check_password( $current_pass, $user->user_pass, $user_id ) ) {
+        wp_send_json_error( 'Your current password is incorrect.' );
+    }
+
+    if ( strlen( $new_pass ) < 8 ) {
+        wp_send_json_error( 'New password must be at least 8 characters.' );
+    }
+
+    if ( $new_pass !== $confirm_pass ) {
+        wp_send_json_error( 'Passwords do not match.' );
+    }
+
+    wp_set_password( $new_pass, $user_id );
+
+    // Re-authenticate so the user stays logged in after password change
+    wp_set_current_user( $user_id );
+    wp_set_auth_cookie( $user_id, false, is_ssl() );
+
+    wp_send_json_success( array( 'message' => 'Password updated successfully.' ) );
+}
+add_action( 'wp_ajax_tw_update_profile_password', 'tw_update_profile_password' );
+
+// ============================================================
+// Auto-create required frontend pages on theme activation
+// (profile, login, register, submit-blog) if they don't exist
+// ============================================================
+function tw_maybe_create_pages() {
+    $pages = array(
+        array(
+            'slug'     => 'profile',
+            'title'    => 'My Profile',
+            'template' => 'page-profile.php',
+        ),
+        array(
+            'slug'     => 'login',
+            'title'    => 'Login',
+            'template' => 'page-login.php',
+        ),
+        array(
+            'slug'     => 'register',
+            'title'    => 'Register',
+            'template' => 'page-register.php',
+        ),
+        array(
+            'slug'     => 'submit-blog',
+            'title'    => 'Submit a Blog Post',
+            'template' => 'page-submit-blog.php',
+        ),
+    );
+
+    foreach ( $pages as $page_data ) {
+        $existing = get_page_by_path( $page_data['slug'] );
+        if ( $existing ) {
+            // Make sure the template is set correctly
+            if ( get_post_meta( $existing->ID, '_wp_page_template', true ) !== $page_data['template'] ) {
+                update_post_meta( $existing->ID, '_wp_page_template', $page_data['template'] );
+            }
+            continue;
+        }
+
+        $post_id = wp_insert_post( array(
+            'post_title'   => $page_data['title'],
+            'post_name'    => $page_data['slug'],
+            'post_status'  => 'publish',
+            'post_type'    => 'page',
+            'post_content' => '',
+        ) );
+
+        if ( $post_id && ! is_wp_error( $post_id ) ) {
+            update_post_meta( $post_id, '_wp_page_template', $page_data['template'] );
+        }
+    }
+}
+add_action( 'after_switch_theme', 'tw_maybe_create_pages' );
+// Also run on init once (idempotent — only creates pages if missing)
+add_action( 'init', 'tw_maybe_create_pages', 99 );
