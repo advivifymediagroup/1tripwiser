@@ -5,10 +5,10 @@
         <?php while (have_posts()) : the_post(); ?>
             <article class="page-content">
                 <h1><?php the_title(); ?></h1>
-                <div class="page-meta">
+                <!-- <div class="page-meta">
                     <span class="date"><?php echo get_the_date(); ?></span>
                     <span class="author">by <?php the_author(); ?></span>
-                </div>
+                </div> -->
                 <div class="content">
                     <?php the_content(); ?>
                 </div>
