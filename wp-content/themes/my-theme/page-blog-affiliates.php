@@ -322,12 +322,43 @@ body { background-color: var(--ba-bg) !important; color: var(--ba-text); font-fa
 .ba-read-more:hover { color: var(--gold); }
 
 /* ── Blog Grid ────────────────────────────────────────────────── */
+.ba-section-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
 .ba-section-head {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 1.5rem;
     color: var(--ba-head);
     letter-spacing: 0.04em;
-    margin-bottom: 20px;
+    margin: 0;
+}
+
+.ba-write-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 9px 20px;
+    background: linear-gradient(135deg, #FCB415 0%, #f09a00 100%);
+    color: #0D1526;
+    font-size: 0.85rem;
+    font-weight: 800;
+    border-radius: 9px;
+    text-decoration: none;
+    letter-spacing: 0.02em;
+    transition: opacity 0.2s, transform 0.15s;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.ba-write-btn:hover {
+    opacity: 0.88;
+    transform: translateY(-1px);
 }
 
 .ba-grid {
@@ -623,7 +654,14 @@ table.ba-table tr:hover td { background: rgba(6,146,175,0.04); }
         ?>
 
         <!-- BLOG GRID -->
-        <h2 class="ba-section-head">Latest Guides</h2>
+        <div class="ba-section-row">
+            <h2 class="ba-section-head">Latest Guides</h2>
+            <?php if (is_user_logged_in()) : ?>
+            <a href="<?php echo esc_url(home_url('/submit-blog/')); ?>" class="ba-write-btn">
+                ✍️ Write a Post
+            </a>
+            <?php endif; ?>
+        </div>
 
         <?php
         // Get posts excluding the featured one
