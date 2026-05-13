@@ -218,7 +218,7 @@
     /* ═══════════════════════════════════════════════════════════════
        4. 3D CARD TILT (mouse parallax on cards)
     ═══════════════════════════════════════════════════════════════ */
-    var TILT_SELECTORS = '.ba-card, .ba-aff-chip, .sb-form-card, .tw-package-card';
+    var TILT_SELECTORS = '.ba-card, .ba-aff-chip, .tw-package-card';
 
     function initTilt() {
         document.querySelectorAll(TILT_SELECTORS).forEach(function (card) {
