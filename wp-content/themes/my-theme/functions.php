@@ -747,6 +747,8 @@ function mytheme_travel_filter_options($post_type) {
             'all' => __('All', 'mytheme'),
             'india' => __('India', 'mytheme'),
             'international' => __('International', 'mytheme'),
+            'asia' => __('Asia', 'mytheme'),
+            'europe' => __('Europe', 'mytheme'),
             'budget-under-30k' => __('Budget < 30K', 'mytheme'),
             'bestseller' => __('Bestseller', 'mytheme'),
             'trending' => __('Trending', 'mytheme'),
@@ -783,12 +785,12 @@ function mytheme_build_travel_filter_meta_query($post_type, $filter) {
     }
 
     if ($post_type === 'travel_package') {
-        if (in_array($filter, array('india', 'international'), true)) {
+        if (in_array($filter, array('india', 'international', 'asia', 'europe'), true)) {
             return array(
                 array(
                     'key' => 'package_region',
-                    'value' => $filter,
-                    'compare' => '=',
+                    'value' => '"' . $filter . '"',
+                    'compare' => 'LIKE',
                 ),
             );
         }

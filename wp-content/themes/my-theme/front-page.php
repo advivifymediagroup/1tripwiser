@@ -548,6 +548,18 @@
         </div>
     </section>
 
+    <section class="instagram-feed-section">
+        <div class="container">
+            <div class="section-heading instagram-feed-heading">
+                <span>Follow the journey</span>
+                <!-- <h2>Instagram Feed</h2> -->
+            </div>
+            <div class="instagram-feed-wrap">
+                <?php echo do_shortcode('[instagram-feed feed=2]'); ?>
+            </div>
+        </div>
+    </section>
+
     <section class="free-itinerary-section">
         <div class="container">
             <div class="free-itinerary-content">
@@ -559,8 +571,8 @@
                     <p>Tell us your dream destination — we'll craft a personalised trip plan in 24 hours. No charges, ever.</p>
                 </div>
                 <form class="free-itinerary-form" action="<?php echo esc_url(mytheme_get_plan_trip_url()); ?>" method="get">
-                    <label class="screen-reader-text" for="free-itinerary-email">Email address</label>
-                    <input id="free-itinerary-email" type="email" name="email" placeholder="your@email.com" required>
+                    <label class="screen-reader-text" for="free-itinerary-destination">Destination</label>
+                    <input id="free-itinerary-destination" type="text" name="destination" placeholder="Where do you want to go?" required>
                     <button type="submit">Plan My Trip</button>
                 </form>
             </div>
