@@ -2,6 +2,7 @@
 
 <main class="main-content">
     <div class="container">
+        <?php mytheme_breadcrumbs(); ?>
         <?php while (have_posts()) : the_post(); ?>
             <?php
             $package = mytheme_get_package_data();
@@ -45,8 +46,59 @@
                     ?>
                 </div>
 
+                <section class="tw-package-enquiry" id="package-enquiry">
+                    <div class="tw-package-enquiry-copy">
+                        <span>Interested in this package?</span>
+                        <h2>Get a callback for <?php the_title(); ?></h2>
+                        <p>Share your basic details and our travel expert will help with dates, pricing, inclusions, and customisation.</p>
+                    </div>
+
+                    <?php if (isset($_GET['package_enquiry']) && $_GET['package_enquiry'] === 'success') : ?>
+                        <div class="tw-form-notice success">Thanks. Your enquiry has been received.</div>
+                    <?php elseif (isset($_GET['package_enquiry']) && $_GET['package_enquiry'] === 'error') : ?>
+                        <div class="tw-form-notice error">Please fill your name and phone number.</div>
+                    <?php endif; ?>
+
+                    <form class="tw-package-enquiry-form" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="post">
+                        <input type="hidden" name="action" value="mytheme_package_inquiry">
+                        <input type="hidden" name="package_id" value="<?php echo esc_attr(get_the_ID()); ?>">
+                        <?php wp_nonce_field('mytheme_package_inquiry', 'mytheme_package_inquiry_nonce'); ?>
+
+                        <div class="tw-form-grid">
+                            <label>
+                                <span>Name *</span>
+                                <input type="text" name="name" required>
+                            </label>
+                            <label>
+                                <span>Phone *</span>
+                                <input type="tel" name="phone" required>
+                            </label>
+                            <label>
+                                <span>Email</span>
+                                <input type="email" name="email">
+                            </label>
+                            <label>
+                                <span>Preferred Travel Date</span>
+                                <input type="date" name="date">
+                            </label>
+                            <label>
+                                <span>Adults</span>
+                                <input type="number" name="adults" min="1" value="1">
+                            </label>
+                            <label class="tw-form-full">
+                                <span>Message</span>
+                                <textarea name="message" rows="4" placeholder="Tell us your travel dates, group size, or custom requests."></textarea>
+                            </label>
+                        </div>
+
+                        <button type="submit">Send Enquiry</button>
+                    </form>
+                </section>
+
+                <?php mytheme_render_faq_section(get_the_ID(), 'Package FAQs'); ?>
+
                 <footer class="post-footer travel-cta">
-                    <a href="<?php echo esc_url($book_url); ?>" class="btn-primary">Book Now</a>
+                    <a href="#package-enquiry" class="btn-primary">Enquire Now</a>
                     <!-- <a href="<?php echo esc_url(mytheme_get_plan_trip_url()); ?>" class="btn-secondary">Customize Trip</a> -->
                     <a href="<?php echo esc_url(get_post_type_archive_link('travel_package')); ?>" class="btn-secondary">All Packages</a>
                 </footer>

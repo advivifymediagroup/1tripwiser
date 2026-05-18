@@ -587,7 +587,7 @@
                 <!-- <h2>Instagram Feed</h2> -->
             </div>
             <div class="instagram-feed-wrap">
-                <?php echo do_shortcode('[instagram-feed feed=2]'); ?>
+                <?php echo do_shortcode('[instagram-feed feed=3]'); ?>
             </div>
         </div>
     </section>
@@ -600,13 +600,9 @@
                         FREE
                     </span>
                      ITINERARY</h2>
-                    <p>Tell us your dream destination — we'll craft a personalised trip plan in 24 hours. No charges, ever.</p>
+                    <p>Tell us your dream destination — we'll craft a personalised trip plan. No charges, ever.</p>
                 </div>
-                <form class="free-itinerary-form" action="<?php echo esc_url(mytheme_get_plan_trip_url()); ?>" method="get">
-                    <label class="screen-reader-text" for="free-itinerary-destination">Destination</label>
-                    <input id="free-itinerary-destination" type="text" name="destination" placeholder="Where do you want to go?" required>
-                    <button type="submit">Plan My Trip</button>
-                </form>
+                <a class="free-itinerary-link" href="<?php echo esc_url(mytheme_get_plan_trip_url()); ?>">Plan My Trip</a>
             </div>
         </div>
     </section>
