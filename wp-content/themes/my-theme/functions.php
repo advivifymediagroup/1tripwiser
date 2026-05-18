@@ -577,6 +577,68 @@ function mytheme_get_page_url_by_path($path) {
     return $page ? get_permalink($page) : home_url('/' . trim($path, '/') . '/');
 }
 
+function mytheme_breadcrumbs() {
+    if (is_front_page()) {
+        return;
+    }
+
+    $items = array(
+        array(
+            'label' => __('Home', 'mytheme'),
+            'url' => home_url('/'),
+        ),
+    );
+
+    if (is_singular('travel_package')) {
+        $items[] = array('label' => __('Packages', 'mytheme'), 'url' => get_post_type_archive_link('travel_package'));
+        $items[] = array('label' => get_the_title(), 'url' => '');
+    } elseif (is_singular('itinerary')) {
+        $items[] = array('label' => __('Itineraries', 'mytheme'), 'url' => get_post_type_archive_link('itinerary'));
+        $items[] = array('label' => get_the_title(), 'url' => '');
+    } elseif (is_singular('destination')) {
+        $items[] = array('label' => __('Destinations', 'mytheme'), 'url' => get_post_type_archive_link('destination'));
+        $items[] = array('label' => get_the_title(), 'url' => '');
+    } elseif (is_singular('post')) {
+        $blog_url = get_permalink(get_option('page_for_posts'));
+        $items[] = array('label' => __('Blog', 'mytheme'), 'url' => $blog_url ? $blog_url : home_url('/blog/'));
+        $items[] = array('label' => get_the_title(), 'url' => '');
+    } elseif (is_page()) {
+        $ancestors = array_reverse(get_post_ancestors(get_the_ID()));
+        foreach ($ancestors as $ancestor_id) {
+            $items[] = array('label' => get_the_title($ancestor_id), 'url' => get_permalink($ancestor_id));
+        }
+        $items[] = array('label' => get_the_title(), 'url' => '');
+    } elseif (is_post_type_archive('travel_package')) {
+        $items[] = array('label' => __('Packages', 'mytheme'), 'url' => '');
+    } elseif (is_post_type_archive('itinerary')) {
+        $items[] = array('label' => __('Itineraries', 'mytheme'), 'url' => '');
+    } elseif (is_post_type_archive('destination')) {
+        $items[] = array('label' => __('Destinations', 'mytheme'), 'url' => '');
+    } elseif (is_archive()) {
+        $items[] = array('label' => get_the_archive_title(), 'url' => '');
+    } elseif (is_search()) {
+        $items[] = array('label' => sprintf(__('Search: %s', 'mytheme'), get_search_query()), 'url' => '');
+    }
+
+    if (count($items) < 2) {
+        return;
+    }
+
+    echo '<nav class="tw-breadcrumbs" aria-label="' . esc_attr__('Breadcrumb', 'mytheme') . '">';
+    foreach ($items as $index => $item) {
+        if ($index > 0) {
+            echo '<span class="tw-breadcrumb-separator" aria-hidden="true">/</span>';
+        }
+
+        if (!empty($item['url']) && $index < count($items) - 1) {
+            echo '<a href="' . esc_url($item['url']) . '">' . esc_html($item['label']) . '</a>';
+        } else {
+            echo '<span aria-current="page">' . esc_html($item['label']) . '</span>';
+        }
+    }
+    echo '</nav>';
+}
+
 function mytheme_travel_tabs() {
     $current_type = get_post_type();
     $home_active = is_front_page() || is_home();
@@ -746,6 +808,100 @@ function mytheme_get_destination_data($post_id = null) {
     );
 }
 
+function mytheme_render_faq_section($post_id = null, $heading = 'Frequently Asked Questions') {
+    $post_id = $post_id ? $post_id : get_the_ID();
+
+    if (!function_exists('have_rows') || !have_rows('faqs', $post_id)) {
+        return;
+    }
+    ?>
+    <section class="tw-faq-section">
+        <h2><?php echo esc_html($heading); ?></h2>
+        <div class="tw-faq-list">
+            <?php while (have_rows('faqs', $post_id)) : the_row(); ?>
+                <?php
+                $question = get_sub_field('faq_question');
+                $answer = get_sub_field('faq_answer');
+                if (!$question || !$answer) {
+                    continue;
+                }
+                ?>
+                <details class="tw-faq-item">
+                    <summary><?php echo esc_html($question); ?></summary>
+                    <div class="tw-faq-answer">
+                        <?php echo wp_kses_post(wpautop($answer)); ?>
+                    </div>
+                </details>
+            <?php endwhile; ?>
+        </div>
+    </section>
+    <?php
+}
+
+function mytheme_handle_package_inquiry() {
+    if (!isset($_POST['mytheme_package_inquiry_nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['mytheme_package_inquiry_nonce'])), 'mytheme_package_inquiry')) {
+        wp_die(esc_html__('Security check failed.', 'mytheme'));
+    }
+
+    $package_id = isset($_POST['package_id']) ? absint($_POST['package_id']) : 0;
+    $name = isset($_POST['name']) ? sanitize_text_field(wp_unslash($_POST['name'])) : '';
+    $phone = isset($_POST['phone']) ? sanitize_text_field(wp_unslash($_POST['phone'])) : '';
+    $email = isset($_POST['email']) ? sanitize_email(wp_unslash($_POST['email'])) : '';
+    $travel_date = isset($_POST['date']) ? sanitize_text_field(wp_unslash($_POST['date'])) : '';
+    $adults = isset($_POST['adults']) ? max(1, absint($_POST['adults'])) : 1;
+    $message = isset($_POST['message']) ? sanitize_textarea_field(wp_unslash($_POST['message'])) : '';
+    $redirect = isset($_POST['_wp_http_referer']) ? esc_url_raw(wp_unslash($_POST['_wp_http_referer'])) : home_url('/');
+
+    if (!$package_id || get_post_type($package_id) !== 'travel_package' || empty($name) || empty($phone)) {
+        wp_safe_redirect(add_query_arg('package_enquiry', 'error', $redirect));
+        exit;
+    }
+
+    $package = mytheme_get_package_data($package_id);
+    $package_title = get_the_title($package_id);
+    $destination = $package['location'] ? $package['location'] : $package_title;
+
+    $post_id = wp_insert_post(array(
+        'post_type' => 'trip_inquiry',
+        'post_title' => sanitize_text_field(sprintf('%s - Package Enquiry - %s', $name, $package_title)),
+        'post_status' => 'publish',
+    ));
+
+    if (is_wp_error($post_id)) {
+        wp_safe_redirect(add_query_arg('package_enquiry', 'error', $redirect));
+        exit;
+    }
+
+    $meta = array(
+        '_ti_name' => $name,
+        '_ti_phone' => $phone,
+        '_ti_email' => $email,
+        '_ti_destination' => $destination,
+        '_ti_date' => $travel_date,
+        '_ti_duration' => $package['duration'],
+        '_ti_time_pref' => '',
+        '_ti_trip_type' => $package['trip_type'],
+        '_ti_adults' => $adults,
+        '_ti_children' => 0,
+        '_ti_budget' => $package['amount'],
+        '_ti_departing' => '',
+        '_ti_notes' => $message,
+        '_ti_source' => 'Package Enquiry',
+        '_ti_package_id' => $package_id,
+        '_ti_package_title' => $package_title,
+        '_ti_package_url' => get_permalink($package_id),
+    );
+
+    foreach ($meta as $key => $value) {
+        update_post_meta($post_id, $key, $value);
+    }
+
+    wp_safe_redirect(add_query_arg('package_enquiry', 'success', $redirect));
+    exit;
+}
+add_action('admin_post_mytheme_package_inquiry', 'mytheme_handle_package_inquiry');
+add_action('admin_post_nopriv_mytheme_package_inquiry', 'mytheme_handle_package_inquiry');
+
 function mytheme_travel_filter_options($post_type) {
     if ($post_type === 'travel_package') {
         return array(
@@ -902,8 +1058,9 @@ if (!class_exists('TW_Nav_Walker')) {
         public function start_el(&$output, $item, $depth = 0, $args = null, $id = 0) {
             $classes  = empty($item->classes) ? array() : (array) $item->classes;
             $active   = in_array('current-menu-item', $classes) ? ' tw-active' : '';
+            $href     = !empty($item->url) ? $item->url : '#';
             $atts     = array(
-                'href'   => !empty($item->url) ? $item->url : '#',
+                'href'   => esc_url($href),
                 'target' => !empty($item->target) ? $item->target : '',
                 'rel'    => !empty($item->xfn) ? $item->xfn : '',
                 'class'  => 'tw-nav-link' . $active,
@@ -1286,6 +1443,7 @@ function mytheme_render_inquiries_page() {
                     <th><?php esc_html_e('Name', 'mytheme'); ?></th>
                     <th><?php esc_html_e('Phone', 'mytheme'); ?></th>
                     <th><?php esc_html_e('Email', 'mytheme'); ?></th>
+                    <th><?php esc_html_e('Package', 'mytheme'); ?></th>
                     <th><?php esc_html_e('Destination', 'mytheme'); ?></th>
                     <th><?php esc_html_e('Travel Date', 'mytheme'); ?></th>
                     <th><?php esc_html_e('Budget', 'mytheme'); ?></th>
@@ -1305,6 +1463,19 @@ function mytheme_render_inquiries_page() {
                         <td><strong><?php echo esc_html(get_post_meta($id, '_ti_name', true)); ?></strong></td>
                         <td><?php echo esc_html(get_post_meta($id, '_ti_phone', true)); ?></td>
                         <td><?php echo esc_html(get_post_meta($id, '_ti_email', true)); ?></td>
+                        <td>
+                            <?php
+                            $package_title = get_post_meta($id, '_ti_package_title', true);
+                            $package_url = get_post_meta($id, '_ti_package_url', true);
+                            if ($package_title && $package_url) {
+                                echo '<a href="' . esc_url($package_url) . '" target="_blank" rel="noopener">' . esc_html($package_title) . '</a>';
+                            } elseif ($package_title) {
+                                echo esc_html($package_title);
+                            } else {
+                                echo '&mdash;';
+                            }
+                            ?>
+                        </td>
                         <td><?php echo esc_html(get_post_meta($id, '_ti_destination', true)); ?></td>
                         <td><?php echo esc_html(get_post_meta($id, '_ti_date', true)); ?></td>
                         <td><?php echo esc_html(get_post_meta($id, '_ti_budget', true)); ?></td>
@@ -1316,7 +1487,7 @@ function mytheme_render_inquiries_page() {
                 <?php endwhile;
                 wp_reset_postdata();
             else : ?>
-                <tr><td colspan="11" style="text-align:center;padding:24px;color:#666;"><?php esc_html_e('No inquiries yet. Form submissions will appear here.', 'mytheme'); ?></td></tr>
+                <tr><td colspan="12" style="text-align:center;padding:24px;color:#666;"><?php esc_html_e('No inquiries yet. Form submissions will appear here.', 'mytheme'); ?></td></tr>
             <?php endif; ?>
             </tbody>
         </table>

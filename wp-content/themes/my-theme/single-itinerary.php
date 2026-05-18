@@ -2,6 +2,7 @@
 
 <main class="main-content">
     <div class="container">
+        <?php mytheme_breadcrumbs(); ?>
         <?php while (have_posts()) : the_post(); ?>
             <?php
             $duration = mytheme_get_travel_field('itinerary_duration');
@@ -49,6 +50,8 @@
                         <?php endwhile; ?>
                     </section>
                 <?php endif; ?>
+
+                <?php mytheme_render_faq_section(get_the_ID(), 'Itinerary FAQs'); ?>
 
                 <footer class="post-footer travel-cta">
                     <!-- <a href="<?php echo esc_url(mytheme_get_plan_trip_url()); ?>" class="btn-primary">Customize This Route</a> -->
