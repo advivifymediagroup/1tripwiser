@@ -1243,6 +1243,7 @@ body {
 }
 
 .tw-form-grid input,
+.tw-form-grid select,
 .tw-form-grid textarea {
   border: 1px solid #d9e2ec;
   border-radius: 6px;
@@ -1252,6 +1253,7 @@ body {
 }
 
 .tw-form-grid input:focus,
+.tw-form-grid select:focus,
 .tw-form-grid textarea:focus {
   border-color: #0692af;
   outline: none;
