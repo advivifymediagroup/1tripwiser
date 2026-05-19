@@ -21,8 +21,9 @@ if ( $tw_hero_video ) {
         <?php if ( $tw_yt_id ) : ?>
         <div class="tw-hero-yt-wrap">
             <iframe class="tw-hero-yt"
-                src="https://www.youtube.com/embed/<?php echo esc_attr($tw_yt_id); ?>?autoplay=1&mute=1&loop=1&playlist=<?php echo esc_attr($tw_yt_id); ?>&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&playsinline=1"
-                frameborder="0" allow="autoplay; encrypted-media" allowfullscreen loading="lazy"></iframe>
+                src="https://www.youtube.com/embed/<?php echo esc_attr($tw_yt_id); ?>?autoplay=1&mute=1&loop=1&playlist=<?php echo esc_attr($tw_yt_id); ?>&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&playsinline=1&disablekb=1&fs=0&cc_load_policy=0&color=white"
+                frameborder="0" allow="autoplay; encrypted-media" loading="lazy" title=""></iframe>
+            <div class="tw-hero-yt-shield" aria-hidden="true"></div>
         </div>
         <?php elseif ( $tw_hero_video ) : ?>
         <video class="tw-hero-vid" autoplay muted loop playsinline preload="metadata">
@@ -88,9 +89,10 @@ if ( $tw_hero_video ) {
 /* ── Hero ── */
 .tw-hero { position:relative; min-height:100svh; display:flex; align-items:center; overflow:hidden; background:#0d1526; }
 .tw-hero-bg { position:absolute; inset:0; z-index:0; }
-.tw-hero-yt-wrap { position:absolute; inset:-10%; pointer-events:none; }
-.tw-hero-yt { width:100%; height:100%; object-fit:cover; }
-.tw-hero-vid { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+.tw-hero-yt-wrap { position:absolute; inset:-15%; pointer-events:none; overflow:hidden; }
+.tw-hero-yt { width:100%; height:100%; border:0; display:block; }
+.tw-hero-yt-shield { position:absolute; inset:0; z-index:1; background:transparent; cursor:default; }
+.tw-hero-vid { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; pointer-events:none; }
 .tw-hero-img { position:absolute; inset:0; background-size:cover; background-position:center; transform:scale(1.04); transition:transform 12s ease; }
 .tw-hero:hover .tw-hero-img { transform:scale(1.0); }
 .tw-hero-overlay { position:absolute; inset:0; background: linear-gradient(to bottom,rgba(13,21,38,0.6) 0%,rgba(13,21,38,0.25) 40%,rgba(13,21,38,0.8) 100%), linear-gradient(to right,rgba(13,21,38,0.75) 0%,transparent 65%); }
