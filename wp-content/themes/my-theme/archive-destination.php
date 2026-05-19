@@ -2,6 +2,7 @@
 
 <main class="main-content travel-archive">
     <div class="container">
+        <?php mytheme_breadcrumbs(); ?>
         <header class="archive-header travel-archive-header">
             <span>Explore by place</span>
             <h1 class="archive-title">Destinations</h1>
