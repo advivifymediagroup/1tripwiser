@@ -933,6 +933,52 @@ function mytheme_travel_filter_options($post_type) {
     );
 }
 
+function mytheme_package_region_options() {
+    return array(
+        'india' => __('India', 'mytheme'),
+        'international' => __('International', 'mytheme'),
+        'asia' => __('Asia', 'mytheme'),
+        'europe' => __('Europe', 'mytheme'),
+    );
+}
+
+function mytheme_package_tag_options() {
+    return array(
+        'bestseller' => __('Bestseller', 'mytheme'),
+        'trending' => __('Trending', 'mytheme'),
+        'new' => __('New', 'mytheme'),
+        'limited' => __('Limited Seats', 'mytheme'),
+        'popular' => __('Popular', 'mytheme'),
+    );
+}
+
+function mytheme_package_trip_type_options() {
+    return array(
+        'Group Trip' => __('Group Trip', 'mytheme'),
+        'Single Traveller' => __('Single Traveller', 'mytheme'),
+        'Private Trip' => __('Private Trip', 'mytheme'),
+        'Family Trip' => __('Family Trip', 'mytheme'),
+        'Honeymoon' => __('Honeymoon', 'mytheme'),
+    );
+}
+
+function mytheme_package_month_options() {
+    return array(
+        'january' => __('January', 'mytheme'),
+        'february' => __('February', 'mytheme'),
+        'march' => __('March', 'mytheme'),
+        'april' => __('April', 'mytheme'),
+        'may' => __('May', 'mytheme'),
+        'june' => __('June', 'mytheme'),
+        'july' => __('July', 'mytheme'),
+        'august' => __('August', 'mytheme'),
+        'september' => __('September', 'mytheme'),
+        'october' => __('October', 'mytheme'),
+        'november' => __('November', 'mytheme'),
+        'december' => __('December', 'mytheme'),
+    );
+}
+
 function mytheme_get_active_travel_filter($param, $post_type) {
     $options = mytheme_travel_filter_options($post_type);
     $filter = isset($_GET[$param]) ? sanitize_key(wp_unslash($_GET[$param])) : 'all';
