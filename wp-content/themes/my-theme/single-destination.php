@@ -2,6 +2,7 @@
 
 <main class="main-content">
     <div class="container">
+        <?php mytheme_breadcrumbs(); ?>
         <?php while (have_posts()) : the_post(); ?>
             <?php
             $destination = mytheme_get_destination_data();
@@ -48,6 +49,8 @@
                     }
                     ?>
                 </div>
+
+                <?php mytheme_render_faq_section(get_the_ID(), 'Destination FAQs'); ?>
 
                 <footer class="post-footer travel-cta">
                     <a href="<?php echo esc_url(get_post_type_archive_link('travel_package')); ?>" class="btn-primary">View Packages</a>
