@@ -85,6 +85,16 @@
                                 <span>Adults</span>
                                 <input type="number" name="adults" min="1" value="1">
                             </label>
+                            <label>
+                                <span>Budget</span>
+                                <select name="budget">
+                                    <option value="">Select budget range</option>
+                                    <option value="Budget - Under Rs. 25,000">Budget - Under Rs. 25,000</option>
+                                    <option value="Mid-range - Rs. 25K-Rs. 60K">Mid-range - Rs. 25K-Rs. 60K</option>
+                                    <option value="Premium - Rs. 60K-Rs. 1.5L">Premium - Rs. 60K-Rs. 1.5L</option>
+                                    <option value="Luxury - Above Rs. 1.5L">Luxury - Above Rs. 1.5L</option>
+                                </select>
+                            </label>
                             <label class="tw-form-full">
                                 <span>Message</span>
                                 <textarea name="message" rows="4" placeholder="Tell us your travel dates, group size, or custom requests."></textarea>

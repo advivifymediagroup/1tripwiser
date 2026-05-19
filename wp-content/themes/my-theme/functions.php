@@ -849,6 +849,7 @@ function mytheme_handle_package_inquiry() {
     $email = isset($_POST['email']) ? sanitize_email(wp_unslash($_POST['email'])) : '';
     $travel_date = isset($_POST['date']) ? sanitize_text_field(wp_unslash($_POST['date'])) : '';
     $adults = isset($_POST['adults']) ? max(1, absint($_POST['adults'])) : 1;
+    $budget = isset($_POST['budget']) ? sanitize_text_field(wp_unslash($_POST['budget'])) : '';
     $message = isset($_POST['message']) ? sanitize_textarea_field(wp_unslash($_POST['message'])) : '';
     $redirect = isset($_POST['_wp_http_referer']) ? esc_url_raw(wp_unslash($_POST['_wp_http_referer'])) : home_url('/');
 
@@ -883,7 +884,7 @@ function mytheme_handle_package_inquiry() {
         '_ti_trip_type' => $package['trip_type'],
         '_ti_adults' => $adults,
         '_ti_children' => 0,
-        '_ti_budget' => $package['amount'],
+        '_ti_budget' => $budget ? $budget : $package['amount'],
         '_ti_departing' => '',
         '_ti_notes' => $message,
         '_ti_source' => 'Package Enquiry',
