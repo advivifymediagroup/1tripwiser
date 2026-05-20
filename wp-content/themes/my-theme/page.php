@@ -2,6 +2,7 @@
 
 <main class="main-content">
     <div class="container">
+        <?php mytheme_breadcrumbs(); ?>
         <?php while (have_posts()) : the_post(); ?>
             <article class="page-content">
                 <h1><?php the_title(); ?></h1>
@@ -18,6 +19,7 @@
                     'after' => '</div>',
                 ));
                 ?>
+                <?php mytheme_render_faq_section(get_the_ID()); ?>
             </article>
         <?php endwhile; ?>
     </div>

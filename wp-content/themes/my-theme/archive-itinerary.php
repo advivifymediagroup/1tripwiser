@@ -2,6 +2,7 @@
 
 <main class="main-content travel-archive">
     <div class="container">
+        <?php mytheme_breadcrumbs(); ?>
         <header class="archive-header travel-archive-header">
             <span>Ready-made routes</span>
             <h1 class="archive-title">Itineraries</h1>

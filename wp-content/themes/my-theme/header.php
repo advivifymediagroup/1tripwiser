@@ -25,7 +25,6 @@
     <div class="tw-nav-inner">
 
         <!-- Brand / Logo -->
-        <!-- Brand / Logo -->
         <a class="tw-brand" href="<?php echo esc_url(home_url('/')); ?>" aria-label="<?php bloginfo('name'); ?> Home">
             <?php if ( has_custom_logo() ) :
                 $tw_logo_id = get_theme_mod('custom_logo');
@@ -95,6 +94,9 @@
                 <a class="tw-auth-link" href="<?php echo esc_url(home_url('/login/')); ?>">Log In</a>
                 <a class="tw-auth-btn" href="<?php echo esc_url(home_url('/register/')); ?>">Sign Up</a>
             <?php endif; ?>
+            </div>
+            <div class="instagram-follow tw-f-social">
+                <a href="https://www.instagram.com/1tripwiser/" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>         
             </div>
         </nav>
 
@@ -257,6 +259,10 @@ function tw_default_mobile_nav() {
 }
 
 .tw-menu-item { margin: 0; }
+
+.instagram-follow {
+    margin-left: 12px;
+}
 
 .tw-nav-link {
     color: rgba(255,255,255,0.75);

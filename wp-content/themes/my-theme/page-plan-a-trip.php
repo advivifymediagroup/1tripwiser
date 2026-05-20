@@ -453,6 +453,7 @@ select.fi {
 </style>
 
 <div class="plan-hero">
+    <?php mytheme_breadcrumbs(); ?>
   <div class="plan-hero-kicker"><?php echo esc_html($pat_kicker); ?></div>
   <h1 class="plan-hero-title"><?php
     // Split title at last space to make last word gold-accented
