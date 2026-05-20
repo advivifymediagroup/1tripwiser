@@ -381,7 +381,7 @@ if ( $tw_hero_video ) {
                 <span>Follow the journey</span>
             </div>
             <div class="instagram-feed-wrap">
-                <?php echo do_shortcode('[instagram-feed feed=2]'); ?>
+                <?php echo do_shortcode('[instagram-feed feed=3]'); ?>
             </div>
         </div>
     </section>
@@ -393,13 +393,9 @@ if ( $tw_hero_video ) {
                 <div class="tw-cta-copy">
                     <span class="tw-cta-kicker">100% Free · No Hidden Charges</span>
                     <h2 class="tw-cta-title">GET A <span>FREE</span> ITINERARY</h2>
-                    <p>Tell us your dream destination — we'll craft a personalised trip plan in 24 hours.</p>
+                    <p>Tell us your dream destination — we'll craft a personalised trip plan.</p>
                 </div>
-                <form class="tw-cta-form" action="<?php echo esc_url(mytheme_get_plan_trip_url()); ?>" method="get">
-                    <label class="screen-reader-text" for="tw-cta-dest">Destination</label>
-                    <input id="tw-cta-dest" type="text" name="destination" placeholder="Where do you want to go?" required>
-                    <button type="submit">✈ Plan My Trip</button>
-                </form>
+                <a class="free-itinerary-link" href="<?php echo esc_url(mytheme_get_plan_trip_url()); ?>">✈ Plan My Trip</a>
             </div>
         </div>
     </section>
