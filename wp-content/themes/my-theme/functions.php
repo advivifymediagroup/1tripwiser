@@ -1918,39 +1918,6 @@ function tw_whatsapp_widget() {
         </button>
     </div>
 
-    <style>
-    #tw-wa-widget { position:fixed; bottom:24px; right:24px; z-index:9999; font-family:'Nunito',sans-serif; }
-
-    /* Trigger button */
-    .tw-wa-btn { width:60px; height:60px; border-radius:50%; background:#25D366; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 8px 28px rgba(37,211,102,0.45); transition:transform 0.25s,box-shadow 0.25s; color:#fff; position:relative; }
-    .tw-wa-btn:hover { transform:scale(1.1); box-shadow:0 12px 36px rgba(37,211,102,0.55); }
-    .tw-wa-badge { position:absolute; top:-4px; right:-4px; background:#D5374F; color:#fff; font-size:0.65rem; font-weight:800; width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center; border:2px solid #fff; animation:tw-wa-ping 2s ease infinite; }
-    @keyframes tw-wa-ping { 0%,100%{transform:scale(1)} 50%{transform:scale(1.25)} }
-    .tw-wa-btn-icon { line-height:0; }
-
-    /* Popup */
-    .tw-wa-popup { position:absolute; bottom:72px; right:0; width:320px; background:#fff; border-radius:18px; box-shadow:0 20px 60px rgba(0,0,0,0.2); overflow:hidden; animation:tw-wa-slide-in 0.25s ease; }
-    .tw-wa-popup[hidden] { display:none; }
-    @keyframes tw-wa-slide-in { from{opacity:0;transform:translateY(16px) scale(0.96)} to{opacity:1;transform:translateY(0) scale(1)} }
-
-    .tw-wa-popup-head { background:#075E54; padding:16px 16px 16px 16px; display:flex; align-items:center; gap:12px; }
-    .tw-wa-popup-avatar { flex-shrink:0; }
-    .tw-wa-popup-info { flex:1; }
-    .tw-wa-popup-info strong { display:block; color:#fff; font-size:0.95rem; font-weight:800; }
-    .tw-wa-popup-info span { font-size:0.75rem; color:rgba(255,255,255,0.7); }
-    .tw-wa-popup-close { background:none; border:none; color:rgba(255,255,255,0.7); font-size:1rem; cursor:pointer; padding:4px; line-height:1; flex-shrink:0; transition:color 0.15s; }
-    .tw-wa-popup-close:hover { color:#fff; }
-
-    .tw-wa-popup-body { padding:20px 16px; background:#ECE5DD; }
-    .tw-wa-bubble { background:#fff; border-radius:0 12px 12px 12px; padding:12px 14px; font-size:0.9rem; color:#1a2535; line-height:1.55; box-shadow:0 1px 3px rgba(0,0,0,0.1); position:relative; }
-    .tw-wa-bubble::before { content:''; position:absolute; top:0; left:-8px; border-width:0 8px 8px 0; border-style:solid; border-color:transparent #fff transparent transparent; }
-
-    .tw-wa-popup-cta { display:flex; align-items:center; justify-content:center; gap:8px; background:#25D366; color:#fff; font-weight:800; font-size:0.9rem; padding:14px; text-decoration:none; transition:background 0.2s; }
-    .tw-wa-popup-cta:hover { background:#1ebe5d; color:#fff; }
-
-    @media(max-width:400px) { .tw-wa-popup{width:calc(100vw - 32px);right:-8px} #tw-wa-widget{bottom:16px;right:16px} }
-    </style>
-
     <script>
     (function(){
         var btn    = document.getElementById('tw-wa-btn');
