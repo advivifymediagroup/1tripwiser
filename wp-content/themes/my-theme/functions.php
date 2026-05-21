@@ -808,6 +808,77 @@ function mytheme_get_destination_data($post_id = null) {
     );
 }
 
+function mytheme_get_destination_guide_sections($post_id = null) {
+    $post_id = $post_id ? $post_id : get_the_ID();
+
+    return array(
+        array(
+            'label' => __('Best Time to Visit', 'mytheme'),
+            'field' => 'destination_best_time',
+            'content' => mytheme_get_travel_field('destination_best_time', $post_id),
+        ),
+        array(
+            'label' => __('Things to Do', 'mytheme'),
+            'field' => 'destination_things_to_do',
+            'content' => mytheme_get_travel_field('destination_things_to_do', $post_id),
+        ),
+        array(
+            'label' => __('Food', 'mytheme'),
+            'field' => 'destination_food',
+            'content' => mytheme_get_travel_field('destination_food', $post_id),
+        ),
+        array(
+            'label' => __('Visa Info', 'mytheme'),
+            'field' => 'destination_visa_info',
+            'content' => mytheme_get_travel_field('destination_visa_info', $post_id),
+        ),
+        array(
+            'label' => __('Budget', 'mytheme'),
+            'field' => 'destination_budget',
+            'content' => mytheme_get_travel_field('destination_budget', $post_id),
+        ),
+        array(
+            'label' => __('How to Reach', 'mytheme'),
+            'field' => 'destination_how_to_reach',
+            'content' => mytheme_get_travel_field('destination_how_to_reach', $post_id),
+        ),
+        array(
+            'label' => __('Travel Tips', 'mytheme'),
+            'field' => 'destination_travel_tips',
+            'content' => mytheme_get_travel_field('destination_travel_tips', $post_id),
+        ),
+    );
+}
+
+function mytheme_render_destination_guide($post_id = null) {
+    $post_id = $post_id ? $post_id : get_the_ID();
+    $sections = array_filter(mytheme_get_destination_guide_sections($post_id), function ($section) {
+        return !empty($section['content']);
+    });
+
+    if (empty($sections)) {
+        return;
+    }
+    ?>
+    <section class="destination-guide-section">
+        <div class="destination-guide-heading">
+            <span><?php esc_html_e('Travel Guide', 'mytheme'); ?></span>
+            <h2><?php esc_html_e('Plan this destination better', 'mytheme'); ?></h2>
+        </div>
+        <div class="destination-guide-grid">
+            <?php foreach ($sections as $section) : ?>
+                <article class="destination-guide-card">
+                    <h3><?php echo esc_html($section['label']); ?></h3>
+                    <div class="destination-guide-content">
+                        <?php echo wp_kses_post(wpautop($section['content'])); ?>
+                    </div>
+                </article>
+            <?php endforeach; ?>
+        </div>
+    </section>
+    <?php
+}
+
 function mytheme_render_faq_section($post_id = null, $heading = 'Frequently Asked Questions') {
     $post_id = $post_id ? $post_id : get_the_ID();
 
