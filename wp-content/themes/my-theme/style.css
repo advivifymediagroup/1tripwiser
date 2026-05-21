@@ -1185,6 +1185,68 @@ body {
   padding: 30px;
 }
 
+.destination-guide-section {
+  background: #f8fbfc;
+  border-top: 1px solid #e7eaf0;
+  padding: 30px;
+}
+
+.destination-guide-heading {
+  margin-bottom: 18px;
+}
+
+.destination-guide-heading span {
+  color: #0692af;
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.destination-guide-heading h2 {
+  color: #0d1526;
+  font-size: 1.55rem;
+  margin: 0;
+}
+
+.destination-guide-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.destination-guide-card {
+  background: #ffffff;
+  border: 1px solid #e7eaf0;
+  border-radius: 8px;
+  padding: 18px;
+}
+
+.destination-guide-card h3 {
+  color: #0d1526;
+  font-size: 1rem;
+  margin: 0 0 10px;
+}
+
+.destination-guide-content {
+  color: #526070;
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+.destination-guide-content p:last-child,
+.destination-guide-content ul:last-child,
+.destination-guide-content ol:last-child {
+  margin-bottom: 0;
+}
+
+.destination-guide-content ul,
+.destination-guide-content ol {
+  padding-left: 20px;
+}
+
 .tw-package-enquiry {
   background: #f8fbfc;
   border-top: 1px solid #e7eaf0;
@@ -1925,8 +1987,13 @@ body {
   }
 
   .tw-package-enquiry,
+  .destination-guide-section,
   .tw-faq-section {
     padding: 22px;
+  }
+
+  .destination-guide-grid {
+    grid-template-columns: 1fr;
   }
 
   .visa-services-grid {
