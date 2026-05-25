@@ -50,6 +50,8 @@
                     ?>
                 </div>
 
+                <?php mytheme_render_destination_guide(get_the_ID()); ?>
+
                 <?php mytheme_render_faq_section(get_the_ID(), 'Destination FAQs'); ?>
 
                 <footer class="post-footer travel-cta">

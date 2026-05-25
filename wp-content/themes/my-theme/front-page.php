@@ -104,7 +104,10 @@ if ( $tw_hero_video ) {
                     while ($packages->have_posts()): $packages->the_post(); mytheme_package_card(); endwhile;
                     wp_reset_postdata();
                 else: ?>
-                    <div class="no-posts"><p>No travel packages found with the selected filters.</p></div>
+                    <?php mytheme_render_package_empty_state(
+                        home_url('/#featured-packages'),
+                        __('No packages match this homepage filter right now. Reset the filters or ask us to plan a custom trip for you.', 'mytheme')
+                    ); ?>
                 <?php endif; ?>
             </div>
             <div class="view-all">
@@ -153,7 +156,10 @@ if ( $tw_hero_video ) {
                     </article>
                     <?php endwhile; wp_reset_postdata();
                 else: ?>
-                    <div class="no-posts"><p>No itineraries found with the selected filters.</p></div>
+                    <?php mytheme_render_itinerary_empty_state(
+                        home_url('/#upcoming-trips'),
+                        __('No itineraries match this homepage filter right now. Reset the filters or ask us to create a custom route for you.', 'mytheme')
+                    ); ?>
                 <?php endif; ?>
             </div>
         </div>
