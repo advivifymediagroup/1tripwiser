@@ -1145,6 +1145,88 @@ function mytheme_travel_filter_box($post_type, $param, $base_url, $anchor = '') 
     <?php
 }
 
+function mytheme_render_package_empty_state($reset_url = '', $message = '') {
+    $archive_url = get_post_type_archive_link('travel_package');
+    $reset_url = $reset_url ? $reset_url : $archive_url;
+    $message = $message ? $message : __('Try a wider filter, explore popular routes, or tell us your dream trip and we will plan it for you.', 'mytheme');
+
+    $suggestions = array(
+        array(
+            'label' => __('All Packages', 'mytheme'),
+            'url' => $reset_url,
+        ),
+        array(
+            'label' => __('India Trips', 'mytheme'),
+            'url' => add_query_arg('package_filter', 'india', $archive_url),
+        ),
+        array(
+            'label' => __('International Trips', 'mytheme'),
+            'url' => add_query_arg('package_filter', 'international', $archive_url),
+        ),
+        array(
+            'label' => __('Budget < 30K', 'mytheme'),
+            'url' => add_query_arg('package_filter', 'budget-under-30k', $archive_url),
+        ),
+    );
+    ?>
+    <div class="no-posts travel-empty-state">
+        <span><?php esc_html_e('No matching packages', 'mytheme'); ?></span>
+        <h2><?php esc_html_e('Let us find a better route for you', 'mytheme'); ?></h2>
+        <p><?php echo esc_html($message); ?></p>
+        <div class="travel-empty-actions">
+            <a class="btn-primary" href="<?php echo esc_url(mytheme_get_plan_trip_url()); ?>"><?php esc_html_e('Plan a Trip', 'mytheme'); ?></a>
+            <a class="btn-secondary" href="<?php echo esc_url($reset_url); ?>"><?php esc_html_e('Reset Filters', 'mytheme'); ?></a>
+        </div>
+        <div class="travel-empty-suggestions" aria-label="<?php esc_attr_e('Recommended package filters', 'mytheme'); ?>">
+            <?php foreach ($suggestions as $suggestion) : ?>
+                <a href="<?php echo esc_url($suggestion['url']); ?>"><?php echo esc_html($suggestion['label']); ?></a>
+            <?php endforeach; ?>
+        </div>
+    </div>
+    <?php
+}
+
+function mytheme_render_itinerary_empty_state($reset_url = '', $message = '') {
+    $archive_url = get_post_type_archive_link('itinerary');
+    $reset_url = $reset_url ? $reset_url : $archive_url;
+    $message = $message ? $message : __('Try a wider filter, browse popular itineraries, or tell us your dream route and we will plan it for you.', 'mytheme');
+
+    $suggestions = array(
+        array(
+            'label' => __('All Itineraries', 'mytheme'),
+            'url' => $reset_url,
+        ),
+        array(
+            'label' => __('India Routes', 'mytheme'),
+            'url' => add_query_arg('itinerary_filter', 'india', $archive_url),
+        ),
+        array(
+            'label' => __('International Routes', 'mytheme'),
+            'url' => add_query_arg('itinerary_filter', 'international', $archive_url),
+        ),
+        array(
+            'label' => __('Budget < 30K', 'mytheme'),
+            'url' => add_query_arg('itinerary_filter', 'budget-under-30k', $archive_url),
+        ),
+    );
+    ?>
+    <div class="no-posts travel-empty-state">
+        <span><?php esc_html_e('No matching itineraries', 'mytheme'); ?></span>
+        <h2><?php esc_html_e('Let us shape a route around you', 'mytheme'); ?></h2>
+        <p><?php echo esc_html($message); ?></p>
+        <div class="travel-empty-actions">
+            <a class="btn-primary" href="<?php echo esc_url(mytheme_get_plan_trip_url()); ?>"><?php esc_html_e('Plan a Trip', 'mytheme'); ?></a>
+            <a class="btn-secondary" href="<?php echo esc_url($reset_url); ?>"><?php esc_html_e('Reset Filters', 'mytheme'); ?></a>
+        </div>
+        <div class="travel-empty-suggestions" aria-label="<?php esc_attr_e('Recommended itinerary filters', 'mytheme'); ?>">
+            <?php foreach ($suggestions as $suggestion) : ?>
+                <a href="<?php echo esc_url($suggestion['url']); ?>"><?php echo esc_html($suggestion['label']); ?></a>
+            <?php endforeach; ?>
+        </div>
+    </div>
+    <?php
+}
+
 function mytheme_apply_travel_archive_filters($query) {
     if (is_admin() || !$query->is_main_query()) {
         return;

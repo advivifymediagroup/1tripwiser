@@ -249,10 +249,10 @@ $destinations = get_posts(array(
             </div>
             <?php wp_reset_postdata(); ?>
         <?php else : ?>
-            <div class="no-posts">
-                <h2>No packages found</h2>
-                <p>Try changing your filters or resetting the search.</p>
-            </div>
+            <?php mytheme_render_package_empty_state(
+                get_permalink(),
+                __('Try changing your filters, reset the search, or ask us to build a custom itinerary around your budget.', 'mytheme')
+            ); ?>
         <?php endif; ?>
     </div>
 </main>

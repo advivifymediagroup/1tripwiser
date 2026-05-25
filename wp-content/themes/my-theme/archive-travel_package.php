@@ -26,10 +26,7 @@
                 )); ?>
             </div>
         <?php else : ?>
-            <div class="no-posts">
-                <h2>No packages found</h2>
-                <p>Add your first package from the WordPress dashboard.</p>
-            </div>
+            <?php mytheme_render_package_empty_state(get_post_type_archive_link('travel_package')); ?>
         <?php endif; ?>
     </div>
 </main>
