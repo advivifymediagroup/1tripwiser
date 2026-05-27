@@ -316,7 +316,9 @@
     setTimeout(initTilt, 1500);
 
     /* ═══════════════════════════════════════════════════════════════
-       5. HERO PARALLAX — background scroll
+       5. HERO PARALLAX — background scroll (desktop only)
+       Disabled on mobile: scale(1.05) causes overflow on narrow viewports
+       and parallax scroll feels jarring on touch devices.
     ═══════════════════════════════════════════════════════════════ */
     function updateParallax() {
         var sy = window.scrollY;
@@ -328,13 +330,19 @@
         });
     }
 
-    var ticking = false;
-    window.addEventListener('scroll', function () {
-        if (!ticking) {
-            requestAnimationFrame(function () { updateParallax(); ticking = false; });
-            ticking = true;
-        }
-    }, { passive: true });
+    /* Only run parallax on desktop — prevents scale overflow on mobile */
+    if (window.matchMedia('(min-width: 769px) and (hover: hover)').matches) {
+        /* Apply initial scale so hero bg is pre-expanded before first scroll */
+        updateParallax();
+
+        var ticking = false;
+        window.addEventListener('scroll', function () {
+            if (!ticking) {
+                requestAnimationFrame(function () { updateParallax(); ticking = false; });
+                ticking = true;
+            }
+        }, { passive: true });
+    }
 
     /* ═══════════════════════════════════════════════════════════════
        6. BUTTON RIPPLE EFFECT

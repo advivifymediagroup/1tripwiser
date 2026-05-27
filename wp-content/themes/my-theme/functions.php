@@ -3038,6 +3038,11 @@ add_action( 'wp_ajax_tw_update_profile_password', 'tw_update_profile_password' )
 function tw_maybe_create_pages() {
     $pages = array(
         array(
+            'slug'     => 'home',
+            'title'    => 'Home',
+            'template' => 'page-home.php',
+        ),
+        array(
             'slug'     => 'profile',
             'title'    => 'My Profile',
             'template' => 'page-profile.php',
@@ -3059,12 +3064,17 @@ function tw_maybe_create_pages() {
         ),
     );
 
+    $home_page_id = 0;
+
     foreach ( $pages as $page_data ) {
         $existing = get_page_by_path( $page_data['slug'] );
         if ( $existing ) {
             // Make sure the template is set correctly
             if ( get_post_meta( $existing->ID, '_wp_page_template', true ) !== $page_data['template'] ) {
                 update_post_meta( $existing->ID, '_wp_page_template', $page_data['template'] );
+            }
+            if ( $page_data['slug'] === 'home' ) {
+                $home_page_id = $existing->ID;
             }
             continue;
         }
@@ -3079,9 +3089,26 @@ function tw_maybe_create_pages() {
 
         if ( $post_id && ! is_wp_error( $post_id ) ) {
             update_post_meta( $post_id, '_wp_page_template', $page_data['template'] );
+            if ( $page_data['slug'] === 'home' ) {
+                $home_page_id = $post_id;
+            }
+        }
+    }
+
+    /*
+     * Auto-configure Settings → Reading to use the Home page as a static
+     * front page. This ensures the homepage works on any environment
+     * (local, staging, production) without manual WP admin steps.
+     */
+    if ( $home_page_id > 0 ) {
+        if ( get_option( 'show_on_front' ) !== 'page' ) {
+            update_option( 'show_on_front', 'page' );
+        }
+        if ( (int) get_option( 'page_on_front' ) !== $home_page_id ) {
+            update_option( 'page_on_front', $home_page_id );
         }
     }
 }
 add_action( 'after_switch_theme', 'tw_maybe_create_pages' );
-// Also run on init once (idempotent — only creates pages if missing)
+// Also run on init once (idempotent — only creates/updates if something is missing)
 add_action( 'init', 'tw_maybe_create_pages', 99 );
