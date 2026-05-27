@@ -228,6 +228,148 @@ function tw_default_mobile_nav() {
         });
     }
 })();
+
+/* ============================================================
+   Force-style SBI Instagram feed buttons via inline JS.
+   The SBI plugin uses extremely high-specificity CSS that wins
+   even against our !important rules. Inline style attributes
+   always win the cascade, so this is the bulletproof fix. */
+(function () {
+    var BTN_BASE = [
+        'display:inline-flex',
+        'align-items:center',
+        'justify-content:center',
+        'gap:10px',
+        'height:48px',
+        'padding:0 30px',
+        'border:none',
+        'border-radius:999px',
+        'font-family:Nunito,sans-serif',
+        'font-size:0.88rem',
+        'font-weight:800',
+        'letter-spacing:0.06em',
+        'text-transform:uppercase',
+        'text-decoration:none',
+        'line-height:1',
+        'margin:0',
+        'box-sizing:border-box',
+        'cursor:pointer',
+        'float:none',
+        'clear:none',
+        'position:static',
+        'width:auto',
+        'max-width:max-content',
+        'min-width:0',
+        'flex:0 0 auto',
+        'transition:transform 0.2s ease,box-shadow 0.2s ease,filter 0.2s ease'
+    ].join(';');
+
+    var LOAD_STYLE = BTN_BASE + ';' + [
+        'background:linear-gradient(135deg,#FCB415 0%,#f09a00 100%)',
+        'background-color:#FCB415',
+        'color:#0d1526',
+        'box-shadow:0 4px 14px rgba(252,180,21,0.32)'
+    ].join(';');
+
+    var FOLLOW_STYLE = BTN_BASE + ';' + [
+        'background:linear-gradient(135deg,#0692af 0%,#056d83 100%)',
+        'background-color:#0692af',
+        'color:#ffffff',
+        'box-shadow:0 4px 14px rgba(6,146,175,0.32)'
+    ].join(';');
+
+    var WRAP_STYLE = [
+        'background:transparent',
+        'background-color:transparent',
+        'background-image:none',
+        'box-shadow:none',
+        'border:none',
+        'border-radius:0',
+        'padding:0',
+        'margin:36px 0 0',
+        'display:flex',
+        'justify-content:center',
+        'align-items:center',
+        'flex-wrap:wrap',
+        'gap:14px',
+        'width:100%',
+        'max-width:100%',
+        'box-sizing:border-box',
+        'text-align:center',
+        'float:none',
+        'clear:both'
+    ].join(';');
+
+    function styleSBI() {
+        var wrap = document.querySelector('.instagram-feed-wrap');
+        if (!wrap) return;
+
+        // Wrapper (container holding both buttons)
+        var loadWrap = wrap.querySelector('#sbi_load, .sbi_load, .sb-load-wrap');
+        if (loadWrap) loadWrap.setAttribute('style', WRAP_STYLE);
+
+        // Load More button — find anchor/button with load-related class or id
+        var loadBtn = wrap.querySelector(
+            'a#sbi_load_btn, button#sbi_load_btn, a.sbi_load_btn, button.sbi_load_btn, ' +
+            'a.sb-loadmore_btn, button.sb-loadmore_btn, ' +
+            '#sbi_load > a:first-child, #sbi_load > button:first-child'
+        );
+        if (loadBtn && loadBtn.tagName !== 'DIV') {
+            loadBtn.setAttribute('style', LOAD_STYLE);
+        }
+
+        // Follow on Instagram button — find anchor with follow-related class or id
+        var followBtn = wrap.querySelector(
+            'a#sbi_follow_btn, a.sbi_follow_btn, a.sb-followBtn-link, ' +
+            '#sbi_follow_btn > a, #sb_instagram_follow > a, ' +
+            '#sbi_load a[href*="instagram.com"]'
+        );
+        if (followBtn && followBtn.tagName !== 'DIV') {
+            followBtn.setAttribute('style', FOLLOW_STYLE);
+        }
+
+        // If #sbi_follow_btn is a wrapper div, strip its styles
+        var followWrap = wrap.querySelector('div#sbi_follow_btn, div.sb-follow-btn');
+        if (followWrap) {
+            followWrap.setAttribute('style',
+                'background:transparent;background-color:transparent;background-image:none;' +
+                'box-shadow:none;border:none;padding:0;margin:0;float:none;' +
+                'display:inline-flex;width:auto;max-width:max-content;'
+            );
+        }
+    }
+
+    // Run at multiple points — SBI loads its feed asynchronously
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', styleSBI);
+    } else {
+        styleSBI();
+    }
+    [400, 1200, 2500, 5000].forEach(function (delay) {
+        setTimeout(styleSBI, delay);
+    });
+
+    // Re-apply whenever SBI re-renders (e.g. after Load More click adds posts)
+    if (window.MutationObserver) {
+        var target = document.querySelector('.instagram-feed-wrap');
+        if (target) {
+            var obs = new MutationObserver(function () { styleSBI(); });
+            obs.observe(target, { childList: true, subtree: true });
+        } else {
+            // wrap not yet in DOM — observe body until it appears
+            var bodyObs = new MutationObserver(function () {
+                var t = document.querySelector('.instagram-feed-wrap');
+                if (t) {
+                    bodyObs.disconnect();
+                    var o = new MutationObserver(function () { styleSBI(); });
+                    o.observe(t, { childList: true, subtree: true });
+                    styleSBI();
+                }
+            });
+            bodyObs.observe(document.body, { childList: true, subtree: true });
+        }
+    }
+})();
 </script>
 
 <!-- ===== SUB-HEADER TABS ===== -->
