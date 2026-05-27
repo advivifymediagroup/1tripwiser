@@ -2984,3 +2984,359 @@ select.fi { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w
     color: inherit;
     -webkit-text-fill-color: inherit;
 }
+
+
+/* ================================================================
+   GLOBAL OVERFLOW PREVENTION
+   ================================================================ */
+html, body { overflow-x: hidden; }
+img, video, iframe, embed, object { max-width: 100%; }
+
+/* ================================================================
+   HERO — mobile overflow and responsiveness
+   ================================================================ */
+@media (max-width: 520px) {
+    .tw-hero-accent { display: none; }
+    .tw-hero-inner { padding: 88px 16px 52px; }
+    .tw-hero-pill {
+        font-size: 0.68rem;
+        padding: 6px 12px;
+        letter-spacing: 0.04em;
+        text-align: center;
+        justify-content: center;
+    }
+    .tw-hero-title { font-size: clamp(2.8rem, 15vw, 4.8rem); }
+    .tw-hero-desc { font-size: 0.96rem; }
+    .tw-hero-tags { gap: 8px; }
+    .tw-hero-tag { font-size: 0.75rem; padding: 6px 11px; }
+}
+@media (max-width: 360px) {
+    .tw-hero-inner { padding: 80px 14px 48px; }
+    .tw-hero-title { font-size: clamp(2.4rem, 18vw, 4rem); }
+    .container { padding: 0 14px; }
+}
+
+/* ================================================================
+   STATS BAR — 2-column grid on very small screens
+   ================================================================ */
+@media (max-width: 480px) {
+    .tw-stats-inner {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        padding: 0;
+    }
+    .tw-stat-divider { display: none; }
+    .tw-stat {
+        padding: 18px 10px;
+        border-right: 1px solid rgba(6,146,175,0.15);
+        border-bottom: 1px solid rgba(6,146,175,0.15);
+    }
+    .tw-stat:nth-child(even) { border-right: none; }
+    .tw-stat:nth-last-child(-n+2) { border-bottom: none; }
+    .tw-stat-num { font-size: 1.5rem; }
+}
+
+/* ================================================================
+   TRAVEL TABS — horizontal scroll on mobile
+   ================================================================ */
+@media (max-width: 640px) {
+    .travel-tabs-inner {
+        justify-content: flex-start;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        padding: 8px 12px;
+        height: auto;
+    }
+    .travel-tabs-inner::-webkit-scrollbar { display: none; }
+    .travel-tabs a { flex: 0 0 auto; font-size: 0.78rem; padding: 6px 12px; }
+}
+
+/* ================================================================
+   TRAVEL FILTER BOX — mobile
+   ================================================================ */
+@media (max-width: 600px) {
+    .travel-filter-box {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 12px;
+    }
+    .travel-filter-options { gap: 6px; }
+    .travel-filter-options a { font-size: 0.82rem; padding: 6px 10px; }
+}
+
+/* ================================================================
+   SECTION HEADINGS — mobile font sizes
+   ================================================================ */
+@media (max-width: 480px) {
+    .section-heading h2 { font-size: 1.6rem; }
+    .featured-posts { padding: 36px 0; }
+    .visa-services-section { padding: 44px 0; }
+    .visa-services-heading h2,
+    .visa-services-heading .highlight { font-size: 2rem; }
+}
+
+/* ================================================================
+   POSTS GRID — safe minimum on tiny screens
+   ================================================================ */
+@media (max-width: 360px) {
+    .posts-grid { grid-template-columns: 1fr; }
+}
+
+/* ================================================================
+   BLOG SECTION — mobile
+   ================================================================ */
+@media (max-width: 480px) {
+    .tw-blog-section { padding: 48px 0 56px; }
+    .tw-blog-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+        margin-bottom: 28px;
+    }
+    .tw-blog-viewall { align-self: flex-start; }
+    .tw-blog-card--main .tw-blog-card-img-wrap { height: 190px; }
+    .tw-blog-card--side  .tw-blog-card-img-wrap { height: 130px; }
+}
+
+/* ================================================================
+   COMMUNITY SECTION — very small screens
+   ================================================================ */
+@media (max-width: 360px) {
+    .tw-community-stats { grid-template-columns: 1fr; }
+    .tw-community-section { padding: 52px 0; }
+}
+
+/* ================================================================
+   CTA SECTION — mobile
+   ================================================================ */
+@media (max-width: 480px) {
+    .tw-cta-section { padding: 48px 0; }
+    .tw-cta-title { font-size: 2.2rem; }
+    .free-itinerary-link { display: block; text-align: center; }
+}
+
+/* ================================================================
+   FREE ITINERARY FORM — overflow fix
+   ================================================================ */
+.free-itinerary-form input { min-width: 0; }
+@media (max-width: 480px) {
+    .free-itinerary-form { flex-direction: column; }
+    .free-itinerary-form button { width: 100%; }
+}
+
+/* ================================================================
+   PACKAGE SEARCH GRID — collapse on mobile
+   ================================================================ */
+@media (max-width: 600px) {
+    .package-search-grid { grid-template-columns: 1fr; }
+}
+
+/* ================================================================
+   SINGLE POST PAGE — mobile
+   ================================================================ */
+@media (max-width: 480px) {
+    .sp-content { padding: 22px 16px; font-size: 0.96rem; }
+    .sp-nav { grid-template-columns: 1fr; }
+    .sp-comments { padding: 22px 16px; }
+}
+
+/* ================================================================
+   PROFILE PAGE — mobile
+   ================================================================ */
+@media (max-width: 480px) {
+    .pf-grid { grid-template-columns: 1fr; }
+    .pf-identity { flex-direction: column; align-items: flex-start; }
+    .pf-field-row { grid-template-columns: 1fr; }
+    .pf-card-body { padding: 18px 16px; }
+}
+
+/* ================================================================
+   SUBMIT BLOG PAGE — mobile
+   ================================================================ */
+@media (max-width: 480px) {
+    .sb-field-row { grid-template-columns: 1fr; }
+    .sb-form-body { padding: 20px 16px; }
+    .sb-submit-row { flex-direction: column; align-items: flex-start; }
+}
+
+/* ================================================================
+   FOOTER — very small screens
+   ================================================================ */
+@media (max-width: 400px) {
+    .tw-footer-grid { padding: 28px 16px 20px; gap: 24px; }
+    .tw-f-bottom { padding: 14px 16px; flex-direction: column; align-items: flex-start; }
+}
+
+/* ================================================================
+   INSTAGRAM FEED — brand-matched redesign
+   ================================================================ */
+
+.instagram-feed-section {
+    background: linear-gradient(180deg, #f0f6fa 0%, #e8f2f7 100%);
+    padding: 72px 0 80px;
+    border-top: 1px solid #d6e8ef;
+    border-bottom: 1px solid #d6e8ef;
+}
+
+.instagram-feed-heading {
+    text-align: center;
+    margin-bottom: 44px;
+}
+
+.tw-ig-kicker {
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #0692af;
+    margin-bottom: 10px;
+}
+
+.tw-ig-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    letter-spacing: 0.04em;
+    line-height: 1;
+    margin: 0 0 14px;
+    background: linear-gradient(135deg, #0692AF 0%, #FCB415 55%, #306C35 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: block;
+}
+
+.tw-ig-handle {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #ffffff;
+    border: 1.5px solid rgba(252,180,21,0.4);
+    color: #0d1526;
+    font-size: 0.85rem;
+    font-weight: 800;
+    padding: 8px 20px;
+    border-radius: 999px;
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    box-shadow: 0 2px 12px rgba(6,146,175,0.1);
+    transition: background 0.2s, border-color 0.2s, color 0.2s, box-shadow 0.2s;
+}
+
+.tw-ig-handle:hover {
+    background: #FCB415;
+    border-color: #FCB415;
+    color: #0d1526;
+    box-shadow: 0 4px 20px rgba(252,180,21,0.3);
+}
+
+/* Feed wrapper — strip default plugin chrome */
+.instagram-feed-wrap {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    overflow: visible !important;
+}
+
+/* Hide SBI username / header bar */
+.instagram-feed-wrap .sbi_header,
+.instagram-feed-wrap .sbi_header_img,
+.instagram-feed-wrap .sbi_header_text,
+.instagram-feed-wrap #sbi_header { display: none !important; }
+
+/* Individual photo items */
+.instagram-feed-wrap .sbi_item {
+    border-radius: 16px !important;
+    overflow: hidden !important;
+    transition: transform 0.28s ease, box-shadow 0.28s ease !important;
+    box-shadow: 0 4px 16px rgba(13,21,38,0.08) !important;
+}
+
+.instagram-feed-wrap .sbi_item:hover {
+    transform: translateY(-6px) !important;
+    box-shadow: 0 20px 48px rgba(13,21,38,0.18) !important;
+    z-index: 3 !important;
+    position: relative !important;
+}
+
+.instagram-feed-wrap .sbi_photo_wrap,
+.instagram-feed-wrap .sbi_photo,
+.instagram-feed-wrap .sbi_photo_wrap img {
+    border-radius: 16px !important;
+    overflow: hidden !important;
+    display: block !important;
+}
+
+/* Caption overlay */
+.instagram-feed-wrap .sbi_photo_wrap .sbi_hover_bottom {
+    border-radius: 0 0 16px 16px !important;
+    background: linear-gradient(to top, rgba(13,21,38,0.85) 0%, transparent 100%) !important;
+}
+
+/* Load more button */
+.instagram-feed-wrap .sbi_load_btn_wrap,
+.instagram-feed-wrap #sbi_load_btn_wrap { text-align: center !important; margin-top: 32px !important; }
+
+.instagram-feed-wrap #sbi_load,
+.instagram-feed-wrap .sbi_load_btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    background: linear-gradient(135deg, #FCB415 0%, #f09a00 100%) !important;
+    color: #0d1526 !important;
+    border: none !important;
+    border-radius: 10px !important;
+    font-family: Nunito, sans-serif !important;
+    font-size: 0.9rem !important;
+    font-weight: 800 !important;
+    padding: 12px 32px !important;
+    letter-spacing: 0.03em !important;
+    cursor: pointer !important;
+    box-shadow: 0 6px 20px rgba(252,180,21,0.3) !important;
+    transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s !important;
+}
+
+.instagram-feed-wrap #sbi_load:hover,
+.instagram-feed-wrap .sbi_load_btn:hover {
+    opacity: 0.88 !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 10px 28px rgba(252,180,21,0.4) !important;
+}
+
+/* Follow on Instagram button */
+.instagram-feed-wrap .sbi_follow_btn,
+.instagram-feed-wrap #sbi_follow_btn { margin-top: 20px !important; text-align: center !important; }
+
+.instagram-feed-wrap .sbi_follow_btn a,
+.instagram-feed-wrap #sbi_follow_btn a {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    background: transparent !important;
+    border: 2px solid #0692af !important;
+    color: #0692af !important;
+    border-radius: 10px !important;
+    font-family: Nunito, sans-serif !important;
+    font-size: 0.9rem !important;
+    font-weight: 800 !important;
+    padding: 10px 26px !important;
+    text-decoration: none !important;
+    transition: background 0.2s, color 0.2s, border-color 0.2s !important;
+}
+
+.instagram-feed-wrap .sbi_follow_btn a:hover,
+.instagram-feed-wrap #sbi_follow_btn a:hover {
+    background: #0692af !important;
+    color: #fff !important;
+}
+
+/* Instagram feed responsive */
+@media (max-width: 480px) {
+    .instagram-feed-section { padding: 52px 0 60px; }
+    .instagram-feed-heading { margin-bottom: 32px; }
+    .tw-ig-title { font-size: 2rem; }
+}

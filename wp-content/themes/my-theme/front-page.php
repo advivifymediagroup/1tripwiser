@@ -273,8 +273,10 @@ if ( $tw_hero_video ) {
     <!-- ═══════════ INSTAGRAM ═══════════ -->
     <section class="instagram-feed-section">
         <div class="container">
-            <div class="section-heading instagram-feed-heading">
-                <span>Follow the journey</span>
+            <div class="instagram-feed-heading">
+                <span class="tw-ig-kicker">Follow the journey</span>
+                <h2 class="tw-ig-title">Our Instagram</h2>
+                <a class="tw-ig-handle" href="https://www.instagram.com/1tripwiser/" target="_blank" rel="noopener noreferrer">📸 @1tripwiser</a>
             </div>
             <div class="instagram-feed-wrap">
                 <?php
