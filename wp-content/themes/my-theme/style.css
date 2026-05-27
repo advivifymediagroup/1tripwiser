@@ -1,7 +1,7 @@
 /*
 Theme Name: 1tripwiser
 Author: Neeraj Nishad
-Version: 9.0
+Version: 11.0
 Description: This is my custom theme for the website 1tripwiser.
 */
 
@@ -452,17 +452,27 @@ h5, h6 {
 }
 
 .read-more {
-  display: inline-block;
-  background: #0d6b68;
-  color: white;
-  padding: 8px 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, #0692af 0%, #056d83 100%);
+  color: #fff;
+  padding: 10px 22px;
+  font-weight: 800;
+  font-size: 0.86rem;
+  letter-spacing: 0.03em;
   text-decoration: none;
-  border-radius: 5px;
-  transition: background 0.3s;
+  border-radius: 999px;
+  box-shadow: 0 4px 14px rgba(6,146,175,0.25);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
 }
 
 .read-more:hover {
-  background: #095654;
+  background: linear-gradient(135deg, #0692af 0%, #056d83 100%);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(6,146,175,0.4);
+  filter: brightness(1.08);
 }
 
 /* Pagination */
@@ -614,27 +624,48 @@ h5, h6 {
 
 .btn-primary,
 .btn-secondary {
-  display: inline-block;
-  padding: 12px 24px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 28px;
+  font-weight: 800;
+  font-size: 0.9rem;
+  letter-spacing: 0.03em;
   text-decoration: none;
-  border-radius: 5px;
+  border-radius: 999px;
   margin: 0 10px;
-  transition: all 0.3s;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
 }
 
+/* Primary CTA — brand yellow gradient */
 .btn-primary {
-  background: #0d6b68;
-  color: white;
+  background: linear-gradient(135deg, #FCB415 0%, #f09a00 100%);
+  color: #0d1526;
+  box-shadow: 0 6px 18px rgba(252,180,21,0.32);
 }
-
 .btn-primary:hover {
-  background: #095654;
+  background: linear-gradient(135deg, #FCB415 0%, #f09a00 100%);
+  color: #0d1526;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 26px rgba(252,180,21,0.45);
+  filter: brightness(1.05);
 }
 
+/* Secondary — brand teal gradient */
 .btn-secondary {
-  background: #f8f9fa;
-  color: #333;
-  border: 1px solid #ddd;
+  background: linear-gradient(135deg, #0692af 0%, #056d83 100%);
+  color: #fff;
+  border: none;
+  box-shadow: 0 6px 18px rgba(6,146,175,0.28);
+}
+.btn-secondary:hover {
+  background: linear-gradient(135deg, #0692af 0%, #056d83 100%);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 26px rgba(6,146,175,0.4);
+  filter: brightness(1.08);
 }
 
 .btn-secondary:hover {
@@ -1862,20 +1893,42 @@ h5, h6 {
 }
 
 .free-itinerary-link {
-  background: #f1af1a;
-  border-radius: 1rem;
+  background: linear-gradient(135deg, #FCB415 0%, #f09a00 100%);
+  border-radius: 999px;
   color: #0d1526;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   font-family: "Nunito", sans-serif;
   font-size: 14px;
   font-weight: 800;
-  padding: 1rem 2rem;
+  letter-spacing: 0.04em;
+  padding: 14px 32px;
   text-decoration: none;
+  box-shadow: 0 6px 20px rgba(252,180,21,0.32);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
 }
 
 .free-itinerary-link:hover {
-  background: #ffc13d;
+  background: linear-gradient(135deg, #FCB415 0%, #f09a00 100%);
   color: #0d1526;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(252,180,21,0.45);
+  filter: brightness(1.05);
+}
+
+/* Also upgrade the inline form button used in the "Plan a quick trip" form */
+.free-itinerary-form button {
+  background: linear-gradient(135deg, #FCB415 0%, #f09a00 100%) !important;
+  color: #0d1526 !important;
+  box-shadow: 0 4px 14px rgba(252,180,21,0.28) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease !important;
+}
+.free-itinerary-form button:hover {
+  background: linear-gradient(135deg, #FCB415 0%, #f09a00 100%) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 22px rgba(252,180,21,0.4) !important;
+  filter: brightness(1.05) !important;
 }
 
 /* Sidebar */
@@ -3352,7 +3405,11 @@ img, video, iframe, embed, object { max-width: 100%; height: auto; }
    are direct anchor children of #sbi_load.
    =================================================================== */
 
-/* Outer container that wraps both buttons — strip ALL plugin chrome */
+/* Outer container that wraps both buttons — strip ALL plugin chrome.
+   Extra-specific selectors (with #sb_instagram and chained IDs) to win the
+   cascade against SBI's own #sb_instagram #sbi_load rules. */
+.instagram-feed-section .instagram-feed-wrap #sb_instagram #sbi_load,
+.instagram-feed-wrap #sb_instagram #sbi_load,
 .instagram-feed-wrap #sbi_load,
 .instagram-feed-wrap .sbi_load {
     background: transparent !important;
@@ -3374,6 +3431,23 @@ img, video, iframe, embed, object { max-width: 100%; height: auto; }
     text-align: center !important;
     float: none !important;
     clear: both !important;
+}
+/* CRITICAL — kill SBI's default float:left/right on the buttons so the
+   parent flex layout actually controls their position. Without this both
+   buttons float to opposite corners of the wrapper. */
+.instagram-feed-section .instagram-feed-wrap #sb_instagram #sbi_load > *,
+.instagram-feed-wrap #sb_instagram #sbi_load > *,
+.instagram-feed-wrap #sbi_load > *,
+.instagram-feed-wrap #sbi_load_btn,
+.instagram-feed-wrap #sbi_follow_btn,
+.instagram-feed-wrap .sbi_load_btn,
+.instagram-feed-wrap .sbi_follow_btn,
+.instagram-feed-wrap .sb-loadmore_btn,
+.instagram-feed-wrap .sb-follow-btn,
+.instagram-feed-wrap .sb-followBtn-link {
+    float: none !important;
+    clear: none !important;
+    position: static !important;
 }
 
 /* STEP 1 — strip ALL plugin styling from div wrappers.
