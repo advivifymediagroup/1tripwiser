@@ -17,10 +17,17 @@ function load_js(){
 add_action('wp_enqueue_scripts', 'load_js');
 
 function mytheme_enqueue_styles() {
-    wp_enqueue_style('main-style', get_stylesheet_uri());
+    /* Use filemtime() as the version string so the browser cache busts EVERY time
+       style.css is modified. Without this, WordPress falls back to the WP core
+       version (e.g. ?ver=7.0) which never changes, so updated CSS stays cached. */
+    $style_path = get_stylesheet_directory() . '/style.css';
+    $style_ver  = file_exists( $style_path ) ? filemtime( $style_path ) : '1.0';
+    wp_enqueue_style('main-style', get_stylesheet_uri(), array(), $style_ver);
     wp_enqueue_style('font-awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css');
-    // Animations CSS (global)
-    wp_enqueue_style('tw-animations', get_template_directory_uri() . '/assets/css/tw-animations.css', array(), '1.1');
+    // Animations CSS (global) — same filemtime cache-busting
+    $anim_path = get_template_directory() . '/assets/css/tw-animations.css';
+    $anim_ver  = file_exists( $anim_path ) ? filemtime( $anim_path ) : '1.1';
+    wp_enqueue_style('tw-animations', get_template_directory_uri() . '/assets/css/tw-animations.css', array(), $anim_ver);
     wp_enqueue_script('jquery');
     // Custom JS placeholder (kept for legacy localize_script hook)
     if ( file_exists( get_template_directory() . '/assets/js/custom.js' ) ) {
