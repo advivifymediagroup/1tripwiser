@@ -19,6 +19,10 @@
       .tw-hero{overflow:hidden!important;contain:paint!important;transform:translateZ(0)!important;isolation:isolate!important;clip-path:inset(0)!important}
       .tw-hero-bg{overflow:hidden!important}
       .tw-hero-yt-wrap{inset:0!important;overflow:hidden!important}
+      /* Cover YouTube title card (top) and controls (bottom) — showinfo=0 is deprecated */
+      .tw-hero-yt-wrap::before,.tw-hero-yt-wrap::after{content:''!important;position:absolute!important;left:0!important;right:0!important;z-index:3!important;pointer-events:none!important}
+      .tw-hero-yt-wrap::before{top:0!important;height:18%!important;background:linear-gradient(to bottom,#0d1526 0%,transparent 100%)!important}
+      .tw-hero-yt-wrap::after{bottom:0!important;height:18%!important;background:linear-gradient(to top,#0d1526 0%,transparent 100%)!important}
       @media(max-width:768px){
         .tw-hero-accent{display:none!important}
       }
