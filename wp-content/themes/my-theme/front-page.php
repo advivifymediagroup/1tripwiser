@@ -277,7 +277,7 @@ if ( $tw_hero_video ) {
                 <span>Follow the journey</span>
             </div>
             <div class="instagram-feed-wrap">
-                <?php echo do_shortcode('[instagram-feed feed=3]'); ?>
+                <?php echo do_shortcode('[instagram-feed feed=1]'); ?>
             </div>
         </div>
     </section>
