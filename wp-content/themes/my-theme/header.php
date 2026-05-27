@@ -22,8 +22,8 @@
       /* Mask YouTube title card (top) and player controls (bottom) on desktop —
          showinfo=0 was deprecated by YouTube, so we cover the UI areas visually. */
       .tw-hero-yt-wrap::before,.tw-hero-yt-wrap::after{content:''!important;position:absolute!important;left:0!important;right:0!important;z-index:5!important;pointer-events:none!important}
-      .tw-hero-yt-wrap::before{top:0!important;height:22%!important;background:linear-gradient(to bottom,#0d1526 0%,rgba(13,21,38,0.7) 60%,transparent 100%)!important}
-      .tw-hero-yt-wrap::after{bottom:0!important;height:22%!important;background:linear-gradient(to top,#0d1526 0%,rgba(13,21,38,0.7) 60%,transparent 100%)!important}
+      .tw-hero-yt-wrap::before{top:0!important;height:12%!important;background:linear-gradient(to bottom,rgba(13,21,38,0.9) 0%,transparent 100%)!important}
+      .tw-hero-yt-wrap::after{bottom:0!important;height:12%!important;background:linear-gradient(to top,rgba(13,21,38,0.9) 0%,transparent 100%)!important}
       /* On mobile: hide all video sources entirely + accent blobs */
       @media(max-width:768px){
         .tw-hero-accent{display:none!important}
@@ -44,7 +44,9 @@
 
       /* Mobile menu & nav */
       .tw-mobile-menu{max-width:100vw!important;overflow:hidden!important;width:100%!important}
-      .tw-nav,.tw-nav-inner{max-width:100%!important;box-sizing:border-box!important}
+      /* Only constrain .tw-nav itself — NOT .tw-nav-inner.
+         .tw-nav-inner has its own max-width:1280px that creates breathing room on wide screens. */
+      .tw-nav{max-width:100%!important;box-sizing:border-box!important}
 
       /* Posts grid — column width can never exceed 100% */
       .posts-grid{grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr))!important}
