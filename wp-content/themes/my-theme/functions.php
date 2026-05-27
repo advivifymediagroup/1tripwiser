@@ -2017,6 +2017,7 @@ function mytheme_register_page_settings() {
     // Hero background
     register_setting('tripwiser_hero_settings', 'tw_hero_video_url', array('sanitize_callback' => 'esc_url_raw'));
     register_setting('tripwiser_hero_settings', 'tw_hero_image_url', array('sanitize_callback' => 'esc_url_raw'));
+    register_setting('tripwiser_hero_settings', 'tw_instagram_feed_id', array('sanitize_callback' => 'absint'));
     // WhatsApp widget + Cloud API
     register_setting('tripwiser_wa_settings', 'tw_wa_widget_number',  array('sanitize_callback' => 'sanitize_text_field'));
     register_setting('tripwiser_wa_settings', 'tw_wa_widget_message', array('sanitize_callback' => 'sanitize_text_field'));
@@ -2279,6 +2280,7 @@ function tw_render_overview_page() {
                 <tbody>
                     <tr><td style="width:260px;font-weight:700">Hero Video</td><td><?php $v=get_option('tw_hero_video_url',''); echo $v ? '<a href="'.esc_url($v).'" target="_blank">'.esc_html(substr($v,0,60)).'…</a>' : '<span style="color:#999">Not set — using dark background</span>'; ?></td><td><a href="<?php echo esc_url(admin_url('admin.php?page=tw-hero-settings')); ?>">Edit →</a></td></tr>
                     <tr><td style="font-weight:700">Hero Image</td><td><?php $i=get_option('tw_hero_image_url',''); echo $i ? '<a href="'.esc_url($i).'" target="_blank">Set ✓</a>' : '<span style="color:#999">Not set</span>'; ?></td><td><a href="<?php echo esc_url(admin_url('admin.php?page=tw-hero-settings')); ?>">Edit →</a></td></tr>
+                    <tr><td style="font-weight:700">Instagram Feed ID</td><td><?php echo esc_html(get_option('tw_instagram_feed_id', 1)); ?></td><td><a href="<?php echo esc_url(admin_url('admin.php?page=tw-hero-settings')); ?>">Edit →</a></td></tr>
                     <tr><td style="font-weight:700">Plan A Trip WhatsApp</td><td><?php echo esc_html(get_option('tw_pat_whatsapp','Not set')); ?></td><td><a href="<?php echo esc_url(admin_url('admin.php?page=tw-plan-trip-settings')); ?>">Edit →</a></td></tr>
                     <tr><td style="font-weight:700">WhatsApp Widget Number</td><td><?php $n=get_option('tw_wa_widget_number',get_option('tw_pat_whatsapp','')); echo $n ? esc_html($n) : '<span style="color:#999">Not set</span>'; ?></td><td><a href="<?php echo esc_url(admin_url('admin.php?page=tw-wa-widget-settings')); ?>">Edit →</a></td></tr>
                     <tr><td style="font-weight:700">WhatsApp Cloud API</td><td><?php echo get_option('tw_wa_api_token','') ? '<span style="color:green">✓ Configured</span>' : '<span style="color:#999">Not configured</span>'; ?></td><td><a href="<?php echo esc_url(admin_url('admin.php?page=tw-wa-api-settings')); ?>">Edit →</a></td></tr>
@@ -2342,6 +2344,29 @@ function tw_render_hero_settings_page() {
                 </table>
                 <div class="tw-admin-note info" style="margin-top:8px">
                     💡 <strong>Tip:</strong> For best results use a landscape video at 1920×1080 or wider. YouTube videos are embedded as iframes — make sure the video is public. Direct .mp4 files load faster.
+                </div>
+                <div class="tw-admin-card" style="margin-top:24px;margin-bottom:0">
+                    <div class="tw-admin-card-head">
+                        <div>
+                            <h2>Instagram Feed</h2>
+                            <p>Controls the feed used in the homepage Instagram section.</p>
+                        </div>
+                    </div>
+                    <div class="tw-admin-card-body">
+                        <table class="form-table">
+                            <tr>
+                                <th><label for="tw_instagram_feed_id">Feed ID</label></th>
+                                <td>
+                                    <input type="number" min="1" step="1" id="tw_instagram_feed_id" name="tw_instagram_feed_id"
+                                           value="<?php echo esc_attr(get_option('tw_instagram_feed_id', 1)); ?>"
+                                           class="small-text">
+                                    <p class="description">
+                                        This renders the shortcode as <code>[instagram-feed feed="ID"]</code>. Update this when the Instagram Feed plugin feed ID changes.
+                                    </p>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
                 </div>
                 <?php submit_button('Save Hero Settings', 'primary', 'submit', true, ['style'=>'margin-top:8px']); ?>
             </form>
