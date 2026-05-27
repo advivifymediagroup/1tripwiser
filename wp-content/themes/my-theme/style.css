@@ -1,7 +1,7 @@
 /*
 Theme Name: 1tripwiser
 Author: Neeraj Nishad
-Version: 8.0
+Version: 9.0
 Description: This is my custom theme for the website 1tripwiser.
 */
 
@@ -3376,16 +3376,50 @@ img, video, iframe, embed, object { max-width: 100%; height: auto; }
     clear: both !important;
 }
 
-/* SHARED base — IDENTICAL height + shape for both buttons (no border on either,
-   filled-in styles, fixed 48px height so they line up pixel-perfect). */
-.instagram-feed-wrap #sbi_load_btn,
-.instagram-feed-wrap .sbi_load_btn,
+/* STEP 1 — strip ALL plugin styling from div wrappers.
+   In SBI v6 the markup is:
+     <div id="sbi_follow_btn" class="sb-follow-btn">
+        <a class="sb-followBtn-link">...</a>
+     </div>
+   We must NOT style the div wrapper or its background bleeds out
+   beyond the actual button. Reset to fully transparent + auto size. */
+.instagram-feed-wrap div#sbi_load_btn,
+.instagram-feed-wrap div.sbi_load_btn,
+.instagram-feed-wrap div#sbi_follow_btn,
+.instagram-feed-wrap div.sbi_follow_btn,
+.instagram-feed-wrap div.sb-loadmore_btn,
+.instagram-feed-wrap div.sb-follow-btn {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    box-shadow: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: auto !important;
+    max-width: max-content !important;
+    min-width: 0 !important;
+    height: auto !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    float: none !important;
+}
+
+/* STEP 2 — SHARED button styling for the actual clickable elements.
+   Targets every variant of selector that could be the real anchor/button. */
 .instagram-feed-wrap a#sbi_load_btn,
 .instagram-feed-wrap a.sbi_load_btn,
-.instagram-feed-wrap #sbi_follow_btn,
-.instagram-feed-wrap .sbi_follow_btn,
+.instagram-feed-wrap a.sb-loadmore_btn,
+.instagram-feed-wrap #sbi_load_btn:not(div),
+.instagram-feed-wrap .sb-loadmore_btn,
 .instagram-feed-wrap a#sbi_follow_btn,
-.instagram-feed-wrap a.sbi_follow_btn {
+.instagram-feed-wrap a.sbi_follow_btn,
+.instagram-feed-wrap #sbi_follow_btn > a,
+.instagram-feed-wrap #sbi_follow_btn a.sb-followBtn-link,
+.instagram-feed-wrap a.sb-followBtn-link,
+.instagram-feed-wrap #sbi_follow_btn:not(div) {
     display: inline-flex !important;
     width: auto !important;
     max-width: max-content !important;
@@ -3394,8 +3428,8 @@ img, video, iframe, embed, object { max-width: 100%; height: auto; }
     align-items: center !important;
     justify-content: center !important;
     gap: 10px !important;
-    height: 48px !important;            /* identical height */
-    padding: 0 30px !important;         /* horizontal-only — height locked above */
+    height: 48px !important;
+    padding: 0 30px !important;
     border: none !important;
     border-radius: 999px !important;
     font-family: 'Nunito', sans-serif !important;
@@ -3413,38 +3447,46 @@ img, video, iframe, embed, object { max-width: 100%; height: auto; }
 }
 
 /* Load More — primary yellow */
-.instagram-feed-wrap #sbi_load_btn,
-.instagram-feed-wrap .sbi_load_btn,
 .instagram-feed-wrap a#sbi_load_btn,
-.instagram-feed-wrap a.sbi_load_btn {
+.instagram-feed-wrap a.sbi_load_btn,
+.instagram-feed-wrap a.sb-loadmore_btn,
+.instagram-feed-wrap .sb-loadmore_btn,
+.instagram-feed-wrap #sbi_load_btn:not(div) {
     background: linear-gradient(135deg, #FCB415 0%, #f09a00 100%) !important;
     background-color: #FCB415 !important;
     color: #0d1526 !important;
-    box-shadow: 0 8px 22px rgba(252,180,21,0.35) !important;
+    box-shadow: 0 4px 14px rgba(252,180,21,0.28) !important;
 }
-.instagram-feed-wrap #sbi_load_btn:hover,
-.instagram-feed-wrap .sbi_load_btn:hover {
+.instagram-feed-wrap a#sbi_load_btn:hover,
+.instagram-feed-wrap a.sbi_load_btn:hover,
+.instagram-feed-wrap a.sb-loadmore_btn:hover,
+.instagram-feed-wrap .sb-loadmore_btn:hover {
     transform: translateY(-2px) !important;
-    box-shadow: 0 14px 30px rgba(252,180,21,0.45) !important;
+    box-shadow: 0 8px 22px rgba(252,180,21,0.4) !important;
     filter: brightness(1.05) !important;
     color: #0d1526 !important;
 }
 
-/* Follow on Instagram — secondary teal (the other brand accent) */
-.instagram-feed-wrap #sbi_follow_btn,
-.instagram-feed-wrap .sbi_follow_btn,
+/* Follow on Instagram — secondary teal (filled, no halo) */
 .instagram-feed-wrap a#sbi_follow_btn,
-.instagram-feed-wrap a.sbi_follow_btn {
+.instagram-feed-wrap a.sbi_follow_btn,
+.instagram-feed-wrap #sbi_follow_btn > a,
+.instagram-feed-wrap #sbi_follow_btn a.sb-followBtn-link,
+.instagram-feed-wrap a.sb-followBtn-link,
+.instagram-feed-wrap #sbi_follow_btn:not(div) {
     background: linear-gradient(135deg, #0692af 0%, #056d83 100%) !important;
     background-color: #0692af !important;
     background-image: linear-gradient(135deg, #0692af 0%, #056d83 100%) !important;
     color: #ffffff !important;
-    box-shadow: 0 8px 22px rgba(6,146,175,0.35) !important;
+    box-shadow: 0 4px 14px rgba(6,146,175,0.28) !important;
 }
-.instagram-feed-wrap #sbi_follow_btn:hover,
-.instagram-feed-wrap .sbi_follow_btn:hover {
+.instagram-feed-wrap a#sbi_follow_btn:hover,
+.instagram-feed-wrap a.sbi_follow_btn:hover,
+.instagram-feed-wrap #sbi_follow_btn > a:hover,
+.instagram-feed-wrap #sbi_follow_btn a.sb-followBtn-link:hover,
+.instagram-feed-wrap a.sb-followBtn-link:hover {
     transform: translateY(-2px) !important;
-    box-shadow: 0 14px 30px rgba(6,146,175,0.5) !important;
+    box-shadow: 0 8px 22px rgba(6,146,175,0.4) !important;
     filter: brightness(1.08) !important;
     color: #ffffff !important;
 }
@@ -3452,9 +3494,13 @@ img, video, iframe, embed, object { max-width: 100%; height: auto; }
 /* Reset inner spans + icons so they inherit the button's text styles cleanly */
 .instagram-feed-wrap #sbi_load_btn span,
 .instagram-feed-wrap .sbi_load_btn span,
+.instagram-feed-wrap .sb-loadmore_btn span,
 .instagram-feed-wrap #sbi_follow_btn span,
-.instagram-feed-wrap .sbi_follow_btn span {
+.instagram-feed-wrap .sbi_follow_btn span,
+.instagram-feed-wrap .sb-followBtn-link span {
     background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
     color: inherit !important;
     font: inherit !important;
     letter-spacing: inherit !important;
@@ -3466,11 +3512,14 @@ img, video, iframe, embed, object { max-width: 100%; height: auto; }
 }
 .instagram-feed-wrap #sbi_load_btn i,
 .instagram-feed-wrap .sbi_load_btn i,
+.instagram-feed-wrap .sb-loadmore_btn i,
 .instagram-feed-wrap #sbi_follow_btn i,
-.instagram-feed-wrap .sbi_follow_btn i {
+.instagram-feed-wrap .sbi_follow_btn i,
+.instagram-feed-wrap .sb-followBtn-link i {
     font-size: 1rem !important;
     line-height: 1 !important;
     color: inherit !important;
+    background: transparent !important;
 }
 
 /* Instagram feed responsive */
