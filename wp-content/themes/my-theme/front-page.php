@@ -277,7 +277,12 @@ if ( $tw_hero_video ) {
                 <span>Follow the journey</span>
             </div>
             <div class="instagram-feed-wrap">
-                <?php echo do_shortcode('[instagram-feed feed=3]'); ?>
+                <?php
+                $tw_instagram_feed_id = absint(get_option('tw_instagram_feed_id', 1));
+                if ( $tw_instagram_feed_id ) {
+                    echo do_shortcode(sprintf('[instagram-feed feed="%d"]', $tw_instagram_feed_id));
+                }
+                ?>
             </div>
         </div>
     </section>
