@@ -1,60 +1,48 @@
 <?php
 /**
  * Plugin Name: 1TripWiser Auto-Setup
- * Description: Ensures the correct theme is active and the front page is
- *              configured on every environment (local, staging, production).
- *              Runs as a Must-Use plugin so WordPress loads it automatically
- *              without manual activation — perfect for CI/CD deployments.
+ * Description: Locks the active theme to "my-theme" via pre_option filters
+ *              (more reliable than update_option + redirect) and auto-configures
+ *              the static front page. Loaded automatically by WordPress.
  */
 
-// Fire as early as possible in the WordPress boot sequence
-add_action( 'muplugins_loaded', 'tw_autosetup_theme', 1 );
-add_action( 'init',             'tw_autosetup_front_page', 999 );
+/* ============================================================================
+   THEME LOCK
+   Forces 'my-theme' to be the active theme on EVERY request by intercepting
+   the get_option('stylesheet') and get_option('template') calls. No DB writes,
+   no redirects, no first-request flash of the default WordPress theme.
+   ============================================================================ */
+add_filter( 'pre_option_stylesheet', 'tw_force_active_theme' );
+add_filter( 'pre_option_template',   'tw_force_active_theme' );
 
-/**
- * Switch to our custom theme if it isn't already active.
- * Redirects the current request so the next page load uses the correct theme.
- */
-function tw_autosetup_theme() {
-    $target = 'my-theme';
-
-    if ( get_option( 'stylesheet' ) === $target && get_option( 'template' ) === $target ) {
-        return; // Already correct — fast path (DB options are cached in memory)
+function tw_force_active_theme( $pre ) {
+    // Cache the directory check so we only hit the filesystem once per request
+    static $theme_exists = null;
+    if ( $theme_exists === null ) {
+        $theme_exists = is_dir( WP_CONTENT_DIR . '/themes/my-theme' );
     }
-
-    // Safety check: only switch if the theme actually exists and has no errors
-    $theme = wp_get_theme( $target );
-    if ( ! $theme->exists() || $theme->errors() ) {
-        return;
-    }
-
-    // Update the active theme in the database
-    update_option( 'stylesheet', $target );
-    update_option( 'template',   $target );
-
-    // Redirect so THIS request also benefits from the theme switch
-    if ( ! headers_sent() ) {
-        $redirect_to = isset( $_SERVER['REQUEST_URI'] ) ? $_SERVER['REQUEST_URI'] : '/';
-        header( 'Location: ' . esc_url_raw( $redirect_to ), true, 302 );
-        exit;
-    }
+    return $theme_exists ? 'my-theme' : $pre;
 }
 
-/**
- * Ensure Settings → Reading points to the "home" page as the static front page.
- * Idempotent — only writes to DB when something is misconfigured.
- */
+/* ============================================================================
+   FRONT PAGE LOCK
+   Ensures Settings → Reading is configured to use the "home" page as the
+   static front page. Runs on init so the home page (created by the theme's
+   tw_maybe_create_pages function) is available.
+   ============================================================================ */
+add_action( 'init', 'tw_autosetup_front_page', 999 );
+
 function tw_autosetup_front_page() {
-    // Quick cache-hit check before any DB queries
+    // Fast path — already configured correctly
     if ( get_option( 'show_on_front' ) === 'page' && (int) get_option( 'page_on_front' ) > 0 ) {
         return;
     }
 
-    $home_page = get_page_by_path( 'home' );
-    if ( ! $home_page ) {
-        return; // Home page not created yet — functions.php will create it
+    $home = get_page_by_path( 'home' );
+    if ( ! $home ) {
+        return; // theme's tw_maybe_create_pages will create it on next request
     }
 
     update_option( 'show_on_front',  'page' );
-    update_option( 'page_on_front',  $home_page->ID );
+    update_option( 'page_on_front',  $home->ID );
 }
