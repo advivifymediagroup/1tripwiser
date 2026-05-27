@@ -7,6 +7,45 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <?php wp_head(); ?>
+    <!-- Critical overflow prevention — inline so no cache/plugin can block it (v3) -->
+    <style id="tw-overflow-fix">
+      /* Layer 1 — root: html hidden works on iOS Safari; body clip skips scroll-container */
+      html{overflow-x:hidden!important}
+      body{overflow-x:clip!important;max-width:100%!important}
+      /* Layer 2 — main content area */
+      .main-content{overflow-x:hidden!important}
+
+      /* Hero: every technique combined so nothing escapes */
+      .tw-hero{overflow:hidden!important;contain:paint!important;transform:translateZ(0)!important;isolation:isolate!important;clip-path:inset(0)!important}
+      .tw-hero-bg{overflow:hidden!important}
+      .tw-hero-yt-wrap{inset:0!important;overflow:hidden!important}
+      @media(max-width:768px){
+        .tw-hero-accent{display:none!important}
+      }
+
+      /* Travel tabs — scroll inside, never push page wider */
+      .travel-tabs{overflow:hidden!important;max-width:100vw!important;width:100%!important}
+      .travel-tabs-inner{overflow-x:auto!important;-webkit-overflow-scrolling:touch!important;scrollbar-width:none!important;justify-content:flex-start!important;width:100%!important;box-sizing:border-box!important}
+      .travel-tabs-inner::-webkit-scrollbar{display:none!important}
+      .travel-tabs a{white-space:nowrap!important;flex:0 0 auto!important}
+
+      /* Mobile menu & nav */
+      .tw-mobile-menu{max-width:100vw!important;overflow:hidden!important;width:100%!important}
+      .tw-nav,.tw-nav-inner{max-width:100%!important;box-sizing:border-box!important}
+
+      /* Posts grid — column width can never exceed 100% */
+      .posts-grid{grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr))!important}
+
+      /* Instagram feed — clip SBI plugin overflow horizontally */
+      .instagram-feed-section{overflow-x:hidden!important}
+      .instagram-feed-wrap{overflow-x:hidden!important}
+
+      /* Footer */
+      .tw-footer,.tw-footer-grid,.tw-f-bottom{max-width:100%!important;box-sizing:border-box!important}
+
+      /* All media elements */
+      img,video,iframe,embed,object{max-width:100%!important}
+    </style>
 </head>
 
 <body <?php body_class(); ?>>
@@ -18,6 +57,9 @@
     <div class="tw-loader-logo"><span>1</span>TRIPWISER</div>
     <div class="tw-loader-bar"></div>
 </div>
+
+<!-- ===== SITE WRAP — overflow-x clip so nothing bleeds past viewport ===== -->
+<div id="tw-site-wrap">
 
 <!-- ===== SITE NAV ===== -->
 <header class="tw-nav" id="tw-nav" role="banner">

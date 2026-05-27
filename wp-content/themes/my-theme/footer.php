@@ -89,6 +89,8 @@
     </div>
 </footer>
 
+</div><!-- /#tw-site-wrap -->
+
 <?php wp_footer(); ?>
 </body>
 </html>
