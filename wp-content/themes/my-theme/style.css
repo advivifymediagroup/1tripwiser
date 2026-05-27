@@ -1,7 +1,7 @@
 /*
 Theme Name: 1tripwiser
 Author: Neeraj Nishad
-Version: 7.0
+Version: 8.0
 Description: This is my custom theme for the website 1tripwiser.
 */
 
@@ -3376,59 +3376,12 @@ img, video, iframe, embed, object { max-width: 100%; height: auto; }
     clear: both !important;
 }
 
-/* Load More — solid yellow gradient pill */
+/* SHARED base — IDENTICAL height + shape for both buttons (no border on either,
+   filled-in styles, fixed 48px height so they line up pixel-perfect). */
 .instagram-feed-wrap #sbi_load_btn,
 .instagram-feed-wrap .sbi_load_btn,
 .instagram-feed-wrap a#sbi_load_btn,
-.instagram-feed-wrap a.sbi_load_btn {
-    display: inline-flex !important;
-    width: auto !important;
-    max-width: max-content !important;
-    min-width: 0 !important;
-    flex: 0 0 auto !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 8px !important;
-    background: linear-gradient(135deg, #FCB415 0%, #f09a00 100%) !important;
-    background-color: #FCB415 !important;
-    color: #0d1526 !important;
-    border: none !important;
-    border-radius: 999px !important;
-    font-family: 'Nunito', sans-serif !important;
-    font-size: 0.92rem !important;
-    font-weight: 800 !important;
-    padding: 13px 34px !important;
-    letter-spacing: 0.04em !important;
-    text-transform: uppercase !important;
-    cursor: pointer !important;
-    box-shadow: 0 6px 20px rgba(252,180,21,0.32) !important;
-    transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease !important;
-    text-decoration: none !important;
-    line-height: 1 !important;
-    margin: 0 !important;
-    float: none !important;
-}
-.instagram-feed-wrap #sbi_load_btn:hover,
-.instagram-feed-wrap .sbi_load_btn:hover {
-    transform: translateY(-2px) !important;
-    box-shadow: 0 12px 28px rgba(252,180,21,0.45) !important;
-    filter: brightness(1.05) !important;
-    color: #0d1526 !important;
-}
-/* Reset the inner <span class="sbi_btn_text"> so it inherits cleanly */
-.instagram-feed-wrap #sbi_load_btn span,
-.instagram-feed-wrap .sbi_load_btn span {
-    background: transparent !important;
-    color: inherit !important;
-    font: inherit !important;
-    letter-spacing: inherit !important;
-    text-transform: inherit !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    border: 0 !important;
-}
-
-/* Follow on Instagram — clean outlined pill matching brand teal */
+.instagram-feed-wrap a.sbi_load_btn,
 .instagram-feed-wrap #sbi_follow_btn,
 .instagram-feed-wrap .sbi_follow_btn,
 .instagram-feed-wrap a#sbi_follow_btn,
@@ -3440,35 +3393,65 @@ img, video, iframe, embed, object { max-width: 100%; height: auto; }
     flex: 0 0 auto !important;
     align-items: center !important;
     justify-content: center !important;
-    gap: 8px !important;
-    background: #ffffff !important;
-    background-color: #ffffff !important;
-    background-image: none !important;
-    color: #0692af !important;
-    border: 1.5px solid #0692af !important;
+    gap: 10px !important;
+    height: 48px !important;            /* identical height */
+    padding: 0 30px !important;         /* horizontal-only — height locked above */
+    border: none !important;
     border-radius: 999px !important;
     font-family: 'Nunito', sans-serif !important;
-    font-size: 0.92rem !important;
+    font-size: 0.88rem !important;
     font-weight: 800 !important;
-    padding: 11px 26px !important;
-    letter-spacing: 0.04em !important;
+    letter-spacing: 0.06em !important;
     text-transform: uppercase !important;
     text-decoration: none !important;
     line-height: 1 !important;
-    box-shadow: 0 2px 10px rgba(6,146,175,0.10) !important;
-    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease !important;
     margin: 0 !important;
+    box-sizing: border-box !important;
+    cursor: pointer !important;
     float: none !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease !important;
+}
+
+/* Load More — primary yellow */
+.instagram-feed-wrap #sbi_load_btn,
+.instagram-feed-wrap .sbi_load_btn,
+.instagram-feed-wrap a#sbi_load_btn,
+.instagram-feed-wrap a.sbi_load_btn {
+    background: linear-gradient(135deg, #FCB415 0%, #f09a00 100%) !important;
+    background-color: #FCB415 !important;
+    color: #0d1526 !important;
+    box-shadow: 0 8px 22px rgba(252,180,21,0.35) !important;
+}
+.instagram-feed-wrap #sbi_load_btn:hover,
+.instagram-feed-wrap .sbi_load_btn:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 14px 30px rgba(252,180,21,0.45) !important;
+    filter: brightness(1.05) !important;
+    color: #0d1526 !important;
+}
+
+/* Follow on Instagram — secondary teal (the other brand accent) */
+.instagram-feed-wrap #sbi_follow_btn,
+.instagram-feed-wrap .sbi_follow_btn,
+.instagram-feed-wrap a#sbi_follow_btn,
+.instagram-feed-wrap a.sbi_follow_btn {
+    background: linear-gradient(135deg, #0692af 0%, #056d83 100%) !important;
+    background-color: #0692af !important;
+    background-image: linear-gradient(135deg, #0692af 0%, #056d83 100%) !important;
+    color: #ffffff !important;
+    box-shadow: 0 8px 22px rgba(6,146,175,0.35) !important;
 }
 .instagram-feed-wrap #sbi_follow_btn:hover,
 .instagram-feed-wrap .sbi_follow_btn:hover {
-    background: #0692af !important;
-    background-color: #0692af !important;
-    color: #ffffff !important;
-    border-color: #0692af !important;
     transform: translateY(-2px) !important;
-    box-shadow: 0 10px 24px rgba(6,146,175,0.30) !important;
+    box-shadow: 0 14px 30px rgba(6,146,175,0.5) !important;
+    filter: brightness(1.08) !important;
+    color: #ffffff !important;
 }
+
+/* Reset inner spans + icons so they inherit the button's text styles cleanly */
+.instagram-feed-wrap #sbi_load_btn span,
+.instagram-feed-wrap .sbi_load_btn span,
 .instagram-feed-wrap #sbi_follow_btn span,
 .instagram-feed-wrap .sbi_follow_btn span {
     background: transparent !important;
@@ -3478,8 +3461,11 @@ img, video, iframe, embed, object { max-width: 100%; height: auto; }
     text-transform: inherit !important;
     padding: 0 !important;
     margin: 0 !important;
+    border: 0 !important;
+    line-height: 1 !important;
 }
-/* Instagram icon inside the follow button */
+.instagram-feed-wrap #sbi_load_btn i,
+.instagram-feed-wrap .sbi_load_btn i,
 .instagram-feed-wrap #sbi_follow_btn i,
 .instagram-feed-wrap .sbi_follow_btn i {
     font-size: 1rem !important;
