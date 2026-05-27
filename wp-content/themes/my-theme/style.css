@@ -1,7 +1,7 @@
 /*
 Theme Name: 1tripwiser
 Author: Neeraj Nishad
-Version: 5.0
+Version: 6.0
 Description: This is my custom theme for the website 1tripwiser.
 */
 
@@ -18,7 +18,7 @@ Description: This is my custom theme for the website 1tripwiser.
 /* ── Smooth scroll ── */
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 58px;  /* matches .tw-nav-inner height */
+  scroll-padding-top: 64px;  /* matches .tw-nav-inner height */
 }
 
 /* ── Reset ── */
@@ -2213,7 +2213,7 @@ h5, h6 {
 }
 .tw-nav-inner {
     max-width: 1280px; margin: 0 auto; padding: 0 24px;
-    display: flex; align-items: center; height: 58px; gap: 8px;  /* tighter nav height — was 68 */
+    display: flex; align-items: center; height: 64px; gap: 8px;
 }
 .tw-brand { display: flex; align-items: center; gap: 11px; text-decoration: none; flex-shrink: 0; }
 .tw-custom-logo { max-height: 42px; width: auto; display: block; object-fit: contain; flex-shrink: 0; }
@@ -2298,7 +2298,7 @@ h5, h6 {
 .tw-mobile-auth .signup { background: linear-gradient(135deg,#FCB415,#f09a00); color: #0d1526; }
 @media (max-width: 900px) { .tw-links { display: none; } .tw-toggle { display: flex; } .tw-user-nav { display: none; } }
 .tw-nav { transition: height 0.25s ease, box-shadow 0.25s ease; }
-.tw-nav-scrolled .tw-nav-inner { height: 50px; }  /* scrolled state — slightly tighter than base 58px */
+.tw-nav-scrolled .tw-nav-inner { height: 54px; }  /* scrolled state — tighter than base 64px */
 .tw-nav-scrolled { box-shadow: 0 4px 28px rgba(0,0,0,0.35); }
 
 /* ================================================================
@@ -2390,7 +2390,7 @@ h5, h6 {
 /* ================================================================
    HOMEPAGE — HERO + STATS (moved from front-page.php)
    ================================================================ */
-.tw-hero { position:relative; min-height:100svh; display:flex; align-items:center; overflow:hidden; background:#0d1526; isolation:isolate; transform:translateZ(0); }
+.tw-hero { position:relative; min-height:82svh; display:flex; align-items:center; overflow:hidden; background:#0d1526; isolation:isolate; transform:translateZ(0); }
 .tw-hero-bg { position:absolute; inset:0; z-index:0; }
 .tw-hero-yt-wrap { position:absolute; inset:-15%; pointer-events:none; overflow:hidden; }
 /* IMPORTANT: base .tw-hero-yt rule MUST come BEFORE the @media override below,
@@ -2431,24 +2431,24 @@ h5, h6 {
 }
 .tw-hero-yt-wrap::before {
     top: 0;
-    height: 22%;
-    background: linear-gradient(to bottom, #0d1526 0%, rgba(13,21,38,0.7) 60%, transparent 100%);
+    height: 12%;
+    background: linear-gradient(to bottom, rgba(13,21,38,0.9) 0%, transparent 100%);
 }
 .tw-hero-yt-wrap::after {
     bottom: 0;
-    height: 22%;
-    background: linear-gradient(to top, #0d1526 0%, rgba(13,21,38,0.7) 60%, transparent 100%);
+    height: 12%;
+    background: linear-gradient(to top, rgba(13,21,38,0.9) 0%, transparent 100%);
 }
 .tw-hero-yt-shield { position:absolute; inset:0; z-index:1; background:transparent; cursor:default; }
 .tw-hero-vid { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; pointer-events:none; }
 .tw-hero-img { position:absolute; inset:0; background-size:cover; background-position:center; transform:scale(1.04); transition:transform 12s ease; }
 .tw-hero:hover .tw-hero-img { transform:scale(1.0); }
-.tw-hero-overlay { position:absolute; inset:0; z-index:1; background:linear-gradient(to bottom,rgba(13,21,38,0.85) 0%,rgba(13,21,38,0.25) 40%,rgba(13,21,38,0.85) 100%),linear-gradient(to right,rgba(13,21,38,0.75) 0%,transparent 65%); }
+.tw-hero-overlay { position:absolute; inset:0; z-index:1; background:linear-gradient(to bottom,rgba(13,21,38,0.45) 0%,rgba(13,21,38,0.2) 40%,rgba(13,21,38,0.7) 100%),linear-gradient(to right,rgba(13,21,38,0.6) 0%,transparent 65%); }
 .tw-hero-accent { position:absolute; border-radius:50%; pointer-events:none; z-index:1; animation:tw-blob-float 8s ease-in-out infinite; }
 .tw-hero-accent--1 { width:520px; height:520px; background:radial-gradient(circle,rgba(6,146,175,0.18) 0%,transparent 70%); top:-120px; right:-80px; }
 .tw-hero-accent--2 { width:380px; height:380px; background:radial-gradient(circle,rgba(252,180,21,0.12) 0%,transparent 70%); bottom:80px; left:-60px; animation-delay:-4s; }
 @keyframes tw-blob-float { 0%,100%{transform:translateY(0) scale(1)} 50%{transform:translateY(-28px) scale(1.04)} }
-.tw-hero-inner { position:relative; z-index:2; padding:120px 20px 80px; max-width:860px; }
+.tw-hero-inner { position:relative; z-index:2; padding:60px 20px 60px; max-width:860px; }
 .tw-hero-pill { display:inline-flex; align-items:center; gap:10px; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.18); backdrop-filter:blur(8px); color:rgba(255,255,255,0.9); font-size:0.78rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; padding:8px 18px; border-radius:999px; margin-bottom:28px; animation:tw-hero-fadein 0.9s ease both; }
 .tw-hero-pill-dot { width:7px; height:7px; background:#25D366; border-radius:50%; flex-shrink:0; box-shadow:0 0 0 3px rgba(37,211,102,0.3); animation:tw-pulse 2s ease infinite; }
 @keyframes tw-pulse { 0%,100%{box-shadow:0 0 0 3px rgba(37,211,102,0.3)} 50%{box-shadow:0 0 0 7px rgba(37,211,102,0.1)} }
@@ -3345,57 +3345,82 @@ img, video, iframe, embed, object { max-width: 100%; height: auto; }
     background: linear-gradient(to top, rgba(13,21,38,0.85) 0%, transparent 100%) !important;
 }
 
-/* Load more button */
+/* SBI Load More + Follow buttons — center them in a clean transparent row.
+   SBI plugin defaults render the load button as full-width which creates an
+   ugly yellow bar. Force inline sizing + transparent wrappers + centered flex row. */
 .instagram-feed-wrap .sbi_load_btn_wrap,
-.instagram-feed-wrap #sbi_load_btn_wrap { text-align: center !important; margin-top: 32px !important; }
+.instagram-feed-wrap #sbi_load_btn_wrap,
+.instagram-feed-wrap .sbi_follow_btn,
+.instagram-feed-wrap #sbi_follow_btn {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    box-shadow: none !important;
+    border: none !important;
+    padding: 0 !important;
+    margin-top: 28px !important;
+    text-align: center !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    flex-wrap: wrap !important;
+    gap: 14px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
 
+/* Load More button — pill-shaped, NOT full-width */
 .instagram-feed-wrap #sbi_load,
 .instagram-feed-wrap .sbi_load_btn {
     display: inline-flex !important;
+    width: auto !important;
+    max-width: max-content !important;
+    flex: 0 0 auto !important;
     align-items: center !important;
+    justify-content: center !important;
     gap: 8px !important;
     background: linear-gradient(135deg, #FCB415 0%, #f09a00 100%) !important;
     color: #0d1526 !important;
     border: none !important;
-    border-radius: 10px !important;
+    border-radius: 999px !important;
     font-family: Nunito, sans-serif !important;
     font-size: 0.9rem !important;
     font-weight: 800 !important;
     padding: 12px 32px !important;
     letter-spacing: 0.03em !important;
     cursor: pointer !important;
-    box-shadow: 0 6px 20px rgba(252,180,21,0.3) !important;
+    box-shadow: 0 6px 20px rgba(252,180,21,0.25) !important;
     transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s !important;
+    text-decoration: none !important;
 }
-
 .instagram-feed-wrap #sbi_load:hover,
 .instagram-feed-wrap .sbi_load_btn:hover {
-    opacity: 0.88 !important;
+    opacity: 0.92 !important;
     transform: translateY(-2px) !important;
     box-shadow: 0 10px 28px rgba(252,180,21,0.4) !important;
 }
 
-/* Follow on Instagram button */
-.instagram-feed-wrap .sbi_follow_btn,
-.instagram-feed-wrap #sbi_follow_btn { margin-top: 20px !important; text-align: center !important; }
-
+/* Follow on Instagram — outlined pill */
 .instagram-feed-wrap .sbi_follow_btn a,
 .instagram-feed-wrap #sbi_follow_btn a {
     display: inline-flex !important;
+    width: auto !important;
+    max-width: max-content !important;
+    flex: 0 0 auto !important;
     align-items: center !important;
+    justify-content: center !important;
     gap: 8px !important;
-    background: transparent !important;
-    border: 2px solid #0692af !important;
+    background: #fff !important;
+    border: 1.5px solid #0692af !important;
     color: #0692af !important;
-    border-radius: 10px !important;
+    border-radius: 999px !important;
     font-family: Nunito, sans-serif !important;
     font-size: 0.9rem !important;
     font-weight: 800 !important;
-    padding: 10px 26px !important;
+    padding: 11px 26px !important;
     text-decoration: none !important;
     transition: background 0.2s, color 0.2s, border-color 0.2s !important;
 }
-
 .instagram-feed-wrap .sbi_follow_btn a:hover,
 .instagram-feed-wrap #sbi_follow_btn a:hover {
     background: #0692af !important;
