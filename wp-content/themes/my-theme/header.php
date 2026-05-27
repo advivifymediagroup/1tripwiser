@@ -18,20 +18,41 @@
       /* Hero: every technique combined so nothing escapes */
       .tw-hero{overflow:hidden!important;contain:paint!important;transform:translateZ(0)!important;isolation:isolate!important;clip-path:inset(0)!important}
       .tw-hero-bg{overflow:hidden!important}
-      .tw-hero-yt-wrap{inset:0!important;overflow:hidden!important}
+      /* Desktop: keep inset:-15% so YouTube UI naturally sits outside hero bounds.
+         Only collapse to inset:0 on mobile (where -15% would cause overflow). */
+      .tw-hero-yt-wrap{overflow:hidden!important}
+      @media(max-width:768px){
+        .tw-hero-yt-wrap{inset:0!important}
+        /* Cover-video sizing: keep video at native 16:9, crop sides on portrait viewports.
+           Width/height use viewport units so the video always fills the hero without letterboxing
+           and YouTube's title/controls (at the iframe's top/bottom edges) get pushed off-screen. */
+        .tw-hero-yt{
+          position:absolute!important;
+          top:50%!important;left:50%!important;
+          width:max(100%,177.78vh)!important;
+          height:max(100%,56.25vw)!important;
+          min-width:100%!important;min-height:100%!important;
+          transform:translate(-50%,-50%)!important;
+        }
+      }
       /* Cover YouTube title card (top) and controls (bottom) — showinfo=0 is deprecated */
-      .tw-hero-yt-wrap::before,.tw-hero-yt-wrap::after{content:''!important;position:absolute!important;left:0!important;right:0!important;z-index:3!important;pointer-events:none!important}
-      .tw-hero-yt-wrap::before{top:0!important;height:18%!important;background:linear-gradient(to bottom,#0d1526 0%,transparent 100%)!important}
-      .tw-hero-yt-wrap::after{bottom:0!important;height:18%!important;background:linear-gradient(to top,#0d1526 0%,transparent 100%)!important}
+      .tw-hero-yt-wrap::before,.tw-hero-yt-wrap::after{content:''!important;position:absolute!important;left:0!important;right:0!important;z-index:5!important;pointer-events:none!important}
+      .tw-hero-yt-wrap::before{top:0!important;height:22%!important;background:linear-gradient(to bottom,#0d1526 0%,rgba(13,21,38,0.7) 60%,transparent 100%)!important}
+      .tw-hero-yt-wrap::after{bottom:0!important;height:22%!important;background:linear-gradient(to top,#0d1526 0%,rgba(13,21,38,0.7) 60%,transparent 100%)!important}
       @media(max-width:768px){
         .tw-hero-accent{display:none!important}
       }
 
       /* Travel tabs — scroll inside, never push page wider */
       .travel-tabs{overflow:hidden!important;max-width:100vw!important;width:100%!important}
-      .travel-tabs-inner{overflow-x:auto!important;-webkit-overflow-scrolling:touch!important;scrollbar-width:none!important;justify-content:flex-start!important;width:100%!important;box-sizing:border-box!important}
+      .travel-tabs-inner{overflow-x:auto!important;-webkit-overflow-scrolling:touch!important;scrollbar-width:none!important;width:100%!important;box-sizing:border-box!important}
       .travel-tabs-inner::-webkit-scrollbar{display:none!important}
       .travel-tabs a{white-space:nowrap!important;flex:0 0 auto!important}
+      /* On mobile only — switch to flex-start so users can swipe to see overflowing tabs.
+         Desktop keeps the original justify-content:center for the polished look. */
+      @media(max-width:768px){
+        .travel-tabs-inner{justify-content:flex-start!important}
+      }
 
       /* Mobile menu & nav */
       .tw-mobile-menu{max-width:100vw!important;overflow:hidden!important;width:100%!important}
