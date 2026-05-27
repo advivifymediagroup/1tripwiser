@@ -198,6 +198,7 @@ h5, h6 {
   position: relative;
   z-index: 5;
   font-family: "Nunito", sans-serif;
+  overflow: hidden; /* contain tabs — prevents horizontal body overflow */
 }
 
 .travel-tabs-inner {
@@ -207,7 +208,13 @@ h5, h6 {
   gap: 4px;
   padding: 0 24px;
   height: 44px;
+  /* scrollable on all viewports where tabs don't fit */
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
 }
+
+.travel-tabs-inner::-webkit-scrollbar { display: none; }
 
 .travel-tabs a {
   color: rgba(255, 255, 255, 0.45);
@@ -2084,12 +2091,12 @@ h5, h6 {
   }
 
   .travel-tabs-inner {
-    justify-content: stretch;
+    justify-content: flex-start; /* don't stretch — allow scroll */
   }
 
   .travel-tabs a {
-    flex: 1;
-    padding: 9px 10px;
+    flex: 0 0 auto; /* keep natural width — don't squeeze */
+    padding: 8px 12px;
     text-align: center;
   }
 
