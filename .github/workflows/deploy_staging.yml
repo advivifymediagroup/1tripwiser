@@ -38,5 +38,30 @@ jobs:
             ./wp-content/ \
             ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/home/${{ secrets.SSH_USERNAME }}/domains/1tripwiser.com/public_html/staging/wp-content/
 
+      - name: Activate theme and configure front page via WP-CLI
+        run: |
+          ssh -i ~/.ssh/github_deploy \
+              -p ${{ secrets.SSH_PORT }} \
+              -o StrictHostKeyChecking=no \
+              ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} \
+              "WP_PATH=/home/${{ secrets.SSH_USERNAME }}/domains/1tripwiser.com/public_html/staging
+               # Check if WP-CLI is available anywhere
+               WP_CLI=\$(which wp 2>/dev/null || echo '')
+               if [ -z \"\$WP_CLI\" ]; then
+                 echo 'WP-CLI not found — skipping (mu-plugin handles auto-setup)'
+                 exit 0
+               fi
+               cd \$WP_PATH
+               echo '→ Activating theme...'
+               \$WP_CLI theme activate my-theme --allow-root 2>/dev/null || true
+               echo '→ Configuring front page...'
+               HOME_ID=\$(\$WP_CLI post list --post_type=page --post_status=publish --name=home --field=ID --allow-root 2>/dev/null | head -1)
+               if [ -n \"\$HOME_ID\" ]; then
+                 \$WP_CLI option update show_on_front page --allow-root 2>/dev/null || true
+                 \$WP_CLI option update page_on_front \$HOME_ID --allow-root 2>/dev/null || true
+                 echo \"→ Front page set to page ID \$HOME_ID\"
+               fi
+               echo '✅ WP configuration complete'"
+
       - name: Done
         run: echo "✅ Staging deployment complete!"

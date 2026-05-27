@@ -2394,12 +2394,32 @@ h5, h6 {
 .tw-hero-yt-wrap { position:absolute; inset:-15%; pointer-events:none; overflow:hidden; }
 /* On mobile the -15% inset creates a massive oversized element; collapse to 0 */
 @media (max-width: 768px) { .tw-hero-yt-wrap { inset: 0; } }
+/* Mask YouTube title card (top) and player controls (bottom) with opaque dark gradients.
+   YouTube no longer respects showinfo=0, so we cover the UI areas visually. */
+.tw-hero-yt-wrap::before,
+.tw-hero-yt-wrap::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0;
+    z-index: 3;
+    pointer-events: none;
+}
+.tw-hero-yt-wrap::before {
+    top: 0;
+    height: 18%;
+    background: linear-gradient(to bottom, #0d1526 0%, rgba(13,21,38,0) 100%);
+}
+.tw-hero-yt-wrap::after {
+    bottom: 0;
+    height: 18%;
+    background: linear-gradient(to top, #0d1526 0%, rgba(13,21,38,0) 100%);
+}
 .tw-hero-yt { width:100%; height:100%; border:0; display:block; }
 .tw-hero-yt-shield { position:absolute; inset:0; z-index:1; background:transparent; cursor:default; }
 .tw-hero-vid { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; pointer-events:none; }
 .tw-hero-img { position:absolute; inset:0; background-size:cover; background-position:center; transform:scale(1.04); transition:transform 12s ease; }
 .tw-hero:hover .tw-hero-img { transform:scale(1.0); }
-.tw-hero-overlay { position:absolute; inset:0; background:linear-gradient(to bottom,rgba(13,21,38,0.6) 0%,rgba(13,21,38,0.25) 40%,rgba(13,21,38,0.8) 100%),linear-gradient(to right,rgba(13,21,38,0.75) 0%,transparent 65%); }
+.tw-hero-overlay { position:absolute; inset:0; z-index:1; background:linear-gradient(to bottom,rgba(13,21,38,0.85) 0%,rgba(13,21,38,0.25) 40%,rgba(13,21,38,0.85) 100%),linear-gradient(to right,rgba(13,21,38,0.75) 0%,transparent 65%); }
 .tw-hero-accent { position:absolute; border-radius:50%; pointer-events:none; z-index:1; animation:tw-blob-float 8s ease-in-out infinite; }
 .tw-hero-accent--1 { width:520px; height:520px; background:radial-gradient(circle,rgba(6,146,175,0.18) 0%,transparent 70%); top:-120px; right:-80px; }
 .tw-hero-accent--2 { width:380px; height:380px; background:radial-gradient(circle,rgba(252,180,21,0.12) 0%,transparent 70%); bottom:80px; left:-60px; animation-delay:-4s; }
