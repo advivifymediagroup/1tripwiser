@@ -10,8 +10,9 @@
 get_header();
 
 /* Hero video / image background from admin settings */
-$tw_hero_video = get_option('tw_hero_video_url', '');
-$tw_hero_image = get_option('tw_hero_image_url', '');
+$tw_hero_video        = get_option('tw_hero_video_url', '');
+$tw_hero_image        = get_option('tw_hero_image_url', '');
+$tw_hero_mobile_image = get_option('tw_hero_mobile_image_url', '');
 $tw_yt_id = '';
 if ( $tw_hero_video ) {
     if ( preg_match('/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/', $tw_hero_video, $m ) ) {
@@ -40,6 +41,14 @@ if ( $tw_hero_video ) {
         <?php elseif ( $tw_hero_image ) : ?>
         <div class="tw-hero-img" style="background-image:url('<?php echo esc_url($tw_hero_image); ?>')"></div>
         <?php endif; ?>
+
+        <?php /* Mobile-only background image — shown via CSS @media (max-width:768px).
+                Hides the video on mobile so YouTube's stretched portrait letterboxing
+                never appears. If no image is set, just the dark gradient shows. */ ?>
+        <?php if ( $tw_hero_mobile_image ) : ?>
+        <div class="tw-hero-mobile-img" style="background-image:url('<?php echo esc_url($tw_hero_mobile_image); ?>')"></div>
+        <?php endif; ?>
+
         <div class="tw-hero-overlay"></div>
     </div>
 

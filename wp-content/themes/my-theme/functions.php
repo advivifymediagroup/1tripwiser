@@ -2022,8 +2022,9 @@ function mytheme_register_page_settings() {
     register_setting('tripwiser_blog_settings', 'tw_blog_aff_heading', array('sanitize_callback' => 'sanitize_text_field'));
     register_setting('tripwiser_blog_settings', 'tw_blog_aff_text',    array('sanitize_callback' => 'wp_kses_post'));
     // Hero background
-    register_setting('tripwiser_hero_settings', 'tw_hero_video_url', array('sanitize_callback' => 'esc_url_raw'));
-    register_setting('tripwiser_hero_settings', 'tw_hero_image_url', array('sanitize_callback' => 'esc_url_raw'));
+    register_setting('tripwiser_hero_settings', 'tw_hero_video_url',        array('sanitize_callback' => 'esc_url_raw'));
+    register_setting('tripwiser_hero_settings', 'tw_hero_image_url',        array('sanitize_callback' => 'esc_url_raw'));
+    register_setting('tripwiser_hero_settings', 'tw_hero_mobile_image_url', array('sanitize_callback' => 'esc_url_raw'));
     register_setting('tripwiser_hero_settings', 'tw_instagram_feed_id', array('sanitize_callback' => 'absint'));
     // WhatsApp widget + Cloud API
     register_setting('tripwiser_wa_settings', 'tw_wa_widget_number',  array('sanitize_callback' => 'sanitize_text_field'));
@@ -2344,6 +2345,24 @@ function tw_render_hero_settings_page() {
                             <div style="margin-top:12px">
                                 <img src="<?php echo esc_url($img); ?>" style="max-width:360px;border-radius:8px;border:1px solid #dde5ef;box-shadow:0 4px 12px rgba(0,0,0,0.1)">
                                 <p style="margin:6px 0 0;font-size:0.8rem;color:#667085">Current fallback image</p>
+                            </div>
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><label for="tw_hero_mobile_image_url">Mobile Image URL <span style="font-weight:400;color:#0692af">(mobile only)</span></label></th>
+                        <td>
+                            <input type="url" id="tw_hero_mobile_image_url" name="tw_hero_mobile_image_url"
+                                   value="<?php echo esc_attr(get_option('tw_hero_mobile_image_url','')); ?>"
+                                   class="large-text" placeholder="https://yoursite.com/hero-mobile.jpg">
+                            <p class="description">
+                                Shown on phones (≤768px) <strong>instead of the video</strong> — YouTube embeds look stretched on portrait screens.
+                                A vertical / portrait image works best. <em>Leave blank to show just the dark gradient background on mobile.</em>
+                            </p>
+                            <?php $mimg = get_option('tw_hero_mobile_image_url',''); if ($mimg) : ?>
+                            <div style="margin-top:12px">
+                                <img src="<?php echo esc_url($mimg); ?>" style="max-width:200px;border-radius:8px;border:1px solid #dde5ef;box-shadow:0 4px 12px rgba(0,0,0,0.1)">
+                                <p style="margin:6px 0 0;font-size:0.8rem;color:#667085">Current mobile image</p>
                             </div>
                             <?php endif; ?>
                         </td>
