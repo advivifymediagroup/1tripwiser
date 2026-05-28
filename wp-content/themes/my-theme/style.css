@@ -3664,6 +3664,25 @@ img, video, iframe, embed, object { max-width: 100%; height: auto; }
 }
 .tribe-btn-ghost:hover { background: #0692af; color: #fff; }
 
+/* Instagram button — Instagram brand gradient */
+.tribe-hero-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.tribe-ig-btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 9px;
+    background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+    color: #fff; border: none; border-radius: 999px;
+    font-family: 'Nunito', sans-serif; font-size: 0.92rem; font-weight: 800; letter-spacing: 0.03em;
+    padding: 13px 28px; cursor: pointer; text-decoration: none;
+    box-shadow: 0 6px 20px rgba(220,39,67,0.32);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+.tribe-ig-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(220,39,67,0.45); filter: brightness(1.06); color: #fff; }
+.tribe-ig-btn i { font-size: 1.05rem; line-height: 1; }
+.tribe-ig-btn--block { width: 100%; }
+
+/* Instagram sidebar widget */
+.tribe-ig-widget { text-align: center; }
+.tribe-ig-widget-text { color: #5b6b7d; font-size: 0.86rem; line-height: 1.55; margin: 0 0 14px; }
+
 /* ── Layout ── */
 .tribe-layout { display: grid; grid-template-columns: 1fr 320px; gap: 32px; padding-top: 36px; padding-bottom: 64px; align-items: start; }
 

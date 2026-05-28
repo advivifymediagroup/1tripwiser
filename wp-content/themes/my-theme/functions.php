@@ -3091,6 +3091,21 @@ function tw_maybe_create_pages() {
             'title'    => 'Submit a Blog Post',
             'template' => 'page-submit-blog.php',
         ),
+        array(
+            'slug'     => 'blog-affiliates',
+            'title'    => 'Blogs + Affiliates',
+            'template' => 'page-blog-affiliates.php',
+        ),
+        array(
+            'slug'     => 'plan-a-trip',
+            'title'    => 'Plan a Trip',
+            'template' => 'page-plan-a-trip.php',
+        ),
+        array(
+            'slug'     => 'package-search',
+            'title'    => 'Package Search',
+            'template' => 'page-package-search.php',
+        ),
     );
 
     $home_page_id = 0;
@@ -3135,6 +3150,22 @@ function tw_maybe_create_pages() {
         }
         if ( (int) get_option( 'page_on_front' ) !== $home_page_id ) {
             update_option( 'page_on_front', $home_page_id );
+        }
+    }
+
+    /*
+     * Self-heal the "Posts page" setting. This theme has NO dedicated WordPress
+     * posts page — the Blogs + Affiliates page runs its own post query via
+     * page-blog-affiliates.php. If a custom-template page (most commonly
+     * blog-affiliates) gets set as the Posts page, WordPress renders the blog
+     * index (home.php) at its URL and ignores the page's own template — which is
+     * exactly the "blog-affiliates page not coming up" bug on staging. Clear it.
+     */
+    $posts_page_id = (int) get_option( 'page_for_posts' );
+    if ( $posts_page_id > 0 ) {
+        $posts_page = get_post( $posts_page_id );
+        if ( $posts_page && in_array( $posts_page->post_name, array( 'blog-affiliates', 'plan-a-trip', 'package-search', 'home' ), true ) ) {
+            update_option( 'page_for_posts', 0 );
         }
     }
 }
