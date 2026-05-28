@@ -191,25 +191,29 @@
 
 <?php
 function tw_default_nav() {
-    $plan_url = mytheme_get_plan_trip_url();
-    $pkg_url  = esc_url(get_post_type_archive_link('travel_package'));
-    $blog_url = esc_url(home_url('/blog-affiliates/'));
+    $plan_url  = mytheme_get_plan_trip_url();
+    $pkg_url   = esc_url(get_post_type_archive_link('travel_package'));
+    $blog_url  = esc_url(home_url('/blog-affiliates/'));
+    $tribe_url = post_type_exists('forum_topic') ? esc_url(get_post_type_archive_link('forum_topic')) : '';
     echo '<ul class="tw-menu">';
     echo '<li class="tw-menu-item"><a href="' . esc_url(home_url('/')) . '" class="tw-nav-link">Home</a></li>';
     echo '<li class="tw-menu-item"><a href="' . $pkg_url . '" class="tw-nav-link">Packages</a></li>';
     echo '<li class="tw-menu-item"><a href="' . $blog_url . '" class="tw-nav-link">Blog</a></li>';
+    if ( $tribe_url ) { echo '<li class="tw-menu-item"><a href="' . $tribe_url . '" class="tw-nav-link">Tribe</a></li>'; }
     echo '<li class="tw-menu-item"><a href="' . esc_url($plan_url) . '" class="tw-nav-link">Plan a Trip</a></li>';
     echo '</ul>';
 }
 
 function tw_default_mobile_nav() {
-    $plan_url = mytheme_get_plan_trip_url();
-    $pkg_url  = esc_url(get_post_type_archive_link('travel_package'));
-    $blog_url = esc_url(home_url('/blog-affiliates/'));
+    $plan_url  = mytheme_get_plan_trip_url();
+    $pkg_url   = esc_url(get_post_type_archive_link('travel_package'));
+    $blog_url  = esc_url(home_url('/blog-affiliates/'));
+    $tribe_url = post_type_exists('forum_topic') ? esc_url(get_post_type_archive_link('forum_topic')) : '';
     echo '<ul class="tw-mobile-list">';
     echo '<li><a href="' . esc_url(home_url('/')) . '">Home</a></li>';
     echo '<li><a href="' . $pkg_url . '">Packages</a></li>';
     echo '<li><a href="' . $blog_url . '">Blog</a></li>';
+    if ( $tribe_url ) { echo '<li><a href="' . $tribe_url . '">Tribe</a></li>'; }
     echo '<li><a href="' . esc_url($plan_url) . '">Plan a Trip</a></li>';
     echo '</ul>';
 }
