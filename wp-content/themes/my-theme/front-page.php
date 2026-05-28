@@ -265,7 +265,7 @@ if ( $tw_hero_video ) {
                     <span class="tw-community-kicker">Join Our Community</span>
                     <h2 class="tw-community-title">1TRIPWISER <span>TRIBE</span></h2>
                     <p>Connect, share, and grow with 300K+ travel enthusiasts. Ask questions, share tips, and get inspired by real travelers.</p>
-                    <a href="<?php echo esc_url(mytheme_get_plan_trip_url()); ?>" class="tw-community-btn">Join Free →</a>
+                    <a href="<?php echo esc_url( post_type_exists('forum_topic') ? get_post_type_archive_link('forum_topic') : mytheme_get_plan_trip_url() ); ?>" class="tw-community-btn">Enter the Tribe →</a>
                 </div>
                 <div class="tw-community-stats">
                     <div class="tw-cstat"><strong>12.5K</strong><span>Active Members</span></div>
