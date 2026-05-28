@@ -134,9 +134,14 @@ $tw_pinned_ids = wp_list_pluck( $tw_pinned, 'ID' );
                 <div class="tribe-hstat"><strong><?php echo esc_html( number_format_i18n( $tw_total_replies ) ); ?></strong><span>Replies</span></div>
             </div>
 
-            <button type="button" class="tribe-start-btn" id="tribe-open-new">
-                <span aria-hidden="true">✍️</span> Start a Discussion
-            </button>
+            <div class="tribe-hero-actions">
+                <button type="button" class="tribe-start-btn" id="tribe-open-new">
+                    <span aria-hidden="true">✍️</span> Start a Discussion
+                </button>
+                <a class="tribe-ig-btn" href="https://www.instagram.com/1tripwiser_tribe/" target="_blank" rel="noopener noreferrer">
+                    <i class="fab fa-instagram" aria-hidden="true"></i> Follow on Instagram
+                </a>
+            </div>
         </div>
     </section>
 
@@ -211,6 +216,15 @@ $tw_pinned_ids = wp_list_pluck( $tw_pinned, 'ID' );
 
         <!-- ═══════════ SIDEBAR ═══════════ -->
         <aside class="tribe-sidebar">
+
+            <!-- Follow on Instagram -->
+            <div class="tribe-widget tribe-ig-widget">
+                <h3 class="tribe-widget-title">📸 Tribe on Instagram</h3>
+                <p class="tribe-ig-widget-text">Daily travel inspo, member stories & trip drops.</p>
+                <a class="tribe-ig-btn tribe-ig-btn--block" href="https://www.instagram.com/1tripwiser_tribe/" target="_blank" rel="noopener noreferrer">
+                    <i class="fab fa-instagram" aria-hidden="true"></i> @1tripwiser_tribe
+                </a>
+            </div>
 
             <!-- Trending -->
             <div class="tribe-widget">
