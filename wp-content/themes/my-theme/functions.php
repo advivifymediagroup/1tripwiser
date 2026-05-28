@@ -1,5 +1,8 @@
 <?php
 
+/* ── Tribe community forum (custom post type, replies, likes, leaderboard) ── */
+require_once get_template_directory() . '/includes/forum.php';
+
 function load_css(){
     wp_register_style('bootstrap', get_template_directory_uri() . '/css/bootstrap.min.css', array(), false, 'all');
     wp_enqueue_style('bootstrap');
