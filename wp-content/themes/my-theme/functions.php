@@ -1020,6 +1020,12 @@ function mytheme_travel_filter_options($post_type) {
             'all' => __('All', 'mytheme'),
             'india' => __('India', 'mytheme'),
             'international' => __('International', 'mytheme'),
+            'asia' => __('Asia', 'mytheme'),
+            'europe' => __('Europe', 'mytheme'),
+            'africa' => __('Africa', 'mytheme'),
+            'north-america' => __('North America', 'mytheme'),
+            'south-america' => __('South America', 'mytheme'),
+            'oceania' => __('Oceania', 'mytheme'),
             'budget-under-30k' => __('Budget < 30K', 'mytheme'),
         );
     }
@@ -1037,6 +1043,17 @@ function mytheme_package_region_options() {
         'international' => __('International', 'mytheme'),
         'asia' => __('Asia', 'mytheme'),
         'europe' => __('Europe', 'mytheme'),
+    );
+}
+
+function mytheme_itinerary_continent_options() {
+    return array(
+        'asia' => __('Asia', 'mytheme'),
+        'europe' => __('Europe', 'mytheme'),
+        'africa' => __('Africa', 'mytheme'),
+        'north-america' => __('North America', 'mytheme'),
+        'south-america' => __('South America', 'mytheme'),
+        'oceania' => __('Oceania', 'mytheme'),
     );
 }
 
@@ -1129,6 +1146,22 @@ function mytheme_build_travel_filter_meta_query($post_type, $filter) {
                     'key' => 'itinerary_region',
                     'value' => $filter,
                     'compare' => '=',
+                ),
+            );
+        }
+
+        if (array_key_exists($filter, mytheme_itinerary_continent_options())) {
+            return array(
+                'relation' => 'OR',
+                array(
+                    'key' => 'itinerary_continent',
+                    'value' => $filter,
+                    'compare' => '=',
+                ),
+                array(
+                    'key' => 'itinerary_continent',
+                    'value' => '"' . $filter . '"',
+                    'compare' => 'LIKE',
                 ),
             );
         }
@@ -1229,6 +1262,14 @@ function mytheme_render_itinerary_empty_state($reset_url = '', $message = '') {
         array(
             'label' => __('International Routes', 'mytheme'),
             'url' => add_query_arg('itinerary_filter', 'international', $archive_url),
+        ),
+        array(
+            'label' => __('Asia Routes', 'mytheme'),
+            'url' => add_query_arg('itinerary_filter', 'asia', $archive_url),
+        ),
+        array(
+            'label' => __('Europe Routes', 'mytheme'),
+            'url' => add_query_arg('itinerary_filter', 'europe', $archive_url),
         ),
         array(
             'label' => __('Budget < 30K', 'mytheme'),
