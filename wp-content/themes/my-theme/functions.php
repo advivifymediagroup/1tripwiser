@@ -862,9 +862,9 @@ function mytheme_get_destination_guide_sections($post_id = null) {
 
 function mytheme_render_destination_guide($post_id = null) {
     $post_id = $post_id ? $post_id : get_the_ID();
-    $sections = array_filter(mytheme_get_destination_guide_sections($post_id), function ($section) {
+    $sections = array_values(array_filter(mytheme_get_destination_guide_sections($post_id), function ($section) {
         return !empty($section['content']);
-    });
+    }));
 
     if (empty($sections)) {
         return;
@@ -875,15 +875,31 @@ function mytheme_render_destination_guide($post_id = null) {
             <span><?php esc_html_e('Travel Guide', 'mytheme'); ?></span>
             <h2><?php esc_html_e('Plan this destination better', 'mytheme'); ?></h2>
         </div>
-        <div class="destination-guide-grid">
-            <?php foreach ($sections as $section) : ?>
-                <article class="destination-guide-card">
-                    <h3><?php echo esc_html($section['label']); ?></h3>
-                    <div class="destination-guide-content">
-                        <?php echo wp_kses_post(wpautop($section['content'])); ?>
-                    </div>
-                </article>
-            <?php endforeach; ?>
+        <div class="destination-guide-layout">
+            <nav class="destination-guide-toc" aria-label="<?php esc_attr_e('Destination guide sections', 'mytheme'); ?>">
+                <ol>
+                    <?php foreach ($sections as $index => $section) : ?>
+                        <?php $section_id = 'destination-guide-' . sanitize_html_class($section['field']) . '-' . ($index + 1); ?>
+                        <li>
+                            <a href="#<?php echo esc_attr($section_id); ?>">
+                                <span><?php echo esc_html($index + 1); ?></span>
+                                <?php echo esc_html($section['label']); ?>
+                            </a>
+                        </li>
+                    <?php endforeach; ?>
+                </ol>
+            </nav>
+            <div class="destination-guide-content-list">
+                <?php foreach ($sections as $index => $section) : ?>
+                    <?php $section_id = 'destination-guide-' . sanitize_html_class($section['field']) . '-' . ($index + 1); ?>
+                    <article class="destination-guide-card" id="<?php echo esc_attr($section_id); ?>">
+                        <h3><?php echo esc_html($section['label']); ?></h3>
+                        <div class="destination-guide-content">
+                            <?php echo wp_kses_post(wpautop($section['content'])); ?>
+                        </div>
+                    </article>
+                <?php endforeach; ?>
+            </div>
         </div>
     </section>
     <?php
