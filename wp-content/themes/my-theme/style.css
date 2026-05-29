@@ -1382,10 +1382,71 @@ h5, h6 {
   margin: 0;
 }
 
-.destination-guide-grid {
+.destination-guide-layout {
+  display: grid;
+  align-items: start;
+  gap: 24px;
+  grid-template-columns: minmax(180px, 260px) minmax(0, 1fr);
+}
+
+.destination-guide-toc {
+  background: #ffffff;
+  border: 1px solid #e7eaf0;
+  border-radius: 8px;
+  padding: 14px;
+  position: sticky;
+  top: 90px;
+}
+
+.destination-guide-toc ol {
+  counter-reset: destination-guide;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.destination-guide-toc li + li {
+  border-top: 1px solid #eef1f5;
+  margin-top: 6px;
+  padding-top: 6px;
+}
+
+.destination-guide-toc a {
+  align-items: center;
+  border-radius: 8px;
+  color: #334155;
+  display: grid;
+  font-size: 0.92rem;
+  font-weight: 700;
+  gap: 10px;
+  grid-template-columns: 32px minmax(0, 1fr);
+  line-height: 1.35;
+  padding: 8px;
+  text-decoration: none;
+}
+
+.destination-guide-toc a:hover,
+.destination-guide-toc a:focus {
+  background: #eef9fc;
+  color: #0692af;
+}
+
+.destination-guide-toc span {
+  align-items: center;
+  background: #eef9fc;
+  border: 1px solid #d3eef5;
+  border-radius: 50%;
+  color: #0692af;
+  display: inline-flex;
+  font-size: 0.82rem;
+  height: 32px;
+  justify-content: center;
+  width: 32px;
+}
+
+.destination-guide-content-list {
   display: grid;
   gap: 16px;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .destination-guide-card {
@@ -1393,6 +1454,7 @@ h5, h6 {
   border: 1px solid #e7eaf0;
   border-radius: 8px;
   padding: 18px;
+  scroll-margin-top: 110px;
 }
 
 .destination-guide-card h3 {
@@ -2185,8 +2247,12 @@ h5, h6 {
     padding: 22px;
   }
 
-  .destination-guide-grid {
+  .destination-guide-layout {
     grid-template-columns: 1fr;
+  }
+
+  .destination-guide-toc {
+    position: static;
   }
 
   .visa-services-grid {
