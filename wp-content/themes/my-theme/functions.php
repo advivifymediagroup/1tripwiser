@@ -862,9 +862,9 @@ function mytheme_get_destination_guide_sections($post_id = null) {
 
 function mytheme_render_destination_guide($post_id = null) {
     $post_id = $post_id ? $post_id : get_the_ID();
-    $sections = array_filter(mytheme_get_destination_guide_sections($post_id), function ($section) {
+    $sections = array_values(array_filter(mytheme_get_destination_guide_sections($post_id), function ($section) {
         return !empty($section['content']);
-    });
+    }));
 
     if (empty($sections)) {
         return;
@@ -875,15 +875,31 @@ function mytheme_render_destination_guide($post_id = null) {
             <span><?php esc_html_e('Travel Guide', 'mytheme'); ?></span>
             <h2><?php esc_html_e('Plan this destination better', 'mytheme'); ?></h2>
         </div>
-        <div class="destination-guide-grid">
-            <?php foreach ($sections as $section) : ?>
-                <article class="destination-guide-card">
-                    <h3><?php echo esc_html($section['label']); ?></h3>
-                    <div class="destination-guide-content">
-                        <?php echo wp_kses_post(wpautop($section['content'])); ?>
-                    </div>
-                </article>
-            <?php endforeach; ?>
+        <div class="destination-guide-layout">
+            <nav class="destination-guide-toc" aria-label="<?php esc_attr_e('Destination guide sections', 'mytheme'); ?>">
+                <ol>
+                    <?php foreach ($sections as $index => $section) : ?>
+                        <?php $section_id = 'destination-guide-' . sanitize_html_class($section['field']) . '-' . ($index + 1); ?>
+                        <li>
+                            <a href="#<?php echo esc_attr($section_id); ?>">
+                                <span><?php echo esc_html($index + 1); ?></span>
+                                <?php echo esc_html($section['label']); ?>
+                            </a>
+                        </li>
+                    <?php endforeach; ?>
+                </ol>
+            </nav>
+            <div class="destination-guide-content-list">
+                <?php foreach ($sections as $index => $section) : ?>
+                    <?php $section_id = 'destination-guide-' . sanitize_html_class($section['field']) . '-' . ($index + 1); ?>
+                    <article class="destination-guide-card" id="<?php echo esc_attr($section_id); ?>">
+                        <h3><?php echo esc_html($section['label']); ?></h3>
+                        <div class="destination-guide-content">
+                            <?php echo wp_kses_post(wpautop($section['content'])); ?>
+                        </div>
+                    </article>
+                <?php endforeach; ?>
+            </div>
         </div>
     </section>
     <?php
@@ -1004,6 +1020,12 @@ function mytheme_travel_filter_options($post_type) {
             'all' => __('All', 'mytheme'),
             'india' => __('India', 'mytheme'),
             'international' => __('International', 'mytheme'),
+            'asia' => __('Asia', 'mytheme'),
+            'europe' => __('Europe', 'mytheme'),
+            'africa' => __('Africa', 'mytheme'),
+            'north-america' => __('North America', 'mytheme'),
+            'south-america' => __('South America', 'mytheme'),
+            'oceania' => __('Oceania', 'mytheme'),
             'budget-under-30k' => __('Budget < 30K', 'mytheme'),
         );
     }
@@ -1021,6 +1043,17 @@ function mytheme_package_region_options() {
         'international' => __('International', 'mytheme'),
         'asia' => __('Asia', 'mytheme'),
         'europe' => __('Europe', 'mytheme'),
+    );
+}
+
+function mytheme_itinerary_continent_options() {
+    return array(
+        'asia' => __('Asia', 'mytheme'),
+        'europe' => __('Europe', 'mytheme'),
+        'africa' => __('Africa', 'mytheme'),
+        'north-america' => __('North America', 'mytheme'),
+        'south-america' => __('South America', 'mytheme'),
+        'oceania' => __('Oceania', 'mytheme'),
     );
 }
 
@@ -1113,6 +1146,22 @@ function mytheme_build_travel_filter_meta_query($post_type, $filter) {
                     'key' => 'itinerary_region',
                     'value' => $filter,
                     'compare' => '=',
+                ),
+            );
+        }
+
+        if (array_key_exists($filter, mytheme_itinerary_continent_options())) {
+            return array(
+                'relation' => 'OR',
+                array(
+                    'key' => 'itinerary_continent',
+                    'value' => $filter,
+                    'compare' => '=',
+                ),
+                array(
+                    'key' => 'itinerary_continent',
+                    'value' => '"' . $filter . '"',
+                    'compare' => 'LIKE',
                 ),
             );
         }
@@ -1213,6 +1262,14 @@ function mytheme_render_itinerary_empty_state($reset_url = '', $message = '') {
         array(
             'label' => __('International Routes', 'mytheme'),
             'url' => add_query_arg('itinerary_filter', 'international', $archive_url),
+        ),
+        array(
+            'label' => __('Asia Routes', 'mytheme'),
+            'url' => add_query_arg('itinerary_filter', 'asia', $archive_url),
+        ),
+        array(
+            'label' => __('Europe Routes', 'mytheme'),
+            'url' => add_query_arg('itinerary_filter', 'europe', $archive_url),
         ),
         array(
             'label' => __('Budget < 30K', 'mytheme'),
