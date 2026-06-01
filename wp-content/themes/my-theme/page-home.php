@@ -168,7 +168,10 @@ if ( $tw_hero_video ) {
                                 <?php $summary = $route_summary ? wp_strip_all_tags($route_summary) : get_the_excerpt(); echo wp_trim_words($summary, 28, '...'); ?>
                                 <a href="<?php the_permalink(); ?>" class="inline-read-more">Read More</a>
                             </div>
-                            <a href="<?php the_permalink(); ?>" class="read-more">Open Itinerary</a>
+                            <div class="itin-actions">
+                                <a href="<?php the_permalink(); ?>" class="read-more">Open Itinerary</a>
+                                <a href="<?php echo esc_url( mytheme_get_travel_field('book_url') ?: get_permalink() ); ?>" class="book-now-gold">Book Now</a>
+                            </div>
                         </div>
                     </article>
                     <?php endwhile; wp_reset_postdata();
@@ -266,6 +269,9 @@ if ( $tw_hero_video ) {
             </div>
         </div>
     </section>
+
+    <!-- ═══════════ EVENTS & FESTIVALS SHOWCASE ═══════════ -->
+    <?php if ( function_exists( 'tw_explore_events_showcase' ) ) { tw_explore_events_showcase(); } ?>
 
     <!-- ═══════════ COMMUNITY ═══════════ -->
     <section class="tw-community-section">

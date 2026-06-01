@@ -67,6 +67,20 @@
 
 <?php wp_body_open(); ?>
 
+<!-- ===== SITE SEARCH OVERLAY ===== -->
+<div class="tw-search-overlay" id="tw-search-overlay" aria-hidden="true">
+    <button type="button" class="tw-search-close" id="tw-search-close" aria-label="Close search">✕</button>
+    <div class="tw-search-box">
+        <form class="tw-search-form" role="search" method="get" action="<?php echo esc_url(home_url('/')); ?>">
+            <input type="search" class="tw-search-input" name="s" id="tw-search-input"
+                   placeholder="Search trips, itineraries, group trips, blogs, the Tribe…"
+                   autocomplete="off" value="<?php echo esc_attr(get_search_query()); ?>">
+            <button type="submit" class="tw-search-submit">Search</button>
+        </form>
+        <p class="tw-search-hint">Try <span>Bali</span>, <span>Ladakh</span>, <span>Honeymoon</span> or <span>Oktoberfest</span></p>
+    </div>
+</div>
+
 <!-- ===== PAGE LOADER ===== -->
 <div id="tw-page-loader" role="status" aria-label="Loading">
     <div class="tw-loader-logo"><span>1</span>TRIPWISER</div>
@@ -121,6 +135,9 @@
             }
             wp_nav_menu($walker_args);
             ?>
+            <button type="button" class="tw-search-toggle" id="tw-search-open" aria-label="Search the site">
+                <i class="fas fa-search" aria-hidden="true"></i>
+            </button>
             <a class="tw-cta" href="<?php echo esc_url(mytheme_get_plan_trip_url()); ?>">
                 <span aria-hidden="true">✈</span> Plan My Trip
             </a>
@@ -173,6 +190,7 @@
         ));
         ?>
         <a class="tw-cta tw-cta-mobile" href="<?php echo esc_url(mytheme_get_plan_trip_url()); ?>">✈ Plan My Trip</a>
+        <button type="button" class="tw-cta tw-cta-mobile" id="tw-search-open-mobile" style="width:100%;background:rgba(255,255,255,0.08);color:#fff;border:1px solid rgba(255,255,255,0.15);margin-top:10px;">🔍 Search the site</button>
 
         <!-- Mobile auth links -->
         <div class="tw-mobile-auth">
@@ -191,7 +209,6 @@
 
 <?php
 function tw_default_nav() {
-    $plan_url  = mytheme_get_plan_trip_url();
     $pkg_url   = esc_url(get_post_type_archive_link('travel_package'));
     $blog_url  = esc_url(home_url('/blog-affiliates/'));
     $tribe_url = post_type_exists('forum_topic') ? esc_url(get_post_type_archive_link('forum_topic')) : '';
@@ -200,12 +217,10 @@ function tw_default_nav() {
     echo '<li class="tw-menu-item"><a href="' . $pkg_url . '" class="tw-nav-link">Packages</a></li>';
     echo '<li class="tw-menu-item"><a href="' . $blog_url . '" class="tw-nav-link">Blog</a></li>';
     if ( $tribe_url ) { echo '<li class="tw-menu-item"><a href="' . $tribe_url . '" class="tw-nav-link">Tribe</a></li>'; }
-    echo '<li class="tw-menu-item"><a href="' . esc_url($plan_url) . '" class="tw-nav-link">Plan a Trip</a></li>';
     echo '</ul>';
 }
 
 function tw_default_mobile_nav() {
-    $plan_url  = mytheme_get_plan_trip_url();
     $pkg_url   = esc_url(get_post_type_archive_link('travel_package'));
     $blog_url  = esc_url(home_url('/blog-affiliates/'));
     $tribe_url = post_type_exists('forum_topic') ? esc_url(get_post_type_archive_link('forum_topic')) : '';
@@ -214,7 +229,6 @@ function tw_default_mobile_nav() {
     echo '<li><a href="' . $pkg_url . '">Packages</a></li>';
     echo '<li><a href="' . $blog_url . '">Blog</a></li>';
     if ( $tribe_url ) { echo '<li><a href="' . $tribe_url . '">Tribe</a></li>'; }
-    echo '<li><a href="' . esc_url($plan_url) . '">Plan a Trip</a></li>';
     echo '</ul>';
 }
 ?>
@@ -229,6 +243,60 @@ function tw_default_mobile_nav() {
             toggle.classList.toggle('open', open);
             toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
             drawer.setAttribute('aria-hidden', open ? 'false' : 'true');
+        });
+    }
+
+    /* Explore subheader mega-menu — tap-to-open on touch/mobile.
+       Desktop uses CSS :hover; here we add click toggling for touch devices
+       and so the caret works without a mouse. */
+    var subItems = document.querySelectorAll('.tw-sub-item.has-mega');
+    if (subItems.length) {
+        subItems.forEach(function (item) {
+            var link = item.querySelector('.tw-sub-link');
+            if (!link) return;
+            link.addEventListener('click', function (e) {
+                // Only intercept on small screens / touch; let desktop links navigate
+                if (window.matchMedia('(max-width: 900px)').matches) {
+                    var alreadyOpen = item.classList.contains('is-open');
+                    subItems.forEach(function (i) { i.classList.remove('is-open'); });
+                    if (!alreadyOpen) { e.preventDefault(); item.classList.add('is-open'); }
+                }
+            });
+        });
+        // Close when tapping outside
+        document.addEventListener('click', function (e) {
+            if (!e.target.closest('.tw-sub-item')) {
+                subItems.forEach(function (i) { i.classList.remove('is-open'); });
+            }
+        });
+    }
+
+    /* Site search overlay */
+    var sOverlay = document.getElementById('tw-search-overlay');
+    var sInput   = document.getElementById('tw-search-input');
+    function openSearch() {
+        if (!sOverlay) return;
+        sOverlay.classList.add('open');
+        sOverlay.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        if (sInput) setTimeout(function () { sInput.focus(); }, 60);
+    }
+    function closeSearch() {
+        if (!sOverlay) return;
+        sOverlay.classList.remove('open');
+        sOverlay.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+    }
+    ['tw-search-open', 'tw-search-open-mobile'].forEach(function (id) {
+        var b = document.getElementById(id);
+        if (b) b.addEventListener('click', openSearch);
+    });
+    var sClose = document.getElementById('tw-search-close');
+    if (sClose) sClose.addEventListener('click', closeSearch);
+    if (sOverlay) {
+        sOverlay.addEventListener('click', function (e) { if (e.target === sOverlay) closeSearch(); });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && sOverlay.classList.contains('open')) closeSearch();
         });
     }
 })();
