@@ -50,6 +50,12 @@ function mytheme_enqueue_styles() {
     wp_enqueue_script('tw-animations', get_template_directory_uri() . '/assets/js/tw-animations.js', array(), '1.1', true);
     // Content image carousel — auto-activates for 2+ images in any post content area
     wp_enqueue_script('tw-carousel', get_template_directory_uri() . '/assets/js/tw-carousel.js', array(), '1.0', true);
+    // AJAX section filter — swaps card grid without a full page reload
+    wp_enqueue_script('tw-filters', get_template_directory_uri() . '/assets/js/tw-filters.js', array(), '1.0', true);
+    wp_localize_script('tw-filters', 'tw_ajax', array(
+        'ajax_url' => admin_url('admin-ajax.php'),
+        'nonce'    => wp_create_nonce('tw_filter_nonce'),
+    ));
 }
 
 add_action('wp_enqueue_scripts', 'mytheme_enqueue_styles');
@@ -767,15 +773,17 @@ function mytheme_package_card($post_id = null) {
     $post_id = $post_id ? $post_id : get_the_ID();
     $data = mytheme_get_package_data($post_id);
     $image_url = mytheme_get_image_url($data['image'], 'medium');
+    // Fallback: if ACF image field is empty, use the featured thumbnail URL
+    if ( ! $image_url && has_post_thumbnail( $post_id ) ) {
+        $image_url = get_the_post_thumbnail_url( $post_id, 'medium_large' );
+    }
     $book_url = $data['book_url'] ? $data['book_url'] : get_permalink($post_id);
     ?>
     <article class="post-card package-card">
         <div class="package-media">
             <a href="<?php echo esc_url(get_permalink($post_id)); ?>">
                 <?php if ($image_url) : ?>
-                    <img src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr(get_the_title($post_id)); ?>">
-                <?php elseif (has_post_thumbnail($post_id)) : ?>
-                    <?php echo get_the_post_thumbnail($post_id, 'medium'); ?>
+                    <img src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr(get_the_title($post_id)); ?>" loading="lazy">
                 <?php endif; ?>
             </a>
             <?php if ($data['tag']) : ?>
@@ -1097,6 +1105,142 @@ function mytheme_package_month_options() {
     );
 }
 
+/* ─────────────────────────────────────────────────────────────────────────
+ * HOMEPAGE ITINERARY CARD — shared by initial render + AJAX refresh
+ * ───────────────────────────────────────────────────────────────────────── */
+function tw_homepage_itinerary_card() {
+    $duration      = mytheme_get_travel_field('itinerary_duration');
+    $best_time     = mytheme_get_travel_field('itinerary_best_time');
+    $route_summary = mytheme_get_travel_field('itinerary_route_summary');
+    // Also try the unified keys written by tw_demo_full_meta()
+    if ( ! $duration )      $duration      = mytheme_get_travel_field('trip_duration');
+    if ( ! $best_time )     $best_time     = mytheme_get_travel_field('best_time');
+    if ( ! $route_summary ) $route_summary = mytheme_get_travel_field('route_summary');
+    ?>
+    <article class="post-card travel-card">
+        <?php if ( has_post_thumbnail() ) : ?>
+        <div class="post-thumbnail"><a href="<?php the_permalink(); ?>"><?php the_post_thumbnail('medium'); ?></a></div>
+        <?php endif; ?>
+        <div class="post-content">
+            <h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
+            <div class="travel-meta">
+                <?php if ( $duration )  : ?><span><?php echo esc_html( $duration ); ?></span><?php endif; ?>
+                <?php if ( $best_time ) : ?><span><?php echo esc_html( $best_time ); ?></span><?php endif; ?>
+            </div>
+            <div class="post-excerpt">
+                <?php
+                $summary = $route_summary ? wp_strip_all_tags( $route_summary ) : get_the_excerpt();
+                echo wp_trim_words( $summary, 28, '...' );
+                ?>
+                <a href="<?php the_permalink(); ?>" class="inline-read-more">Read More</a>
+            </div>
+            <div class="itin-actions">
+                <a href="<?php the_permalink(); ?>" class="read-more">Open Itinerary</a>
+                <a href="<?php echo esc_url( mytheme_get_travel_field('book_url') ?: get_permalink() ); ?>" class="book-now-gold">Book Now</a>
+            </div>
+        </div>
+    </article>
+    <?php
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+ * AJAX FILTER — returns card HTML for the packages / itineraries grid
+ * ───────────────────────────────────────────────────────────────────────── */
+add_action( 'wp_ajax_tw_filter_section',        'tw_ajax_filter_section' );
+add_action( 'wp_ajax_nopriv_tw_filter_section', 'tw_ajax_filter_section' );
+
+function tw_ajax_filter_section() {
+    check_ajax_referer( 'tw_filter_nonce', 'nonce' );
+
+    $section = sanitize_key( $_POST['section'] ?? '' );
+    $filter  = sanitize_key( $_POST['filter']  ?? 'all' );
+
+    ob_start();
+
+    if ( $section === 'packages' ) {
+        $args  = array( 'post_type' => 'travel_package', 'posts_per_page' => 3, 'post_status' => 'publish' );
+        $args  = array_merge( $args, mytheme_build_travel_filter_query_args( 'travel_package', $filter ) );
+        $query = new WP_Query( $args );
+        if ( $query->have_posts() ) {
+            while ( $query->have_posts() ) { $query->the_post(); mytheme_package_card(); }
+            wp_reset_postdata();
+        } else {
+            mytheme_render_package_empty_state( home_url( '/#featured-packages' ) );
+        }
+
+    } elseif ( $section === 'itineraries' ) {
+        $args  = array( 'post_type' => 'itinerary', 'posts_per_page' => 3, 'post_status' => 'publish' );
+        $args  = array_merge( $args, mytheme_build_travel_filter_query_args( 'itinerary', $filter ) );
+        $query = new WP_Query( $args );
+        if ( $query->have_posts() ) {
+            while ( $query->have_posts() ) { $query->the_post(); tw_homepage_itinerary_card(); }
+            wp_reset_postdata();
+        } else {
+            mytheme_render_itinerary_empty_state( home_url( '/#upcoming-trips' ) );
+        }
+    }
+
+    wp_send_json_success( array( 'html' => ob_get_clean() ) );
+}
+
+/**
+ * Returns WP_Query args (meta_query or tax_query) for a given filter value.
+ * Region filters use the destination_region taxonomy (reliable for both ACF and
+ * demo posts). Budget / tag filters use meta_query with OR across all known keys.
+ */
+function mytheme_build_travel_filter_query_args( $post_type, $filter ) {
+    if ( $filter === 'all' ) { return array(); }
+
+    // Region → taxonomy query (works for seeded demo + real posts tagged via region selector)
+    $region_terms = array(
+        'india'         => 'India',
+        'international' => 'International',
+        'asia'          => 'Asia',
+        'europe'        => 'Europe',
+        'africa'        => 'Africa',
+        'north-america' => 'North America',
+        'south-america' => 'South America',
+        'oceania'       => 'Oceania',
+    );
+    if ( isset( $region_terms[ $filter ] ) ) {
+        return array(
+            'tax_query' => array(
+                array(
+                    'taxonomy' => 'destination_region',
+                    'field'    => 'name',
+                    'terms'    => $region_terms[ $filter ],
+                    'operator' => 'IN',
+                ),
+            ),
+        );
+    }
+
+    // Budget < 30K — try all price meta keys
+    if ( $filter === 'budget-under-30k' ) {
+        return array(
+            'meta_query' => array(
+                'relation' => 'OR',
+                array( 'key' => 'package_amount',   'value' => 30000, 'type' => 'NUMERIC', 'compare' => '<=' ),
+                array( 'key' => '_starting_price',  'value' => 30000, 'type' => 'NUMERIC', 'compare' => '<=' ),
+                array( 'key' => '_itinerary_budget','value' => 30000, 'type' => 'NUMERIC', 'compare' => '<=' ),
+            ),
+        );
+    }
+
+    // Tag filters (packages)
+    if ( in_array( $filter, array( 'bestseller', 'trending', 'new', 'limited', 'popular' ), true ) ) {
+        return array(
+            'meta_query' => array(
+                'relation' => 'OR',
+                array( 'key' => 'package_tag',  'value' => $filter, 'compare' => '=' ),
+                array( 'key' => '_package_tag', 'value' => $filter, 'compare' => '=' ),
+            ),
+        );
+    }
+
+    return array();
+}
+
 function mytheme_get_active_travel_filter($param, $post_type) {
     $options = mytheme_travel_filter_options($post_type);
     $filter = isset($_GET[$param]) ? sanitize_key(wp_unslash($_GET[$param])) : 'all';
@@ -1185,24 +1329,79 @@ function mytheme_build_travel_filter_meta_query($post_type, $filter) {
 }
 
 function mytheme_travel_filter_box($post_type, $param, $base_url, $anchor = '') {
-    $options = mytheme_travel_filter_options($post_type);
-    $active_filter = mytheme_get_active_travel_filter($param, $post_type);
+    $active = mytheme_get_active_travel_filter($param, $post_type);
+
+    // Emoji-labelled destination pills
+    $dest_pills = array(
+        'all'           => array( '✦', 'All' ),
+        'india'         => array( '🇮🇳', 'India' ),
+        'international' => array( '✈️', 'International' ),
+        'asia'          => array( '🌏', 'Asia' ),
+        'europe'        => array( '🌍', 'Europe' ),
+        'africa'        => array( '🌍', 'Africa' ),
+        'north-america' => array( '🌎', 'North America' ),
+        'south-america' => array( '🌎', 'South America' ),
+        'oceania'       => array( '🌊', 'Oceania' ),
+        'budget-under-30k' => array( '💰', 'Budget < 30K' ),
+    );
+    // Type pills (packages only)
+    $type_pills = array(
+        'bestseller' => array( '⭐', 'Bestseller' ),
+        'trending'   => array( '🔥', 'Trending' ),
+        'new'        => array( '✨', 'New' ),
+    );
+
+    // Which dest options apply to this post type
+    $post_type_dest_keys = array_keys( mytheme_travel_filter_options( $post_type ) );
+    $has_type_group = ( $post_type === 'travel_package' );
+
+    $build_url = function( $value ) use ( $param, $base_url, $anchor ) {
+        $url = $value === 'all'
+            ? remove_query_arg( $param, $base_url )
+            : add_query_arg( $param, $value, $base_url );
+        return esc_url( remove_query_arg( 'paged', $url ) . $anchor );
+    };
+
+    $section_map = array( 'package_filter' => 'packages', 'itinerary_filter' => 'itineraries' );
+    $section     = isset( $section_map[ $param ] ) ? $section_map[ $param ] : $param;
     ?>
-    <div class="travel-filter-box" aria-label="<?php esc_attr_e('Travel filters', 'mytheme'); ?>">
-        <span class="travel-filter-label"><?php esc_html_e('Filter by', 'mytheme'); ?></span>
-        <div class="travel-filter-options">
-            <?php foreach ($options as $value => $label) : ?>
-                <?php
-                $url = $value === 'all'
-                    ? remove_query_arg($param, $base_url)
-                    : add_query_arg($param, $value, $base_url);
-                $url = remove_query_arg('paged', $url);
-                ?>
-                <a class="<?php echo $active_filter === $value ? 'active' : ''; ?>" href="<?php echo esc_url($url . $anchor); ?>">
-                    <?php echo esc_html($label); ?>
+    <div class="tw-filter-bar"
+         data-section="<?php echo esc_attr( $section ); ?>"
+         data-param="<?php echo esc_attr( $param ); ?>"
+         aria-label="<?php esc_attr_e('Travel filters','mytheme'); ?>">
+
+        <div class="tw-filter-row">
+            <span class="tw-filter-row-label">Destination</span>
+            <div class="tw-filter-pills" role="list">
+                <?php foreach ( $dest_pills as $val => list( $icon, $label ) ) :
+                    if ( $val !== 'all' && ! in_array( $val, $post_type_dest_keys, true ) ) continue;
+                    $is_active = ( $active === $val );
+                    $extra_cls = $val === 'budget-under-30k' ? ' tw-filter-pill--budget' : ''; ?>
+                <a class="tw-filter-pill<?php echo $is_active ? ' active' : ''; echo $extra_cls; ?>"
+                   href="<?php echo $build_url( $val ); ?>" role="listitem">
+                    <span class="tw-filter-pill-icon" aria-hidden="true"><?php echo $icon; ?></span>
+                    <?php echo esc_html( $label ); ?>
                 </a>
-            <?php endforeach; ?>
+                <?php endforeach; ?>
+            </div>
         </div>
+
+        <?php if ( $has_type_group ) : ?>
+        <div class="tw-filter-row tw-filter-row--type">
+            <span class="tw-filter-row-label">Type</span>
+            <div class="tw-filter-pills" role="list">
+                <?php foreach ( $type_pills as $val => list( $icon, $label ) ) :
+                    $is_active = ( $active === $val ); ?>
+                <a class="tw-filter-pill tw-filter-pill--type<?php echo $is_active ? ' active' : ''; ?>"
+                   href="<?php echo $build_url( $val ); ?>" role="listitem">
+                    <span class="tw-filter-pill-icon" aria-hidden="true"><?php echo $icon; ?></span>
+                    <?php echo esc_html( $label ); ?>
+                </a>
+                <?php endforeach; ?>
+            </div>
+        </div>
+        <?php endif; ?>
+
     </div>
     <?php
 }

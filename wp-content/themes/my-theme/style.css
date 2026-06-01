@@ -1016,6 +1016,25 @@ h5, h6 {
   color: #ffffff;
 }
 
+/* ── New tw-filter-bar — redesigned filter UI ── */
+.tw-filter-bar { background:#fff; border:1px solid #e8edf5; border-radius:18px; padding:16px 22px; margin:0 0 32px; box-shadow:0 4px 20px rgba(13,21,38,0.06); }
+.tw-filter-row { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+.tw-filter-row + .tw-filter-row { margin-top:12px; padding-top:12px; border-top:1px dashed #e8edf5; }
+.tw-filter-row--type { }
+.tw-filter-row-label { font-size:0.68rem; font-weight:800; letter-spacing:0.14em; text-transform:uppercase; color:#9ba8bb; white-space:nowrap; min-width:72px; }
+.tw-filter-pills { display:flex; gap:7px; flex-wrap:wrap; flex:1; }
+.tw-filter-pill { display:inline-flex; align-items:center; gap:5px; padding:7px 15px; border-radius:999px; border:1.5px solid #e2e8f4; background:transparent; color:#4a5568; font-size:0.82rem; font-weight:700; text-decoration:none; white-space:nowrap; transition:background 0.18s,border-color 0.18s,color 0.18s,box-shadow 0.18s; }
+.tw-filter-pill:hover { border-color:#0692AF; color:#0692AF; background:rgba(6,146,175,0.06); }
+.tw-filter-pill.active { background:#0692AF; border-color:#0692AF; color:#fff; box-shadow:0 4px 14px rgba(6,146,175,0.28); }
+.tw-filter-pill--budget:hover { border-color:#FCB415; color:#b07a00; background:rgba(252,180,21,0.08); }
+.tw-filter-pill--budget.active { background:linear-gradient(135deg,#FCB415,#f09a00); border-color:#FCB415; color:#0d1526; box-shadow:0 4px 14px rgba(252,180,21,0.3); }
+.tw-filter-pill--type:hover { border-color:#0692AF; color:#0692AF; background:rgba(6,146,175,0.06); }
+.tw-filter-pill--type.active { background:linear-gradient(135deg,#FCB415,#f09a00); border-color:#FCB415; color:#0d1526; box-shadow:0 4px 14px rgba(252,180,21,0.3); }
+.tw-filter-pill-icon { font-size:0.9rem; line-height:1; }
+@media(max-width:768px){ .tw-filter-bar{padding:12px 14px;border-radius:14px} .tw-filter-row{gap:8px} .tw-filter-pill{font-size:0.76rem;padding:6px 11px} .tw-filter-row-label{min-width:56px;font-size:0.62rem} }
+/* AJAX grid fade transition */
+.tw-ajax-grid { transition: opacity 0.2s ease; }
+
 .package-search-page {
   background: #f8f9fa;
   padding-bottom: 56px;
