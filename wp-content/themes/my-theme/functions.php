@@ -3,6 +3,12 @@
 /* ── Tribe community forum (custom post type, replies, likes, leaderboard) ── */
 require_once get_template_directory() . '/includes/forum.php';
 
+/* ── Explore system: region tree + events taxonomy, subheader, unified filters ── */
+require_once get_template_directory() . '/includes/explore.php';
+
+/* ── Demo content seeder (Tools → Demo Content) for leadership walkthroughs ── */
+require_once get_template_directory() . '/includes/demo-seed.php';
+
 function load_css(){
     wp_register_style('bootstrap', get_template_directory_uri() . '/css/bootstrap.min.css', array(), false, 'all');
     wp_enqueue_style('bootstrap');
@@ -42,6 +48,8 @@ function mytheme_enqueue_styles() {
     }
     // Global animations (canvas bubbles, scroll reveal, tilt, ripple)
     wp_enqueue_script('tw-animations', get_template_directory_uri() . '/assets/js/tw-animations.js', array(), '1.1', true);
+    // Content image carousel — auto-activates for 2+ images in any post content area
+    wp_enqueue_script('tw-carousel', get_template_directory_uri() . '/assets/js/tw-carousel.js', array(), '1.0', true);
 }
 
 add_action('wp_enqueue_scripts', 'mytheme_enqueue_styles');
@@ -526,10 +534,16 @@ function mytheme_travel_meta_fields() {
         'starting_price' => __('Starting Price', 'mytheme'),
         'best_time' => __('Best Time To Visit', 'mytheme'),
         'group_size' => __('Group Size', 'mytheme'),
+        'route_summary' => __('Route Summary (one line, e.g. Delhi → Manali → Kasol)', 'mytheme'),
+        'event_date' => __('Event Date (Events & Festivals — e.g. 29 May 2026)', 'mytheme'),
+        'book_url'   => __('Booking URL (used by the "Book Now" button; blank = trip page)', 'mytheme'),
     );
 }
 
 function mytheme_add_travel_meta_boxes() {
+    // When ACF is active, the ACF field group (mytheme_register_acf_travel_fields)
+    // provides the editor for all trip types. Only fall back to this simple meta
+    // box when ACF is not present.
     if (function_exists('acf_add_local_field_group')) {
         return;
     }
@@ -538,7 +552,7 @@ function mytheme_add_travel_meta_boxes() {
         'mytheme_travel_details',
         __('Travel Details', 'mytheme'),
         'mytheme_render_travel_meta_box',
-        array('itinerary', 'travel_package'),
+        array('itinerary', 'travel_package', 'tw_event', 'group_trip'),
         'normal',
         'high'
     );
@@ -650,25 +664,10 @@ function mytheme_breadcrumbs() {
 }
 
 function mytheme_travel_tabs() {
-    $current_type = get_post_type();
-    $home_active = is_front_page() || is_home();
-    $package_active = is_post_type_archive('travel_package') || is_singular('travel_package') || $current_type === 'travel_package';
-    $plan_page = get_page_by_path('plan-a-trip');
-    $plan_active = $plan_page && is_page($plan_page->ID);
-    ?>
-    <nav class="travel-tabs" aria-label="<?php esc_attr_e('Primary travel sections', 'mytheme'); ?>">
-        <div class="container travel-tabs-inner">
-            <a class="<?php echo $home_active ? 'active' : ''; ?>" href="<?php echo esc_url(home_url('/')); ?>">🏡Homepage</a>
-            <a class="<?php echo $package_active ? 'active' : ''; ?>" href="<?php echo esc_url(get_post_type_archive_link('travel_package')); ?>">📦Packages</a>
-            <?php
-            $blog_page   = get_page_by_path('blog-affiliates');
-            $blog_active = $blog_page && is_page($blog_page->ID);
-            ?>
-            <a class="<?php echo $blog_active ? 'active' : ''; ?>" href="<?php echo esc_url(home_url('/blog-affiliates/')); ?>">💰Blogs + Affiliates</a>
-            <a class="<?php echo $plan_active ? 'active' : ''; ?>" href="<?php echo esc_url(mytheme_get_plan_trip_url()); ?>">✈️Plan a Trip</a>
-        </div>
-    </nav>
-    <?php
+    // Subheader is now the Explore mega-menu (India / International / Events & Festivals).
+    if ( function_exists( 'tw_explore_subheader' ) ) {
+        tw_explore_subheader();
+    }
 }
 
 function mytheme_travel_detail_items($post_id = null) {
@@ -1008,6 +1007,10 @@ function mytheme_travel_filter_options($post_type) {
             'international' => __('International', 'mytheme'),
             'asia' => __('Asia', 'mytheme'),
             'europe' => __('Europe', 'mytheme'),
+            'africa' => __('Africa', 'mytheme'),
+            'north-america' => __('North America', 'mytheme'),
+            'south-america' => __('South America', 'mytheme'),
+            'oceania' => __('Oceania', 'mytheme'),
             'budget-under-30k' => __('Budget < 30K', 'mytheme'),
             'bestseller' => __('Bestseller', 'mytheme'),
             'trending' => __('Trending', 'mytheme'),
@@ -1019,13 +1022,13 @@ function mytheme_travel_filter_options($post_type) {
         return array(
             'all' => __('All', 'mytheme'),
             'india' => __('India', 'mytheme'),
-            'international' => __('International', 'mytheme'),
             'asia' => __('Asia', 'mytheme'),
             'europe' => __('Europe', 'mytheme'),
             'africa' => __('Africa', 'mytheme'),
             'north-america' => __('North America', 'mytheme'),
             'south-america' => __('South America', 'mytheme'),
             'oceania' => __('Oceania', 'mytheme'),
+            'international' => __('International', 'mytheme'),
             'budget-under-30k' => __('Budget < 30K', 'mytheme'),
         );
     }
@@ -1046,6 +1049,16 @@ function mytheme_package_region_options() {
     );
 }
 
+function mytheme_package_tag_options() {
+    return array(
+        'bestseller' => __('Bestseller', 'mytheme'),
+        'trending' => __('Trending', 'mytheme'),
+        'new' => __('New', 'mytheme'),
+        'limited' => __('Limited Seats', 'mytheme'),
+        'popular' => __('Popular', 'mytheme'),
+    );
+}
+
 function mytheme_itinerary_continent_options() {
     return array(
         'asia' => __('Asia', 'mytheme'),
@@ -1054,16 +1067,6 @@ function mytheme_itinerary_continent_options() {
         'north-america' => __('North America', 'mytheme'),
         'south-america' => __('South America', 'mytheme'),
         'oceania' => __('Oceania', 'mytheme'),
-    );
-}
-
-function mytheme_package_tag_options() {
-    return array(
-        'bestseller' => __('Bestseller', 'mytheme'),
-        'trending' => __('Trending', 'mytheme'),
-        'new' => __('New', 'mytheme'),
-        'limited' => __('Limited Seats', 'mytheme'),
-        'popular' => __('Popular', 'mytheme'),
     );
 }
 
@@ -1263,7 +1266,7 @@ function mytheme_render_itinerary_empty_state($reset_url = '', $message = '') {
             'label' => __('International Routes', 'mytheme'),
             'url' => add_query_arg('itinerary_filter', 'international', $archive_url),
         ),
-        array(
+                array(
             'label' => __('Asia Routes', 'mytheme'),
             'url' => add_query_arg('itinerary_filter', 'asia', $archive_url),
         ),
@@ -2365,6 +2368,7 @@ function tw_render_overview_page() {
 // HERO BANNER SETTINGS PAGE
 // ============================================================
 function tw_render_hero_settings_page() {
+    wp_enqueue_media(); // load WP media picker scripts
     tw_settings_page_header('Hero Banner', '🎬', 'Control the video or image that plays behind the homepage hero section.');
     ?>
     <div class="tw-admin-card">
@@ -2381,26 +2385,32 @@ function tw_render_hero_settings_page() {
                     <tr>
                         <th><label for="tw_hero_video_url">Video URL</label></th>
                         <td>
-                            <input type="url" id="tw_hero_video_url" name="tw_hero_video_url"
-                                   value="<?php echo esc_attr(get_option('tw_hero_video_url','')); ?>"
-                                   class="large-text" placeholder="https://www.youtube.com/watch?v=...  or  https://yoursite.com/hero.mp4">
+                            <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:6px">
+                                <input type="url" id="tw_hero_video_url" name="tw_hero_video_url"
+                                       value="<?php echo esc_attr(get_option('tw_hero_video_url','')); ?>"
+                                       style="flex:1;min-width:300px" placeholder="YouTube URL  or  direct .mp4 / .webm URL">
+                                <button type="button" class="button button-secondary tw-media-pick" data-target="tw_hero_video_url" data-type="video">
+                                    📁 Select from Media Library
+                                </button>
+                            </div>
                             <p class="description">
-                                Accepts a <strong>YouTube link</strong> (youtu.be or youtube.com/watch?v=) or a direct <strong>.mp4 file URL</strong>.<br>
-                                The video plays <em>muted, looped, and auto-started</em> — ideal for scenic travel footage.
+                                <strong>Recommended:</strong> Upload an .mp4 file to <a href="<?php echo esc_url(admin_url('media-new.php')); ?>" target="_blank">Media → Add New</a>, then click <em>Select from Media Library</em> above — no YouTube player, no controls, perfect cover fill.<br>
+                                Also accepts a <strong>YouTube link</strong> (youtu.be or youtube.com/watch?v=). Either way the video plays muted, looped and auto-started.
                             </p>
                         </td>
                     </tr>
                     <tr>
                         <th><label for="tw_hero_image_url">Fallback Image URL</label></th>
                         <td>
-                            <input type="url" id="tw_hero_image_url" name="tw_hero_image_url"
-                                   value="<?php echo esc_attr(get_option('tw_hero_image_url','')); ?>"
-                                   class="large-text" placeholder="https://yoursite.com/hero-image.jpg">
-                            <p class="description">
-                                Used when no video is set. Upload your image to
-                                <a href="<?php echo esc_url(admin_url('media-new.php')); ?>">Media → Add New</a>,
-                                copy the URL, and paste it here.
-                            </p>
+                            <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:6px">
+                                <input type="url" id="tw_hero_image_url" name="tw_hero_image_url"
+                                       value="<?php echo esc_attr(get_option('tw_hero_image_url','')); ?>"
+                                       style="flex:1;min-width:300px" placeholder="https://yoursite.com/hero-image.jpg">
+                                <button type="button" class="button button-secondary tw-media-pick" data-target="tw_hero_image_url" data-type="image">
+                                    🖼 Select from Media Library
+                                </button>
+                            </div>
+                            <p class="description">Used when no video is set.</p>
                             <?php $img = get_option('tw_hero_image_url',''); if ($img) : ?>
                             <div style="margin-top:12px">
                                 <img src="<?php echo esc_url($img); ?>" style="max-width:360px;border-radius:8px;border:1px solid #dde5ef;box-shadow:0 4px 12px rgba(0,0,0,0.1)">
@@ -2412,9 +2422,14 @@ function tw_render_hero_settings_page() {
                     <tr>
                         <th><label for="tw_hero_mobile_image_url">Mobile Image URL <span style="font-weight:400;color:#0692af">(mobile only)</span></label></th>
                         <td>
-                            <input type="url" id="tw_hero_mobile_image_url" name="tw_hero_mobile_image_url"
-                                   value="<?php echo esc_attr(get_option('tw_hero_mobile_image_url','')); ?>"
-                                   class="large-text" placeholder="https://yoursite.com/hero-mobile.jpg">
+                            <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:6px">
+                                <input type="url" id="tw_hero_mobile_image_url" name="tw_hero_mobile_image_url"
+                                       value="<?php echo esc_attr(get_option('tw_hero_mobile_image_url','')); ?>"
+                                       style="flex:1;min-width:300px" placeholder="https://yoursite.com/hero-mobile.jpg">
+                                <button type="button" class="button button-secondary tw-media-pick" data-target="tw_hero_mobile_image_url" data-type="image">
+                                    🖼 Select from Media Library
+                                </button>
+                            </div>
                             <p class="description">
                                 Shown on phones (≤768px) <strong>instead of the video</strong> — YouTube embeds look stretched on portrait screens.
                                 A vertical / portrait image works best. <em>Leave blank to show just the dark gradient background on mobile.</em>
@@ -2429,7 +2444,7 @@ function tw_render_hero_settings_page() {
                     </tr>
                 </table>
                 <div class="tw-admin-note info" style="margin-top:8px">
-                    💡 <strong>Tip:</strong> For best results use a landscape video at 1920×1080 or wider. YouTube videos are embedded as iframes — make sure the video is public. Direct .mp4 files load faster.
+                    💡 <strong>Tip:</strong> Upload your video via <a href="<?php echo esc_url(admin_url('media-new.php')); ?>">Media → Add New</a>, then use <em>Select from Media Library</em> — clean full-screen background, zero player controls. Landscape 1920×1080 .mp4 works best.
                 </div>
                 <div class="tw-admin-card" style="margin-top:24px;margin-bottom:0">
                     <div class="tw-admin-card-head">
@@ -2458,6 +2473,28 @@ function tw_render_hero_settings_page() {
             </form>
         </div>
     </div>
+    <script>
+    (function ($) {
+        var frames = {};
+        $('.tw-media-pick').on('click', function (e) {
+            e.preventDefault();
+            var target = $(this).data('target');
+            var mtype  = $(this).data('type');
+            if ( frames[target] ) { frames[target].open(); return; }
+            frames[target] = wp.media({
+                title   : mtype === 'video' ? 'Select Hero Video' : 'Select Hero Image',
+                button  : { text: mtype === 'video' ? 'Use This Video' : 'Use This Image' },
+                library : { type: mtype },
+                multiple: false,
+            });
+            frames[target].on('select', function () {
+                var att = frames[target].state().get('selection').first().toJSON();
+                $('#' + target).val(att.url);
+            });
+            frames[target].open();
+        });
+    }(jQuery));
+    </script>
     <?php tw_settings_page_footer();
 }
 
@@ -3162,6 +3199,11 @@ function tw_maybe_create_pages() {
             'slug'     => 'package-search',
             'title'    => 'Package Search',
             'template' => 'page-package-search.php',
+        ),
+        array(
+            'slug'     => 'events-festivals',
+            'title'    => 'Events & Festivals',
+            'template' => 'page-events-festivals.php',
         ),
     );
 

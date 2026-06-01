@@ -1,15 +1,28 @@
 <?php get_header(); ?>
 
-<main class="main-content travel-archive">
-    <div class="container">
-        <?php mytheme_breadcrumbs(); ?>
-        <header class="archive-header travel-archive-header">
-            <span>Ready-made routes</span>
-            <h1 class="archive-title">Itineraries</h1>
-            <p class="archive-description">Browse day-wise routes, practical travel notes and inspiration for your next journey.</p>
-        </header>
+<main class="main-content travel-archive explore-page">
 
-        <?php mytheme_travel_filter_box('itinerary', 'itinerary_filter', get_post_type_archive_link('itinerary')); ?>
+    <!-- Hero (dark band — matches Blog + Affiliates) -->
+    <section class="explore-hero">
+        <div class="explore-hero-overlay" aria-hidden="true"></div>
+        <div class="container explore-hero-inner">
+            <nav class="explore-crumbs" aria-label="Breadcrumb">
+                <a href="<?php echo esc_url( home_url('/') ); ?>">Home</a><span>›</span><span>Itineraries</span>
+            </nav>
+            <span class="explore-hero-kicker">Ready-made Routes</span>
+            <h1 class="explore-hero-title">Itin<span style="color:#FCB415">eraries</span></h1>
+            <p class="explore-hero-sub">Browse day-wise routes, practical travel notes and inspiration for your next journey.</p>
+        </div>
+    </section>
+
+    <div class="container explore-wrap">
+        <?php
+        if ( function_exists('tw_explore_unified_filter_box') ) {
+            tw_explore_unified_filter_box('itinerary', get_post_type_archive_link('itinerary'));
+        } else {
+            mytheme_travel_filter_box('itinerary', 'itinerary_filter', get_post_type_archive_link('itinerary'));
+        }
+        ?>
 
         <?php if (have_posts()) : ?>
             <div class="posts-grid">
@@ -36,7 +49,10 @@
                                 echo $route_summary ? wp_kses_post(wpautop($route_summary)) : get_the_excerpt();
                                 ?>
                             </div>
-                            <a href="<?php the_permalink(); ?>" class="read-more">Open Itinerary</a>
+                            <div class="itin-actions">
+                                <a href="<?php the_permalink(); ?>" class="read-more">Open Itinerary</a>
+                                <a href="<?php echo esc_url( mytheme_get_travel_field('book_url') ?: get_permalink() ); ?>" class="book-now-gold">Book Now</a>
+                            </div>
                         </div>
                     </article>
                 <?php endwhile; ?>
