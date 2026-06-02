@@ -109,6 +109,7 @@
 
                 <footer class="post-footer travel-cta">
                     <a href="#package-enquiry" class="btn-primary">Enquire Now</a>
+                    <?php mytheme_render_trip_pdf_button(get_the_ID(), 'Download PDF'); ?>
                     <!-- <a href="<?php echo esc_url(mytheme_get_plan_trip_url()); ?>" class="btn-secondary">Customize Trip</a> -->
                     <a href="<?php echo esc_url(get_post_type_archive_link('travel_package')); ?>" class="btn-secondary">All Packages</a>
                 </footer>
