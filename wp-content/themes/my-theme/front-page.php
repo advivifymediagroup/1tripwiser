@@ -266,7 +266,7 @@ if ( $tw_hero_video ) {
                 <a class="tw-ig-handle" href="https://www.instagram.com/1tripwiser/" target="_blank" rel="noopener noreferrer">📸 @1tripwiser</a>
             </div>
             <div class="instagram-feed-wrap">
-                <?php echo do_shortcode('[instagram-feed feed=3]'); ?>
+                <?php echo do_shortcode('[instagram-feed feed=1]'); ?>
             </div>
         </div>
     </section>

@@ -769,6 +769,359 @@ function mytheme_get_image_url($image, $size = 'medium') {
     return '';
 }
 
+function mytheme_get_trip_pdf_url($post_id = null) {
+    $post_id = $post_id ? $post_id : get_the_ID();
+
+    return add_query_arg('trip_pdf', '1', get_permalink($post_id));
+}
+
+function mytheme_render_trip_pdf_button($post_id = null, $label = '') {
+    $post_id = $post_id ? $post_id : get_the_ID();
+    $label = $label ? $label : __('Download PDF', 'mytheme');
+
+    if (!in_array(get_post_type($post_id), array('itinerary', 'travel_package'), true)) {
+        return;
+    }
+    ?>
+    <a href="<?php echo esc_url(mytheme_get_trip_pdf_url($post_id)); ?>" class="btn-secondary tw-pdf-btn" target="_blank" rel="noopener">
+        <?php echo esc_html($label); ?>
+    </a>
+    <?php
+}
+
+function mytheme_render_trip_pdf_fact($label, $value) {
+    if ($value === '' || $value === null) {
+        return;
+    }
+    ?>
+    <div class="tw-pdf-fact">
+        <span><?php echo esc_html($label); ?></span>
+        <strong><?php echo esc_html($value); ?></strong>
+    </div>
+    <?php
+}
+
+function mytheme_render_trip_pdf_document($post_id) {
+    $post = get_post($post_id);
+
+    if (!$post || !in_array($post->post_type, array('itinerary', 'travel_package'), true)) {
+        return;
+    }
+
+    $is_package = $post->post_type === 'travel_package';
+    $title = get_the_title($post_id);
+    $print_url = mytheme_get_trip_pdf_url($post_id);
+    $share_text = rawurlencode(sprintf('%s - %s', $title, $print_url));
+    $image_url = '';
+    $facts = array();
+    $main_content = '';
+
+    if ($is_package) {
+        $package = mytheme_get_package_data($post_id);
+        $image_url = mytheme_get_image_url($package['image'], 'large');
+        if (!$image_url && has_post_thumbnail($post_id)) {
+            $image_url = get_the_post_thumbnail_url($post_id, 'large');
+        }
+
+        $facts = array(
+            __('Location', 'mytheme') => $package['location'],
+            __('Duration', 'mytheme') => $package['duration'],
+            __('Trip Type', 'mytheme') => $package['trip_type'],
+            __('Amount', 'mytheme') => $package['amount'],
+            __('EMI Option', 'mytheme') => $package['emi'],
+        );
+        $main_content = $package['overview'];
+    } else {
+        $destination = mytheme_get_travel_field('itinerary_destination', $post_id);
+        $duration = mytheme_get_travel_field('itinerary_duration', $post_id);
+        $best_time = mytheme_get_travel_field('itinerary_best_time', $post_id);
+        $route_summary = mytheme_get_travel_field('itinerary_route_summary', $post_id);
+        $image_url = has_post_thumbnail($post_id) ? get_the_post_thumbnail_url($post_id, 'large') : '';
+
+        $facts = array(
+            __('Destination', 'mytheme') => ($destination && isset($destination->post_title)) ? $destination->post_title : '',
+            __('Duration', 'mytheme') => $duration,
+            __('Best Time', 'mytheme') => $best_time,
+        );
+        $main_content = $route_summary ? wpautop($route_summary) : apply_filters('the_content', $post->post_content);
+    }
+
+    nocache_headers();
+    status_header(200);
+    ?>
+    <!doctype html>
+    <html <?php language_attributes(); ?>>
+    <head>
+        <meta charset="<?php bloginfo('charset'); ?>">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title><?php echo esc_html(sprintf(__('%s PDF', 'mytheme'), $title)); ?></title>
+        <?php wp_site_icon(); ?>
+        <style>
+            :root {
+                --tw-blue: #0692af;
+                --tw-gold: #fcb415;
+                --tw-navy: #0d1526;
+                --tw-muted: #526070;
+                --tw-line: #dfe7ef;
+            }
+            * { box-sizing: border-box; }
+            body {
+                background: #eef3f6;
+                color: #1a2535;
+                font-family: Arial, sans-serif;
+                line-height: 1.62;
+                margin: 0;
+            }
+            .tw-pdf-toolbar {
+                align-items: center;
+                background: #0d1526;
+                color: #fff;
+                display: flex;
+                gap: 10px;
+                justify-content: center;
+                padding: 14px;
+                position: sticky;
+                top: 0;
+                z-index: 5;
+            }
+            .tw-pdf-toolbar a,
+            .tw-pdf-toolbar button {
+                background: #fcb415;
+                border: 0;
+                border-radius: 999px;
+                color: #0d1526;
+                cursor: pointer;
+                font: inherit;
+                font-weight: 800;
+                padding: 10px 18px;
+                text-decoration: none;
+            }
+            .tw-pdf-toolbar a.secondary {
+                background: transparent;
+                border: 1px solid rgba(255,255,255,0.35);
+                color: #fff;
+            }
+            .tw-pdf-page {
+                background: #fff;
+                box-shadow: 0 20px 70px rgba(13,21,38,0.12);
+                margin: 28px auto;
+                max-width: 860px;
+                min-height: 1120px;
+                padding: 46px;
+            }
+            .tw-pdf-brand {
+                align-items: center;
+                border-bottom: 2px solid var(--tw-line);
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 26px;
+                padding-bottom: 16px;
+            }
+            .tw-pdf-brand strong {
+                color: var(--tw-navy);
+                display: block;
+                font-size: 1.25rem;
+                letter-spacing: 0.08em;
+                text-transform: uppercase;
+            }
+            .tw-pdf-brand span {
+                color: var(--tw-muted);
+                font-size: 0.86rem;
+            }
+            .tw-pdf-kicker {
+                color: var(--tw-blue);
+                font-size: 0.78rem;
+                font-weight: 800;
+                letter-spacing: 0.12em;
+                margin-bottom: 8px;
+                text-transform: uppercase;
+            }
+            h1 {
+                color: var(--tw-navy);
+                font-size: 2.2rem;
+                line-height: 1.08;
+                margin: 0 0 18px;
+            }
+            h2 {
+                border-bottom: 1px solid var(--tw-line);
+                color: var(--tw-navy);
+                font-size: 1.2rem;
+                margin: 32px 0 14px;
+                padding-bottom: 8px;
+            }
+            h3 {
+                color: var(--tw-navy);
+                font-size: 1rem;
+                margin: 0 0 6px;
+            }
+            .tw-pdf-hero {
+                border-radius: 12px;
+                display: block;
+                height: 260px;
+                margin: 22px 0;
+                object-fit: cover;
+                width: 100%;
+            }
+            .tw-pdf-facts {
+                display: grid;
+                gap: 10px;
+                grid-template-columns: repeat(3, 1fr);
+                margin: 22px 0;
+            }
+            .tw-pdf-fact {
+                border: 1px solid var(--tw-line);
+                border-radius: 8px;
+                padding: 12px;
+            }
+            .tw-pdf-fact span {
+                color: var(--tw-muted);
+                display: block;
+                font-size: 0.78rem;
+                font-weight: 700;
+                margin-bottom: 4px;
+                text-transform: uppercase;
+            }
+            .tw-pdf-fact strong {
+                color: var(--tw-navy);
+                font-size: 0.98rem;
+            }
+            .tw-pdf-content,
+            .tw-pdf-day,
+            .tw-pdf-faq {
+                color: #2d3b4d;
+                font-size: 0.96rem;
+            }
+            .tw-pdf-content p,
+            .tw-pdf-content ul,
+            .tw-pdf-content ol {
+                margin-bottom: 12px;
+            }
+            .tw-pdf-day,
+            .tw-pdf-faq {
+                border-left: 3px solid var(--tw-blue);
+                margin-bottom: 14px;
+                padding: 2px 0 2px 16px;
+            }
+            .tw-pdf-footer {
+                border-top: 2px solid var(--tw-line);
+                color: var(--tw-muted);
+                display: flex;
+                font-size: 0.86rem;
+                justify-content: space-between;
+                margin-top: 36px;
+                padding-top: 14px;
+            }
+            @page { margin: 14mm; size: A4; }
+            @media print {
+                body { background: #fff; }
+                .tw-pdf-toolbar { display: none; }
+                .tw-pdf-page {
+                    box-shadow: none;
+                    margin: 0;
+                    max-width: none;
+                    min-height: 0;
+                    padding: 0;
+                }
+                .tw-pdf-hero { height: 210px; }
+                .tw-pdf-day,
+                .tw-pdf-faq,
+                .tw-pdf-fact { break-inside: avoid; }
+            }
+            @media (max-width: 760px) {
+                .tw-pdf-page { margin: 0; padding: 24px; }
+                .tw-pdf-toolbar { flex-wrap: wrap; position: static; }
+                .tw-pdf-facts { grid-template-columns: 1fr; }
+                .tw-pdf-brand { align-items: flex-start; flex-direction: column; gap: 8px; }
+                h1 { font-size: 1.7rem; }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="tw-pdf-toolbar">
+            <button type="button" onclick="window.print()"><?php esc_html_e('Download / Print PDF', 'mytheme'); ?></button>
+            <a href="<?php echo esc_url('https://wa.me/?text=' . $share_text); ?>" target="_blank" rel="noopener"><?php esc_html_e('Share on WhatsApp', 'mytheme'); ?></a>
+            <a class="secondary" href="<?php echo esc_url(get_permalink($post_id)); ?>"><?php esc_html_e('Back to trip', 'mytheme'); ?></a>
+        </div>
+
+        <main class="tw-pdf-page">
+            <header class="tw-pdf-brand">
+                <div>
+                    <strong><?php bloginfo('name'); ?></strong>
+                    <span><?php bloginfo('description'); ?></span>
+                </div>
+                <span><?php echo esc_html(home_url('/')); ?></span>
+            </header>
+
+            <div class="tw-pdf-kicker"><?php echo esc_html($is_package ? __('Travel Package', 'mytheme') : __('Itinerary', 'mytheme')); ?></div>
+            <h1><?php echo esc_html($title); ?></h1>
+
+            <?php if ($image_url) : ?>
+                <img class="tw-pdf-hero" src="<?php echo esc_url($image_url); ?>" alt="">
+            <?php endif; ?>
+
+            <section class="tw-pdf-facts">
+                <?php foreach ($facts as $label => $value) : ?>
+                    <?php mytheme_render_trip_pdf_fact($label, $value); ?>
+                <?php endforeach; ?>
+            </section>
+
+            <?php if ($main_content) : ?>
+                <section>
+                    <h2><?php echo esc_html($is_package ? __('Package Overview', 'mytheme') : __('Route Summary', 'mytheme')); ?></h2>
+                    <div class="tw-pdf-content">
+                        <?php echo wp_kses_post($main_content); ?>
+                    </div>
+                </section>
+            <?php endif; ?>
+
+            <?php if (!$is_package && function_exists('have_rows') && have_rows('itinerary_days', $post_id)) : ?>
+                <section>
+                    <h2><?php esc_html_e('Day Wise Plan', 'mytheme'); ?></h2>
+                    <?php while (have_rows('itinerary_days', $post_id)) : the_row(); ?>
+                        <article class="tw-pdf-day">
+                            <h3><?php echo esc_html(get_sub_field('day_title')); ?></h3>
+                            <div><?php echo wp_kses_post(wpautop(get_sub_field('day_details'))); ?></div>
+                        </article>
+                    <?php endwhile; ?>
+                </section>
+            <?php endif; ?>
+
+            <?php if (function_exists('have_rows') && have_rows('faqs', $post_id)) : ?>
+                <section>
+                    <h2><?php esc_html_e('FAQs', 'mytheme'); ?></h2>
+                    <?php while (have_rows('faqs', $post_id)) : the_row(); ?>
+                        <?php
+                        $question = get_sub_field('faq_question');
+                        $answer = get_sub_field('faq_answer');
+                        ?>
+                        <article class="tw-pdf-faq">
+                            <h3><?php echo esc_html($question); ?></h3>
+                            <div><?php echo wp_kses_post(wpautop($answer)); ?></div>
+                        </article>
+                    <?php endwhile; ?>
+                </section>
+            <?php endif; ?>
+
+            <footer class="tw-pdf-footer">
+                <span><?php esc_html_e('Planned by', 'mytheme'); ?> <?php bloginfo('name'); ?></span>
+                <span><?php echo esc_html(get_permalink($post_id)); ?></span>
+            </footer>
+        </main>
+    </body>
+    </html>
+    <?php
+}
+
+function mytheme_maybe_render_trip_pdf() {
+    if (!is_singular(array('itinerary', 'travel_package')) || !isset($_GET['trip_pdf'])) {
+        return;
+    }
+
+    mytheme_render_trip_pdf_document(get_queried_object_id());
+    exit;
+}
+add_action('template_redirect', 'mytheme_maybe_render_trip_pdf');
+
 function mytheme_package_card($post_id = null) {
     $post_id = $post_id ? $post_id : get_the_ID();
     $data = mytheme_get_package_data($post_id);
@@ -1037,6 +1390,12 @@ function mytheme_travel_filter_options($post_type) {
             'south-america' => __('South America', 'mytheme'),
             'oceania' => __('Oceania', 'mytheme'),
             'international' => __('International', 'mytheme'),
+            'asia' => __('Asia', 'mytheme'),
+            'europe' => __('Europe', 'mytheme'),
+            'africa' => __('Africa', 'mytheme'),
+            'north-america' => __('North America', 'mytheme'),
+            'south-america' => __('South America', 'mytheme'),
+            'oceania' => __('Oceania', 'mytheme'),
             'budget-under-30k' => __('Budget < 30K', 'mytheme'),
         );
     }
@@ -1054,6 +1413,17 @@ function mytheme_package_region_options() {
         'international' => __('International', 'mytheme'),
         'asia' => __('Asia', 'mytheme'),
         'europe' => __('Europe', 'mytheme'),
+    );
+}
+
+function mytheme_itinerary_continent_options() {
+    return array(
+        'asia' => __('Asia', 'mytheme'),
+        'europe' => __('Europe', 'mytheme'),
+        'africa' => __('Africa', 'mytheme'),
+        'north-america' => __('North America', 'mytheme'),
+        'south-america' => __('South America', 'mytheme'),
+        'oceania' => __('Oceania', 'mytheme'),
     );
 }
 
@@ -1466,6 +1836,14 @@ function mytheme_render_itinerary_empty_state($reset_url = '', $message = '') {
             'url' => add_query_arg('itinerary_filter', 'international', $archive_url),
         ),
                 array(
+            'label' => __('Asia Routes', 'mytheme'),
+            'url' => add_query_arg('itinerary_filter', 'asia', $archive_url),
+        ),
+        array(
+            'label' => __('Europe Routes', 'mytheme'),
+            'url' => add_query_arg('itinerary_filter', 'europe', $archive_url),
+        ),
+        array(
             'label' => __('Asia Routes', 'mytheme'),
             'url' => add_query_arg('itinerary_filter', 'asia', $archive_url),
         ),
