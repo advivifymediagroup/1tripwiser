@@ -55,6 +55,7 @@
 
                 <footer class="post-footer travel-cta">
                     <!-- <a href="<?php echo esc_url(mytheme_get_plan_trip_url()); ?>" class="btn-primary">Customize This Route</a> -->
+                    <?php mytheme_render_trip_pdf_button(get_the_ID(), 'Download PDF'); ?>
                     <a href="<?php echo esc_url(get_post_type_archive_link('itinerary')); ?>" class="btn-secondary">All Itineraries</a>
                 </footer>
             </article>
