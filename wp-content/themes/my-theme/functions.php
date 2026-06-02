@@ -3,6 +3,12 @@
 /* ── Tribe community forum (custom post type, replies, likes, leaderboard) ── */
 require_once get_template_directory() . '/includes/forum.php';
 
+/* ── Explore system: region tree + events taxonomy, subheader, unified filters ── */
+require_once get_template_directory() . '/includes/explore.php';
+
+/* ── Demo content seeder (Tools → Demo Content) for leadership walkthroughs ── */
+require_once get_template_directory() . '/includes/demo-seed.php';
+
 function load_css(){
     wp_register_style('bootstrap', get_template_directory_uri() . '/css/bootstrap.min.css', array(), false, 'all');
     wp_enqueue_style('bootstrap');
@@ -42,6 +48,14 @@ function mytheme_enqueue_styles() {
     }
     // Global animations (canvas bubbles, scroll reveal, tilt, ripple)
     wp_enqueue_script('tw-animations', get_template_directory_uri() . '/assets/js/tw-animations.js', array(), '1.1', true);
+    // Content image carousel — auto-activates for 2+ images in any post content area
+    wp_enqueue_script('tw-carousel', get_template_directory_uri() . '/assets/js/tw-carousel.js', array(), '1.0', true);
+    // AJAX section filter — swaps card grid without a full page reload
+    wp_enqueue_script('tw-filters', get_template_directory_uri() . '/assets/js/tw-filters.js', array(), '1.0', true);
+    wp_localize_script('tw-filters', 'tw_ajax', array(
+        'ajax_url' => admin_url('admin-ajax.php'),
+        'nonce'    => wp_create_nonce('tw_filter_nonce'),
+    ));
 }
 
 add_action('wp_enqueue_scripts', 'mytheme_enqueue_styles');
@@ -526,10 +540,16 @@ function mytheme_travel_meta_fields() {
         'starting_price' => __('Starting Price', 'mytheme'),
         'best_time' => __('Best Time To Visit', 'mytheme'),
         'group_size' => __('Group Size', 'mytheme'),
+        'route_summary' => __('Route Summary (one line, e.g. Delhi → Manali → Kasol)', 'mytheme'),
+        'event_date' => __('Event Date (Events & Festivals — e.g. 29 May 2026)', 'mytheme'),
+        'book_url'   => __('Booking URL (used by the "Book Now" button; blank = trip page)', 'mytheme'),
     );
 }
 
 function mytheme_add_travel_meta_boxes() {
+    // When ACF is active, the ACF field group (mytheme_register_acf_travel_fields)
+    // provides the editor for all trip types. Only fall back to this simple meta
+    // box when ACF is not present.
     if (function_exists('acf_add_local_field_group')) {
         return;
     }
@@ -538,7 +558,7 @@ function mytheme_add_travel_meta_boxes() {
         'mytheme_travel_details',
         __('Travel Details', 'mytheme'),
         'mytheme_render_travel_meta_box',
-        array('itinerary', 'travel_package'),
+        array('itinerary', 'travel_package', 'tw_event', 'group_trip'),
         'normal',
         'high'
     );
@@ -650,25 +670,10 @@ function mytheme_breadcrumbs() {
 }
 
 function mytheme_travel_tabs() {
-    $current_type = get_post_type();
-    $home_active = is_front_page() || is_home();
-    $package_active = is_post_type_archive('travel_package') || is_singular('travel_package') || $current_type === 'travel_package';
-    $plan_page = get_page_by_path('plan-a-trip');
-    $plan_active = $plan_page && is_page($plan_page->ID);
-    ?>
-    <nav class="travel-tabs" aria-label="<?php esc_attr_e('Primary travel sections', 'mytheme'); ?>">
-        <div class="container travel-tabs-inner">
-            <a class="<?php echo $home_active ? 'active' : ''; ?>" href="<?php echo esc_url(home_url('/')); ?>">🏡Homepage</a>
-            <a class="<?php echo $package_active ? 'active' : ''; ?>" href="<?php echo esc_url(get_post_type_archive_link('travel_package')); ?>">📦Packages</a>
-            <?php
-            $blog_page   = get_page_by_path('blog-affiliates');
-            $blog_active = $blog_page && is_page($blog_page->ID);
-            ?>
-            <a class="<?php echo $blog_active ? 'active' : ''; ?>" href="<?php echo esc_url(home_url('/blog-affiliates/')); ?>">💰Blogs + Affiliates</a>
-            <a class="<?php echo $plan_active ? 'active' : ''; ?>" href="<?php echo esc_url(mytheme_get_plan_trip_url()); ?>">✈️Plan a Trip</a>
-        </div>
-    </nav>
-    <?php
+    // Subheader is now the Explore mega-menu (India / International / Events & Festivals).
+    if ( function_exists( 'tw_explore_subheader' ) ) {
+        tw_explore_subheader();
+    }
 }
 
 function mytheme_travel_detail_items($post_id = null) {
@@ -1121,15 +1126,17 @@ function mytheme_package_card($post_id = null) {
     $post_id = $post_id ? $post_id : get_the_ID();
     $data = mytheme_get_package_data($post_id);
     $image_url = mytheme_get_image_url($data['image'], 'medium');
+    // Fallback: if ACF image field is empty, use the featured thumbnail URL
+    if ( ! $image_url && has_post_thumbnail( $post_id ) ) {
+        $image_url = get_the_post_thumbnail_url( $post_id, 'medium_large' );
+    }
     $book_url = $data['book_url'] ? $data['book_url'] : get_permalink($post_id);
     ?>
     <article class="post-card package-card">
         <div class="package-media">
             <a href="<?php echo esc_url(get_permalink($post_id)); ?>">
                 <?php if ($image_url) : ?>
-                    <img src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr(get_the_title($post_id)); ?>">
-                <?php elseif (has_post_thumbnail($post_id)) : ?>
-                    <?php echo get_the_post_thumbnail($post_id, 'medium'); ?>
+                    <img src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr(get_the_title($post_id)); ?>" loading="lazy">
                 <?php endif; ?>
             </a>
             <?php if ($data['tag']) : ?>
@@ -1361,6 +1368,10 @@ function mytheme_travel_filter_options($post_type) {
             'international' => __('International', 'mytheme'),
             'asia' => __('Asia', 'mytheme'),
             'europe' => __('Europe', 'mytheme'),
+            'africa' => __('Africa', 'mytheme'),
+            'north-america' => __('North America', 'mytheme'),
+            'south-america' => __('South America', 'mytheme'),
+            'oceania' => __('Oceania', 'mytheme'),
             'budget-under-30k' => __('Budget < 30K', 'mytheme'),
             'bestseller' => __('Bestseller', 'mytheme'),
             'trending' => __('Trending', 'mytheme'),
@@ -1372,6 +1383,12 @@ function mytheme_travel_filter_options($post_type) {
         return array(
             'all' => __('All', 'mytheme'),
             'india' => __('India', 'mytheme'),
+            'asia' => __('Asia', 'mytheme'),
+            'europe' => __('Europe', 'mytheme'),
+            'africa' => __('Africa', 'mytheme'),
+            'north-america' => __('North America', 'mytheme'),
+            'south-america' => __('South America', 'mytheme'),
+            'oceania' => __('Oceania', 'mytheme'),
             'international' => __('International', 'mytheme'),
             'asia' => __('Asia', 'mytheme'),
             'europe' => __('Europe', 'mytheme'),
@@ -1420,6 +1437,17 @@ function mytheme_package_tag_options() {
     );
 }
 
+function mytheme_itinerary_continent_options() {
+    return array(
+        'asia' => __('Asia', 'mytheme'),
+        'europe' => __('Europe', 'mytheme'),
+        'africa' => __('Africa', 'mytheme'),
+        'north-america' => __('North America', 'mytheme'),
+        'south-america' => __('South America', 'mytheme'),
+        'oceania' => __('Oceania', 'mytheme'),
+    );
+}
+
 function mytheme_package_trip_type_options() {
     return array(
         'Group Trip' => __('Group Trip', 'mytheme'),
@@ -1445,6 +1473,142 @@ function mytheme_package_month_options() {
         'november' => __('November', 'mytheme'),
         'december' => __('December', 'mytheme'),
     );
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+ * HOMEPAGE ITINERARY CARD — shared by initial render + AJAX refresh
+ * ───────────────────────────────────────────────────────────────────────── */
+function tw_homepage_itinerary_card() {
+    $duration      = mytheme_get_travel_field('itinerary_duration');
+    $best_time     = mytheme_get_travel_field('itinerary_best_time');
+    $route_summary = mytheme_get_travel_field('itinerary_route_summary');
+    // Also try the unified keys written by tw_demo_full_meta()
+    if ( ! $duration )      $duration      = mytheme_get_travel_field('trip_duration');
+    if ( ! $best_time )     $best_time     = mytheme_get_travel_field('best_time');
+    if ( ! $route_summary ) $route_summary = mytheme_get_travel_field('route_summary');
+    ?>
+    <article class="post-card travel-card">
+        <?php if ( has_post_thumbnail() ) : ?>
+        <div class="post-thumbnail"><a href="<?php the_permalink(); ?>"><?php the_post_thumbnail('medium'); ?></a></div>
+        <?php endif; ?>
+        <div class="post-content">
+            <h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
+            <div class="travel-meta">
+                <?php if ( $duration )  : ?><span><?php echo esc_html( $duration ); ?></span><?php endif; ?>
+                <?php if ( $best_time ) : ?><span><?php echo esc_html( $best_time ); ?></span><?php endif; ?>
+            </div>
+            <div class="post-excerpt">
+                <?php
+                $summary = $route_summary ? wp_strip_all_tags( $route_summary ) : get_the_excerpt();
+                echo wp_trim_words( $summary, 28, '...' );
+                ?>
+                <a href="<?php the_permalink(); ?>" class="inline-read-more">Read More</a>
+            </div>
+            <div class="itin-actions">
+                <a href="<?php the_permalink(); ?>" class="read-more">Open Itinerary</a>
+                <a href="<?php echo esc_url( mytheme_get_travel_field('book_url') ?: get_permalink() ); ?>" class="book-now-gold">Book Now</a>
+            </div>
+        </div>
+    </article>
+    <?php
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+ * AJAX FILTER — returns card HTML for the packages / itineraries grid
+ * ───────────────────────────────────────────────────────────────────────── */
+add_action( 'wp_ajax_tw_filter_section',        'tw_ajax_filter_section' );
+add_action( 'wp_ajax_nopriv_tw_filter_section', 'tw_ajax_filter_section' );
+
+function tw_ajax_filter_section() {
+    check_ajax_referer( 'tw_filter_nonce', 'nonce' );
+
+    $section = sanitize_key( $_POST['section'] ?? '' );
+    $filter  = sanitize_key( $_POST['filter']  ?? 'all' );
+
+    ob_start();
+
+    if ( $section === 'packages' ) {
+        $args  = array( 'post_type' => 'travel_package', 'posts_per_page' => 3, 'post_status' => 'publish' );
+        $args  = array_merge( $args, mytheme_build_travel_filter_query_args( 'travel_package', $filter ) );
+        $query = new WP_Query( $args );
+        if ( $query->have_posts() ) {
+            while ( $query->have_posts() ) { $query->the_post(); mytheme_package_card(); }
+            wp_reset_postdata();
+        } else {
+            mytheme_render_package_empty_state( home_url( '/#featured-packages' ) );
+        }
+
+    } elseif ( $section === 'itineraries' ) {
+        $args  = array( 'post_type' => 'itinerary', 'posts_per_page' => 3, 'post_status' => 'publish' );
+        $args  = array_merge( $args, mytheme_build_travel_filter_query_args( 'itinerary', $filter ) );
+        $query = new WP_Query( $args );
+        if ( $query->have_posts() ) {
+            while ( $query->have_posts() ) { $query->the_post(); tw_homepage_itinerary_card(); }
+            wp_reset_postdata();
+        } else {
+            mytheme_render_itinerary_empty_state( home_url( '/#upcoming-trips' ) );
+        }
+    }
+
+    wp_send_json_success( array( 'html' => ob_get_clean() ) );
+}
+
+/**
+ * Returns WP_Query args (meta_query or tax_query) for a given filter value.
+ * Region filters use the destination_region taxonomy (reliable for both ACF and
+ * demo posts). Budget / tag filters use meta_query with OR across all known keys.
+ */
+function mytheme_build_travel_filter_query_args( $post_type, $filter ) {
+    if ( $filter === 'all' ) { return array(); }
+
+    // Region → taxonomy query (works for seeded demo + real posts tagged via region selector)
+    $region_terms = array(
+        'india'         => 'India',
+        'international' => 'International',
+        'asia'          => 'Asia',
+        'europe'        => 'Europe',
+        'africa'        => 'Africa',
+        'north-america' => 'North America',
+        'south-america' => 'South America',
+        'oceania'       => 'Oceania',
+    );
+    if ( isset( $region_terms[ $filter ] ) ) {
+        return array(
+            'tax_query' => array(
+                array(
+                    'taxonomy' => 'destination_region',
+                    'field'    => 'name',
+                    'terms'    => $region_terms[ $filter ],
+                    'operator' => 'IN',
+                ),
+            ),
+        );
+    }
+
+    // Budget < 30K — try all price meta keys
+    if ( $filter === 'budget-under-30k' ) {
+        return array(
+            'meta_query' => array(
+                'relation' => 'OR',
+                array( 'key' => 'package_amount',   'value' => 30000, 'type' => 'NUMERIC', 'compare' => '<=' ),
+                array( 'key' => '_starting_price',  'value' => 30000, 'type' => 'NUMERIC', 'compare' => '<=' ),
+                array( 'key' => '_itinerary_budget','value' => 30000, 'type' => 'NUMERIC', 'compare' => '<=' ),
+            ),
+        );
+    }
+
+    // Tag filters (packages)
+    if ( in_array( $filter, array( 'bestseller', 'trending', 'new', 'limited', 'popular' ), true ) ) {
+        return array(
+            'meta_query' => array(
+                'relation' => 'OR',
+                array( 'key' => 'package_tag',  'value' => $filter, 'compare' => '=' ),
+                array( 'key' => '_package_tag', 'value' => $filter, 'compare' => '=' ),
+            ),
+        );
+    }
+
+    return array();
 }
 
 function mytheme_get_active_travel_filter($param, $post_type) {
@@ -1535,24 +1699,79 @@ function mytheme_build_travel_filter_meta_query($post_type, $filter) {
 }
 
 function mytheme_travel_filter_box($post_type, $param, $base_url, $anchor = '') {
-    $options = mytheme_travel_filter_options($post_type);
-    $active_filter = mytheme_get_active_travel_filter($param, $post_type);
+    $active = mytheme_get_active_travel_filter($param, $post_type);
+
+    // Emoji-labelled destination pills
+    $dest_pills = array(
+        'all'           => array( '✦', 'All' ),
+        'india'         => array( '🇮🇳', 'India' ),
+        'international' => array( '✈️', 'International' ),
+        'asia'          => array( '🌏', 'Asia' ),
+        'europe'        => array( '🌍', 'Europe' ),
+        'africa'        => array( '🌍', 'Africa' ),
+        'north-america' => array( '🌎', 'North America' ),
+        'south-america' => array( '🌎', 'South America' ),
+        'oceania'       => array( '🌊', 'Oceania' ),
+        'budget-under-30k' => array( '💰', 'Budget < 30K' ),
+    );
+    // Type pills (packages only)
+    $type_pills = array(
+        'bestseller' => array( '⭐', 'Bestseller' ),
+        'trending'   => array( '🔥', 'Trending' ),
+        'new'        => array( '✨', 'New' ),
+    );
+
+    // Which dest options apply to this post type
+    $post_type_dest_keys = array_keys( mytheme_travel_filter_options( $post_type ) );
+    $has_type_group = ( $post_type === 'travel_package' );
+
+    $build_url = function( $value ) use ( $param, $base_url, $anchor ) {
+        $url = $value === 'all'
+            ? remove_query_arg( $param, $base_url )
+            : add_query_arg( $param, $value, $base_url );
+        return esc_url( remove_query_arg( 'paged', $url ) . $anchor );
+    };
+
+    $section_map = array( 'package_filter' => 'packages', 'itinerary_filter' => 'itineraries' );
+    $section     = isset( $section_map[ $param ] ) ? $section_map[ $param ] : $param;
     ?>
-    <div class="travel-filter-box" aria-label="<?php esc_attr_e('Travel filters', 'mytheme'); ?>">
-        <span class="travel-filter-label"><?php esc_html_e('Filter by', 'mytheme'); ?></span>
-        <div class="travel-filter-options">
-            <?php foreach ($options as $value => $label) : ?>
-                <?php
-                $url = $value === 'all'
-                    ? remove_query_arg($param, $base_url)
-                    : add_query_arg($param, $value, $base_url);
-                $url = remove_query_arg('paged', $url);
-                ?>
-                <a class="<?php echo $active_filter === $value ? 'active' : ''; ?>" href="<?php echo esc_url($url . $anchor); ?>">
-                    <?php echo esc_html($label); ?>
+    <div class="tw-filter-bar"
+         data-section="<?php echo esc_attr( $section ); ?>"
+         data-param="<?php echo esc_attr( $param ); ?>"
+         aria-label="<?php esc_attr_e('Travel filters','mytheme'); ?>">
+
+        <div class="tw-filter-row">
+            <span class="tw-filter-row-label">Destination</span>
+            <div class="tw-filter-pills" role="list">
+                <?php foreach ( $dest_pills as $val => list( $icon, $label ) ) :
+                    if ( $val !== 'all' && ! in_array( $val, $post_type_dest_keys, true ) ) continue;
+                    $is_active = ( $active === $val );
+                    $extra_cls = $val === 'budget-under-30k' ? ' tw-filter-pill--budget' : ''; ?>
+                <a class="tw-filter-pill<?php echo $is_active ? ' active' : ''; echo $extra_cls; ?>"
+                   href="<?php echo $build_url( $val ); ?>" role="listitem">
+                    <span class="tw-filter-pill-icon" aria-hidden="true"><?php echo $icon; ?></span>
+                    <?php echo esc_html( $label ); ?>
                 </a>
-            <?php endforeach; ?>
+                <?php endforeach; ?>
+            </div>
         </div>
+
+        <?php if ( $has_type_group ) : ?>
+        <div class="tw-filter-row tw-filter-row--type">
+            <span class="tw-filter-row-label">Type</span>
+            <div class="tw-filter-pills" role="list">
+                <?php foreach ( $type_pills as $val => list( $icon, $label ) ) :
+                    $is_active = ( $active === $val ); ?>
+                <a class="tw-filter-pill tw-filter-pill--type<?php echo $is_active ? ' active' : ''; ?>"
+                   href="<?php echo $build_url( $val ); ?>" role="listitem">
+                    <span class="tw-filter-pill-icon" aria-hidden="true"><?php echo $icon; ?></span>
+                    <?php echo esc_html( $label ); ?>
+                </a>
+                <?php endforeach; ?>
+            </div>
+        </div>
+        <?php endif; ?>
+
     </div>
     <?php
 }
@@ -1615,6 +1834,14 @@ function mytheme_render_itinerary_empty_state($reset_url = '', $message = '') {
         array(
             'label' => __('International Routes', 'mytheme'),
             'url' => add_query_arg('itinerary_filter', 'international', $archive_url),
+        ),
+                array(
+            'label' => __('Asia Routes', 'mytheme'),
+            'url' => add_query_arg('itinerary_filter', 'asia', $archive_url),
+        ),
+        array(
+            'label' => __('Europe Routes', 'mytheme'),
+            'url' => add_query_arg('itinerary_filter', 'europe', $archive_url),
         ),
         array(
             'label' => __('Asia Routes', 'mytheme'),
@@ -2718,6 +2945,7 @@ function tw_render_overview_page() {
 // HERO BANNER SETTINGS PAGE
 // ============================================================
 function tw_render_hero_settings_page() {
+    wp_enqueue_media(); // load WP media picker scripts
     tw_settings_page_header('Hero Banner', '🎬', 'Control the video or image that plays behind the homepage hero section.');
     ?>
     <div class="tw-admin-card">
@@ -2734,26 +2962,32 @@ function tw_render_hero_settings_page() {
                     <tr>
                         <th><label for="tw_hero_video_url">Video URL</label></th>
                         <td>
-                            <input type="url" id="tw_hero_video_url" name="tw_hero_video_url"
-                                   value="<?php echo esc_attr(get_option('tw_hero_video_url','')); ?>"
-                                   class="large-text" placeholder="https://www.youtube.com/watch?v=...  or  https://yoursite.com/hero.mp4">
+                            <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:6px">
+                                <input type="url" id="tw_hero_video_url" name="tw_hero_video_url"
+                                       value="<?php echo esc_attr(get_option('tw_hero_video_url','')); ?>"
+                                       style="flex:1;min-width:300px" placeholder="YouTube URL  or  direct .mp4 / .webm URL">
+                                <button type="button" class="button button-secondary tw-media-pick" data-target="tw_hero_video_url" data-type="video">
+                                    📁 Select from Media Library
+                                </button>
+                            </div>
                             <p class="description">
-                                Accepts a <strong>YouTube link</strong> (youtu.be or youtube.com/watch?v=) or a direct <strong>.mp4 file URL</strong>.<br>
-                                The video plays <em>muted, looped, and auto-started</em> — ideal for scenic travel footage.
+                                <strong>Recommended:</strong> Upload an .mp4 file to <a href="<?php echo esc_url(admin_url('media-new.php')); ?>" target="_blank">Media → Add New</a>, then click <em>Select from Media Library</em> above — no YouTube player, no controls, perfect cover fill.<br>
+                                Also accepts a <strong>YouTube link</strong> (youtu.be or youtube.com/watch?v=). Either way the video plays muted, looped and auto-started.
                             </p>
                         </td>
                     </tr>
                     <tr>
                         <th><label for="tw_hero_image_url">Fallback Image URL</label></th>
                         <td>
-                            <input type="url" id="tw_hero_image_url" name="tw_hero_image_url"
-                                   value="<?php echo esc_attr(get_option('tw_hero_image_url','')); ?>"
-                                   class="large-text" placeholder="https://yoursite.com/hero-image.jpg">
-                            <p class="description">
-                                Used when no video is set. Upload your image to
-                                <a href="<?php echo esc_url(admin_url('media-new.php')); ?>">Media → Add New</a>,
-                                copy the URL, and paste it here.
-                            </p>
+                            <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:6px">
+                                <input type="url" id="tw_hero_image_url" name="tw_hero_image_url"
+                                       value="<?php echo esc_attr(get_option('tw_hero_image_url','')); ?>"
+                                       style="flex:1;min-width:300px" placeholder="https://yoursite.com/hero-image.jpg">
+                                <button type="button" class="button button-secondary tw-media-pick" data-target="tw_hero_image_url" data-type="image">
+                                    🖼 Select from Media Library
+                                </button>
+                            </div>
+                            <p class="description">Used when no video is set.</p>
                             <?php $img = get_option('tw_hero_image_url',''); if ($img) : ?>
                             <div style="margin-top:12px">
                                 <img src="<?php echo esc_url($img); ?>" style="max-width:360px;border-radius:8px;border:1px solid #dde5ef;box-shadow:0 4px 12px rgba(0,0,0,0.1)">
@@ -2765,9 +2999,14 @@ function tw_render_hero_settings_page() {
                     <tr>
                         <th><label for="tw_hero_mobile_image_url">Mobile Image URL <span style="font-weight:400;color:#0692af">(mobile only)</span></label></th>
                         <td>
-                            <input type="url" id="tw_hero_mobile_image_url" name="tw_hero_mobile_image_url"
-                                   value="<?php echo esc_attr(get_option('tw_hero_mobile_image_url','')); ?>"
-                                   class="large-text" placeholder="https://yoursite.com/hero-mobile.jpg">
+                            <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:6px">
+                                <input type="url" id="tw_hero_mobile_image_url" name="tw_hero_mobile_image_url"
+                                       value="<?php echo esc_attr(get_option('tw_hero_mobile_image_url','')); ?>"
+                                       style="flex:1;min-width:300px" placeholder="https://yoursite.com/hero-mobile.jpg">
+                                <button type="button" class="button button-secondary tw-media-pick" data-target="tw_hero_mobile_image_url" data-type="image">
+                                    🖼 Select from Media Library
+                                </button>
+                            </div>
                             <p class="description">
                                 Shown on phones (≤768px) <strong>instead of the video</strong> — YouTube embeds look stretched on portrait screens.
                                 A vertical / portrait image works best. <em>Leave blank to show just the dark gradient background on mobile.</em>
@@ -2782,7 +3021,7 @@ function tw_render_hero_settings_page() {
                     </tr>
                 </table>
                 <div class="tw-admin-note info" style="margin-top:8px">
-                    💡 <strong>Tip:</strong> For best results use a landscape video at 1920×1080 or wider. YouTube videos are embedded as iframes — make sure the video is public. Direct .mp4 files load faster.
+                    💡 <strong>Tip:</strong> Upload your video via <a href="<?php echo esc_url(admin_url('media-new.php')); ?>">Media → Add New</a>, then use <em>Select from Media Library</em> — clean full-screen background, zero player controls. Landscape 1920×1080 .mp4 works best.
                 </div>
                 <div class="tw-admin-card" style="margin-top:24px;margin-bottom:0">
                     <div class="tw-admin-card-head">
@@ -2811,6 +3050,28 @@ function tw_render_hero_settings_page() {
             </form>
         </div>
     </div>
+    <script>
+    (function ($) {
+        var frames = {};
+        $('.tw-media-pick').on('click', function (e) {
+            e.preventDefault();
+            var target = $(this).data('target');
+            var mtype  = $(this).data('type');
+            if ( frames[target] ) { frames[target].open(); return; }
+            frames[target] = wp.media({
+                title   : mtype === 'video' ? 'Select Hero Video' : 'Select Hero Image',
+                button  : { text: mtype === 'video' ? 'Use This Video' : 'Use This Image' },
+                library : { type: mtype },
+                multiple: false,
+            });
+            frames[target].on('select', function () {
+                var att = frames[target].state().get('selection').first().toJSON();
+                $('#' + target).val(att.url);
+            });
+            frames[target].open();
+        });
+    }(jQuery));
+    </script>
     <?php tw_settings_page_footer();
 }
 
@@ -3515,6 +3776,11 @@ function tw_maybe_create_pages() {
             'slug'     => 'package-search',
             'title'    => 'Package Search',
             'template' => 'page-package-search.php',
+        ),
+        array(
+            'slug'     => 'events-festivals',
+            'title'    => 'Events & Festivals',
+            'template' => 'page-events-festivals.php',
         ),
     );
 
