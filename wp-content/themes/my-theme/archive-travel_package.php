@@ -1,15 +1,28 @@
 <?php get_header(); ?>
 
-<main class="main-content travel-archive">
-    <div class="container">
-        <?php mytheme_breadcrumbs(); ?>
-        <header class="archive-header travel-archive-header">
-            <span>Curated trips</span>
-            <h1 class="archive-title">Travel Packages</h1>
-            <p class="archive-description">Choose a ready-to-book trip, then customize the pace, stays and experiences around your travel style.</p>
-        </header>
+<main class="main-content travel-archive explore-page">
 
-        <?php mytheme_travel_filter_box('travel_package', 'package_filter', get_post_type_archive_link('travel_package')); ?>
+    <!-- Hero (dark band — matches Blog + Affiliates) -->
+    <section class="explore-hero">
+        <div class="explore-hero-overlay" aria-hidden="true"></div>
+        <div class="container explore-hero-inner">
+            <nav class="explore-crumbs" aria-label="Breadcrumb">
+                <a href="<?php echo esc_url( home_url('/') ); ?>">Home</a><span>›</span><span>Packages</span>
+            </nav>
+            <span class="explore-hero-kicker">Curated Trips</span>
+            <h1 class="explore-hero-title">Travel <span style="color:#FCB415">Packages</span></h1>
+            <p class="explore-hero-sub">Choose a ready-to-book trip, then customize the pace, stays and experiences around your travel style.</p>
+        </div>
+    </section>
+
+    <div class="container explore-wrap">
+        <?php
+        if ( function_exists('tw_explore_unified_filter_box') ) {
+            tw_explore_unified_filter_box('travel_package', get_post_type_archive_link('travel_package'));
+        } else {
+            mytheme_travel_filter_box('travel_package', 'package_filter', get_post_type_archive_link('travel_package'));
+        }
+        ?>
 
         <?php if (have_posts()) : ?>
             <div class="posts-grid">

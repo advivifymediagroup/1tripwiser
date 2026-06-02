@@ -100,12 +100,11 @@ if ( $tw_hero_video ) {
                 <h2>Popular Travel Packages</h2>
             </div>
             <?php mytheme_travel_filter_box('travel_package', 'package_filter', home_url('/'), '#featured-packages'); ?>
-            <div class="posts-grid">
+            <div class="posts-grid tw-ajax-grid" id="tw-cards-packages">
                 <?php
                 $package_filter = mytheme_get_active_travel_filter("package_filter", "travel_package");
                 $package_args = ["post_type" => "travel_package", "posts_per_page" => 3, "post_status" => "publish"];
-                $package_meta_query = mytheme_build_travel_filter_meta_query("travel_package", $package_filter);
-                if (!empty($package_meta_query)) { $package_args["meta_query"] = $package_meta_query; }
+                $package_args = array_merge($package_args, mytheme_build_travel_filter_query_args("travel_package", $package_filter));
                 $packages = new WP_Query($package_args);
                 if ($packages->have_posts()):
                     while ($packages->have_posts()): $packages->the_post(); mytheme_package_card(); endwhile;
@@ -131,37 +130,15 @@ if ( $tw_hero_video ) {
                 <h2>UPCOMING TRIPS</h2>
             </div>
             <?php mytheme_travel_filter_box('itinerary', 'itinerary_filter', home_url('/'), '#upcoming-trips'); ?>
-            <div class="posts-grid">
+            <div class="posts-grid tw-ajax-grid" id="tw-cards-itineraries">
                 <?php
                 $itinerary_filter = mytheme_get_active_travel_filter("itinerary_filter", "itinerary");
                 $itinerary_args = ["post_type" => "itinerary", "posts_per_page" => 3, "post_status" => "publish"];
-                $itinerary_meta_query = mytheme_build_travel_filter_meta_query("itinerary", $itinerary_filter);
-                if (!empty($itinerary_meta_query)) { $itinerary_args["meta_query"] = $itinerary_meta_query; }
+                $itinerary_args = array_merge($itinerary_args, mytheme_build_travel_filter_query_args("itinerary", $itinerary_filter));
                 $itineraries = new WP_Query($itinerary_args);
                 if ($itineraries->have_posts()):
-                    while ($itineraries->have_posts()):
-                        $itineraries->the_post();
-                        $duration      = mytheme_get_travel_field("itinerary_duration");
-                        $best_time     = mytheme_get_travel_field("itinerary_best_time");
-                        $route_summary = mytheme_get_travel_field("itinerary_route_summary"); ?>
-                    <article class="post-card travel-card">
-                        <?php if (has_post_thumbnail()): ?>
-                        <div class="post-thumbnail"><a href="<?php the_permalink(); ?>"><?php the_post_thumbnail("medium"); ?></a></div>
-                        <?php endif; ?>
-                        <div class="post-content">
-                            <h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
-                            <div class="travel-meta">
-                                <?php if ($duration): ?><span><?php echo esc_html($duration); ?></span><?php endif; ?>
-                                <?php if ($best_time): ?><span><?php echo esc_html($best_time); ?></span><?php endif; ?>
-                            </div>
-                            <div class="post-excerpt">
-                                <?php $summary = $route_summary ? wp_strip_all_tags($route_summary) : get_the_excerpt(); echo wp_trim_words($summary, 28, '...'); ?>
-                                <a href="<?php the_permalink(); ?>" class="inline-read-more">Read More</a>
-                            </div>
-                            <a href="<?php the_permalink(); ?>" class="read-more">Open Itinerary</a>
-                        </div>
-                    </article>
-                    <?php endwhile; wp_reset_postdata();
+                    while ($itineraries->have_posts()): $itineraries->the_post(); tw_homepage_itinerary_card(); endwhile;
+                    wp_reset_postdata();
                 else: ?>
                     <?php mytheme_render_itinerary_empty_state(
                         home_url('/#upcoming-trips'),
@@ -256,6 +233,9 @@ if ( $tw_hero_video ) {
             </div>
         </div>
     </section>
+
+    <!-- ═══════════ EVENTS & FESTIVALS SHOWCASE ═══════════ -->
+    <?php if ( function_exists( 'tw_explore_events_showcase' ) ) { tw_explore_events_showcase(); } ?>
 
     <!-- ═══════════ COMMUNITY ═══════════ -->
     <section class="tw-community-section">

@@ -1,58 +1,84 @@
-<?php get_header(); ?>
+<?php
+/**
+ * Universal search results — groups results by content type so a query like
+ * "Bali" shows packages, itineraries, group trips, destinations, blogs and
+ * Tribe topics together. Query is expanded in includes/explore.php.
+ *
+ * @package my-theme
+ */
+get_header();
 
-<main class="main-content">
-    <div class="container">
-        <header class="search-header">
-            <h1>Search Results</h1>
-            <p>You searched for: "<strong><?php echo get_search_query(); ?></strong>"</p>
-        </header>
+$tw_q     = get_search_query();
+$tw_found = (int) $GLOBALS['wp_query']->found_posts;
 
-        <?php if (have_posts()) : ?>
-            <div class="search-results">
-                <p>Found <?php echo $wp_query->found_posts; ?> result(s)</p>
-                <div class="posts-grid">
-                    <?php while (have_posts()) : the_post(); ?>
-                        <article class="post-card">
-                            <?php if (has_post_thumbnail()) : ?>
-                                <div class="post-thumbnail">
-                                    <a href="<?php the_permalink(); ?>">
-                                        <?php the_post_thumbnail('medium'); ?>
-                                    </a>
-                                </div>
-                            <?php endif; ?>
-                            <div class="post-content">
-                                <h2><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
-                                <div class="post-meta">
-                                    <span class="date"><?php echo get_the_date(); ?></span>
-                                    <span class="author">by <?php the_author(); ?></span>
-                                    <span class="post-type"><?php echo get_post_type(); ?></span>
-                                </div>
-                                <div class="post-excerpt">
-                                    <?php the_excerpt(); ?>
-                                </div>
-                                <a href="<?php the_permalink(); ?>" class="read-more">Read More</a>
-                            </div>
-                        </article>
-                    <?php endwhile; ?>
-                </div>
-            </div>
+/* Bucket the results by post type */
+$tw_groups = array();
+if ( have_posts() ) {
+    while ( have_posts() ) {
+        the_post();
+        $tw_groups[ get_post_type() ][] = get_post();
+    }
+    wp_reset_postdata();
+}
 
-            <div class="pagination">
-                <?php
-                the_posts_pagination(array(
-                    'mid_size' => 2,
-                    'prev_text' => __('« Previous', 'mytheme'),
-                    'next_text' => __('Next »', 'mytheme'),
-                ));
-                ?>
-            </div>
+/* Display order + labels/icons for each content type */
+$tw_meta = array(
+    'travel_package' => array( '🧳 Packages', 'Package' ),
+    'itinerary'      => array( '🧭 Itineraries', 'Itinerary' ),
+    'group_trip'     => array( '👥 Group Trips', 'Group Trip' ),
+    'destination'    => array( '📍 Destinations', 'Destination' ),
+    'post'           => array( '✍️ Blog & Stories', 'Story' ),
+    'forum_topic'    => array( '💬 Tribe Discussions', 'Tribe' ),
+);
+
+if ( ! function_exists( 'tw_search_card' ) ) :
+function tw_search_card( $post, $type_label ) {
+    $thumb = get_the_post_thumbnail_url( $post->ID, 'medium' );
+    ?>
+    <article class="explore-card">
+        <a class="explore-card-img" href="<?php echo esc_url( get_permalink( $post->ID ) ); ?>">
+            <?php if ( $thumb ) : ?><img src="<?php echo esc_url( $thumb ); ?>" alt="" loading="lazy"><?php else : ?><span class="explore-card-img--ph" aria-hidden="true">🔎</span><?php endif; ?>
+            <span class="explore-card-type"><?php echo esc_html( $type_label ); ?></span>
+        </a>
+        <div class="explore-card-body">
+            <h3 class="explore-card-title"><a href="<?php echo esc_url( get_permalink( $post->ID ) ); ?>"><?php echo esc_html( get_the_title( $post->ID ) ); ?></a></h3>
+            <p class="explore-card-excerpt"><?php echo esc_html( wp_trim_words( get_the_excerpt( $post->ID ), 18, '…' ) ); ?></p>
+            <a class="explore-card-link" href="<?php echo esc_url( get_permalink( $post->ID ) ); ?>">View →</a>
+        </div>
+    </article>
+    <?php
+}
+endif;
+?>
+
+<main class="main-content explore-page">
+
+    <header class="tw-results-head">
+        <h1>Results for "<span><?php echo esc_html( $tw_q ); ?></span>"</h1>
+        <p><?php echo esc_html( $tw_found ); ?> <?php echo ( 1 === $tw_found ) ? 'result' : 'results'; ?> across the site</p>
+    </header>
+
+    <div class="container explore-wrap">
+        <?php if ( ! empty( $tw_groups ) ) : ?>
+            <?php foreach ( $tw_meta as $pt => $info ) :
+                if ( empty( $tw_groups[ $pt ] ) ) { continue; }
+                $items = $tw_groups[ $pt ]; ?>
+                <section class="tw-results-group">
+                    <h2 class="tw-results-group-title">
+                        <?php echo esc_html( $info[0] ); ?>
+                        <span class="tw-results-badge"><?php echo esc_html( count( $items ) ); ?></span>
+                    </h2>
+                    <div class="explore-grid">
+                        <?php foreach ( $items as $item ) { tw_search_card( $item, $info[1] ); } ?>
+                    </div>
+                </section>
+            <?php endforeach; ?>
         <?php else : ?>
-            <div class="no-results">
-                <h2>No results found</h2>
-                <p>Sorry, no posts matched your search criteria. Please try again with different keywords.</p>
-                <div class="search-form-no-results">
-                    <?php get_search_form(); ?>
-                </div>
+            <div class="tribe-empty" style="margin-top:36px;">
+                <div class="tribe-empty-icon">🔎</div>
+                <h3>No results for "<?php echo esc_html( $tw_q ); ?>"</h3>
+                <p>Try a destination (Bali, Ladakh), a trip style (Honeymoon, Group), or an event (Oktoberfest).</p>
+                <a class="tribe-btn-primary" href="<?php echo esc_url( mytheme_get_plan_trip_url() ); ?>">✈️ Plan a Trip — Free</a>
             </div>
         <?php endif; ?>
     </div>
