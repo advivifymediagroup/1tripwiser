@@ -1437,17 +1437,6 @@ function mytheme_package_tag_options() {
     );
 }
 
-function mytheme_itinerary_continent_options() {
-    return array(
-        'asia' => __('Asia', 'mytheme'),
-        'europe' => __('Europe', 'mytheme'),
-        'africa' => __('Africa', 'mytheme'),
-        'north-america' => __('North America', 'mytheme'),
-        'south-america' => __('South America', 'mytheme'),
-        'oceania' => __('Oceania', 'mytheme'),
-    );
-}
-
 function mytheme_package_trip_type_options() {
     return array(
         'Group Trip' => __('Group Trip', 'mytheme'),
