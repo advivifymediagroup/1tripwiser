@@ -56,17 +56,11 @@
                 grid.style.transition = 'opacity 0.18s';
                 grid.style.opacity    = '0';
                 setTimeout( function () {
-                    grid.innerHTML = data.data.html;
-                    /* fully restore grid before re-initing carousel */
-                    grid.style.display    = '';
-                    grid.style.opacity    = '1';
+                    grid.innerHTML           = data.data.html;
+                    grid.style.opacity       = '1';
                     grid.style.pointerEvents = '';
-                    grid.classList.remove( 'tw-carouseled' );
-                    /* rAF gives the browser one paint cycle to lay out new cards */
-                    requestAnimationFrame( function () {
-                        if ( window.TwHPCarousel ) { window.TwHPCarousel.initGrid( grid ); }
-                        grid.scrollIntoView( { behavior: 'smooth', block: 'nearest' } );
-                    } );
+                    grid.style.transition    = '';
+                    grid.scrollIntoView( { behavior: 'smooth', block: 'nearest' } );
                 }, 200 );
             } else {
                 setLoading( grid, false );
