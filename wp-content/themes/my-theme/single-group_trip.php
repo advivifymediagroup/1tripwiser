@@ -119,14 +119,8 @@ while ( have_posts() ) :
         <article class="ev-single-card">
 
             <div class="ev-single-body">
-                <div class="ev-single-content">
-                    <?php
-                    if ( $overview ) { echo wp_kses_post( wpautop( $overview ) ); }
-                    the_content();
-                    ?>
-                </div>
 
-                <!-- Trip details panel -->
+                <!-- Trip details panel — shown FIRST -->
                 <?php
                 $details = array(
                     array( '🗺️', 'Route',          $route ),
@@ -151,6 +145,14 @@ while ( have_posts() ) :
                         </div>
                         <?php endforeach; ?>
                     </div>
+                </div>
+                <?php endif; ?>
+
+                <!-- Overview / itinerary content -->
+                <?php if ( $overview || get_the_content() ) : ?>
+                <div class="ev-single-content ev-content-styled">
+                    <?php if ( $overview ) { echo wp_kses_post( wpautop( $overview ) ); } ?>
+                    <?php the_content(); ?>
                 </div>
                 <?php endif; ?>
 
