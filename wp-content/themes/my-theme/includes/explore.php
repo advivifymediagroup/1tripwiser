@@ -101,7 +101,7 @@ function tw_group_trip_register_acf_fields() {
         array( 'key' => 'field_twgt_tag',    'label' => 'Trip Tag',                 'name' => 'package_tag',         'type' => 'select',   'choices' => array( 'bestseller' => 'Bestseller', 'trending' => 'Trending', 'new' => 'New', 'limited' => 'Limited Seats', 'popular' => 'Popular' ), 'allow_null' => 0, 'wrapper' => array( 'width' => '50' ) ),
         array( 'key' => 'field_twgt_nights', 'label' => 'Total Nights',             'name' => 'total_nights',        'type' => 'number',   'wrapper' => array( 'width' => '50' ) ),
         array( 'key' => 'field_twgt_days',   'label' => 'Total Days',               'name' => 'total_days',          'type' => 'number',   'wrapper' => array( 'width' => '50' ) ),
-        array( 'key' => 'field_twgt_type',   'label' => 'Trip Type',                'name' => 'package_trip_type',   'type' => 'select',   'choices' => array( 'Group Trip' => 'Group Trip', 'Backpacking' => 'Backpacking', 'Adventure' => 'Adventure', 'Trekking' => 'Trekking', 'Weekend Getaway' => 'Weekend Getaway', 'Family Trip' => 'Family Trip' ), 'allow_null' => 0, 'wrapper' => array( 'width' => '50' ) ),
+        array( 'key' => 'field_twgt_type',   'label' => 'Trip Type',                'name' => 'package_trip_type',   'type' => 'select',   'choices' => array( 'Group Trip' => 'Group Trip', 'Women Trip' => "Women's Trip 👩‍🦰", 'Backpacking' => 'Backpacking', 'Adventure' => 'Adventure', 'Trekking' => 'Trekking', 'Weekend Getaway' => 'Weekend Getaway', 'Family Trip' => 'Family Trip' ), 'allow_null' => 0, 'wrapper' => array( 'width' => '50' ) ),
         array( 'key' => 'field_twgt_amt',    'label' => 'Price Per Person (₹)',     'name' => 'package_amount',      'type' => 'number',   'wrapper' => array( 'width' => '50' ) ),
         array( 'key' => 'field_twgt_emi',    'label' => 'EMI Option',               'name' => 'package_emi',         'type' => 'text',     'instructions' => 'e.g. ₹2,166/mo', 'wrapper' => array( 'width' => '50' ) ),
         array( 'key' => 'field_twgt_size',   'label' => 'Group Size',               'name' => 'group_size',          'type' => 'text',     'instructions' => 'e.g. 8–15 Pax', 'wrapper' => array( 'width' => '50' ) ),
@@ -341,6 +341,100 @@ function tw_group_trip_region_url( $slug = '' ) {
 /* =============================================================
  * 5. SUBHEADER MEGA-MENU  (replaces the old travel-tabs)
  * ============================================================= */
+/* ── Women's Group Trips helpers ── */
+
+/** URL of the Women's Group Trips page (looks for a page using the template). */
+function tw_womens_trips_page_url() {
+    $pages = get_posts( array(
+        'post_type'  => 'page',
+        'meta_key'   => '_wp_page_template',
+        'meta_value' => 'page-womens-trips.php',
+        'numberposts'=> 1,
+        'fields'     => 'ids',
+    ) );
+    if ( $pages ) { return get_permalink( $pages[0] ); }
+    return home_url( '/womens-group-trips/' );
+}
+
+/** Fetch recent Women's Group Trip posts. */
+function tw_recent_womens_trips( $limit = 8 ) {
+    return get_posts( array(
+        'post_type'   => 'group_trip',
+        'post_status' => 'publish',
+        'numberposts' => $limit,
+        'meta_query'  => array(
+            'relation' => 'OR',
+            array( 'key' => 'package_trip_type', 'value' => 'Women Trip', 'compare' => '=' ),
+            array( 'key' => '_package_trip_type', 'value' => 'Women Trip', 'compare' => '=' ),
+        ),
+        'orderby'     => 'date',
+        'order'       => 'DESC',
+    ) );
+}
+
+/** Homepage Women's Group Trips showcase section. */
+function tw_womens_trips_showcase( $limit = 6 ) {
+    $trips = tw_recent_womens_trips( $limit );
+    if ( empty( $trips ) ) { return; }
+    $page_url = tw_womens_trips_page_url();
+    ?>
+    <section class="tw-womens-section">
+        <div class="tw-womens-bg" aria-hidden="true"></div>
+        <div class="container tw-womens-inner">
+
+            <div class="tw-womens-header" data-reveal="up">
+                <div class="tw-womens-kicker">✦ Only for the brave ones</div>
+                <h2 class="tw-womens-title">Women's <span>Group Trips</span></h2>
+                <p class="tw-womens-sub">Safe. Curated. Empowering. Join a crew of like-minded women and explore the world your way.</p>
+            </div>
+
+            <div class="tw-womens-trust">
+                <div class="tw-womens-trust-item"><span>🛡️</span><strong>Safety First</strong><small>Verified women-only groups</small></div>
+                <div class="tw-womens-trust-item"><span>👩‍🦰</span><strong>Women-Led</strong><small>Female trip leaders</small></div>
+                <div class="tw-womens-trust-item"><span>🌍</span><strong>50+ Destinations</strong><small>India & international</small></div>
+                <div class="tw-womens-trust-item"><span>💬</span><strong>Community</strong><small>10K+ women tribe</small></div>
+            </div>
+
+            <div class="tw-womens-grid">
+                <?php foreach ( $trips as $trip ) :
+                    $thumb = get_the_post_thumbnail_url( $trip->ID, 'medium_large' );
+                    $price_raw = '';
+                    foreach ( array( 'package_amount', 'starting_price', '_starting_price', '_package_amount' ) as $_k ) {
+                        $_v = get_post_meta( $trip->ID, $_k, true );
+                        if ( is_numeric( $_v ) && $_v > 0 ) { $price_raw = $_v; break; }
+                    }
+                    $nights = (int) get_post_meta( $trip->ID, 'total_nights', true ) ?: (int) get_post_meta( $trip->ID, '_package_nights', true );
+                    $days   = (int) get_post_meta( $trip->ID, 'total_days', true )   ?: (int) get_post_meta( $trip->ID, '_package_days', true );
+                    $dur    = $nights ? $nights . 'N/' . ( $days ?: $nights + 1 ) . 'D' : mytheme_get_travel_field( 'trip_duration', $trip->ID );
+                    $loc    = get_post_meta( $trip->ID, 'package_location', true ) ?: mytheme_get_travel_field( 'destination_name', $trip->ID );
+                ?>
+                <a class="tw-womens-card" href="<?php echo esc_url( get_permalink( $trip->ID ) ); ?>" data-reveal="scale">
+                    <div class="tw-womens-card-img"
+                         <?php if ( $thumb ) : ?>style="background-image:url('<?php echo esc_url( $thumb ); ?>')"<?php endif; ?>>
+                        <?php if ( ! $thumb ) : ?><span class="tw-womens-card-placeholder">👩‍🦰</span><?php endif; ?>
+                        <div class="tw-womens-card-overlay"></div>
+                        <span class="tw-womens-badge">Women Only</span>
+                    </div>
+                    <div class="tw-womens-card-body">
+                        <?php if ( $loc ) : ?><span class="tw-womens-card-loc">📍 <?php echo esc_html( $loc ); ?></span><?php endif; ?>
+                        <h3 class="tw-womens-card-title"><?php echo esc_html( get_the_title( $trip->ID ) ); ?></h3>
+                        <div class="tw-womens-card-foot">
+                            <?php if ( $dur ) : ?><span class="tw-womens-card-dur">⏱ <?php echo esc_html( $dur ); ?></span><?php endif; ?>
+                            <?php if ( $price_raw ) : ?><span class="tw-womens-card-price"><?php echo esc_html( function_exists('mytheme_format_rupee_amount') ? mytheme_format_rupee_amount($price_raw) : '₹'.$price_raw ); ?></span><?php endif; ?>
+                        </div>
+                    </div>
+                </a>
+                <?php endforeach; ?>
+            </div>
+
+            <div class="tw-womens-cta">
+                <a href="<?php echo esc_url( $page_url ); ?>" class="tw-womens-cta-btn">Explore All Women's Trips →</a>
+            </div>
+        </div>
+    </section>
+    <?php
+}
+
 function tw_explore_subheader() {
     $top_terms = tw_region_top_terms();
     $events    = tw_recent_events( 8 );
@@ -403,6 +497,36 @@ function tw_explore_subheader() {
                             <a class="tw-mega-allcta" href="<?php echo esc_url( get_post_type_archive_link( 'group_trip' ) ); ?>">Browse all group trips →</a>
                         </div>
                     <?php endif; ?>
+                </div>
+            </div>
+
+            <?php $womens_trips = tw_recent_womens_trips( 8 ); ?>
+            <div class="tw-sub-item has-mega">
+                <a class="tw-sub-link tw-sub-link--womens" href="<?php echo esc_url( tw_womens_trips_page_url() ); ?>">
+                    👩‍🦰 Women's Trips
+                    <span class="tw-sub-caret" aria-hidden="true">▾</span>
+                </a>
+                <div class="tw-mega tw-mega-events tw-mega--womens" role="menu">
+                    <div class="tw-mega-womens-hero">
+                        <span class="tw-mega-womens-icon">👩‍🦰</span>
+                        <div>
+                            <strong>Women's Group Trips</strong>
+                            <small>Safe · Curated · Empowering</small>
+                        </div>
+                    </div>
+                    <?php if ( $womens_trips ) : ?>
+                    <div class="tw-mega-events-grid">
+                        <?php foreach ( $womens_trips as $wt ) : ?>
+                            <a class="tw-mega-event" href="<?php echo esc_url( get_permalink( $wt->ID ) ); ?>">
+                                <span class="tw-mega-event-icon">🌸</span>
+                                <span class="tw-mega-event-name"><?php echo esc_html( get_the_title( $wt->ID ) ); ?></span>
+                            </a>
+                        <?php endforeach; ?>
+                    </div>
+                    <?php else : ?>
+                        <div class="tw-mega-empty"><p>Women's trips coming soon.</p></div>
+                    <?php endif; ?>
+                    <a class="tw-mega-allcta" href="<?php echo esc_url( tw_womens_trips_page_url() ); ?>">View all women's trips →</a>
                 </div>
             </div>
 
