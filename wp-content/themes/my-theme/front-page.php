@@ -234,6 +234,9 @@ if ( $tw_hero_video ) {
         </div>
     </section>
 
+    <!-- ═══════════ WOMEN'S GROUP TRIPS ═══════════ -->
+    <?php if ( function_exists( 'tw_womens_trips_showcase' ) ) { tw_womens_trips_showcase(); } ?>
+
     <!-- ═══════════ EVENTS & FESTIVALS SHOWCASE ═══════════ -->
     <?php if ( function_exists( 'tw_explore_events_showcase' ) ) { tw_explore_events_showcase(); } ?>
 
@@ -270,6 +273,9 @@ if ( $tw_hero_video ) {
             </div>
         </div>
     </section>
+
+    <!-- ═══════════ TESTIMONIALS ═══════════ -->
+    <?php if ( function_exists( 'tw_homepage_testimonials_section' ) ) { tw_homepage_testimonials_section(); } ?>
 
     <!-- ═══════════ FREE ITINERARY CTA ═══════════ -->
     <section class="tw-cta-section">
