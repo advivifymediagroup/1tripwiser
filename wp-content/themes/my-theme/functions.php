@@ -50,10 +50,8 @@ function mytheme_enqueue_styles() {
     wp_enqueue_script('tw-animations', get_template_directory_uri() . '/assets/js/tw-animations.js', array(), '1.1', true);
     // Content image carousel — auto-activates for 2+ images in any post content area
     wp_enqueue_script('tw-carousel', get_template_directory_uri() . '/assets/js/tw-carousel.js', array(), '1.0', true);
-    // Homepage card carousel — packages, itineraries, events, women's trips
-    wp_enqueue_script('tw-hp-carousel', get_template_directory_uri() . '/assets/js/tw-hp-carousel.js', array(), '1.0', true);
-    // AJAX section filter — depends on carousel so grid re-inits after filter swap
-    wp_enqueue_script('tw-filters', get_template_directory_uri() . '/assets/js/tw-filters.js', array('tw-hp-carousel'), '1.0', true);
+    // AJAX section filter
+    wp_enqueue_script('tw-filters', get_template_directory_uri() . '/assets/js/tw-filters.js', array(), '1.0', true);
     wp_localize_script('tw-filters', 'tw_ajax', array(
         'ajax_url' => admin_url('admin-ajax.php'),
         'nonce'    => wp_create_nonce('tw_filter_nonce'),
