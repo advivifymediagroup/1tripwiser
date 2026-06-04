@@ -58,7 +58,8 @@
                 setTimeout( function () {
                     grid.innerHTML = data.data.html;
                     setLoading( grid, false );
-                    // Small scroll hint so user sees the result without jumping
+                    // Re-init carousel for the newly injected cards
+                    if ( window.TwHPCarousel ) { window.TwHPCarousel.initGrid( grid ); }
                     grid.scrollIntoView( { behavior: 'smooth', block: 'nearest' } );
                 }, 180 );
             } else {
