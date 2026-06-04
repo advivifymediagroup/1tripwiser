@@ -1885,6 +1885,15 @@ function mytheme_apply_travel_archive_filters($query) {
             $query->set('meta_query', $meta_query);
         }
     }
+
+    /* Group Trips archive — exclude Women's Trips (they have their own page) */
+    if ( $query->is_post_type_archive( 'group_trip' ) ) {
+        $query->set( 'meta_query', array(
+            'relation' => 'OR',
+            array( 'key' => 'package_trip_type', 'compare' => 'NOT EXISTS' ),
+            array( 'key' => 'package_trip_type', 'value' => 'Women Trip', 'compare' => '!=' ),
+        ) );
+    }
 }
 add_action('pre_get_posts', 'mytheme_apply_travel_archive_filters');
 
