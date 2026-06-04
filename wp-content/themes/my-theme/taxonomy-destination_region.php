@@ -50,26 +50,32 @@ $total = array_sum( $counts );
 
     <!-- ═══ CINEMATIC HERO ═══ -->
     <section class="dest-hero<?php echo $hero_img ? ' has-hero-img' : ''; ?>"
-             <?php if ( $hero_img ) : ?>style="background-image:url('<?php echo esc_url( $hero_img ); ?>')"<?php endif; ?>>
+             <?php if ( $hero_img ) : ?>data-parallax-bg="1" style="background-image:url('<?php echo esc_url( $hero_img ); ?>')"<?php endif; ?>>
         <div class="dest-hero-overlay" aria-hidden="true"></div>
         <div class="container dest-hero-inner">
-            <nav class="explore-crumbs" aria-label="Breadcrumb">
+            <nav class="explore-crumbs dest-crumbs" aria-label="Breadcrumb">
                 <a href="<?php echo esc_url( home_url('/') ); ?>">Home</a><span>›</span>
                 <?php if ( $parent && ! is_wp_error( $parent ) ) : ?>
                     <a href="<?php echo esc_url( get_term_link( $parent ) ); ?>"><?php echo esc_html( $parent->name ); ?></a><span>›</span>
                 <?php endif; ?>
                 <span><?php echo esc_html( $term->name ); ?></span>
             </nav>
-            <h1 class="dest-hero-title"><?php echo esc_html( trim( $icon . ' ' . $term->name ) ); ?></h1>
+
+            <h1 class="dest-hero-title">
+                <?php if ( $icon ) : ?><span class="dest-hero-icon" aria-hidden="true"><?php echo esc_html( $icon ); ?></span><?php endif; ?>
+                <?php echo esc_html( $term->name ); ?>
+            </h1>
+
             <?php if ( $tagline ) : ?>
             <p class="dest-hero-tagline"><?php echo esc_html( $tagline ); ?></p>
             <?php endif; ?>
+
             <div class="dest-hero-stats">
                 <div class="dest-stat"><strong><?php echo $total; ?></strong><span>Trips</span></div>
-                <?php if ( $counts['travel_package'] ) : ?><div class="dest-stat"><strong><?php echo $counts['travel_package']; ?></strong><span>Packages</span></div><?php endif; ?>
-                <?php if ( $counts['group_trip'] ) : ?><div class="dest-stat"><strong><?php echo $counts['group_trip']; ?></strong><span>Group Trips</span></div><?php endif; ?>
-                <?php if ( $counts['tw_event'] ) : ?><div class="dest-stat"><strong><?php echo $counts['tw_event']; ?></strong><span>Events</span></div><?php endif; ?>
-                <?php if ( $counts['itinerary'] ) : ?><div class="dest-stat"><strong><?php echo $counts['itinerary']; ?></strong><span>Itineraries</span></div><?php endif; ?>
+                <?php if ( $counts['travel_package'] ) : ?><div class="dest-stat-div"></div><div class="dest-stat"><strong><?php echo $counts['travel_package']; ?></strong><span>Packages</span></div><?php endif; ?>
+                <?php if ( $counts['group_trip'] ) : ?><div class="dest-stat-div"></div><div class="dest-stat"><strong><?php echo $counts['group_trip']; ?></strong><span>Group Trips</span></div><?php endif; ?>
+                <?php if ( $counts['tw_event'] ) : ?><div class="dest-stat-div"></div><div class="dest-stat"><strong><?php echo $counts['tw_event']; ?></strong><span>Events</span></div><?php endif; ?>
+                <?php if ( $counts['itinerary'] ) : ?><div class="dest-stat-div"></div><div class="dest-stat"><strong><?php echo $counts['itinerary']; ?></strong><span>Itineraries</span></div><?php endif; ?>
             </div>
         </div>
     </section>
@@ -201,21 +207,35 @@ $total = array_sum( $counts );
 </main>
 
 <script>
-/* Tab filter — JS show/hide by data-type */
 (function () {
+    /* ── Tab filter ── */
     var tabs  = document.querySelectorAll('.dest-tab');
     var cards = document.querySelectorAll('.dest-card');
-    if (!tabs.length || !cards.length) { return; }
-    tabs.forEach(function (tab) {
-        tab.addEventListener('click', function () {
-            tabs.forEach(function (t) { t.classList.remove('active'); });
-            tab.classList.add('active');
-            var filter = tab.getAttribute('data-filter');
-            cards.forEach(function (card) {
-                card.style.display = ( filter === 'all' || card.getAttribute('data-type') === filter ) ? '' : 'none';
+    if (tabs.length && cards.length) {
+        tabs.forEach(function (tab) {
+            tab.addEventListener('click', function () {
+                tabs.forEach(function (t) { t.classList.remove('active'); });
+                tab.classList.add('active');
+                var filter = tab.getAttribute('data-filter');
+                cards.forEach(function (card) {
+                    card.style.display = (filter === 'all' || card.getAttribute('data-type') === filter) ? '' : 'none';
+                });
             });
         });
-    });
+    }
+
+    /* ── Parallax scroll on hero background ── */
+    var hero = document.querySelector('.dest-hero[data-parallax-bg]');
+    if (!hero) { return; }
+    var heroH = hero.offsetHeight;
+    function onScroll() {
+        var scrolled = window.pageYOffset;
+        if (scrolled > heroH * 1.5) { return; }        /* stop updating off-screen */
+        var offset = Math.round(scrolled * 0.38);       /* 0.38 = subtle depth factor */
+        hero.style.backgroundPositionY = 'calc(center + ' + offset + 'px)';
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll(); /* init */
 }());
 </script>
 
