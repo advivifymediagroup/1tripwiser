@@ -92,6 +92,23 @@ function tw_event_register_acf_fields() {
 }
 add_action( 'acf/init', 'tw_event_register_acf_fields' );
 
+/** Destination Region terms — hero image + tagline fields. */
+function tw_destination_region_acf_fields() {
+    if ( ! function_exists( 'acf_add_local_field_group' ) ) { return; }
+    acf_add_local_field_group( array(
+        'key'    => 'group_dest_region_meta',
+        'title'  => 'Destination Details',
+        'fields' => array(
+            array( 'key' => 'field_dr_image',   'label' => 'Hero Image',  'name' => 'region_hero_image', 'type' => 'image',  'return_format' => 'url', 'instructions' => 'Full-width background image for the destination landing page.' ),
+            array( 'key' => 'field_dr_tag',     'label' => 'Tagline',     'name' => 'region_tagline',    'type' => 'text',   'instructions' => 'Short punchy line shown in the hero — e.g. "Ancient forts, royal palaces & desert sunsets"' ),
+            array( 'key' => 'field_dr_overview','label' => 'Overview',    'name' => 'region_overview',   'type' => 'textarea','instructions' => 'A short paragraph about this destination shown below the hero.' ),
+        ),
+        'location' => array( array( array( 'param' => 'taxonomy', 'operator' => '==', 'value' => 'destination_region' ) ) ),
+        'menu_order' => 0, 'position' => 'normal', 'style' => 'default', 'label_placement' => 'top', 'active' => true,
+    ) );
+}
+add_action( 'acf/init', 'tw_destination_region_acf_fields' );
+
 /** Group Trips — identical structure to Package Details with group-trip-specific tweaks. */
 function tw_group_trip_register_acf_fields() {
     if ( ! function_exists( 'acf_add_local_field_group' ) ) { return; }

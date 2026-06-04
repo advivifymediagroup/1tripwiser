@@ -1886,6 +1886,14 @@ function mytheme_apply_travel_archive_filters($query) {
         }
     }
 
+    /* Destination region taxonomy — query ALL travel CPTs together */
+    if ( $query->is_tax( 'destination_region' ) ) {
+        $query->set( 'post_type', array( 'travel_package', 'group_trip', 'tw_event', 'itinerary' ) );
+        $query->set( 'posts_per_page', 12 );
+        $query->set( 'orderby', 'date' );
+        $query->set( 'order', 'DESC' );
+    }
+
     /* Group Trips archive — exclude Women's Trips (they have their own page) */
     if ( $query->is_post_type_archive( 'group_trip' ) ) {
         $query->set( 'meta_query', array(
