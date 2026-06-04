@@ -4833,6 +4833,25 @@ img, video, iframe, embed, object { max-width: 100%; height: auto; }
 .gt-womens-callout-copy span { font-size:0.82rem; color:#6b7a8f; }
 .gt-womens-callout-btn { display:inline-flex; align-items:center; padding:9px 20px; background:linear-gradient(135deg,#ff8fab,#ff6b8a); color:#fff; font-size:0.85rem; font-weight:800; border-radius:10px; text-decoration:none; white-space:nowrap; transition:opacity 0.2s,transform 0.2s; flex-shrink:0; }
 .gt-womens-callout-btn:hover { opacity:0.9; transform:translateY(-2px); color:#fff; }
+/* ── Styled overview / day-by-day content ── */
+.ev-content-styled { margin-top:28px; }
+.ev-content-styled h2,.ev-content-styled h3,.ev-content-styled h4 {
+    font-family:'Nunito',sans-serif; font-weight:800; color:#0d1526;
+    margin:28px 0 10px; padding:10px 16px; background:#f0f7ff;
+    border-left:4px solid #0692AF; border-radius:0 10px 10px 0; line-height:1.4;
+}
+.ev-content-styled h2 { font-size:1.1rem; }
+.ev-content-styled h3 { font-size:1rem; }
+.ev-content-styled h4 { font-size:0.95rem; }
+.ev-content-styled p { font-size:0.92rem; color:#374151; line-height:1.8; margin:0 0 12px; }
+.ev-content-styled ul,.ev-content-styled ol { margin:0 0 16px 0; padding-left:0; list-style:none; display:flex; flex-direction:column; gap:6px; }
+.ev-content-styled ul li { display:flex; align-items:flex-start; gap:8px; font-size:0.9rem; color:#374151; line-height:1.7; }
+.ev-content-styled ul li::before { content:'✓'; color:#0692AF; font-weight:800; font-size:0.85rem; margin-top:3px; flex-shrink:0; }
+.ev-content-styled ol { counter-reset:ol-count; }
+.ev-content-styled ol li { display:flex; align-items:flex-start; gap:10px; font-size:0.9rem; color:#374151; line-height:1.7; counter-increment:ol-count; }
+.ev-content-styled ol li::before { content:counter(ol-count); min-width:22px; height:22px; background:#0692AF; color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.72rem; font-weight:800; flex-shrink:0; margin-top:2px; }
+.ev-content-styled strong { font-weight:800; color:#0d1526; }
+.ev-content-styled a { color:#0692AF; text-decoration:underline; }
 /* Trip Details panel (events + group trips single page) */
 .ev-trip-details { background:#f8fafc; border:1px solid #e6edf3; border-radius:16px; padding:24px 26px; margin-top:28px; }
 .ev-trip-details-title { font-family:'Bebas Neue',sans-serif; font-size:1.3rem; letter-spacing:0.04em; color:#0d1526; margin:0 0 18px; }
