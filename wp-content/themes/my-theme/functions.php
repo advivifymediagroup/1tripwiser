@@ -2203,8 +2203,219 @@ function mytheme_register_admin_menus() {
         'tw-wa-api-settings',
         'tw_render_wa_api_settings_page'
     );
+    add_submenu_page(
+        'tw-settings',
+        __('Testimonials', 'mytheme'),
+        __('💬 Testimonials', 'mytheme'),
+        'manage_options',
+        'tw-testimonials-settings',
+        'tw_render_testimonials_settings_page'
+    );
 }
 add_action('admin_menu', 'mytheme_register_admin_menus');
+
+/* ─────────────────────────────────────────────────────────
+ * UNIFIED TESTIMONIALS ADMIN PAGE
+ * Manages: Homepage testimonials + Women's Trips testimonials
+ * ───────────────────────────────────────────────────────── */
+add_action( 'admin_init', function () {
+    register_setting( 'tw_testimonials_group', 'tw_homepage_testimonials',  array( 'sanitize_callback' => 'tw_sanitize_testimonials' ) );
+    register_setting( 'tw_testimonials_group', 'tw_womens_testimonials',    array( 'sanitize_callback' => 'tw_sanitize_testimonials' ) );
+} );
+
+function tw_sanitize_testimonials( $input ) {
+    if ( ! is_array( $input ) ) { return array(); }
+    $clean = array();
+    foreach ( $input as $item ) {
+        $q = sanitize_textarea_field( $item['quote'] ?? '' );
+        if ( $q === '' ) { continue; }
+        $clean[] = array(
+            'quote'    => $q,
+            'name'     => sanitize_text_field( $item['name']     ?? '' ),
+            'location' => sanitize_text_field( $item['location'] ?? '' ),
+            'trip'     => sanitize_text_field( $item['trip']     ?? '' ),
+        );
+    }
+    return $clean;
+}
+
+/** Homepage testimonials showcase — rendered via front-page.php */
+function tw_homepage_testimonials_section() {
+    $testimonials = get_option( 'tw_homepage_testimonials', array() );
+    if ( empty( $testimonials ) ) {
+        $testimonials = array(
+            array( 'quote' => 'Planning a trip has never been this easy. The team handled everything — hotels, permits, itinerary. We just showed up and enjoyed!', 'name' => 'Aditya M.', 'location' => 'Pune', 'trip' => 'Ladakh Road Trip' ),
+            array( 'quote' => 'Absolutely loved the Kerala backwaters trip. The houseboat stay was magical and the pricing was way better than what I found elsewhere.', 'name' => 'Sneha R.', 'location' => 'Hyderabad', 'trip' => 'Kerala Backwaters' ),
+            array( 'quote' => 'Joined a Spiti Valley group trip as a solo traveller and came back with 11 new best friends. The itinerary was perfectly paced — not rushed at all.', 'name' => 'Rahul K.', 'location' => 'Bengaluru', 'trip' => 'Spiti Valley Group Expedition' ),
+        );
+    }
+    if ( empty( $testimonials ) ) { return; }
+    ?>
+    <section class="tw-testimonials-section">
+        <div class="container tw-testimonials-inner">
+            <div class="tw-testimonials-head" data-reveal="up">
+                <span class="tw-testimonials-kicker">💬 Real travellers. Real stories.</span>
+                <h2 class="tw-testimonials-title">What Our <span>Travellers Say</span></h2>
+            </div>
+            <div class="tw-testimonials-grid">
+                <?php foreach ( $testimonials as $t ) :
+                    $initials = strtoupper( substr( $t['name'] ?? 'T', 0, 1 ) );
+                ?>
+                <div class="tw-testi-card" data-reveal="scale">
+                    <div class="tw-testi-card-stars">
+                        <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                    </div>
+                    <span class="tw-testi-card-quote-mark">"</span>
+                    <p class="tw-testi-card-text"><?php echo esc_html( $t['quote'] ); ?>"</p>
+                    <div class="tw-testi-card-author">
+                        <div class="tw-testi-card-avatar"><?php echo esc_html( $initials ); ?></div>
+                        <div>
+                            <?php if ( ! empty( $t['name'] ) ) : ?><strong><?php echo esc_html( $t['name'] ); ?></strong><?php endif; ?>
+                            <?php if ( ! empty( $t['location'] ) ) : ?><span><?php echo esc_html( $t['location'] ); ?></span><?php endif; ?>
+                            <?php if ( ! empty( $t['trip'] ) ) : ?><span class="tw-testi-card-trip">✈ <?php echo esc_html( $t['trip'] ); ?></span><?php endif; ?>
+                        </div>
+                    </div>
+                </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </section>
+    <?php
+}
+
+function tw_render_testimonials_settings_page() {
+    if ( ! current_user_can( 'manage_options' ) ) { return; }
+    wp_enqueue_script( 'jquery' );
+    tw_settings_page_header( 'Testimonials', '💬', 'Manage testimonials shown on the Homepage and the Women\'s Group Trips page.' );
+
+    $hp_defaults = array(
+        array( 'quote' => 'Planning a trip has never been this easy. The team handled everything — hotels, permits, itinerary. We just showed up and enjoyed!', 'name' => 'Aditya M.', 'location' => 'Pune', 'trip' => 'Ladakh Road Trip' ),
+        array( 'quote' => 'Absolutely loved the Kerala backwaters trip. The houseboat stay was magical and the pricing was way better than what I found elsewhere.', 'name' => 'Sneha R.', 'location' => 'Hyderabad', 'trip' => 'Kerala Backwaters' ),
+        array( 'quote' => 'Joined a Spiti Valley group trip as a solo traveller and came back with 11 new best friends. Perfectly paced itinerary — not rushed at all.', 'name' => 'Rahul K.', 'location' => 'Bengaluru', 'trip' => 'Spiti Valley Expedition' ),
+    );
+    $wo_defaults = array(
+        array( 'quote' => 'Best decision I ever made for solo travel — felt safe, empowered and came back a changed person.', 'name' => 'Priya S.', 'location' => 'Mumbai', 'trip' => "Women's Kerala Trip" ),
+        array( 'quote' => 'Felt safe the entire trip. The female trip leader was amazing and the group was so supportive.', 'name' => 'Ananya R.', 'location' => 'Delhi', 'trip' => 'Kasol Trek' ),
+        array( 'quote' => 'Met my absolute best friends on a 1TRIPWISER women\'s trip. We\'ve already booked the next one!', 'name' => 'Riya K.', 'location' => 'Bangalore', 'trip' => "Bali Women's Getaway" ),
+    );
+
+    $hp_testi = get_option( 'tw_homepage_testimonials', array() );
+    $wo_testi = get_option( 'tw_womens_testimonials',  array() );
+    if ( empty( $hp_testi ) ) { $hp_testi = $hp_defaults; }
+    if ( empty( $wo_testi ) ) { $wo_testi = $wo_defaults; }
+
+    // Shared row render helper (outputs HTML directly)
+    $render_rows = function( $list, $option_key, $testi_array, $has_trip = true ) {
+        foreach ( $testi_array as $i => $t ) : ?>
+        <div class="tw-testi-row" style="background:#f9fafb;border:1px solid #e8edf5;border-radius:12px;padding:16px 20px;position:relative;margin-bottom:12px;">
+            <button type="button" class="button tw-tr-remove" style="position:absolute;top:12px;right:12px;color:#c0392b;border-color:#c0392b;" onclick="this.closest('.tw-testi-row').remove()">✕ Remove</button>
+            <div style="display:grid;grid-template-columns:2fr 1fr 1fr <?php echo $has_trip ? '1fr' : ''; ?>;gap:10px;margin-right:90px;">
+                <div style="grid-column:1/-1;">
+                    <label style="font-weight:700;display:block;margin-bottom:4px;font-size:0.82rem;">Quote *</label>
+                    <textarea name="<?php echo esc_attr($option_key); ?>[<?php echo $i; ?>][quote]" rows="2"
+                        style="width:100%;border-radius:8px;border:1px solid #dde5ef;padding:8px 10px;font-size:0.88rem;resize:vertical;"
+                        placeholder="What the traveller said…"><?php echo esc_textarea( $t['quote'] ?? '' ); ?></textarea>
+                </div>
+                <div>
+                    <label style="font-weight:700;display:block;margin-bottom:4px;font-size:0.82rem;">Name</label>
+                    <input type="text" name="<?php echo esc_attr($option_key); ?>[<?php echo $i; ?>][name]"
+                        value="<?php echo esc_attr( $t['name'] ?? '' ); ?>"
+                        style="width:100%;border-radius:8px;border:1px solid #dde5ef;padding:7px 10px;font-size:0.88rem;" placeholder="Priya S.">
+                </div>
+                <div>
+                    <label style="font-weight:700;display:block;margin-bottom:4px;font-size:0.82rem;">Location</label>
+                    <input type="text" name="<?php echo esc_attr($option_key); ?>[<?php echo $i; ?>][location]"
+                        value="<?php echo esc_attr( $t['location'] ?? '' ); ?>"
+                        style="width:100%;border-radius:8px;border:1px solid #dde5ef;padding:7px 10px;font-size:0.88rem;" placeholder="Mumbai">
+                </div>
+                <?php if ( $has_trip ) : ?>
+                <div>
+                    <label style="font-weight:700;display:block;margin-bottom:4px;font-size:0.82rem;">Trip Name</label>
+                    <input type="text" name="<?php echo esc_attr($option_key); ?>[<?php echo $i; ?>][trip]"
+                        value="<?php echo esc_attr( $t['trip'] ?? '' ); ?>"
+                        style="width:100%;border-radius:8px;border:1px solid #dde5ef;padding:7px 10px;font-size:0.88rem;" placeholder="Ladakh Trip">
+                </div>
+                <?php endif; ?>
+            </div>
+        </div>
+        <?php endforeach;
+    };
+    ?>
+
+    <form method="post" action="options.php">
+        <?php settings_fields( 'tw_testimonials_group' ); ?>
+
+        <!-- HOMEPAGE TESTIMONIALS -->
+        <div class="tw-admin-card" style="margin-bottom:28px;">
+            <div class="tw-admin-card-head">
+                <div>
+                    <h2>🏠 Homepage Testimonials</h2>
+                    <p>Shown in the "What Our Travellers Say" section on the homepage. Up to 6. Include a Trip Name to show the ✈ trip badge.</p>
+                </div>
+            </div>
+            <div class="tw-admin-card-body">
+                <div id="tw-hp-list">
+                    <?php $render_rows( 'tw-hp-list', 'tw_homepage_testimonials', $hp_testi, true ); ?>
+                </div>
+                <button type="button" class="button button-secondary tw-tr-add" data-list="tw-hp-list" data-key="tw_homepage_testimonials" data-trip="1" style="margin-top:4px;">+ Add Testimonial</button>
+            </div>
+        </div>
+
+        <!-- WOMEN'S TESTIMONIALS -->
+        <div class="tw-admin-card" style="margin-bottom:28px;">
+            <div class="tw-admin-card-head">
+                <div>
+                    <h2>👩‍🦰 Women's Trips Testimonials</h2>
+                    <p>Shown on the Women's Group Trips landing page. Up to 6.</p>
+                </div>
+            </div>
+            <div class="tw-admin-card-body">
+                <div id="tw-wo-list">
+                    <?php $render_rows( 'tw-wo-list', 'tw_womens_testimonials', $wo_testi, true ); ?>
+                </div>
+                <button type="button" class="button button-secondary tw-tr-add" data-list="tw-wo-list" data-key="tw_womens_testimonials" data-trip="1" style="margin-top:4px;">+ Add Testimonial</button>
+            </div>
+        </div>
+
+        <?php submit_button( 'Save All Testimonials', 'primary button-hero', 'submit', true ); ?>
+    </form>
+
+    <script>
+    (function(){
+        var counts = { 'tw-hp-list': <?php echo count($hp_testi); ?>, 'tw-wo-list': <?php echo count($wo_testi); ?> };
+
+        document.querySelectorAll('.tw-tr-add').forEach(function(btn){
+            btn.addEventListener('click', function(){
+                var listId  = btn.getAttribute('data-list');
+                var optKey  = btn.getAttribute('data-key');
+                var hasTrip = btn.getAttribute('data-trip') === '1';
+                var list    = document.getElementById(listId);
+                if ( list.querySelectorAll('.tw-testi-row').length >= 6 ) { alert('Maximum 6 testimonials.'); return; }
+                var i = counts[listId]++;
+                var tripField = hasTrip
+                    ? '<div><label style="font-weight:700;display:block;margin-bottom:4px;font-size:0.82rem;">Trip Name</label>'
+                    + '<input type="text" name="' + optKey + '[' + i + '][trip]" style="width:100%;border-radius:8px;border:1px solid #dde5ef;padding:7px 10px;font-size:0.88rem;" placeholder="e.g. Ladakh Trip"></div>'
+                    : '';
+                var row = document.createElement('div');
+                row.className = 'tw-testi-row';
+                row.style.cssText = 'background:#f9fafb;border:1px solid #e8edf5;border-radius:12px;padding:16px 20px;position:relative;margin-bottom:12px;';
+                row.innerHTML = '<button type="button" class="button tw-tr-remove" style="position:absolute;top:12px;right:12px;color:#c0392b;border-color:#c0392b;" onclick="this.closest(\'.tw-testi-row\').remove()">✕ Remove</button>'
+                    + '<div style="display:grid;grid-template-columns:2fr 1fr 1fr' + (hasTrip?' 1fr':'') + ';gap:10px;margin-right:90px;">'
+                    + '<div style="grid-column:1/-1;"><label style="font-weight:700;display:block;margin-bottom:4px;font-size:0.82rem;">Quote *</label>'
+                    + '<textarea name="' + optKey + '[' + i + '][quote]" rows="2" style="width:100%;border-radius:8px;border:1px solid #dde5ef;padding:8px 10px;font-size:0.88rem;resize:vertical;" placeholder="What the traveller said…"></textarea></div>'
+                    + '<div><label style="font-weight:700;display:block;margin-bottom:4px;font-size:0.82rem;">Name</label>'
+                    + '<input type="text" name="' + optKey + '[' + i + '][name]" style="width:100%;border-radius:8px;border:1px solid #dde5ef;padding:7px 10px;font-size:0.88rem;" placeholder="Priya S."></div>'
+                    + '<div><label style="font-weight:700;display:block;margin-bottom:4px;font-size:0.82rem;">Location</label>'
+                    + '<input type="text" name="' + optKey + '[' + i + '][location]" style="width:100%;border-radius:8px;border:1px solid #dde5ef;padding:7px 10px;font-size:0.88rem;" placeholder="Mumbai"></div>'
+                    + tripField + '</div>';
+                list.appendChild(row);
+            });
+        });
+    })();
+    </script>
+    <?php
+    tw_settings_page_footer();
+}
 
 // Redirect tw-blog-posts and tw-affiliates menu slugs BEFORE any output is sent
 function mytheme_admin_early_redirects() {

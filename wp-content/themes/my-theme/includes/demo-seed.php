@@ -370,6 +370,46 @@ function tw_demo_generate() {
         ), $created );
     }
 
+    /* ---- WOMEN'S GROUP TRIPS ---- */
+    $womens_trips = array(
+        array(
+            'title' => "Kerala Wellness Retreat — Women's Edition", 'slug' => 'demo-womens-kerala', 'regions' => array( $kerala ), 'thumb' => 'wkeral1',
+            'excerpt' => "Ayurveda, backwaters and beach yoga — a restorative Kerala journey for women.",
+            'content' => '<p>Reconnect with yourself on this curated Kerala wellness trip designed exclusively for women. Daily yoga at sunrise, traditional Ayurvedic massages, houseboat stay in Alleppey\'s backwaters, a cooking class with a local family and a private sunset beach session in Kovalam. Female trip leader throughout.</p>',
+            'core' => array( 'location' => 'Kerala, India', 'price' => '22999', 'nights' => '5', 'days' => '6', 'duration' => '5 Nights 6 Days', 'best_time' => 'October to March', 'group_size' => '6–12 Women', 'trip_type' => 'Women Trip', 'tag' => 'Bestseller', 'emi' => '₹3,833/mo', 'route' => 'Cochin → Munnar → Alleppey → Kovalam → Trivandrum', 'overview' => 'A restorative journey through Kerala\'s backwaters and beaches — designed entirely for women.' ),
+        ),
+        array(
+            'title' => "Kasol & Kheerganga — Women's Trek", 'slug' => 'demo-womens-kasol', 'regions' => array( $himachal ), 'thumb' => 'wkasol1',
+            'excerpt' => "Bonfire nights, mountain treks and an all-women crew in the Parvati Valley.",
+            'content' => '<p>Trek the legendary Kheerganga trail with a group of fearless women. Camp under stars in the Parvati Valley, take a dip in the natural hot springs at Kheerganga, explore Kasol\'s riverside cafes and share stories around the bonfire. A female trek leader ensures safety and fun the entire way.</p>',
+            'core' => array( 'location' => 'Kasol, Himachal Pradesh', 'price' => '9999', 'nights' => '3', 'days' => '4', 'duration' => '3 Nights 4 Days', 'best_time' => 'May to October', 'group_size' => '8–15 Women', 'trip_type' => 'Women Trip', 'tag' => 'Trending', 'emi' => '₹1,666/mo', 'route' => 'Delhi → Kasol → Kheerganga → Kasol → Delhi', 'overview' => 'Mountains, hot springs and an all-women vibe — the perfect first trek for women travellers.' ),
+        ),
+        array(
+            'title' => "Bali — Women's Solo Travellers Getaway", 'slug' => 'demo-womens-bali', 'regions' => array( $bali ), 'thumb' => 'wbali1',
+            'excerpt' => "Temple walks, rice terraces and sunset cocktails with your new best friends.",
+            'content' => '<p>Travel solo, arrive as a stranger, leave as family. This Bali women\'s group trip covers the spiritual temples of Ubud, a sunrise trek up Mount Batur, a traditional Balinese cooking class, a beach club evening in Seminyak and a day trip to the crystal waters of Nusa Penida. A female guide is with you throughout.</p>',
+            'core' => array( 'location' => 'Bali, Indonesia', 'price' => '44999', 'nights' => '6', 'days' => '7', 'duration' => '6 Nights 7 Days', 'best_time' => 'April to October', 'group_size' => '8–14 Women', 'trip_type' => 'Women Trip', 'tag' => 'Popular', 'emi' => '₹7,499/mo', 'route' => 'Mumbai → Bali → Ubud → Mt Batur → Seminyak → Nusa Penida → Bali', 'overview' => 'Come alone, leave with a tribe — the ultimate Bali experience for women solo travellers.' ),
+        ),
+        array(
+            'title' => "Rajasthan — Women's Heritage Trail", 'slug' => 'demo-womens-rajasthan', 'regions' => array( $rajasthan ), 'thumb' => 'wraj1',
+            'excerpt' => "Forts, palaces, desert sunsets and an all-women road trip across Rajasthan.",
+            'content' => '<p>Explore the royal heritage of Rajasthan in the safest, most empowering way possible — with an all-women group and a female guide. From the Pink City\'s Amber Fort to the blue streets of Jodhpur, the lake city of Udaipur and a desert camp in Jaisalmer. Authentic experiences, local home-stay dinners and zero compromise on safety.</p>',
+            'core' => array( 'location' => 'Rajasthan, India', 'price' => '26999', 'nights' => '6', 'days' => '7', 'duration' => '6 Nights 7 Days', 'best_time' => 'October to March', 'group_size' => '8–16 Women', 'trip_type' => 'Women Trip', 'tag' => 'New', 'emi' => '₹4,499/mo', 'route' => 'Delhi → Jaipur → Jodhpur → Udaipur → Jaisalmer → Delhi', 'overview' => 'A royal road trip across Rajasthan — safe, stunning and exclusively for women.' ),
+        ),
+    );
+    foreach ( $womens_trips as $wt ) {
+        tw_demo_post( array(
+            'post_type'    => 'group_trip',
+            'post_title'   => $wt['title'],
+            'post_name'    => $wt['slug'],
+            'post_content' => $wt['content'],
+            'post_excerpt' => $wt['excerpt'],
+            'regions'      => array_filter( $wt['regions'] ),
+            'meta'         => tw_demo_full_meta( $wt['core'] ),
+            'thumb_seed'   => $wt['thumb'],
+        ), $created );
+    }
+
     /* ---- DESTINATIONS ---- */
     $dests = array(
         array( 'Bali, Indonesia', 'demo-dest-bali', 'Island of temples, surf and rice terraces.', array( $bali ), 'balidest' ),
