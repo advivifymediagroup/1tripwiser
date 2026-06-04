@@ -35,13 +35,15 @@ while ( have_posts() ) :
     }
 
     /* ── other fields ── */
-    $location  = get_post_meta( $id, 'package_location', true ) ?: mytheme_get_travel_field( 'destination_name', $id );
-    $departure = get_post_meta( $id, 'event_date', true )        ?: mytheme_get_travel_field( 'event_date', $id );
-    $grp_size  = get_post_meta( $id, 'group_size', true )        ?: mytheme_get_travel_field( 'group_size', $id );
-    $trip_type = get_post_meta( $id, 'package_trip_type', true ) ?: mytheme_get_travel_field( 'trip_type', $id );
+    $location  = get_post_meta( $id, 'package_location', true )  ?: mytheme_get_travel_field( 'destination_name', $id );
+    $departure = get_post_meta( $id, 'event_date', true )         ?: mytheme_get_travel_field( 'event_date', $id );
+    $grp_size  = get_post_meta( $id, 'group_size', true )         ?: mytheme_get_travel_field( 'group_size', $id );
+    $trip_type = get_post_meta( $id, 'package_trip_type', true )  ?: mytheme_get_travel_field( 'package_trip_type', $id );
     $tag       = get_post_meta( $id, 'package_tag', true );
     $emi       = get_post_meta( $id, 'package_emi', true );
     $overview  = get_post_meta( $id, 'package_overview', true );
+    $route     = get_post_meta( $id, 'route_summary', true )      ?: mytheme_get_travel_field( 'route_summary', $id );
+    $best_time = get_post_meta( $id, 'best_time', true )          ?: mytheme_get_travel_field( 'best_time', $id );
 
     /* ── book URL ── */
     $book     = get_post_meta( $id, 'package_book_url', true ) ?: mytheme_get_travel_field( 'book_url', $id );
@@ -119,13 +121,39 @@ while ( have_posts() ) :
             <div class="ev-single-body">
                 <div class="ev-single-content">
                     <?php
-                    /* Show WYSIWYG overview from ACF if available, else fall back to post content */
-                    if ( $overview ) {
-                        echo wp_kses_post( wpautop( $overview ) );
-                    }
+                    if ( $overview ) { echo wp_kses_post( wpautop( $overview ) ); }
                     the_content();
                     ?>
                 </div>
+
+                <!-- Trip details panel -->
+                <?php
+                $details = array(
+                    array( '🗺️', 'Route',          $route ),
+                    array( '🌤️', 'Best Time',       $best_time ),
+                    array( '👥', 'Group Size',      $grp_size ),
+                    array( '🏷️', 'Trip Type',       $trip_type ),
+                    array( '📅', 'Departure',       $departure ),
+                    array( '📍', 'Destination',     $location ),
+                );
+                $details = array_filter( $details, function( $d ) { return ! empty( $d[2] ); } );
+                if ( $details ) : ?>
+                <div class="ev-trip-details">
+                    <h3 class="ev-trip-details-title">Trip Details</h3>
+                    <div class="ev-trip-details-grid">
+                        <?php foreach ( $details as $d ) : ?>
+                        <div class="ev-trip-detail-item">
+                            <span class="ev-trip-detail-icon"><?php echo $d[0]; ?></span>
+                            <div>
+                                <span class="ev-trip-detail-label"><?php echo esc_html( $d[1] ); ?></span>
+                                <span class="ev-trip-detail-val"><?php echo esc_html( $d[2] ); ?></span>
+                            </div>
+                        </div>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+                <?php endif; ?>
+
             </div>
 
             <!-- Sticky booking panel -->
@@ -138,32 +166,22 @@ while ( have_posts() ) :
                 </div>
                 <?php endif; ?>
 
-                <?php if ( $dur || $departure || $grp_size ) : ?>
+                <?php
+                $sidebar_rows = array_filter( array(
+                    'Duration'    => $dur,
+                    'Departure'   => $departure,
+                    'Group Size'  => $grp_size,
+                    'Destination' => $location,
+                    'Trip Type'   => $trip_type,
+                ) );
+                if ( $sidebar_rows ) : ?>
                 <div class="ev-single-detail-list">
-                    <?php if ( $dur ) : ?>
+                    <?php foreach ( $sidebar_rows as $label => $val ) : ?>
                     <div class="ev-single-detail-row">
-                        <span class="ev-detail-label">Duration</span>
-                        <span class="ev-detail-val"><?php echo esc_html( $dur ); ?></span>
+                        <span class="ev-detail-label"><?php echo esc_html( $label ); ?></span>
+                        <span class="ev-detail-val"><?php echo esc_html( $val ); ?></span>
                     </div>
-                    <?php endif; ?>
-                    <?php if ( $departure ) : ?>
-                    <div class="ev-single-detail-row">
-                        <span class="ev-detail-label">Departure</span>
-                        <span class="ev-detail-val"><?php echo esc_html( $departure ); ?></span>
-                    </div>
-                    <?php endif; ?>
-                    <?php if ( $grp_size ) : ?>
-                    <div class="ev-single-detail-row">
-                        <span class="ev-detail-label">Group Size</span>
-                        <span class="ev-detail-val"><?php echo esc_html( $grp_size ); ?></span>
-                    </div>
-                    <?php endif; ?>
-                    <?php if ( $location ) : ?>
-                    <div class="ev-single-detail-row">
-                        <span class="ev-detail-label">Destination</span>
-                        <span class="ev-detail-val"><?php echo esc_html( $location ); ?></span>
-                    </div>
-                    <?php endif; ?>
+                    <?php endforeach; ?>
                 </div>
                 <?php endif; ?>
 

@@ -4833,6 +4833,15 @@ img, video, iframe, embed, object { max-width: 100%; height: auto; }
 .gt-womens-callout-copy span { font-size:0.82rem; color:#6b7a8f; }
 .gt-womens-callout-btn { display:inline-flex; align-items:center; padding:9px 20px; background:linear-gradient(135deg,#ff8fab,#ff6b8a); color:#fff; font-size:0.85rem; font-weight:800; border-radius:10px; text-decoration:none; white-space:nowrap; transition:opacity 0.2s,transform 0.2s; flex-shrink:0; }
 .gt-womens-callout-btn:hover { opacity:0.9; transform:translateY(-2px); color:#fff; }
+/* Trip Details panel (events + group trips single page) */
+.ev-trip-details { background:#f8fafc; border:1px solid #e6edf3; border-radius:16px; padding:24px 26px; margin-top:28px; }
+.ev-trip-details-title { font-family:'Bebas Neue',sans-serif; font-size:1.3rem; letter-spacing:0.04em; color:#0d1526; margin:0 0 18px; }
+.ev-trip-details-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:14px; }
+.ev-trip-detail-item { display:flex; align-items:flex-start; gap:10px; }
+.ev-trip-detail-icon { font-size:1.2rem; flex-shrink:0; margin-top:2px; }
+.ev-trip-detail-label { display:block; font-size:0.7rem; font-weight:800; letter-spacing:0.08em; text-transform:uppercase; color:#8595a6; margin-bottom:3px; }
+.ev-trip-detail-val { display:block; font-size:0.9rem; font-weight:700; color:#0d1526; line-height:1.4; }
+@media(max-width:600px){ .ev-trip-details-grid{ grid-template-columns:1fr; } }
 /* Group trip detail rows inside booking sidebar */
 .ev-single-detail-list { border-top:1px solid #eef2f6; padding-top:12px; display:flex; flex-direction:column; gap:8px; }
 .ev-single-detail-row { display:flex; justify-content:space-between; align-items:center; gap:8px; }
