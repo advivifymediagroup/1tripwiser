@@ -322,18 +322,18 @@
     ═══════════════════════════════════════════════════════════════ */
     function updateParallax() {
         var sy = window.scrollY;
-        document.querySelectorAll('.sp-hero-bg').forEach(function (bg) {
-            bg.style.transform = 'translateY(' + (sy * 0.32) + 'px) scale(1.05)';
-        });
+        /* CSS pre-expands .tw-hero-bg with inset:-8% so no scale() needed here */
         document.querySelectorAll('.tw-hero-bg, .fp-hero-bg').forEach(function (bg) {
-            bg.style.transform = 'translateY(' + (sy * 0.28) + 'px) scale(1.05)';
+            bg.style.transform = 'translateY(' + Math.round(sy * 0.35) + 'px)';
+        });
+        document.querySelectorAll('.sp-hero-bg').forEach(function (bg) {
+            bg.style.transform = 'translateY(' + Math.round(sy * 0.35) + 'px)';
         });
     }
 
-    /* Only run parallax on desktop — prevents scale overflow on mobile */
+    /* Run parallax on desktop pointer devices only (no jarring parallax on touch) */
     if (window.matchMedia('(min-width: 769px) and (hover: hover)').matches) {
-        /* Apply initial scale so hero bg is pre-expanded before first scroll */
-        updateParallax();
+        updateParallax(); /* set initial position immediately */
 
         var ticking = false;
         window.addEventListener('scroll', function () {
