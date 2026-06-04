@@ -53,6 +53,20 @@ if ( ! function_exists( 'tw_explore_card' ) ) {
             tw_explore_region_filter_box( get_post_type_archive_link( 'group_trip' ) );
         } ?>
 
+        <!-- Women's Trips callout -->
+        <?php if ( function_exists( 'tw_womens_trips_page_url' ) ) : ?>
+        <div class="gt-womens-callout">
+            <span class="gt-womens-callout-icon">👩‍🦰</span>
+            <div class="gt-womens-callout-copy">
+                <strong>Looking for Women-Only Group Trips?</strong>
+                <span>We have a dedicated section with safe, curated travel experiences exclusively for women.</span>
+            </div>
+            <a class="gt-womens-callout-btn" href="<?php echo esc_url( tw_womens_trips_page_url() ); ?>">
+                Explore Women's Trips →
+            </a>
+        </div>
+        <?php endif; ?>
+
         <?php if ( have_posts() ) : ?>
             <div class="explore-grid">
                 <?php while ( have_posts() ) : the_post(); tw_explore_card(); endwhile; ?>
