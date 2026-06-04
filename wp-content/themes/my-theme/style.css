@@ -1035,6 +1035,19 @@ h5, h6 {
 /* AJAX grid fade transition */
 .tw-ajax-grid { transition: opacity 0.2s ease; }
 
+/* Homepage package / itinerary grids — fixed 3 columns so a single filtered
+   result never stretches to full width (auto-fit collapses empty tracks). */
+#tw-cards-packages,
+#tw-cards-itineraries { grid-template-columns: repeat(3, 1fr) !important; }
+@media(max-width:900px){
+    #tw-cards-packages,
+    #tw-cards-itineraries { grid-template-columns: repeat(2, 1fr) !important; }
+}
+@media(max-width:600px){
+    #tw-cards-packages,
+    #tw-cards-itineraries { grid-template-columns: 1fr !important; }
+}
+
 
 .package-search-page {
   background: #f8f9fa;
