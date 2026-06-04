@@ -49,11 +49,14 @@ $total = array_sum( $counts );
 <main class="main-content dest-page">
 
     <!-- ═══ CINEMATIC HERO ═══ -->
-    <section class="dest-hero<?php echo $hero_img ? ' has-hero-img' : ''; ?>"
-             <?php if ( $hero_img ) : ?>data-parallax-bg="1" style="background-image:url('<?php echo esc_url( $hero_img ); ?>')"<?php endif; ?>>
+    <section class="dest-hero<?php echo $hero_img ? ' has-hero-img' : ''; ?>">
+        <?php if ( $hero_img ) : ?>
+        <div class="dest-hero-bg" id="dest-parallax-bg"
+             style="background-image:url('<?php echo esc_url( $hero_img ); ?>')"></div>
+        <?php endif; ?>
         <div class="dest-hero-overlay" aria-hidden="true"></div>
         <div class="container dest-hero-inner">
-            <nav class="explore-crumbs dest-crumbs" aria-label="Breadcrumb">
+            <nav class="dest-crumbs" aria-label="Breadcrumb">
                 <a href="<?php echo esc_url( home_url('/') ); ?>">Home</a><span>›</span>
                 <?php if ( $parent && ! is_wp_error( $parent ) ) : ?>
                     <a href="<?php echo esc_url( get_term_link( $parent ) ); ?>"><?php echo esc_html( $parent->name ); ?></a><span>›</span>
@@ -224,18 +227,18 @@ $total = array_sum( $counts );
         });
     }
 
-    /* ── Parallax scroll on hero background ── */
-    var hero = document.querySelector('.dest-hero[data-parallax-bg]');
-    if (!hero) { return; }
-    var heroH = hero.offsetHeight;
+    /* ── Parallax: translate the bg-div instead of background-position ── */
+    var bg = document.getElementById('dest-parallax-bg');
+    if (!bg) { return; }
+    var hero = bg.parentElement;
+    var heroH = hero ? hero.offsetHeight : 600;
     function onScroll() {
-        var scrolled = window.pageYOffset;
-        if (scrolled > heroH * 1.5) { return; }        /* stop updating off-screen */
-        var offset = Math.round(scrolled * 0.38);       /* 0.38 = subtle depth factor */
-        hero.style.backgroundPositionY = 'calc(center + ' + offset + 'px)';
+        var s = window.pageYOffset || document.documentElement.scrollTop;
+        if (s > heroH * 1.8) { return; }
+        bg.style.transform = 'translateY(' + Math.round(s * 0.38) + 'px)';
     }
     window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll(); /* init */
+    onScroll();
 }());
 </script>
 
