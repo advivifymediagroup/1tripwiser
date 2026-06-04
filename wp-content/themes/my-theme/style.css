@@ -2968,11 +2968,16 @@ h5, h6 {
 /* ══════════════════════════════════════════════════════════════
    DESTINATION LANDING PAGE  (taxonomy-destination_region.php)
    ══════════════════════════════════════════════════════════════ */
-.dest-hero{position:relative;min-height:500px;display:flex;align-items:flex-end;background:linear-gradient(135deg,#0d1526 0%,#0a2533 100%);background-size:cover;background-position:center top;overflow:hidden;will-change:background-position;}
+.dest-hero{position:relative;min-height:500px;display:flex;align-items:flex-end;background:#0d1526;overflow:hidden;}
 .dest-hero.has-hero-img{min-height:580px;}
-.dest-hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(7,12,26,0.96) 0%,rgba(7,12,26,0.52) 40%,rgba(7,12,26,0.15) 100%);pointer-events:none;z-index:0;}
-.dest-hero-inner{position:relative;z-index:1;padding-bottom:52px;width:100%;}
-.dest-crumbs{margin-bottom:18px;}
+/* Parallax background — translated by JS scroll handler */
+.dest-hero-bg{position:absolute;inset:-80px 0;background-size:cover;background-position:center;will-change:transform;z-index:0;}
+.dest-hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(7,12,26,0.96) 0%,rgba(7,12,26,0.52) 40%,rgba(7,12,26,0.15) 100%);pointer-events:none;z-index:1;}
+.dest-hero-inner{position:relative;z-index:2;padding-bottom:52px;width:100%;}
+/* Left-aligned breadcrumbs — overrides explore-crumbs justify-content:center */
+.dest-crumbs{display:flex !important;gap:8px;flex-wrap:wrap;justify-content:flex-start !important;font-size:0.82rem;color:rgba(255,255,255,0.5);margin-bottom:18px;}
+.dest-crumbs a{color:#0692af;text-decoration:none;font-weight:700;}
+.dest-crumbs span{color:rgba(255,255,255,0.35);}
 .dest-hero-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,8vw,5.5rem);color:#fff;letter-spacing:0.05em;line-height:1;margin:0 0 12px;display:flex;align-items:center;gap:14px;}
 .dest-hero-icon{font-size:0.5em;line-height:1;display:inline-flex;align-items:center;flex-shrink:0;}
 .dest-hero-tagline{font-size:1.05rem;color:rgba(255,255,255,0.72);margin:0 0 28px;max-width:580px;line-height:1.7;}
