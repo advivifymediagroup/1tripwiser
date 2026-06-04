@@ -1,108 +1,222 @@
 <?php
 /**
- * Explore archive — region (destination_region) and events (event_festival).
- * Shared by taxonomy-event_festival.php. Lists all trips tagged with the term.
+ * Destination Region archive — Tripoto-style destination landing page.
+ *
+ * Shows all packages, group trips, events and itineraries tagged with
+ * this region/country/state in one consolidated, filterable grid.
  *
  * @package my-theme
  */
 get_header();
 
-$tw_term   = get_queried_object();
-$tw_is_event = ( $tw_term instanceof WP_Term && $tw_term->taxonomy === 'event_festival' );
-$tw_parent = ( $tw_term && $tw_term->parent ) ? get_term( $tw_term->parent, $tw_term->taxonomy ) : null;
-$tw_kids   = $tw_term ? get_terms( array( 'taxonomy' => $tw_term->taxonomy, 'parent' => $tw_term->term_id, 'hide_empty' => false ) ) : array();
-$tw_icon   = $tw_is_event ? tw_event_icon( $tw_term->term_id ) : tw_region_icon( $tw_term->term_id );
-$tw_count  = $tw_term ? (int) $tw_term->count : 0;
+$term    = get_queried_object();
+$parent  = ( $term && $term->parent ) ? get_term( $term->parent, 'destination_region' ) : null;
+$icon    = function_exists( 'tw_region_icon' ) ? tw_region_icon( $term->term_id ) : '🧭';
+$kids    = get_terms( array( 'taxonomy' => 'destination_region', 'parent' => $term->term_id, 'hide_empty' => false ) );
 
-/* Unified trip card for mixed post types */
-if ( ! function_exists( 'tw_explore_card' ) ) :
-function tw_explore_card() {
-    $type_labels = array(
-        'travel_package' => 'Package',
-        'itinerary'      => 'Itinerary',
-        'destination'    => 'Destination',
-        'post'           => 'Story',
-    );
-    $pt    = get_post_type();
-    $label = isset( $type_labels[ $pt ] ) ? $type_labels[ $pt ] : 'Trip';
-    $thumb = get_the_post_thumbnail_url( get_the_ID(), 'medium_large' );
-    ?>
-    <article class="explore-card">
-        <a class="explore-card-img" href="<?php the_permalink(); ?>">
-            <?php if ( $thumb ) : ?>
-                <img src="<?php echo esc_url( $thumb ); ?>" alt="" loading="lazy">
-            <?php else : ?>
-                <span class="explore-card-img--ph" aria-hidden="true">🧭</span>
-            <?php endif; ?>
-            <span class="explore-card-type"><?php echo esc_html( $label ); ?></span>
-        </a>
-        <div class="explore-card-body">
-            <h3 class="explore-card-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
-            <p class="explore-card-excerpt"><?php echo esc_html( wp_trim_words( get_the_excerpt(), 18, '…' ) ); ?></p>
-            <a class="explore-card-link" href="<?php the_permalink(); ?>">View <?php echo esc_html( strtolower( $label ) ); ?> →</a>
-        </div>
-    </article>
-    <?php
+/* ACF term meta */
+$hero_img = function_exists( 'get_field' ) ? get_field( 'region_hero_image', $term ) : '';
+$tagline  = function_exists( 'get_field' ) ? get_field( 'region_tagline',    $term ) : '';
+$overview = function_exists( 'get_field' ) ? get_field( 'region_overview',   $term ) : '';
+if ( ! $overview ) { $overview = $term->description; }
+
+/* Count posts by type in this term (include children) */
+function tw_count_type_in_term( $post_type, $term ) {
+    $q = new WP_Query( array(
+        'post_type'      => $post_type,
+        'post_status'    => 'publish',
+        'posts_per_page' => 1,
+        'fields'         => 'ids',
+        'no_found_rows'  => false,
+        'tax_query'      => array( array(
+            'taxonomy'         => 'destination_region',
+            'field'            => 'term_id',
+            'terms'            => $term->term_id,
+            'include_children' => true,
+        ) ),
+    ) );
+    return (int) $q->found_posts;
 }
-endif;
+$counts = array(
+    'travel_package' => tw_count_type_in_term( 'travel_package', $term ),
+    'group_trip'     => tw_count_type_in_term( 'group_trip',     $term ),
+    'tw_event'       => tw_count_type_in_term( 'tw_event',       $term ),
+    'itinerary'      => tw_count_type_in_term( 'itinerary',      $term ),
+);
+$total = array_sum( $counts );
 ?>
 
-<main class="main-content explore-page">
+<main class="main-content dest-page">
 
-    <!-- Hero -->
-    <section class="explore-hero">
-        <div class="explore-hero-overlay" aria-hidden="true"></div>
-        <div class="container explore-hero-inner">
+    <!-- ═══ CINEMATIC HERO ═══ -->
+    <section class="dest-hero<?php echo $hero_img ? ' has-hero-img' : ''; ?>"
+             <?php if ( $hero_img ) : ?>style="background-image:url('<?php echo esc_url( $hero_img ); ?>')"<?php endif; ?>>
+        <div class="dest-hero-overlay" aria-hidden="true"></div>
+        <div class="container dest-hero-inner">
             <nav class="explore-crumbs" aria-label="Breadcrumb">
-                <a href="<?php echo esc_url( home_url( '/' ) ); ?>">Home</a>
-                <span>›</span>
-                <?php if ( $tw_parent ) : ?>
-                    <a href="<?php echo esc_url( get_term_link( $tw_parent ) ); ?>"><?php echo esc_html( $tw_parent->name ); ?></a>
-                    <span>›</span>
+                <a href="<?php echo esc_url( home_url('/') ); ?>">Home</a><span>›</span>
+                <?php if ( $parent && ! is_wp_error( $parent ) ) : ?>
+                    <a href="<?php echo esc_url( get_term_link( $parent ) ); ?>"><?php echo esc_html( $parent->name ); ?></a><span>›</span>
                 <?php endif; ?>
-                <span><?php echo esc_html( $tw_term->name ); ?></span>
+                <span><?php echo esc_html( $term->name ); ?></span>
             </nav>
-            <span class="explore-hero-kicker"><?php echo $tw_is_event ? 'Event &amp; Festival' : 'Explore Destination'; ?></span>
-            <h1 class="explore-hero-title"><?php echo esc_html( trim( $tw_icon . ' ' . $tw_term->name ) ); ?></h1>
-            <?php if ( ! empty( $tw_term->description ) ) : ?>
-                <p class="explore-hero-sub"><?php echo esc_html( $tw_term->description ); ?></p>
+            <h1 class="dest-hero-title"><?php echo esc_html( trim( $icon . ' ' . $term->name ) ); ?></h1>
+            <?php if ( $tagline ) : ?>
+            <p class="dest-hero-tagline"><?php echo esc_html( $tagline ); ?></p>
             <?php endif; ?>
-            <p class="explore-hero-count"><?php echo esc_html( $tw_count ); ?> <?php echo ( 1 === $tw_count ) ? 'trip' : 'trips'; ?> available</p>
+            <div class="dest-hero-stats">
+                <div class="dest-stat"><strong><?php echo $total; ?></strong><span>Trips</span></div>
+                <?php if ( $counts['travel_package'] ) : ?><div class="dest-stat"><strong><?php echo $counts['travel_package']; ?></strong><span>Packages</span></div><?php endif; ?>
+                <?php if ( $counts['group_trip'] ) : ?><div class="dest-stat"><strong><?php echo $counts['group_trip']; ?></strong><span>Group Trips</span></div><?php endif; ?>
+                <?php if ( $counts['tw_event'] ) : ?><div class="dest-stat"><strong><?php echo $counts['tw_event']; ?></strong><span>Events</span></div><?php endif; ?>
+                <?php if ( $counts['itinerary'] ) : ?><div class="dest-stat"><strong><?php echo $counts['itinerary']; ?></strong><span>Itineraries</span></div><?php endif; ?>
+            </div>
         </div>
     </section>
 
-    <div class="container explore-wrap">
+    <div class="container dest-wrap">
 
-        <!-- Sub-region / child chips (e.g. India → zones, Asia → destinations) -->
-        <?php if ( $tw_kids && ! is_wp_error( $tw_kids ) ) : ?>
-            <nav class="explore-chips" aria-label="Sub-regions">
-                <?php foreach ( $tw_kids as $kid ) : ?>
-                    <a class="explore-chip" href="<?php echo esc_url( get_term_link( $kid ) ); ?>"><?php echo esc_html( $kid->name ); ?></a>
-                <?php endforeach; ?>
-            </nav>
+        <!-- Overview paragraph -->
+        <?php if ( $overview ) : ?>
+        <div class="dest-overview"><?php echo wp_kses_post( wpautop( $overview ) ); ?></div>
         <?php endif; ?>
 
-        <!-- Trips grid -->
+        <!-- Sub-region chips -->
+        <?php if ( $kids && ! is_wp_error( $kids ) ) : ?>
+        <nav class="dest-sub-chips" aria-label="Sub-regions">
+            <?php foreach ( $kids as $kid ) : ?>
+                <a class="dest-sub-chip" href="<?php echo esc_url( get_term_link( $kid ) ); ?>">
+                    <?php echo esc_html( $kid->name ); ?>
+                    <span class="dest-sub-chip-count"><?php echo (int) $kid->count; ?></span>
+                </a>
+            <?php endforeach; ?>
+        </nav>
+        <?php endif; ?>
+
+        <!-- Tab filters -->
+        <div class="dest-tabs" role="tablist">
+            <button class="dest-tab active" data-filter="all" role="tab">✦ All <span><?php echo $total; ?></span></button>
+            <?php if ( $counts['travel_package'] ) : ?>
+            <button class="dest-tab" data-filter="travel_package" role="tab">🧳 Packages <span><?php echo $counts['travel_package']; ?></span></button>
+            <?php endif; ?>
+            <?php if ( $counts['group_trip'] ) : ?>
+            <button class="dest-tab" data-filter="group_trip" role="tab">👥 Group Trips <span><?php echo $counts['group_trip']; ?></span></button>
+            <?php endif; ?>
+            <?php if ( $counts['itinerary'] ) : ?>
+            <button class="dest-tab" data-filter="itinerary" role="tab">🗺️ Itineraries <span><?php echo $counts['itinerary']; ?></span></button>
+            <?php endif; ?>
+            <?php if ( $counts['tw_event'] ) : ?>
+            <button class="dest-tab" data-filter="tw_event" role="tab">🎉 Events <span><?php echo $counts['tw_event']; ?></span></button>
+            <?php endif; ?>
+        </div>
+
+        <!-- Trip cards grid -->
         <?php if ( have_posts() ) : ?>
-            <div class="explore-grid">
-                <?php while ( have_posts() ) : the_post(); tw_explore_card(); endwhile; ?>
-            </div>
-            <div class="tribe-pagination">
-                <?php the_posts_pagination( array(
-                    'mid_size'  => 1,
-                    'prev_text' => '← Prev',
-                    'next_text' => 'Next →',
-                ) ); ?>
-            </div>
+        <div class="dest-grid" id="dest-trips-grid">
+            <?php while ( have_posts() ) : the_post();
+                $pid      = get_the_ID();
+                $pt       = get_post_type();
+                $thumb    = get_the_post_thumbnail_url( $pid, 'medium_large' ) ?: get_post_meta( $pid, 'package_image_url', true );
+                if ( ! $thumb ) {
+                    $acf_img = function_exists('get_field') ? get_field('package_image', $pid) : null;
+                    if ( is_array( $acf_img ) && isset( $acf_img['url'] ) ) { $thumb = $acf_img['url']; }
+                    elseif ( is_string( $acf_img ) && $acf_img ) { $thumb = $acf_img; }
+                }
+
+                /* price */
+                $price = '';
+                foreach ( array( 'package_amount', '_starting_price', '_package_amount' ) as $_k ) {
+                    $_v = get_post_meta( $pid, $_k, true );
+                    if ( is_numeric( $_v ) && $_v > 0 ) { $price = $_v; break; }
+                }
+
+                /* duration */
+                $nights = (int) get_post_meta( $pid, 'total_nights', true );
+                $days   = (int) get_post_meta( $pid, 'total_days', true );
+                $dur    = $nights ? $nights . 'N / ' . ( $days ?: $nights + 1 ) . 'D' : '';
+                if ( ! $dur ) {
+                    $dur = get_post_meta( $pid, '_trip_duration', true )
+                        ?: ( function_exists('mytheme_get_travel_field') ? mytheme_get_travel_field('itinerary_duration', $pid) : '' );
+                }
+
+                /* type badge */
+                $badges = array(
+                    'travel_package' => array( '🧳 Package',    '#FCB415', '#0d1526' ),
+                    'group_trip'     => array( '👥 Group Trip',  '#0692AF', '#fff'    ),
+                    'tw_event'       => array( '🎉 Event',       '#ff6b8a', '#fff'    ),
+                    'itinerary'      => array( '🗺️ Itinerary',  '#10b981', '#fff'    ),
+                );
+                $badge     = isset( $badges[$pt] ) ? $badges[$pt] : array( '✈ Trip', '#6b7a8f', '#fff' );
+                $book_url  = get_post_meta( $pid, 'package_book_url', true ) ?: get_permalink( $pid );
+                $tag_label = get_post_meta( $pid, 'package_tag', true );
+            ?>
+            <article class="dest-card" data-type="<?php echo esc_attr( $pt ); ?>">
+                <a class="dest-card-img" href="<?php the_permalink(); ?>">
+                    <?php if ( $thumb ) : ?>
+                        <img src="<?php echo esc_url( $thumb ); ?>" alt="" loading="lazy">
+                    <?php else : ?>
+                        <span class="dest-card-ph">🧭</span>
+                    <?php endif; ?>
+                    <span class="dest-card-badge"
+                          style="background:<?php echo esc_attr($badge[1]); ?>;color:<?php echo esc_attr($badge[2]); ?>;">
+                        <?php echo $badge[0]; ?>
+                    </span>
+                    <?php if ( $tag_label ) : ?>
+                    <span class="dest-card-tag"><?php echo esc_html( ucfirst( $tag_label ) ); ?></span>
+                    <?php endif; ?>
+                </a>
+                <div class="dest-card-body">
+                    <h3 class="dest-card-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
+                    <div class="dest-card-meta">
+                        <?php if ( $dur ) : ?><span class="dest-card-dur">⏱ <?php echo esc_html( $dur ); ?></span><?php endif; ?>
+                    </div>
+                    <p class="dest-card-excerpt"><?php echo esc_html( wp_trim_words( get_the_excerpt(), 16, '…' ) ); ?></p>
+                    <div class="dest-card-foot">
+                        <?php if ( $price ) : ?>
+                        <div class="dest-card-price">
+                            <span>Starts from</span>
+                            <strong><?php echo esc_html( function_exists('mytheme_format_rupee_amount') ? mytheme_format_rupee_amount($price) : '₹'.$price ); ?></strong>
+                        </div>
+                        <?php endif; ?>
+                        <a class="dest-card-btn" href="<?php echo esc_url( $book_url ); ?>">Book Now</a>
+                    </div>
+                </div>
+            </article>
+            <?php endwhile; ?>
+        </div>
+        <div class="tribe-pagination">
+            <?php the_posts_pagination( array( 'mid_size' => 1, 'prev_text' => '← Prev', 'next_text' => 'Next →' ) ); ?>
+        </div>
+
         <?php else : ?>
-            <div class="tribe-empty">
-                <div class="tribe-empty-icon"><?php echo esc_html( $tw_icon ?: '🧭' ); ?></div>
-                <h3>No trips here yet</h3>
-                <p>We're curating trips for <?php echo esc_html( $tw_term->name ); ?>. Tell us your dream plan and we'll build it.</p>
-                <a class="tribe-btn-primary" href="<?php echo esc_url( mytheme_get_plan_trip_url() ); ?>">✈️ Plan a Trip — Free</a>
-            </div>
+        <div class="tribe-empty">
+            <div class="tribe-empty-icon"><?php echo esc_html( $icon ); ?></div>
+            <h3>No trips for <?php echo esc_html( $term->name ); ?> yet</h3>
+            <p>We're curating amazing trips here. Tell us where you want to go and we'll build a custom itinerary.</p>
+            <a class="tribe-btn-primary" href="<?php echo esc_url( mytheme_get_plan_trip_url() ); ?>">✈️ Plan a Trip — Free</a>
+        </div>
         <?php endif; ?>
-    </div>
+
+    </div><!-- /.dest-wrap -->
 </main>
+
+<script>
+/* Tab filter — JS show/hide by data-type */
+(function () {
+    var tabs  = document.querySelectorAll('.dest-tab');
+    var cards = document.querySelectorAll('.dest-card');
+    if (!tabs.length || !cards.length) { return; }
+    tabs.forEach(function (tab) {
+        tab.addEventListener('click', function () {
+            tabs.forEach(function (t) { t.classList.remove('active'); });
+            tab.classList.add('active');
+            var filter = tab.getAttribute('data-filter');
+            cards.forEach(function (card) {
+                card.style.display = ( filter === 'all' || card.getAttribute('data-type') === filter ) ? '' : 'none';
+            });
+        });
+    });
+}());
+</script>
 
 <?php get_footer(); ?>
