@@ -3982,6 +3982,11 @@ function tw_maybe_create_pages() {
             'title'    => 'Events & Festivals',
             'template' => 'page-events-festivals.php',
         ),
+        array(
+            'slug'     => 'womens-group-trips',
+            'title'    => "Women's Group Trips",
+            'template' => 'page-womens-trips.php',
+        ),
     );
 
     $home_page_id = 0;
