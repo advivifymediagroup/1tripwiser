@@ -1185,6 +1185,30 @@ h5, h6 {
   top: 14px;
 }
 
+.package-compare-check {
+  align-items: center;
+  background: rgba(13, 21, 38, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 999px;
+  bottom: 12px;
+  color: #ffffff;
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 0.8rem;
+  font-weight: 800;
+  gap: 7px;
+  padding: 7px 11px;
+  position: absolute;
+  right: 12px;
+  z-index: 2;
+}
+
+.package-compare-check input {
+  accent-color: #fcb415;
+  height: 15px;
+  width: 15px;
+}
+
 .package-content {
   display: flex;
   flex: 1;
@@ -1273,6 +1297,168 @@ h5, h6 {
 .book-now-btn:hover {
   background: #095654;
   color: #fff;
+}
+
+.package-compare-section {
+  background: #ffffff;
+  border: 1px solid #e0e8f0;
+  border-radius: 8px;
+  margin-bottom: 28px;
+  padding: 24px;
+}
+
+.package-compare-heading {
+  margin-bottom: 18px;
+}
+
+.package-compare-heading span {
+  color: #0692af;
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.package-compare-heading h2 {
+  color: #0d1526;
+  font-size: 1.6rem;
+  margin: 0 0 8px;
+}
+
+.package-compare-heading p {
+  color: #667085;
+  margin: 0;
+}
+
+.package-compare-table-wrap {
+  overflow-x: auto;
+}
+
+.package-compare-table {
+  border-collapse: collapse;
+  min-width: 760px;
+  table-layout: fixed;
+  width: 100%;
+}
+
+.package-compare-detail-col {
+  width: 180px;
+}
+
+.package-compare-table--count-2 .package-compare-package-col {
+  width: calc((100% - 180px) / 2);
+}
+
+.package-compare-table--count-3 .package-compare-package-col {
+  width: calc((100% - 180px) / 3);
+}
+
+.package-compare-table th,
+.package-compare-table td {
+  border: 1px solid #e7eaf0;
+  color: #334155;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  padding: 14px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.package-compare-table thead th {
+  background: #f8fbfc;
+  color: #0d1526;
+}
+
+.package-compare-table tbody th {
+  background: #fbfcfd;
+  color: #0d1526;
+  font-weight: 900;
+}
+
+.package-compare-title {
+  color: #0d1526;
+  display: grid;
+  gap: 10px;
+  grid-template-rows: auto minmax(2.7em, auto);
+  text-decoration: none;
+}
+
+.package-compare-title img {
+  aspect-ratio: 16 / 9;
+  border-radius: 6px;
+  display: block;
+  object-fit: cover;
+  width: 100%;
+}
+
+.package-compare-title strong {
+  font-size: 1rem;
+  line-height: 1.35;
+}
+
+.package-compare-tray {
+  align-items: center;
+  background: #0d1526;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  bottom: 18px;
+  box-shadow: 0 18px 44px rgba(13, 21, 38, 0.24);
+  color: #ffffff;
+  display: flex;
+  gap: 18px;
+  justify-content: space-between;
+  left: 50%;
+  max-width: calc(100% - 32px);
+  padding: 14px 16px;
+  position: fixed;
+  transform: translateX(-50%);
+  width: 560px;
+  z-index: 9990;
+}
+
+.package-compare-tray[hidden] {
+  display: none;
+}
+
+.package-compare-tray strong,
+.package-compare-tray span {
+  display: block;
+}
+
+.package-compare-tray strong {
+  font-size: 0.96rem;
+}
+
+.package-compare-tray span {
+  color: rgba(255, 255, 255, 0.68);
+  font-size: 0.84rem;
+}
+
+.package-compare-tray-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.package-compare-tray button {
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+  font-family: "Nunito", Arial, sans-serif;
+  font-size: 0.84rem;
+  font-weight: 900;
+  padding: 9px 14px;
+}
+
+.package-compare-tray button:first-child {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.package-compare-tray button:last-child {
+  background: #fcb415;
+  color: #0d1526;
 }
 
 .travel-meta {
@@ -2456,6 +2642,30 @@ h5, h6 {
 
   .destination-guide-toc {
     position: static;
+  }
+
+  .package-compare-section {
+    padding: 18px;
+  }
+
+  .package-compare-table {
+    min-width: 640px;
+  }
+
+  .package-compare-table--count-3 {
+    min-width: 820px;
+  }
+
+  .package-compare-tray {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 12px;
+    width: calc(100% - 24px);
+  }
+
+  .package-compare-tray-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
   }
 
   .visa-services-grid {
