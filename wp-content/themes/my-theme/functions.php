@@ -4004,6 +4004,11 @@ function tw_maybe_create_pages() {
             'title'    => "Women's Group Trips",
             'template' => 'page-womens-trips.php',
         ),
+        array(
+            'slug'     => 'travel-agency-registration',
+            'title'    => 'Travel Agency Registration',
+            'template' => 'page-agency-register.php',
+        ),
     );
 
     $home_page_id = 0;
@@ -4070,3 +4075,233 @@ function tw_maybe_create_pages() {
 add_action( 'after_switch_theme', 'tw_maybe_create_pages' );
 // Also run on init once (idempotent — only creates/updates if something is missing)
 add_action( 'init', 'tw_maybe_create_pages', 99 );
+
+/* ═════════════════════════════════════════════════════════════
+ * TRAVEL AGENCY REGISTRATION
+ * - CPT to store submissions (admin-only)
+ * - Public form handler (admin-post)
+ * - Admin list table + per-row detail view
+ * - CSV export
+ * ═════════════════════════════════════════════════════════════ */
+
+/* CPT */
+function tw_register_agency_cpt() {
+    register_post_type( 'tw_agency', array(
+        'labels' => array(
+            'name'          => __( 'Travel Agencies', 'mytheme' ),
+            'singular_name' => __( 'Travel Agency',  'mytheme' ),
+            'menu_name'     => __( 'Travel Agencies','mytheme' ),
+            'all_items'     => __( 'All Agencies',   'mytheme' ),
+        ),
+        'public'              => false,
+        'show_ui'             => true,
+        'show_in_menu'        => true,
+        'menu_icon'           => 'dashicons-businessperson',
+        'menu_position'       => 28,
+        'supports'            => array( 'title' ),
+        'capabilities'        => array(
+            'create_posts' => 'do_not_allow', // only created via the public form
+        ),
+        'map_meta_cap'        => true,
+        'exclude_from_search' => true,
+        'has_archive'         => false,
+        'rewrite'             => false,
+    ) );
+}
+add_action( 'init', 'tw_register_agency_cpt', 7 );
+
+/* Form fields — single source of truth */
+function tw_agency_fields() {
+    return array(
+        'company_name'    => array( 'Company Name *',     'text',     true  ),
+        'contact_person'  => array( 'Contact Person *',   'text',     true  ),
+        'designation'     => array( 'Designation',        'text',     false ),
+        'email'           => array( 'Email *',            'email',    true  ),
+        'phone'           => array( 'Phone *',            'tel',      true  ),
+        'whatsapp'        => array( 'WhatsApp Number',    'tel',      false ),
+        'website'         => array( 'Website',            'url',      false ),
+        'city'            => array( 'City *',             'text',     true  ),
+        'state'           => array( 'State / Region',     'text',     false ),
+        'country'         => array( 'Country *',          'text',     true  ),
+        'years_active'    => array( 'Years in Business',  'number',   false ),
+        'team_size'       => array( 'Team Size',          'number',   false ),
+        'specialisation'  => array( 'Specialisation',     'text',     false, 'e.g. Honeymoon, Group Trips, Adventure' ),
+        'destinations'    => array( 'Destinations Covered','textarea',false, 'List the main destinations you serve' ),
+        'license_number'  => array( 'License / GSTIN',    'text',     false ),
+        'notes'           => array( 'Additional Notes',   'textarea', false ),
+    );
+}
+
+/* Form handler */
+add_action( 'admin_post_nopriv_tw_agency_register', 'tw_handle_agency_register' );
+add_action( 'admin_post_tw_agency_register',        'tw_handle_agency_register' );
+function tw_handle_agency_register() {
+    if ( ! isset( $_POST['tw_agency_nonce'] ) || ! wp_verify_nonce( $_POST['tw_agency_nonce'], 'tw_agency_register' ) ) {
+        wp_safe_redirect( add_query_arg( 'agency', 'error', wp_get_referer() ?: home_url( '/travel-agency-registration/' ) ) );
+        exit;
+    }
+
+    $fields = tw_agency_fields();
+    $data   = array();
+
+    /* required-field check */
+    foreach ( $fields as $key => $f ) {
+        $val = isset( $_POST[ $key ] ) ? trim( wp_unslash( $_POST[ $key ] ) ) : '';
+        if ( ! empty( $f[2] ) && $val === '' ) {
+            wp_safe_redirect( add_query_arg( 'agency', 'missing', wp_get_referer() ?: home_url( '/travel-agency-registration/' ) ) );
+            exit;
+        }
+        if ( $f[1] === 'email' )  { $val = sanitize_email( $val ); }
+        elseif ( $f[1] === 'url' )    { $val = esc_url_raw( $val ); }
+        elseif ( $f[1] === 'textarea' ){ $val = sanitize_textarea_field( $val ); }
+        else                          { $val = sanitize_text_field( $val ); }
+        $data[ $key ] = $val;
+    }
+
+    $title = $data['company_name'] . ' — ' . $data['contact_person'];
+    $post_id = wp_insert_post( array(
+        'post_type'   => 'tw_agency',
+        'post_title'  => $title,
+        'post_status' => 'publish',
+    ), true );
+
+    if ( is_wp_error( $post_id ) ) {
+        wp_safe_redirect( add_query_arg( 'agency', 'error', wp_get_referer() ?: home_url( '/travel-agency-registration/' ) ) );
+        exit;
+    }
+
+    foreach ( $data as $k => $v ) {
+        update_post_meta( $post_id, '_tw_ag_' . $k, $v );
+    }
+    update_post_meta( $post_id, '_tw_ag_submitted_at', current_time( 'mysql' ) );
+    update_post_meta( $post_id, '_tw_ag_ip', isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( $_SERVER['REMOTE_ADDR'] ) : '' );
+
+    /* Notify admin */
+    $admin_email = get_option( 'admin_email' );
+    if ( $admin_email ) {
+        $body = "A new travel agency has registered:\n\n";
+        foreach ( $fields as $key => $f ) {
+            if ( ! empty( $data[ $key ] ) ) { $body .= $f[0] . ': ' . $data[ $key ] . "\n"; }
+        }
+        $body .= "\nView in admin: " . admin_url( 'post.php?post=' . $post_id . '&action=edit' );
+        wp_mail( $admin_email, '[1TRIPWISER] New Travel Agency Registration', $body );
+    }
+
+    wp_safe_redirect( add_query_arg( 'agency', 'success', wp_get_referer() ?: home_url( '/travel-agency-registration/' ) ) );
+    exit;
+}
+
+/* Admin list table columns */
+add_filter( 'manage_tw_agency_posts_columns', function ( $cols ) {
+    return array(
+        'cb'             => '<input type="checkbox" />',
+        'agency_company' => __( 'Company',       'mytheme' ),
+        'agency_contact' => __( 'Contact',       'mytheme' ),
+        'agency_email'   => __( 'Email',         'mytheme' ),
+        'agency_phone'   => __( 'Phone',         'mytheme' ),
+        'agency_loc'     => __( 'Location',      'mytheme' ),
+        'agency_special' => __( 'Specialisation','mytheme' ),
+        'date'           => __( 'Submitted',     'mytheme' ),
+    );
+} );
+add_action( 'manage_tw_agency_posts_custom_column', function ( $col, $post_id ) {
+    switch ( $col ) {
+        case 'agency_company':
+            echo '<strong><a href="' . esc_url( admin_url( 'post.php?post=' . $post_id . '&action=edit' ) ) . '">' . esc_html( get_post_meta( $post_id, '_tw_ag_company_name', true ) ) . '</a></strong>';
+            $w = get_post_meta( $post_id, '_tw_ag_website', true );
+            if ( $w ) { echo '<br><a href="' . esc_url( $w ) . '" target="_blank" style="font-size:0.8em;color:#0692af">' . esc_html( $w ) . '</a>'; }
+            break;
+        case 'agency_contact':
+            echo esc_html( get_post_meta( $post_id, '_tw_ag_contact_person', true ) );
+            $d = get_post_meta( $post_id, '_tw_ag_designation', true );
+            if ( $d ) { echo '<br><small style="color:#888">' . esc_html( $d ) . '</small>'; }
+            break;
+        case 'agency_email':
+            $e = get_post_meta( $post_id, '_tw_ag_email', true );
+            echo $e ? '<a href="mailto:' . esc_attr( $e ) . '">' . esc_html( $e ) . '</a>' : '—';
+            break;
+        case 'agency_phone':
+            $p = get_post_meta( $post_id, '_tw_ag_phone', true );
+            $w = get_post_meta( $post_id, '_tw_ag_whatsapp', true );
+            echo $p ? esc_html( $p ) : '—';
+            if ( $w && $w !== $p ) { echo '<br><small style="color:#25D366">WA: ' . esc_html( $w ) . '</small>'; }
+            break;
+        case 'agency_loc':
+            $city = get_post_meta( $post_id, '_tw_ag_city', true );
+            $st   = get_post_meta( $post_id, '_tw_ag_state', true );
+            $co   = get_post_meta( $post_id, '_tw_ag_country', true );
+            echo esc_html( trim( $city . ( $st ? ', ' . $st : '' ) ) );
+            if ( $co ) { echo '<br><small>' . esc_html( $co ) . '</small>'; }
+            break;
+        case 'agency_special':
+            echo esc_html( get_post_meta( $post_id, '_tw_ag_specialisation', true ) ?: '—' );
+            break;
+    }
+}, 10, 2 );
+
+/* Read-only detail meta box */
+add_action( 'add_meta_boxes', function () {
+    add_meta_box( 'tw_agency_details', 'Agency Submission', function ( $post ) {
+        $fields = tw_agency_fields();
+        echo '<table class="form-table" style="font-size:0.9em">';
+        foreach ( $fields as $key => $f ) {
+            $val = get_post_meta( $post->ID, '_tw_ag_' . $key, true );
+            if ( $val === '' ) { continue; }
+            echo '<tr><th style="width:200px">' . esc_html( str_replace( ' *', '', $f[0] ) ) . '</th><td>';
+            if ( $f[1] === 'email' )    { echo '<a href="mailto:' . esc_attr( $val ) . '">' . esc_html( $val ) . '</a>'; }
+            elseif ( $f[1] === 'url' )      { echo '<a href="' . esc_url( $val ) . '" target="_blank">' . esc_html( $val ) . '</a>'; }
+            elseif ( $f[1] === 'textarea' ) { echo nl2br( esc_html( $val ) ); }
+            else                            { echo esc_html( $val ); }
+            echo '</td></tr>';
+        }
+        $sub = get_post_meta( $post->ID, '_tw_ag_submitted_at', true );
+        if ( $sub ) { echo '<tr><th>Submitted at</th><td>' . esc_html( $sub ) . '</td></tr>'; }
+        echo '</table>';
+    }, 'tw_agency', 'normal', 'high' );
+} );
+
+/* Export button on the list screen */
+add_action( 'restrict_manage_posts', function () {
+    global $typenow;
+    if ( $typenow !== 'tw_agency' ) { return; }
+    $url = wp_nonce_url( admin_url( 'admin-post.php?action=tw_agency_export_csv' ), 'tw_agency_export' );
+    echo '<a href="' . esc_url( $url ) . '" class="button button-primary" style="margin-left:8px">⬇ Export CSV</a>';
+} );
+
+/* CSV export handler */
+add_action( 'admin_post_tw_agency_export_csv', function () {
+    if ( ! current_user_can( 'edit_posts' ) ) { wp_die( 'No permission' ); }
+    check_admin_referer( 'tw_agency_export' );
+
+    $fields = tw_agency_fields();
+    $posts  = get_posts( array(
+        'post_type'      => 'tw_agency',
+        'post_status'    => 'any',
+        'posts_per_page' => -1,
+        'orderby'        => 'date',
+        'order'          => 'DESC',
+    ) );
+
+    $filename = 'travel-agencies-' . date( 'Y-m-d-Hi' ) . '.csv';
+    header( 'Content-Type: text/csv; charset=utf-8' );
+    header( 'Content-Disposition: attachment; filename="' . $filename . '"' );
+
+    $out = fopen( 'php://output', 'w' );
+    fputs( $out, "\xEF\xBB\xBF" ); /* UTF-8 BOM for Excel */
+
+    /* Header row */
+    $header = array( 'ID', 'Submitted At' );
+    foreach ( $fields as $f ) { $header[] = str_replace( ' *', '', $f[0] ); }
+    $header[] = 'IP Address';
+    fputcsv( $out, $header );
+
+    /* Data rows */
+    foreach ( $posts as $p ) {
+        $row = array( $p->ID, get_post_meta( $p->ID, '_tw_ag_submitted_at', true ) );
+        foreach ( $fields as $k => $f ) { $row[] = get_post_meta( $p->ID, '_tw_ag_' . $k, true ); }
+        $row[] = get_post_meta( $p->ID, '_tw_ag_ip', true );
+        fputcsv( $out, $row );
+    }
+    fclose( $out );
+    exit;
+} );

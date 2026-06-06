@@ -3024,6 +3024,44 @@ h5, h6 {
 @media(max-width:900px){.dest-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:600px){.dest-grid{grid-template-columns:1fr}.dest-hero{min-height:360px}.dest-tabs{gap:6px}.dest-tab{font-size:0.78rem;padding:7px 12px}}
 
+/* ══════════════════════════════════════════════════════════════
+   TRAVEL AGENCY REGISTRATION PAGE
+   ══════════════════════════════════════════════════════════════ */
+.tw-agency-hero{position:relative;background:linear-gradient(135deg,#0d1526 0%,#0a2533 55%,#071a2a 100%);padding:64px 0 56px;overflow:hidden;text-align:center;}
+.tw-agency-hero-overlay{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 20% 0%,rgba(6,146,175,0.2) 0%,transparent 55%),radial-gradient(ellipse at 85% 100%,rgba(252,180,21,0.12) 0%,transparent 50%);}
+.tw-agency-hero-inner{position:relative;z-index:1;}
+.tw-agency-hero-kicker{display:inline-block;font-size:0.72rem;font-weight:800;letter-spacing:0.18em;text-transform:uppercase;color:#0692af;background:rgba(6,146,175,0.14);border:1px solid rgba(6,146,175,0.35);border-radius:999px;padding:5px 18px;margin-bottom:18px;}
+.tw-agency-hero-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.4rem,5vw,3.6rem);color:#fff;letter-spacing:0.04em;line-height:1.05;margin:0 0 12px;}
+.tw-agency-hero-title span{background:linear-gradient(135deg,#FCB415 0%,#f09a00 60%,#FCB415 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.tw-agency-hero-sub{font-size:1rem;color:rgba(255,255,255,0.72);max-width:640px;margin:0 auto 22px;line-height:1.7;}
+.tw-agency-hero-perks{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;}
+.tw-agency-hero-perks span{font-size:0.85rem;color:#FCB415;font-weight:700;}
+
+.tw-agency-wrap{max-width:980px;margin:0 auto;padding:48px 24px 80px;}
+.tw-agency-notice{border-radius:14px;padding:18px 22px;margin-bottom:28px;}
+.tw-agency-notice.success{background:#ecfdf5;border:1.5px solid #10b981;color:#065f46;}
+.tw-agency-notice.error{background:#fef2f2;border:1.5px solid #ef4444;color:#991b1b;}
+.tw-agency-notice strong{display:block;font-size:1rem;margin-bottom:4px;}
+.tw-agency-notice p{margin:0;font-size:0.88rem;}
+
+.tw-agency-form{background:#fff;border:1px solid #e8edf5;border-radius:18px;padding:36px 40px;box-shadow:0 8px 32px rgba(13,21,38,0.06);}
+.tw-agency-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px 24px;}
+.tw-agency-field{display:flex;flex-direction:column;}
+.tw-agency-field--full{grid-column:1/-1;}
+.tw-agency-field label{font-size:0.82rem;font-weight:800;color:#0d1526;margin-bottom:6px;letter-spacing:0.02em;}
+.tw-agency-field input,.tw-agency-field textarea{width:100%;border:1.5px solid #dde5ef;border-radius:10px;padding:10px 14px;font-size:0.92rem;font-family:'Nunito',sans-serif;color:#0d1526;background:#fff;transition:border-color 0.2s,box-shadow 0.2s;}
+.tw-agency-field input:focus,.tw-agency-field textarea:focus{outline:none;border-color:#0692af;box-shadow:0 0 0 3px rgba(6,146,175,0.12);}
+.tw-agency-field textarea{resize:vertical;min-height:80px;}
+
+.tw-agency-consent{margin:24px 0 20px;padding:14px 16px;background:#f8fafc;border-radius:10px;}
+.tw-agency-consent label{display:flex;align-items:flex-start;gap:10px;font-size:0.88rem;color:#374151;cursor:pointer;}
+.tw-agency-consent input{margin-top:3px;}
+
+.tw-agency-submit{display:inline-flex;align-items:center;gap:8px;padding:14px 32px;background:linear-gradient(135deg,#FCB415 0%,#f09a00 100%);color:#0d1526;font-size:0.95rem;font-weight:800;border:none;border-radius:12px;cursor:pointer;box-shadow:0 8px 22px rgba(252,180,21,0.32);transition:transform 0.2s,box-shadow 0.2s;}
+.tw-agency-submit:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(252,180,21,0.45);}
+
+@media(max-width:680px){.tw-agency-form{padding:24px 20px;}.tw-agency-form-grid{grid-template-columns:1fr;}}
+
 /* ── Blog section (front-page) ── */
 .tw-blog-section{padding:80px 0 88px;background:linear-gradient(180deg,#0d1526 0%,#0a1e30 100%);position:relative;overflow:hidden}
 .tw-blog-section::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 10% 60%,rgba(6,146,175,0.12) 0%,transparent 55%),radial-gradient(ellipse at 90% 20%,rgba(252,180,21,0.07) 0%,transparent 50%);pointer-events:none}
