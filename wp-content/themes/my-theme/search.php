@@ -58,21 +58,52 @@ endif;
         <p><?php echo esc_html( $tw_found ); ?> <?php echo ( 1 === $tw_found ) ? 'result' : 'results'; ?> across the site</p>
     </header>
 
-    <div class="container explore-wrap">
+    <div class="container explore-wrap tw-search-layout">
+
         <?php if ( ! empty( $tw_groups ) ) : ?>
-            <?php foreach ( $tw_meta as $pt => $info ) :
-                if ( empty( $tw_groups[ $pt ] ) ) { continue; }
-                $items = $tw_groups[ $pt ]; ?>
-                <section class="tw-results-group">
-                    <h2 class="tw-results-group-title">
-                        <?php echo esc_html( $info[0] ); ?>
-                        <span class="tw-results-badge"><?php echo esc_html( count( $items ) ); ?></span>
-                    </h2>
-                    <div class="explore-grid">
-                        <?php foreach ( $items as $item ) { tw_search_card( $item, $info[1] ); } ?>
-                    </div>
-                </section>
-            <?php endforeach; ?>
+
+            <!-- Floating category nav -->
+            <aside class="tw-search-nav" id="tw-search-nav">
+                <div class="tw-search-nav-head">Jump to</div>
+                <ul class="tw-search-nav-list">
+                    <?php foreach ( $tw_meta as $pt => $info ) :
+                        if ( empty( $tw_groups[ $pt ] ) ) { continue; }
+                        $count   = count( $tw_groups[ $pt ] );
+                        $section = 'tw-cat-' . sanitize_html_class( $pt );
+                        $parts   = explode( ' ', $info[0], 2 );
+                        $icon    = $parts[0] ?? '';
+                        $label   = $parts[1] ?? $info[0];
+                    ?>
+                    <li>
+                        <a href="#<?php echo esc_attr( $section ); ?>" data-section="<?php echo esc_attr( $section ); ?>">
+                            <span class="tw-search-nav-icon"><?php echo esc_html( $icon ); ?></span>
+                            <span class="tw-search-nav-label"><?php echo esc_html( $label ); ?></span>
+                            <span class="tw-search-nav-badge"><?php echo (int) $count; ?></span>
+                        </a>
+                    </li>
+                    <?php endforeach; ?>
+                </ul>
+                <a href="#" class="tw-search-nav-top">↑ Back to top</a>
+            </aside>
+
+            <!-- Results column -->
+            <div class="tw-search-results">
+                <?php foreach ( $tw_meta as $pt => $info ) :
+                    if ( empty( $tw_groups[ $pt ] ) ) { continue; }
+                    $items   = $tw_groups[ $pt ];
+                    $section = 'tw-cat-' . sanitize_html_class( $pt ); ?>
+                    <section class="tw-results-group" id="<?php echo esc_attr( $section ); ?>" data-section="<?php echo esc_attr( $section ); ?>">
+                        <h2 class="tw-results-group-title">
+                            <?php echo esc_html( $info[0] ); ?>
+                            <span class="tw-results-badge"><?php echo esc_html( count( $items ) ); ?></span>
+                        </h2>
+                        <div class="explore-grid">
+                            <?php foreach ( $items as $item ) { tw_search_card( $item, $info[1] ); } ?>
+                        </div>
+                    </section>
+                <?php endforeach; ?>
+            </div>
+
         <?php else : ?>
             <div class="tribe-empty" style="margin-top:36px;">
                 <div class="tribe-empty-icon">🔎</div>
@@ -83,5 +114,81 @@ endif;
         <?php endif; ?>
     </div>
 </main>
+
+<script>
+/* Smooth scroll + active highlight for the floating nav */
+(function () {
+    var nav   = document.getElementById('tw-search-nav');
+    if (!nav) { return; }
+    var links = nav.querySelectorAll('a[data-section]');
+    var headerOffset = 110;  /* sticky header height */
+
+    /* Smooth scroll on click */
+    links.forEach(function (link) {
+        link.addEventListener('click', function (e) {
+            var id = link.getAttribute('data-section');
+            var target = document.getElementById(id);
+            if (!target) { return; }
+            e.preventDefault();
+            var y = target.getBoundingClientRect().top + window.pageYOffset - headerOffset;
+            window.scrollTo({ top: y, behavior: 'smooth' });
+            history.replaceState(null, '', '#' + id);
+        });
+    });
+
+    /* Back to top */
+    var topBtn = nav.querySelector('.tw-search-nav-top');
+    if (topBtn) {
+        topBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+
+    /* Toggle floating mode based on scroll past the layout's top */
+    var layout = document.querySelector('.tw-search-layout');
+    if (layout) {
+        var floatThreshold = 0; /* will be computed on each scroll */
+        var onScroll = function () {
+            var rect = layout.getBoundingClientRect();
+            /* Nav starts floating once layout's top crosses header offset (~95px) */
+            if (rect.top <= 95) {
+                nav.classList.add('is-floating');
+            } else {
+                nav.classList.remove('is-floating');
+            }
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+    }
+
+    /* IntersectionObserver — auto-highlight active section as user scrolls */
+    if ('IntersectionObserver' in window) {
+        var sections = document.querySelectorAll('.tw-results-group[data-section]');
+        var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                    var id = entry.target.getAttribute('data-section');
+                    links.forEach(function (l) {
+                        l.classList.toggle('active', l.getAttribute('data-section') === id);
+                    });
+                }
+            });
+        }, { rootMargin: '-120px 0px -55% 0px', threshold: 0 });
+        sections.forEach(function (s) { io.observe(s); });
+    }
+
+    /* If page loaded with a hash, smooth-scroll to it after render */
+    if (window.location.hash) {
+        var target = document.getElementById(window.location.hash.slice(1));
+        if (target) {
+            setTimeout(function () {
+                var y = target.getBoundingClientRect().top + window.pageYOffset - headerOffset;
+                window.scrollTo({ top: y, behavior: 'smooth' });
+            }, 100);
+        }
+    }
+}());
+</script>
 
 <?php get_footer(); ?>
