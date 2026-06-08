@@ -16,6 +16,8 @@
     </section>
 
     <div class="container explore-wrap">
+        <?php mytheme_render_package_compare_table(); ?>
+
         <?php
         if ( function_exists('tw_explore_unified_filter_box') ) {
             tw_explore_unified_filter_box('travel_package', get_post_type_archive_link('travel_package'));
