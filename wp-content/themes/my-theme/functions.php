@@ -40,7 +40,9 @@ function mytheme_enqueue_styles() {
     wp_enqueue_script('jquery');
     // Custom JS placeholder (kept for legacy localize_script hook)
     if ( file_exists( get_template_directory() . '/assets/js/custom.js' ) ) {
-        wp_enqueue_script('custom-js', get_template_directory_uri() . '/assets/js/custom.js', array('jquery'), '1.0', true);
+        $custom_js_path = get_template_directory() . '/assets/js/custom.js';
+        $custom_js_ver  = filemtime($custom_js_path);
+        wp_enqueue_script('custom-js', get_template_directory_uri() . '/assets/js/custom.js', array('jquery'), $custom_js_ver, true);
     } else {
         // Register a dummy handle so localize_script still works
         wp_register_script('custom-js', '', array('jquery'), '1.0', true);
@@ -789,6 +791,135 @@ function mytheme_render_trip_pdf_button($post_id = null, $label = '') {
     <?php
 }
 
+function mytheme_get_package_compare_ids() {
+    if (empty($_GET['compare_packages'])) {
+        return array();
+    }
+
+    $raw_ids = explode(',', sanitize_text_field(wp_unslash($_GET['compare_packages'])));
+    $ids = array();
+
+    foreach ($raw_ids as $raw_id) {
+        $id = absint($raw_id);
+
+        if ($id && get_post_type($id) === 'travel_package' && get_post_status($id) === 'publish') {
+            $ids[] = $id;
+        }
+    }
+
+    return array_slice(array_values(array_unique($ids)), 0, 3);
+}
+
+function mytheme_format_compare_value($value) {
+    if (is_array($value)) {
+        $value = implode(', ', array_filter(array_map('wp_strip_all_tags', $value)));
+    }
+
+    $value = trim(wp_strip_all_tags((string) $value));
+
+    return $value !== '' ? $value : __('Not specified', 'mytheme');
+}
+
+function mytheme_render_package_compare_table($package_ids = array()) {
+    $package_ids = $package_ids ? $package_ids : mytheme_get_package_compare_ids();
+    $package_ids = array_slice(array_values(array_unique(array_map('absint', $package_ids))), 0, 3);
+    $package_count = count($package_ids);
+
+    if ($package_count < 2) {
+        return;
+    }
+
+    $rows = array(
+        'location' => __('Location', 'mytheme'),
+        'duration' => __('Duration', 'mytheme'),
+        'trip_type' => __('Trip Type', 'mytheme'),
+        'amount' => __('Price', 'mytheme'),
+        'emi' => __('EMI', 'mytheme'),
+    );
+    ?>
+    <section class="package-compare-section" id="package-comparison">
+        <div class="package-compare-heading">
+            <span><?php esc_html_e('Package comparison', 'mytheme'); ?></span>
+            <h2><?php esc_html_e('Compare Selected Trips', 'mytheme'); ?></h2>
+            <p><?php esc_html_e('Review location, duration, trip type and pricing side by side before choosing your trip.', 'mytheme'); ?></p>
+        </div>
+
+        <div class="package-compare-table-wrap">
+            <table class="package-compare-table package-compare-table--count-<?php echo esc_attr($package_count); ?>">
+                <colgroup>
+                    <col class="package-compare-detail-col">
+                    <?php foreach ($package_ids as $package_id) : ?>
+                        <col class="package-compare-package-col">
+                    <?php endforeach; ?>
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th><?php esc_html_e('Details', 'mytheme'); ?></th>
+                        <?php foreach ($package_ids as $package_id) : ?>
+                            <?php
+                            $data = mytheme_get_package_data($package_id);
+                            $image_url = mytheme_get_image_url($data['image'], 'medium');
+                            if (!$image_url && has_post_thumbnail($package_id)) {
+                                $image_url = get_the_post_thumbnail_url($package_id, 'medium');
+                            }
+                            ?>
+                            <th>
+                                <a class="package-compare-title" href="<?php echo esc_url(get_permalink($package_id)); ?>">
+                                    <?php if ($image_url) : ?>
+                                        <img src="<?php echo esc_url($image_url); ?>" alt="">
+                                    <?php endif; ?>
+                                    <strong><?php echo esc_html(get_the_title($package_id)); ?></strong>
+                                </a>
+                            </th>
+                        <?php endforeach; ?>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($rows as $key => $label) : ?>
+                        <tr>
+                            <th><?php echo esc_html($label); ?></th>
+                            <?php foreach ($package_ids as $package_id) : ?>
+                                <?php $data = mytheme_get_package_data($package_id); ?>
+                                <td><?php echo esc_html(mytheme_format_compare_value($data[$key] ?? '')); ?></td>
+                            <?php endforeach; ?>
+                        </tr>
+                    <?php endforeach; ?>
+                    <tr>
+                        <th><?php esc_html_e('Action', 'mytheme'); ?></th>
+                        <?php foreach ($package_ids as $package_id) : ?>
+                            <td>
+                                <a class="book-now-btn" href="<?php echo esc_url(get_permalink($package_id)); ?>">
+                                    <?php esc_html_e('View Package', 'mytheme'); ?>
+                                </a>
+                            </td>
+                        <?php endforeach; ?>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+    <?php
+}
+
+function mytheme_render_package_compare_tray() {
+    if (is_admin()) {
+        return;
+    }
+    ?>
+    <div class="package-compare-tray" data-package-compare-tray hidden>
+        <div>
+            <strong><?php esc_html_e('Compare packages', 'mytheme'); ?></strong>
+            <span data-package-compare-count><?php esc_html_e('Select 2-3 packages', 'mytheme'); ?></span>
+        </div>
+        <div class="package-compare-tray-actions">
+            <button type="button" data-package-compare-clear><?php esc_html_e('Clear', 'mytheme'); ?></button>
+            <button type="button" data-package-compare-open><?php esc_html_e('Compare', 'mytheme'); ?></button>
+        </div>
+    </div>
+    <?php
+}
+add_action('wp_footer', 'mytheme_render_package_compare_tray');
+
 function mytheme_render_trip_pdf_fact($label, $value) {
     if ($value === '' || $value === null) {
         return;
@@ -812,6 +943,11 @@ function mytheme_render_trip_pdf_document($post_id) {
     $title = get_the_title($post_id);
     $print_url = mytheme_get_trip_pdf_url($post_id);
     $share_text = rawurlencode(sprintf('%s - %s', $title, $print_url));
+    $custom_logo_id = get_theme_mod('custom_logo');
+    $pdf_logo_url = $custom_logo_id ? wp_get_attachment_image_url($custom_logo_id, 'full') : '';
+    if (!$pdf_logo_url) {
+        $pdf_logo_url = get_template_directory_uri() . '/assets/images/logo-dark.png';
+    }
     $image_url = '';
     $facts = array();
     $main_content = '';
@@ -916,6 +1052,14 @@ function mytheme_render_trip_pdf_document($post_id) {
                 justify-content: space-between;
                 margin-bottom: 26px;
                 padding-bottom: 16px;
+            }
+            .tw-pdf-logo {
+                display: block;
+                height: auto;
+                max-height: 58px;
+                max-width: 220px;
+                object-fit: contain;
+                width: auto;
             }
             .tw-pdf-brand strong {
                 color: var(--tw-navy);
@@ -1046,7 +1190,7 @@ function mytheme_render_trip_pdf_document($post_id) {
         <main class="tw-pdf-page">
             <header class="tw-pdf-brand">
                 <div>
-                    <strong><?php bloginfo('name'); ?></strong>
+                    <img class="tw-pdf-logo" src="<?php echo esc_url($pdf_logo_url); ?>" alt="<?php echo esc_attr(get_bloginfo('name')); ?>">
                     <span><?php bloginfo('description'); ?></span>
                 </div>
                 <span><?php echo esc_html(home_url('/')); ?></span>
@@ -1132,7 +1276,7 @@ function mytheme_package_card($post_id = null) {
     }
     $book_url = $data['book_url'] ? $data['book_url'] : get_permalink($post_id);
     ?>
-    <article class="post-card package-card">
+    <article class="post-card package-card" data-package-card-id="<?php echo esc_attr($post_id); ?>">
         <div class="package-media">
             <a href="<?php echo esc_url(get_permalink($post_id)); ?>">
                 <?php if ($image_url) : ?>
@@ -1142,6 +1286,10 @@ function mytheme_package_card($post_id = null) {
             <?php if ($data['tag']) : ?>
                 <span class="package-tag"><?php echo esc_html($data['tag']); ?></span>
             <?php endif; ?>
+            <label class="package-compare-check">
+                <input type="checkbox" data-package-compare-id="<?php echo esc_attr($post_id); ?>" data-package-compare-title="<?php echo esc_attr(get_the_title($post_id)); ?>">
+                <span><?php esc_html_e('Compare', 'mytheme'); ?></span>
+            </label>
         </div>
         <div class="package-content">
             <?php if ($data['location']) : ?>
@@ -3735,6 +3883,11 @@ function mytheme_localize_ajax_data() {
     wp_localize_script('custom-js', 'twAjax', array(
         'url'   => admin_url('admin-ajax.php'),
         'nonce' => wp_create_nonce('tw_trip_inquiry_nonce'),
+    ));
+    wp_localize_script('custom-js', 'twPackageCompare', array(
+        'archiveUrl' => get_post_type_archive_link('travel_package'),
+        'maxItems' => 3,
+        'minItems' => 2,
     ));
 }
 add_action('wp_enqueue_scripts', 'mytheme_localize_ajax_data', 20);
