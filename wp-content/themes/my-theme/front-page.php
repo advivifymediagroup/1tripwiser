@@ -149,6 +149,39 @@ if ( $tw_hero_video ) {
         </div>
     </section>
 
+    <!-- ═══════════ WOMEN'S GROUP TRIPS ═══════════ -->
+    <?php if ( function_exists( 'tw_womens_trips_showcase' ) ) { tw_womens_trips_showcase( 3 ); } ?>
+
+    <!-- ═══════════ VISA SERVICES ═══════════ -->
+    <section class="visa-services-section">
+        <div class="container">
+            <div class="section-heading visa-services-heading" data-reveal="up">
+                <span class="section-subtitle">Travel made simple</span>
+                <h2 class="section-title">Visa <span class="highlight">Services</span></h2>
+            </div>
+            <div class="visa-services-grid">
+                <a class="visa-service-card" href="<?php echo esc_url(mytheme_get_page_url_by_path('visa-assistance')); ?>">
+                    <span class="visa-service-icon">📄</span>
+                    <h3>Visa Assistance</h3>
+                    <p>Complete guidance for Schengen, UK, US, and Asia visas. We handle documentation, interviews, and follow-ups.</p>
+                    <span class="visa-service-link">Learn More -></span>
+                </a>
+                <a class="visa-service-card" href="<?php echo esc_url(mytheme_get_page_url_by_path('passport-services')); ?>">
+                    <span class="visa-service-icon">🛂</span>
+                    <h3>Passport Services</h3>
+                    <p>New passport, renewal, or emergency services. Fast-track assistance for urgent travel plans.</p>
+                    <span class="visa-service-link">Learn More -></span>
+                </a>
+                <a class="visa-service-card" href="<?php echo esc_url(mytheme_get_page_url_by_path('travel-insurance')); ?>">
+                    <span class="visa-service-icon">🌍</span>
+                    <h3>Travel Insurance</h3>
+                    <p>Protect your trip with medical, cancellation, baggage, and emergency coverage for domestic and international travel.</p>
+                    <span class="visa-service-link">Learn More -></span>
+                </a>
+            </div>
+        </div>
+    </section>
+
     <!-- ═══════════ BLOG ═══════════ -->
     <section id="featured-posts" class="tw-blog-section">
         <div class="container">
@@ -203,39 +236,6 @@ if ( $tw_hero_video ) {
             <?php endif; ?>
         </div>
     </section>
-
-    <!-- ═══════════ VISA SERVICES ═══════════ -->
-    <section class="visa-services-section">
-        <div class="container">
-            <div class="section-heading visa-services-heading" data-reveal="up">
-                <span class="section-subtitle">Travel made simple</span>
-                <h2 class="section-title">Visa <span class="highlight">Services</span></h2>
-            </div>
-            <div class="visa-services-grid">
-                <a class="visa-service-card" href="<?php echo esc_url(mytheme_get_page_url_by_path('visa-assistance')); ?>">
-                    <span class="visa-service-icon">📄</span>
-                    <h3>Visa Assistance</h3>
-                    <p>Complete guidance for Schengen, UK, US, and Asia visas. We handle documentation, interviews, and follow-ups.</p>
-                    <span class="visa-service-link">Learn More -></span>
-                </a>
-                <a class="visa-service-card" href="<?php echo esc_url(mytheme_get_page_url_by_path('passport-services')); ?>">
-                    <span class="visa-service-icon">🛂</span>
-                    <h3>Passport Services</h3>
-                    <p>New passport, renewal, or emergency services. Fast-track assistance for urgent travel plans.</p>
-                    <span class="visa-service-link">Learn More -></span>
-                </a>
-                <a class="visa-service-card" href="<?php echo esc_url(mytheme_get_page_url_by_path('travel-insurance')); ?>">
-                    <span class="visa-service-icon">🌍</span>
-                    <h3>Travel Insurance</h3>
-                    <p>Protect your trip with medical, cancellation, baggage, and emergency coverage for domestic and international travel.</p>
-                    <span class="visa-service-link">Learn More -></span>
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- ═══════════ WOMEN'S GROUP TRIPS ═══════════ -->
-    <?php if ( function_exists( 'tw_womens_trips_showcase' ) ) { tw_womens_trips_showcase(); } ?>
 
     <!-- ═══════════ EVENTS & FESTIVALS SHOWCASE ═══════════ -->
     <?php if ( function_exists( 'tw_explore_events_showcase' ) ) { tw_explore_events_showcase(); } ?>
