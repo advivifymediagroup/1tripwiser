@@ -901,7 +901,7 @@ function mytheme_render_package_compare_table($package_ids = array()) {
     <?php
 }
 
-function mytheme_render_package_compare_tray() {
+function mytheme_render_package_compare_tray() { 
     if (is_admin()) {
         return;
     }
