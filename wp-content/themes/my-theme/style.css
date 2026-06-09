@@ -1300,59 +1300,59 @@ h5, h6 {
 }
 
 .package-compare-section {
-  background: #ffffff;
-  border: 1px solid #e0e8f0;
-  border-radius: 8px;
-  margin-bottom: 28px;
-  padding: 24px;
+  background: #ffffff !important;
+  border: 1px solid #e0e8f0 !important;
+  border-radius: 8px !important;
+  margin-bottom: 28px !important;
+  padding: 24px !important;
 }
 
 .package-compare-heading {
-  margin-bottom: 18px;
+  margin-bottom: 18px !important;
 }
 
 .package-compare-heading span {
-  color: #0692af;
-  display: block;
-  font-size: 0.78rem;
-  font-weight: 900;
-  letter-spacing: 0.1em;
-  margin-bottom: 8px;
-  text-transform: uppercase;
+  color: #0692af !important;
+  display: block !important;
+  font-size: 0.78rem !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.1em !important;
+  margin-bottom: 8px !important;
+  text-transform: uppercase!important;
 }
 
 .package-compare-heading h2 {
-  color: #0d1526;
-  font-size: 1.6rem;
-  margin: 0 0 8px;
+  color: #0d1526 !important;
+  font-size: 1.6rem !important;
+  margin: 0 0 8px !important;
 }
 
 .package-compare-heading p {
-  color: #667085;
-  margin: 0;
+  color: #667085 !important;
+  margin: 0 !important;
 }
 
 .package-compare-table-wrap {
-  overflow-x: auto;
+  overflow-x: auto !important;
 }
 
 .package-compare-table {
-  border-collapse: collapse;
-  min-width: 760px;
-  table-layout: fixed;
-  width: 100%;
+  border-collapse: collapse !important;
+  min-width: 760px !important;
+  table-layout: fixed !important;
+  width: 100% !important;
 }
 
 .package-compare-detail-col {
-  width: 180px;
+  width: 180px !important;
 }
 
 .package-compare-table--count-2 .package-compare-package-col {
-  width: calc((100% - 180px) / 2);
+  width: calc((100% - 180px) / 2) !important;
 }
 
 .package-compare-table--count-3 .package-compare-package-col {
-  width: calc((100% - 180px) / 3);
+  width: calc((100% - 180px) / 3) !important;
 }
 
 .package-compare-table th,
