@@ -1,0 +1,67 @@
+name: Deploy WordPress to Staging
+
+on:
+  push:
+    branches:
+      - staging
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # THIS IS THE KEY FIX — adds your server to known_hosts
+      - name: Add server to known_hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+
+      - name: Setup SSH Key
+        run: |
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/github_deploy
+          chmod 600 ~/.ssh/github_deploy
+
+      - name: Deploy via rsync
+        run: |
+          rsync -rlgoDzvc --delete \
+            -e "ssh -i ~/.ssh/github_deploy -p ${{ secrets.SSH_PORT }} -o StrictHostKeyChecking=no" \
+            --exclude='.git' \
+            --exclude='.github' \
+            --exclude='plugins/' \
+            --exclude='uploads/' \
+            --exclude='wp-config.php' \
+            ./wp-content/ \
+            ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/home/${{ secrets.SSH_USERNAME }}/domains/1tripwiser.com/public_html/staging/wp-content/
+
+      - name: Activate theme and configure front page via WP-CLI
+        run: |
+          ssh -i ~/.ssh/github_deploy \
+              -p ${{ secrets.SSH_PORT }} \
+              -o StrictHostKeyChecking=no \
+              ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} \
+              "WP_PATH=/home/${{ secrets.SSH_USERNAME }}/domains/1tripwiser.com/public_html/staging
+               # Check if WP-CLI is available anywhere
+               WP_CLI=\$(which wp 2>/dev/null || echo '')
+               if [ -z \"\$WP_CLI\" ]; then
+                 echo 'WP-CLI not found — skipping (mu-plugin handles auto-setup)'
+                 exit 0
+               fi
+               cd \$WP_PATH
+               echo '→ Activating theme...'
+               \$WP_CLI theme activate my-theme --allow-root 2>/dev/null || true
+               echo '→ Configuring front page...'
+               HOME_ID=\$(\$WP_CLI post list --post_type=page --post_status=publish --name=home --field=ID --allow-root 2>/dev/null | head -1)
+               if [ -n \"\$HOME_ID\" ]; then
+                 \$WP_CLI option update show_on_front page --allow-root 2>/dev/null || true
+                 \$WP_CLI option update page_on_front \$HOME_ID --allow-root 2>/dev/null || true
+                 echo \"→ Front page set to page ID \$HOME_ID\"
+               fi
+               echo '✅ WP configuration complete'"
+
+      - name: Done
+        run: echo "✅ Staging deployment complete!"
