@@ -9,6 +9,7 @@
             $image_url = mytheme_get_image_url($destination['image'], 'large');
             ?>
             <article class="single-post travel-single">
+                <div class="travel-header-image-section">
                 <header class="post-header travel-single-header">
                     <span>Destination</span>
                     <h1><?php the_title(); ?></h1>
@@ -28,6 +29,7 @@
                         <?php endif; ?>
                     </div>
                 <?php endif; ?>
+                </div>
 
                 <div class="travel-detail-grid">
                     <?php if ($destination['country']) : ?><div class="travel-detail"><span>Country / Region</span><strong><?php echo esc_html($destination['country']); ?></strong></div><?php endif; ?>
