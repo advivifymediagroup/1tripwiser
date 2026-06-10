@@ -5159,6 +5159,10 @@ img, video, iframe, embed, object { max-width: 100%; height: auto; }
 .ev-fact a { color: #0692af; text-decoration: none; }
 .ev-single-content { color: #2d3b4d; font-size: 1.02rem; line-height: 1.8; }
 .ev-single-content p { margin: 0 0 1.2em; }
+/* Polished intro/description card on single trip pages */
+.ev-itin-intro { background:#fff; border:1px solid #e6edf3; border-radius:16px; padding:24px 28px; box-shadow:0 4px 18px rgba(13,21,38,0.04); }
+.ev-itin-intro p { font-size:1rem; color:#374151; line-height:1.8; margin:0; font-style:normal; }
+.ev-itin-intro p::first-letter { font-size:1.6em; font-weight:800; color:#0692AF; line-height:1; padding-right:4px; }
 .ev-single-content a { color: #0692af; }
 /* Sticky booking panel */
 .ev-single-book { grid-area: book; position: sticky; top: 84px; background: #fff; border: 1px solid #e6edf3; border-radius: 18px; padding: 24px; box-shadow: 0 12px 36px rgba(13,21,38,0.08); display: flex; flex-direction: column; gap: 12px; }
@@ -5199,9 +5203,10 @@ img, video, iframe, embed, object { max-width: 100%; height: auto; }
 .ev-content-styled strong { font-weight:800; color:#0d1526; }
 .ev-content-styled a { color:#0692AF; text-decoration:underline; }
 /* Trip Details panel (events + group trips single page) */
-.ev-trip-details { background:#f8fafc; border:1px solid #e6edf3; border-radius:16px; padding:24px 26px; margin-top:28px; }
+.ev-trip-details { background:#f8fafc; border:1px solid #e6edf3; border-radius:16px; padding:24px 26px; margin-top:24px; }
 .ev-trip-details-title { font-family:'Bebas Neue',sans-serif; font-size:1.3rem; letter-spacing:0.04em; color:#0d1526; margin:0 0 18px; }
-.ev-trip-details-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:14px; }
+.ev-trip-details-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:18px 24px; }
+.ev-trip-detail-val { word-break:break-word; }
 .ev-trip-detail-item { display:flex; align-items:flex-start; gap:10px; }
 .ev-trip-detail-icon { font-size:1.2rem; flex-shrink:0; margin-top:2px; }
 .ev-trip-detail-label { display:block; font-size:0.7rem; font-weight:800; letter-spacing:0.08em; text-transform:uppercase; color:#8595a6; margin-bottom:3px; }
