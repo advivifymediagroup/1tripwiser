@@ -107,15 +107,24 @@ while ( have_posts() ) :
                 </div>
                 <?php endif; ?>
 
-                <!-- 3. Day-wise plan (from ACF repeater) -->
-                <?php if ( function_exists('have_rows') && have_rows('itinerary_days') ) : ?>
+                <!-- 3. Day-wise plan (from ACF repeater — try multiple field names) -->
+                <?php
+                $tw_days_field = '';
+                if ( function_exists('get_field') ) {
+                    foreach ( array( 'itinerary_days', 'package_days', 'day_wise_plan', 'days', 'trip_days' ) as $_fn ) {
+                        $_v = get_field( $_fn );
+                        if ( is_array( $_v ) && ! empty( $_v ) ) { $tw_days_field = $_fn; break; }
+                    }
+                }
+                ?>
+                <?php if ( $tw_days_field ) : ?>
                 <section class="itinerary-days itinerary-timeline" style="margin-top:28px;">
                     <div class="itinerary-days-heading">
                         <span>Day-by-day</span>
                         <h2>Itinerary</h2>
                     </div>
                     <?php $day_number = 1; ?>
-                    <?php while ( have_rows('itinerary_days') ) : the_row();
+                    <?php while ( have_rows( $tw_days_field ) ) : the_row();
                         $day_title      = get_sub_field('day_title');
                         $day_details    = get_sub_field('day_details');
                         $day_route      = get_sub_field('day_route');
