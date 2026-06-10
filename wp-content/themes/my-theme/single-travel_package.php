@@ -107,14 +107,57 @@ while ( have_posts() ) :
                 </div>
                 <?php endif; ?>
 
-                <!-- 3. Post editor content (inclusions, day-by-day, etc.) -->
+                <!-- 3. Day-wise plan (from ACF repeater) -->
+                <?php if ( function_exists('have_rows') && have_rows('itinerary_days') ) : ?>
+                <section class="itinerary-days itinerary-timeline" style="margin-top:28px;">
+                    <div class="itinerary-days-heading">
+                        <span>Day-by-day</span>
+                        <h2>Itinerary</h2>
+                    </div>
+                    <?php $day_number = 1; ?>
+                    <?php while ( have_rows('itinerary_days') ) : the_row();
+                        $day_title      = get_sub_field('day_title');
+                        $day_details    = get_sub_field('day_details');
+                        $day_route      = get_sub_field('day_route');
+                        $day_stay       = get_sub_field('day_stay');
+                        $day_meals      = get_sub_field('day_meals');
+                        $day_transfer   = get_sub_field('day_transfer');
+                        $day_highlights = get_sub_field('day_highlights');
+                        $preview_text   = wp_trim_words( wp_strip_all_tags( $day_details ), 18, '...' );
+                    ?>
+                    <details class="itinerary-day" <?php echo $day_number === 1 ? 'open' : ''; ?>>
+                        <summary>
+                            <span class="itinerary-day-marker"><?php echo esc_html( $day_number ); ?></span>
+                            <span class="itinerary-day-summary">
+                                <strong><?php echo esc_html( $day_title ?: sprintf( __('Day %d','mytheme'), $day_number ) ); ?></strong>
+                                <?php if ( $day_route ) : ?><em><?php echo esc_html( $day_route ); ?></em><?php elseif ( $preview_text ) : ?><em><?php echo esc_html( $preview_text ); ?></em><?php endif; ?>
+                            </span>
+                            <span class="itinerary-day-toggle" aria-hidden="true"></span>
+                        </summary>
+                        <div class="itinerary-day-panel">
+                            <?php if ( $day_stay || $day_meals || $day_transfer || $day_highlights ) : ?>
+                            <div class="itinerary-day-chips">
+                                <?php if ( $day_stay )       : ?><span><i class="fa-solid fa-bed"></i><?php echo esc_html( $day_stay ); ?></span><?php endif; ?>
+                                <?php if ( $day_meals )      : ?><span><i class="fa-solid fa-utensils"></i><?php echo esc_html( $day_meals ); ?></span><?php endif; ?>
+                                <?php if ( $day_transfer )   : ?><span><i class="fa-solid fa-route"></i><?php echo esc_html( $day_transfer ); ?></span><?php endif; ?>
+                                <?php if ( $day_highlights ) : ?><span><i class="fa-solid fa-star"></i><?php echo esc_html( $day_highlights ); ?></span><?php endif; ?>
+                            </div>
+                            <?php endif; ?>
+                            <div class="itinerary-day-copy ev-content-styled"><?php echo wp_kses_post( wpautop( $day_details ) ); ?></div>
+                        </div>
+                    </details>
+                    <?php $day_number++; endwhile; ?>
+                </section>
+                <?php endif; ?>
+
+                <!-- 4. Post editor content (additional notes) -->
                 <?php if ( get_the_content() ) : ?>
                 <div class="ev-single-content ev-content-styled" style="margin-top:24px;">
                     <?php the_content(); ?>
                 </div>
                 <?php endif; ?>
 
-                <!-- 4. Enquiry form -->
+                <!-- 5. Enquiry form -->
                 <section class="tw-package-enquiry" id="package-enquiry" style="margin-top:32px;">
                     <div class="tw-package-enquiry-copy">
                         <span>Interested in this package?</span>
