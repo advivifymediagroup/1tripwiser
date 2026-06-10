@@ -916,13 +916,13 @@ h5, h6 {
 .travel-archive-header span,
 .travel-single-header > span {
   font-size: 16px;
-  font-weight: 300;
+  font-weight: 800;
   color: #0692af;
   letter-spacing: 3px;
   text-transform: uppercase;
-  margin-bottom: 28px;
+  margin-bottom: 1rem;
   animation: fadeUp 1s ease 0.5s both;
-}
+ }
 
 .hero-actions {
   align-items: center;
@@ -1490,6 +1490,59 @@ h5, h6 {
   /* text-align: start; */
   margin-left: auto;
   margin-right: auto;
+}
+
+.travel-header-image-section {
+  position: relative;
+  display: block;
+  margin-bottom: 28px;
+  overflow: hidden;
+}
+
+/* Image container */
+.travel-hero-image {
+  width: 100%;
+  height: 400px;
+  position: relative;
+}
+
+.travel-hero-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Overlay header */
+.travel-single-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 40px;
+
+  color: #fff;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.65),
+    rgba(0, 0, 0, 0.1),
+    transparent
+  );
+}
+
+.travel-single-header h1 {
+  margin: 10px 0;
+}
+
+.travel-meta span {
+  margin-right: 10px;
+  font-size: 14px;
 }
 
 .travel-single-header h1 {
