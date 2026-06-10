@@ -5221,6 +5221,9 @@ img, video, iframe, embed, object { max-width: 100%; height: auto; }
 .ev-itin-intro p { font-size:1rem; color:#374151; line-height:1.8; margin:0; font-style:normal; }
 .ev-single-content a { color: #0692af; }
 
+/* Destination archive card — 2-line excerpt clamp */
+.dest-archive .dest-card-excerpt { font-size:0.9rem; color:#6b7a8f; line-height:1.55; margin:8px 0 14px; display:-webkit-box; -webkit-line-clamp:2; line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; text-overflow:ellipsis; }
+
 /* Card wrapper for the WYSIWYG overview (package highlights, etc.) */
 .ev-overview-card { background:#fff; border:1px solid #e6edf3; border-radius:16px; padding:8px 28px 22px; box-shadow:0 4px 18px rgba(13,21,38,0.04); margin-top:0; }
 .ev-overview-card > *:first-child { margin-top:18px; }
