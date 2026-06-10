@@ -5163,6 +5163,13 @@ img, video, iframe, embed, object { max-width: 100%; height: auto; }
 .ev-itin-intro { background:#fff; border:1px solid #e6edf3; border-radius:16px; padding:24px 28px; box-shadow:0 4px 18px rgba(13,21,38,0.04); }
 .ev-itin-intro p { font-size:1rem; color:#374151; line-height:1.8; margin:0; font-style:normal; }
 .ev-single-content a { color: #0692af; }
+
+/* Card wrapper for the WYSIWYG overview (package highlights, etc.) */
+.ev-overview-card { background:#fff; border:1px solid #e6edf3; border-radius:16px; padding:8px 28px 22px; box-shadow:0 4px 18px rgba(13,21,38,0.04); margin-top:0; }
+.ev-overview-card > *:first-child { margin-top:18px; }
+.ev-overview-card > *:last-child { margin-bottom:0; }
+.ev-overview-card h2,.ev-overview-card h3,.ev-overview-card h4 { margin-top:18px; }
+.ev-overview-card p { font-size:0.95rem; color:#374151; line-height:1.75; margin:0 0 12px; }
 /* Sticky booking panel */
 .ev-single-book { grid-area: book; position: sticky; top: 84px; background: #fff; border: 1px solid #e6edf3; border-radius: 18px; padding: 24px; box-shadow: 0 12px 36px rgba(13,21,38,0.08); display: flex; flex-direction: column; gap: 12px; }
 .ev-single-price { text-align: center; padding-bottom: 14px; border-bottom: 1px solid #eef2f6; }
