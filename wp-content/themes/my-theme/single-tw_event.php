@@ -119,7 +119,7 @@ while ( have_posts() ) :
 
                 <!-- Overview / post content -->
                 <?php if ( $overview || get_the_content() ) : ?>
-                <div class="ev-single-content ev-content-styled">
+                <div class="ev-single-content ev-content-styled ev-overview-card">
                     <?php if ( $overview ) { echo wp_kses_post( wpautop( $overview ) ); } ?>
                     <?php the_content(); ?>
                 </div>

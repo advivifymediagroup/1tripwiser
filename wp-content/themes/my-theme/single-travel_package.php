@@ -76,7 +76,7 @@ while ( have_posts() ) :
 
                 <!-- 1. Description / overview first -->
                 <?php if ( $overview ) : ?>
-                <div class="ev-single-content ev-content-styled">
+                <div class="ev-single-content ev-content-styled ev-overview-card">
                     <?php echo wp_kses_post( $overview ); ?>
                 </div>
                 <?php endif; ?>
