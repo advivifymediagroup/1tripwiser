@@ -14,7 +14,7 @@
                         <?php if (has_post_thumbnail()) : ?>
                             <div class="post-thumbnail">
                                 <a href="<?php the_permalink(); ?>">
-                                    <?php the_post_thumbnail('medium'); ?>
+                                    <?php the_post_thumbnail('large'); ?>
                                 </a>
                             </div>
                         <?php endif; ?>

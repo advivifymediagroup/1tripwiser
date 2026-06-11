@@ -33,7 +33,7 @@ $tw_meta = array(
 
 if ( ! function_exists( 'tw_search_card' ) ) :
 function tw_search_card( $post, $type_label ) {
-    $thumb = get_the_post_thumbnail_url( $post->ID, 'medium' );
+    $thumb = get_the_post_thumbnail_url( $post->ID, 'large' );
     ?>
     <article class="explore-card">
         <a class="explore-card-img" href="<?php echo esc_url( get_permalink( $post->ID ) ); ?>">
