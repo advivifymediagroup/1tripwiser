@@ -52,7 +52,7 @@ while ( have_posts() ) :
     /* ── region / taxonomy ── */
     $regions = get_the_terms( $id, 'destination_region' );
     $region  = ( $regions && ! is_wp_error( $regions ) ) ? $regions[0] : null;
-    $thumb   = get_the_post_thumbnail_url( $id, 'large' );
+    $thumb   = get_the_post_thumbnail_url( $id, 'full' );
 
     /* archive URL */
     $archive_url = get_post_type_archive_link( 'group_trip' ) ?: home_url( '/group-trips/' );
