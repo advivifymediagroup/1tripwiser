@@ -858,9 +858,9 @@ function mytheme_render_package_compare_table($package_ids = array()) {
                         <?php foreach ($package_ids as $package_id) : ?>
                             <?php
                             $data = mytheme_get_package_data($package_id);
-                            $image_url = mytheme_get_image_url($data['image'], 'medium');
+                            $image_url = mytheme_get_image_url($data['image'], 'large');
                             if (!$image_url && has_post_thumbnail($package_id)) {
-                                $image_url = get_the_post_thumbnail_url($package_id, 'medium');
+                                $image_url = get_the_post_thumbnail_url($package_id, 'large');
                             }
                             ?>
                             <th>
@@ -1269,10 +1269,10 @@ add_action('template_redirect', 'mytheme_maybe_render_trip_pdf');
 function mytheme_package_card($post_id = null) {
     $post_id = $post_id ? $post_id : get_the_ID();
     $data = mytheme_get_package_data($post_id);
-    $image_url = mytheme_get_image_url($data['image'], 'medium');
+    $image_url = mytheme_get_image_url($data['image'], 'large');
     // Fallback: if ACF image field is empty, use the featured thumbnail URL
     if ( ! $image_url && has_post_thumbnail( $post_id ) ) {
-        $image_url = get_the_post_thumbnail_url( $post_id, 'medium_large' );
+        $image_url = get_the_post_thumbnail_url( $post_id, 'large' );
     }
     $book_url = $data['book_url'] ? $data['book_url'] : get_permalink($post_id);
     ?>
@@ -1626,7 +1626,7 @@ function tw_homepage_itinerary_card() {
     ?>
     <article class="post-card travel-card">
         <?php if ( has_post_thumbnail() ) : ?>
-        <div class="post-thumbnail"><a href="<?php the_permalink(); ?>"><?php the_post_thumbnail('medium'); ?></a></div>
+        <div class="post-thumbnail"><a href="<?php the_permalink(); ?>"><?php the_post_thumbnail('large'); ?></a></div>
         <?php endif; ?>
         <div class="post-content">
             <h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>

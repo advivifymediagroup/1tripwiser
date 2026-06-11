@@ -12,7 +12,7 @@ $tw_region_term   = $tw_active_region ? get_term_by( 'slug', $tw_active_region, 
 if ( ! function_exists( 'tw_explore_card' ) ) {
     /* Fallback card (same markup as the taxonomy explore template) */
     function tw_explore_card() {
-        $thumb = get_the_post_thumbnail_url( get_the_ID(), 'medium_large' );
+        $thumb = get_the_post_thumbnail_url( get_the_ID(), 'large' );
         ?>
         <article class="explore-card">
             <a class="explore-card-img" href="<?php the_permalink(); ?>">

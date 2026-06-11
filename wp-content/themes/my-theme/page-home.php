@@ -156,7 +156,7 @@ if ( $tw_hero_video ) {
                         $route_summary = mytheme_get_travel_field("itinerary_route_summary"); ?>
                     <article class="post-card travel-card">
                         <?php if (has_post_thumbnail()): ?>
-                        <div class="post-thumbnail"><a href="<?php the_permalink(); ?>"><?php the_post_thumbnail("medium"); ?></a></div>
+                        <div class="post-thumbnail"><a href="<?php the_permalink(); ?>"><?php the_post_thumbnail("large"); ?></a></div>
                         <?php endif; ?>
                         <div class="post-content">
                             <h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
