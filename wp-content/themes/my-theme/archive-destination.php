@@ -21,9 +21,9 @@
             <div class="posts-grid">
                 <?php while ( have_posts() ) : the_post();
                     $destination = mytheme_get_destination_data();
-                    $image_url   = mytheme_get_image_url( $destination['image'], 'medium' );
+                    $image_url   = mytheme_get_image_url( $destination['image'], 'large' );
                     if ( ! $image_url && has_post_thumbnail() ) {
-                        $image_url = get_the_post_thumbnail_url( get_the_ID(), 'medium_large' );
+                        $image_url = get_the_post_thumbnail_url( get_the_ID(), 'large' );
                     }
                     $intro = $destination['short_intro'] ? wp_strip_all_tags( $destination['short_intro'] ) : get_the_excerpt();
                     ?>

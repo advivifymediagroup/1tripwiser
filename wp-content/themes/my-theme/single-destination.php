@@ -1,68 +1,144 @@
-<?php get_header(); ?>
+<?php
+/**
+ * Single Destination — cinematic hero layout matching all other trip types.
+ *
+ * @package my-theme
+ */
+get_header();
 
-<main class="main-content">
-    <div class="container">
-        <?php mytheme_breadcrumbs(); ?>
-        <?php while (have_posts()) : the_post(); ?>
-            <?php
-            $destination = mytheme_get_destination_data();
-            $image_url = mytheme_get_image_url($destination['image'], 'large');
-            ?>
-            <article class="single-post travel-single">
-                <div class="travel-header-image-section">
-                <header class="post-header travel-single-header">
-                    <span>Destination</span>
-                    <h1><?php the_title(); ?></h1>
-                    <div class="travel-meta header-meta">
-                        <?php if ($destination['country']) : ?><span><?php echo esc_html($destination['country']); ?></span><?php endif; ?>
-                        <?php if ($destination['best_time']) : ?><span><?php echo esc_html($destination['best_time']); ?></span><?php endif; ?>
-                        <?php if ($destination['ideal_duration']) : ?><span><?php echo esc_html($destination['ideal_duration']); ?></span><?php endif; ?>
-                    </div>
-                </header>
+while ( have_posts() ) :
+    the_post();
+    $id          = get_the_ID();
+    $destination = mytheme_get_destination_data( $id );
 
-                <?php if ($image_url || has_post_thumbnail()) : ?>
-                    <div class="post-thumbnail travel-hero-image">
-                        <?php if ($image_url) : ?>
-                            <img src="<?php echo esc_url($image_url); ?>" alt="<?php the_title_attribute(); ?>">
-                        <?php else : ?>
-                            <?php the_post_thumbnail('large'); ?>
-                        <?php endif; ?>
-                    </div>
+    /* Hero image — try ACF, then WP featured thumbnail, always at FULL size */
+    $hero_img = '';
+    if ( ! empty( $destination['image'] ) ) {
+        $hero_img = mytheme_get_image_url( $destination['image'], 'full' );
+    }
+    if ( ! $hero_img && has_post_thumbnail( $id ) ) {
+        $hero_img = get_the_post_thumbnail_url( $id, 'full' );
+    }
+
+    $archive = get_post_type_archive_link( 'destination' );
+    ?>
+
+<main class="main-content explore-page ev-single">
+
+    <!-- CINEMATIC HERO -->
+    <section class="explore-hero ev-hero-cinematic<?php echo $hero_img ? ' has-hero-img' : ''; ?>"
+             <?php if ( $hero_img ) : ?>style="background-image:url('<?php echo esc_url( $hero_img ); ?>')"<?php endif; ?>>
+        <div class="explore-hero-overlay ev-hero-overlay" aria-hidden="true"></div>
+        <div class="container explore-hero-inner">
+            <nav class="explore-crumbs" aria-label="Breadcrumb">
+                <a href="<?php echo esc_url( home_url('/') ); ?>">Home</a><span>›</span>
+                <a href="<?php echo esc_url( $archive ); ?>">Destinations</a><span>›</span>
+                <span><?php the_title(); ?></span>
+            </nav>
+            <span class="explore-hero-kicker">Destination</span>
+            <h1 class="explore-hero-title"><?php the_title(); ?></h1>
+            <?php if ( $destination['country'] ) : ?>
+            <p class="explore-hero-sub"><?php echo esc_html( $destination['country'] ); ?></p>
+            <?php endif; ?>
+            <div class="ev-hero-facts">
+                <?php if ( $destination['country'] )        : ?><span class="ev-hero-fact"><span class="ev-fact-icon">📍</span><?php echo esc_html( $destination['country'] ); ?></span><?php endif; ?>
+                <?php if ( $destination['best_time'] )      : ?><span class="ev-hero-fact"><span class="ev-fact-icon">🌤️</span><?php echo esc_html( $destination['best_time'] ); ?></span><?php endif; ?>
+                <?php if ( $destination['ideal_duration'] ) : ?><span class="ev-hero-fact"><span class="ev-fact-icon">⏱️</span><?php echo esc_html( $destination['ideal_duration'] ); ?></span><?php endif; ?>
+                <?php if ( $destination['starting_price'] ) : ?><span class="ev-hero-fact ev-hero-fact--price"><span class="ev-fact-icon">💰</span><?php echo esc_html( $destination['starting_price'] ); ?> <small>onwards</small></span><?php endif; ?>
+            </div>
+        </div>
+    </section>
+
+    <div class="container ev-single-wrap">
+        <article class="ev-single-card">
+
+            <div class="ev-single-body">
+
+                <!-- 1. Short intro -->
+                <?php if ( $destination['short_intro'] ) : ?>
+                <div class="ev-single-content ev-content-styled ev-overview-card">
+                    <?php echo wp_kses_post( wpautop( $destination['short_intro'] ) ); ?>
+                </div>
                 <?php endif; ?>
-                </div>
 
-                <div class="travel-detail-grid">
-                    <?php if ($destination['country']) : ?><div class="travel-detail"><span>Country / Region</span><strong><?php echo esc_html($destination['country']); ?></strong></div><?php endif; ?>
-                    <?php if ($destination['best_time']) : ?><div class="travel-detail"><span>Best Time</span><strong><?php echo esc_html($destination['best_time']); ?></strong></div><?php endif; ?>
-                    <?php if ($destination['ideal_duration']) : ?><div class="travel-detail"><span>Ideal Duration</span><strong><?php echo esc_html($destination['ideal_duration']); ?></strong></div><?php endif; ?>
-                    <?php if ($destination['starting_price']) : ?><div class="travel-detail"><span>Starting Price</span><strong><?php echo esc_html($destination['starting_price']); ?></strong></div><?php endif; ?>
-                </div>
-
-                <?php if ($destination['short_intro']) : ?>
-                    <div class="post-content destination-intro">
-                        <?php echo wp_kses_post(wpautop($destination['short_intro'])); ?>
+                <!-- 2. Destination details panel -->
+                <?php
+                $details = array_filter( array(
+                    array( '📍', 'Country / Region', $destination['country'] ),
+                    array( '🌤️', 'Best Time',         $destination['best_time'] ),
+                    array( '⏱️', 'Ideal Duration',    $destination['ideal_duration'] ),
+                    array( '💰', 'Starting Price',    $destination['starting_price'] ),
+                ), function( $d ) { return ! empty( $d[2] ); } );
+                if ( $details ) : ?>
+                <div class="ev-trip-details">
+                    <h3 class="ev-trip-details-title">Destination Details</h3>
+                    <div class="ev-trip-details-grid">
+                        <?php foreach ( $details as $d ) : ?>
+                        <div class="ev-trip-detail-item">
+                            <span class="ev-trip-detail-icon"><?php echo $d[0]; ?></span>
+                            <div>
+                                <span class="ev-trip-detail-label"><?php echo esc_html( $d[1] ); ?></span>
+                                <span class="ev-trip-detail-val"><?php echo esc_html( $d[2] ); ?></span>
+                            </div>
+                        </div>
+                        <?php endforeach; ?>
                     </div>
+                </div>
                 <?php endif; ?>
 
-                <div class="post-content">
-                    <?php
-                    if ($destination['overview']) {
-                        echo wp_kses_post($destination['overview']);
-                    }
-                    ?>
+                <!-- 3. Overview content -->
+                <?php if ( $destination['overview'] ) : ?>
+                <div class="ev-single-content ev-content-styled ev-overview-card" style="margin-top:24px;">
+                    <?php echo wp_kses_post( $destination['overview'] ); ?>
                 </div>
+                <?php endif; ?>
 
-                <?php mytheme_render_destination_guide(get_the_ID()); ?>
+                <!-- 4. Destination guide + FAQs -->
+                <?php mytheme_render_destination_guide( $id ); ?>
+                <?php mytheme_render_faq_section( $id, 'Destination FAQs' ); ?>
 
-                <?php mytheme_render_faq_section(get_the_ID(), 'Destination FAQs'); ?>
-
-                <footer class="post-footer travel-cta">
-                    <a href="<?php echo esc_url(get_post_type_archive_link('travel_package')); ?>" class="btn-primary">View Packages</a>
-                    <a href="<?php echo esc_url(mytheme_get_plan_trip_url()); ?>" class="btn-secondary">Plan a Trip</a>
+                <footer class="post-footer travel-cta" style="margin-top:28px;">
+                    <a href="<?php echo esc_url( get_post_type_archive_link('travel_package') ); ?>" class="btn-primary">View Packages</a>
+                    <a href="<?php echo esc_url( mytheme_get_plan_trip_url() ); ?>" class="btn-secondary">Plan a Trip</a>
                 </footer>
-            </article>
-        <?php endwhile; ?>
+
+            </div>
+
+            <!-- Sticky sidebar -->
+            <aside class="ev-single-book">
+                <?php if ( $destination['starting_price'] ) : ?>
+                <div class="ev-single-price">
+                    <span>Packages from</span>
+                    <strong><?php echo esc_html( $destination['starting_price'] ); ?></strong>
+                    <small>per person</small>
+                </div>
+                <?php endif; ?>
+                <?php
+                $sidebar_rows = array_filter( array(
+                    'Country'        => $destination['country'],
+                    'Best Time'      => $destination['best_time'],
+                    'Ideal Duration' => $destination['ideal_duration'],
+                ) );
+                if ( $sidebar_rows ) : ?>
+                <div class="ev-single-detail-list">
+                    <?php foreach ( $sidebar_rows as $label => $val ) : ?>
+                    <div class="ev-single-detail-row">
+                        <span class="ev-detail-label"><?php echo esc_html( $label ); ?></span>
+                        <span class="ev-detail-val"><?php echo esc_html( $val ); ?></span>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+                <?php endif; ?>
+                <a class="ev-single-btn" href="<?php echo esc_url( get_post_type_archive_link('travel_package') ); ?>">View Packages</a>
+                <a class="ev-single-btn ev-single-btn--ghost" href="<?php echo esc_url( mytheme_get_plan_trip_url() ); ?>">Plan a Trip</a>
+            </aside>
+
+        </article>
+        <a class="tribe-back-link" href="<?php echo esc_url( $archive ); ?>">← All Destinations</a>
     </div>
+
 </main>
 
-<?php get_footer(); ?>
+<?php
+endwhile;
+get_footer();

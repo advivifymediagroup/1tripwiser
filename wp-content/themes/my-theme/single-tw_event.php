@@ -49,7 +49,7 @@ while ( have_posts() ) :
     /* ── region ── */
     $regions = get_the_terms( $id, 'destination_region' );
     $region  = ( $regions && ! is_wp_error( $regions ) ) ? $regions[0] : null;
-    $thumb   = get_the_post_thumbnail_url( $id, 'large' );
+    $thumb   = get_the_post_thumbnail_url( $id, 'full' );
     ?>
 
 <main class="main-content explore-page ev-single">
