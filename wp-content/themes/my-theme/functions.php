@@ -4162,6 +4162,11 @@ function tw_maybe_create_pages() {
             'title'    => 'Travel Agency Registration',
             'template' => 'page-agency-register.php',
         ),
+        array(
+            'slug'     => 'blogs',
+            'title'    => 'All Blogs',
+            'template' => 'page-all-blogs.php',
+        ),
     );
 
     $home_page_id = 0;
