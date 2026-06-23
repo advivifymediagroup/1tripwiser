@@ -107,6 +107,17 @@ $g_insure_aff  = tw_aff_by_cat($affiliates, 'Insurance');
 
         <!-- FILTER PILLS (category-based) -->
         <?php
+        // Recalculate cached category post counts so they reflect reality.
+        // (Counts can drift after WXR imports, bulk operations, etc.)
+        $all_cat_ids = get_terms( array(
+            'taxonomy'   => 'category',
+            'fields'     => 'ids',
+            'hide_empty' => false,
+        ) );
+        if ( ! is_wp_error( $all_cat_ids ) && ! empty( $all_cat_ids ) ) {
+            wp_update_term_count_now( $all_cat_ids, 'category' );
+        }
+
         $categories = get_categories( array(
             'hide_empty' => false,    // show ALL categories
             'number'     => 0,        // 0 = no limit
