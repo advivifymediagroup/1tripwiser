@@ -3500,6 +3500,11 @@ h5, h6 {
 .ba-section-head { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; color: #0D1526; letter-spacing: 0.04em; margin: 0; }
 .ba-write-btn { display: inline-flex; align-items: center; gap: 7px; padding: 9px 20px; background: linear-gradient(135deg,#FCB415 0%,#f09a00 100%); color: #0D1526; font-size: 0.85rem; font-weight: 800; border-radius: 9px; text-decoration: none; letter-spacing: 0.02em; transition: opacity 0.2s, transform 0.15s; white-space: nowrap; flex-shrink: 0; }
 .ba-write-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+/* Filter empty-state */
+.ba-no-filter-results { text-align:center; padding:32px 20px; background:#f8fafc; border:1px dashed #cbd5e1; border-radius:14px; margin-bottom:32px; color:#475569; font-size:0.95rem; }
+.ba-no-filter-results p { margin:0; }
+.ba-reset-filter { background:none; border:none; color:#0692AF; font-weight:800; cursor:pointer; padding:0; text-decoration:underline; font-size:inherit; font-family:inherit; }
+.ba-reset-filter:hover { color:#055e72; }
 /* Row actions wrapper + "View All Blogs" pill */
 .ba-section-row-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .ba-view-all-btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 20px; background: transparent; color: #0692AF; border: 1.5px solid #0692AF; font-size: 0.85rem; font-weight: 800; border-radius: 9px; text-decoration: none; letter-spacing: 0.02em; transition: background 0.2s, color 0.2s, transform 0.15s; white-space: nowrap; flex-shrink: 0; }

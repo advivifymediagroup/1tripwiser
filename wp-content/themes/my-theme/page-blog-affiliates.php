@@ -139,9 +139,11 @@ $g_insure_aff  = tw_aff_by_cat($affiliates, 'Insurance');
 
         if ($featured_query->have_posts()) :
             $featured_query->the_post();
-            $post_id = get_the_ID();
+            $post_id          = get_the_ID();
+            $featured_cats    = get_the_category();
+            $featured_cat_slugs = $featured_cats ? implode( ' ', wp_list_pluck( $featured_cats, 'slug' ) ) : '';
         ?>
-        <div class="ba-featured">
+        <div class="ba-featured" data-cats="<?php echo esc_attr( $featured_cat_slugs ); ?>">
             <div class="ba-featured-img">
                 <?php if (has_post_thumbnail()) : ?>
                     <a href="<?php the_permalink(); ?>"><?php the_post_thumbnail('large'); ?></a>
@@ -198,14 +200,15 @@ $g_insure_aff  = tw_aff_by_cat($affiliates, 'Insurance');
         <?php if ($grid_query->have_posts()) : ?>
         <div class="ba-grid">
             <?php while ($grid_query->have_posts()) : $grid_query->the_post();
-                $pid      = get_the_ID();
-                $cats     = get_the_category();
-                $cat_name = $cats ? $cats[0]->name : '';
+                $pid       = get_the_ID();
+                $cats      = get_the_category();
+                $cat_name  = $cats ? $cats[0]->name : '';
+                $cat_slugs = $cats ? implode( ' ', wp_list_pluck( $cats, 'slug' ) ) : '';
             ?>
-            <article class="ba-card">
+            <article class="ba-card" data-cats="<?php echo esc_attr( $cat_slugs ); ?>">
                 <div class="ba-card-img">
                     <?php if (has_post_thumbnail()) : ?>
-                        <a href="<?php the_permalink(); ?>"><?php the_post_thumbnail('medium_large'); ?></a>
+                        <a href="<?php the_permalink(); ?>"><?php the_post_thumbnail('large'); ?></a>
                     <?php else : ?>
                         <a href="<?php the_permalink(); ?>" class="ba-card-img-placeholder">✈️</a>
                     <?php endif; ?>
@@ -221,6 +224,11 @@ $g_insure_aff  = tw_aff_by_cat($affiliates, 'Insurance');
                 </div>
             </article>
             <?php endwhile; wp_reset_postdata(); ?>
+        </div>
+
+        <!-- Empty state for filter results — hidden until JS toggles it -->
+        <div class="ba-no-filter-results" style="display:none;">
+            <p>📭 No posts in this category yet. <button type="button" class="ba-reset-filter">Show all posts</button></p>
         </div>
         <?php else : ?>
         <div class="ba-no-posts">
@@ -270,30 +278,61 @@ $g_insure_aff  = tw_aff_by_cat($affiliates, 'Insurance');
 </main>
 
 <script>
-// Simple category filter (front-end show/hide)
+// Category filter — hides cards by category slug stored in data-cats attribute
 (function () {
-    var pills = document.querySelectorAll('.ba-filter-pill');
-    var cards = document.querySelectorAll('.ba-card');
+    var pills    = document.querySelectorAll('.ba-filter-pill');
+    var cards    = document.querySelectorAll('.ba-card[data-cats]');
+    var featured = document.querySelector('.ba-featured[data-cats]');
+    var empty    = document.querySelector('.ba-no-filter-results');
+    if (!pills.length) { return; }
 
-    if (!pills.length || !cards.length) return;
+    function applyFilter(cat) {
+        var visibleCount = 0;
+
+        function matches(el) {
+            if (cat === 'all') { return true; }
+            var raw = (el.getAttribute('data-cats') || '').trim();
+            if (!raw) { return false; }
+            // Match whole slug in space-separated list
+            return (' ' + raw + ' ').indexOf(' ' + cat + ' ') !== -1;
+        }
+
+        // Featured post
+        if (featured) {
+            var fMatch = matches(featured);
+            featured.style.display = fMatch ? '' : 'none';
+            if (fMatch) { visibleCount++; }
+        }
+
+        // Grid cards
+        cards.forEach(function (card) {
+            var m = matches(card);
+            card.style.display = m ? '' : 'none';
+            if (m) { visibleCount++; }
+        });
+
+        // Empty state
+        if (empty) {
+            empty.style.display = visibleCount === 0 ? '' : 'none';
+        }
+    }
 
     pills.forEach(function (pill) {
         pill.addEventListener('click', function () {
             pills.forEach(function (p) { p.classList.remove('active'); });
             pill.classList.add('active');
-
-            var cat = pill.getAttribute('data-cat');
-            cards.forEach(function (card) {
-                if (cat === 'all') {
-                    card.parentElement.style.display = '';
-                } else {
-                    var cardCat = card.querySelector('.ba-card-cat');
-                    var match   = cardCat && cardCat.textContent.toLowerCase().replace(/\s+/g, '-') === cat;
-                    card.parentElement.style.display = match ? '' : 'none';
-                }
-            });
+            applyFilter(pill.getAttribute('data-cat'));
         });
     });
+
+    // "Show all posts" reset link inside the empty state
+    var resetBtn = document.querySelector('.ba-reset-filter');
+    if (resetBtn) {
+        resetBtn.addEventListener('click', function () {
+            var allPill = document.querySelector('.ba-filter-pill[data-cat="all"]');
+            if (allPill) { allPill.click(); }
+        });
+    }
 })();
 </script>
 
