@@ -107,13 +107,28 @@ $g_insure_aff  = tw_aff_by_cat($affiliates, 'Insurance');
 
         <!-- FILTER PILLS (category-based) -->
         <?php
-        $categories = get_categories(array('hide_empty' => true, 'number' => 10));
-        if ($categories) :
+        $categories = get_categories( array(
+            'hide_empty' => false,    // show ALL categories
+            'number'     => 0,        // 0 = no limit
+            'orderby'    => 'name',
+            'order'      => 'ASC',
+            'exclude'    => array( 1 ), // hide default "Uncategorized" (term_id 1)
+        ) );
+        $total_published = (int) wp_count_posts( 'post' )->publish;
+        if ( $categories ) :
         ?>
         <div class="ba-filters">
-            <button class="ba-filter-pill active" data-cat="all">All Posts</button>
-            <?php foreach ($categories as $cat) : ?>
-            <button class="ba-filter-pill" data-cat="<?php echo esc_attr($cat->slug); ?>"><?php echo esc_html($cat->name); ?></button>
+            <button class="ba-filter-pill active" data-cat="all">
+                All Posts <span class="ba-filter-count"><?php echo $total_published; ?></span>
+            </button>
+            <?php foreach ( $categories as $cat ) :
+                $is_empty = ( (int) $cat->count === 0 );
+                $cls      = 'ba-filter-pill' . ( $is_empty ? ' ba-filter-pill--empty' : '' );
+            ?>
+            <button class="<?php echo esc_attr( $cls ); ?>" data-cat="<?php echo esc_attr( $cat->slug ); ?>">
+                <?php echo esc_html( $cat->name ); ?>
+                <span class="ba-filter-count"><?php echo (int) $cat->count; ?></span>
+            </button>
             <?php endforeach; ?>
         </div>
         <?php endif; ?>
