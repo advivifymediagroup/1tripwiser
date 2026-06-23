@@ -144,57 +144,104 @@ $g_insure_aff  = tw_aff_by_cat($affiliates, 'Insurance');
         </div>
         <?php endif; ?>
 
-        <!-- FEATURED POST -->
+        <!-- FEATURED POSTS — one per category (only the active one is visible) -->
         <?php
-        $featured_query = new WP_Query(array(
+        /*
+         * Build a featured post for "all" + one per non-empty category.
+         * "all" = manually-flagged _is_featured post, falling back to latest.
+         * Per-cat = latest post in that category.
+         */
+        $featured_per_cat = array();
+
+        // "All Posts" featured slot
+        $all_q = new WP_Query( array(
             'post_type'      => 'post',
             'posts_per_page' => 1,
             'post_status'    => 'publish',
             'meta_key'       => '_is_featured',
             'meta_value'     => '1',
-        ));
-
-        // Fallback: just get latest post if no featured one
-        if (!$featured_query->have_posts()) {
-            $featured_query = new WP_Query(array(
+        ) );
+        if ( ! $all_q->have_posts() ) {
+            $all_q = new WP_Query( array(
                 'post_type'      => 'post',
                 'posts_per_page' => 1,
                 'post_status'    => 'publish',
-            ));
+            ) );
+        }
+        if ( $all_q->have_posts() ) {
+            $all_q->the_post();
+            $featured_per_cat['all'] = get_post();
+        }
+        wp_reset_postdata();
+
+        // One per category (skip categories with zero posts)
+        foreach ( $categories as $cat ) {
+            if ( (int) $cat->count === 0 ) { continue; }
+            $cq = new WP_Query( array(
+                'post_type'      => 'post',
+                'posts_per_page' => 1,
+                'post_status'    => 'publish',
+                'cat'            => $cat->term_id,
+            ) );
+            if ( $cq->have_posts() ) {
+                $cq->the_post();
+                $featured_per_cat[ $cat->slug ] = get_post();
+            }
+            wp_reset_postdata();
         }
 
-        if ($featured_query->have_posts()) :
-            $featured_query->the_post();
-            $post_id          = get_the_ID();
-            $featured_cats    = get_the_category();
-            $featured_cat_slugs = $featured_cats ? implode( ' ', wp_list_pluck( $featured_cats, 'slug' ) ) : '';
+        /* Render each featured block; only "all" is visible initially */
+        foreach ( $featured_per_cat as $cat_slug => $featured_post ) :
+            $GLOBALS['post'] = $featured_post;
+            setup_postdata( $GLOBALS['post'] );
+            $f_cats      = get_the_category( $featured_post->ID );
+            $f_cat_slugs = $f_cats ? implode( ' ', wp_list_pluck( $f_cats, 'slug' ) ) : '';
+            $f_visible   = ( $cat_slug === 'all' );
         ?>
-        <div class="ba-featured" data-cats="<?php echo esc_attr( $featured_cat_slugs ); ?>">
+        <div class="ba-featured"
+             data-featured-for="<?php echo esc_attr( $cat_slug ); ?>"
+             data-cats="<?php echo esc_attr( $f_cat_slugs ); ?>"
+             data-post-id="<?php echo (int) $featured_post->ID; ?>"
+             <?php if ( ! $f_visible ) : ?>style="display:none;"<?php endif; ?>>
             <div class="ba-featured-img">
-                <?php if (has_post_thumbnail()) : ?>
-                    <a href="<?php the_permalink(); ?>"><?php the_post_thumbnail('large'); ?></a>
+                <?php if ( has_post_thumbnail( $featured_post->ID ) ) : ?>
+                    <a href="<?php echo esc_url( get_permalink( $featured_post->ID ) ); ?>"><?php echo get_the_post_thumbnail( $featured_post->ID, 'large' ); ?></a>
                 <?php else : ?>
-                    <a href="<?php the_permalink(); ?>" style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--ba-muted);font-size:3rem;">✈️</a>
+                    <a href="<?php echo esc_url( get_permalink( $featured_post->ID ) ); ?>" style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--ba-muted);font-size:3rem;">✈️</a>
                 <?php endif; ?>
                 <span class="ba-featured-badge">⭐ Featured</span>
             </div>
             <div class="ba-featured-body">
                 <div>
                     <div class="ba-featured-meta">
-                        <?php echo esc_html(get_the_date()); ?> &nbsp;·&nbsp;
-                        <?php the_category(', '); ?>
+                        <?php echo esc_html( get_the_date( '', $featured_post->ID ) ); ?> &nbsp;·&nbsp;
+                        <?php
+                        $cat_links = array();
+                        foreach ( (array) $f_cats as $fc ) {
+                            $cat_links[] = '<a href="' . esc_url( get_category_link( $fc->term_id ) ) . '">' . esc_html( $fc->name ) . '</a>';
+                        }
+                        echo implode( ', ', $cat_links );
+                        ?>
                     </div>
-                    <h2 class="ba-featured-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
-                    <p class="ba-featured-excerpt"><?php echo wp_trim_words(get_the_excerpt(), 28, '…'); ?></p>
+                    <h2 class="ba-featured-title"><a href="<?php echo esc_url( get_permalink( $featured_post->ID ) ); ?>"><?php echo esc_html( get_the_title( $featured_post->ID ) ); ?></a></h2>
+                    <p class="ba-featured-excerpt"><?php echo esc_html( wp_trim_words( get_the_excerpt( $featured_post->ID ), 28, '…' ) ); ?></p>
                 </div>
                 <div>
-                    <a href="<?php the_permalink(); ?>" class="ba-read-more">Read Full Guide →</a>
+                    <a href="<?php echo esc_url( get_permalink( $featured_post->ID ) ); ?>" class="ba-read-more">Read Full Guide →</a>
                 </div>
             </div>
         </div>
         <?php
-        wp_reset_postdata();
-        endif; // end featured
+            wp_reset_postdata();
+        endforeach;
+
+        /* IDs of all featured posts — exclude them from the grid so we never duplicate */
+        $featured_ids = array();
+        foreach ( $featured_per_cat as $fp ) {
+            if ( $fp ) { $featured_ids[] = (int) $fp->ID; }
+        }
+        $featured_ids = array_unique( $featured_ids );
+        $post_id = isset( $featured_per_cat['all'] ) ? $featured_per_cat['all']->ID : 0; // legacy var kept for downstream code
         ?>
 
         <!-- BLOG GRID -->
@@ -213,14 +260,16 @@ $g_insure_aff  = tw_aff_by_cat($affiliates, 'Insurance');
         </div>
 
         <?php
-        // Get posts excluding the featured one
-        $featured_id = isset($post_id) ? $post_id : 0;
-        $grid_query  = new WP_Query(array(
+        // Load ALL published posts (minus the featured set) so the JS filter
+        // can show category-specific posts without an AJAX round-trip.
+        $grid_query = new WP_Query( array(
             'post_type'      => 'post',
-            'posts_per_page' => 6,
+            'posts_per_page' => -1,
             'post_status'    => 'publish',
-            'post__not_in'   => $featured_id ? array($featured_id) : array(),
-        ));
+            'post__not_in'   => ! empty( $featured_ids ) ? $featured_ids : array( 0 ),
+            'orderby'        => 'date',
+            'order'          => 'DESC',
+        ) );
         ?>
 
         <?php if ($grid_query->have_posts()) : ?>
@@ -231,7 +280,7 @@ $g_insure_aff  = tw_aff_by_cat($affiliates, 'Insurance');
                 $cat_name  = $cats ? $cats[0]->name : '';
                 $cat_slugs = $cats ? implode( ' ', wp_list_pluck( $cats, 'slug' ) ) : '';
             ?>
-            <article class="ba-card" data-cats="<?php echo esc_attr( $cat_slugs ); ?>">
+            <article class="ba-card" data-cats="<?php echo esc_attr( $cat_slugs ); ?>" data-post-id="<?php echo (int) $pid; ?>">
                 <div class="ba-card-img">
                     <?php if (has_post_thumbnail()) : ?>
                         <a href="<?php the_permalink(); ?>"><?php the_post_thumbnail('large'); ?></a>
@@ -304,40 +353,43 @@ $g_insure_aff  = tw_aff_by_cat($affiliates, 'Insurance');
 </main>
 
 <script>
-// Category filter — hides cards by category slug stored in data-cats attribute
+// Category filter — swap featured block per category and show/hide cards
 (function () {
-    var pills    = document.querySelectorAll('.ba-filter-pill');
-    var cards    = document.querySelectorAll('.ba-card[data-cats]');
-    var featured = document.querySelector('.ba-featured[data-cats]');
-    var empty    = document.querySelector('.ba-no-filter-results');
+    var pills      = document.querySelectorAll('.ba-filter-pill');
+    var cards      = document.querySelectorAll('.ba-card[data-cats]');
+    var featureds  = document.querySelectorAll('.ba-featured[data-featured-for]');
+    var empty      = document.querySelector('.ba-no-filter-results');
     if (!pills.length) { return; }
+
+    function matchesCat(el, cat) {
+        if (cat === 'all') { return true; }
+        var raw = (el.getAttribute('data-cats') || '').trim();
+        if (!raw) { return false; }
+        return (' ' + raw + ' ').indexOf(' ' + cat + ' ') !== -1;
+    }
 
     function applyFilter(cat) {
         var visibleCount = 0;
+        var activeFeaturedId = null;
 
-        function matches(el) {
-            if (cat === 'all') { return true; }
-            var raw = (el.getAttribute('data-cats') || '').trim();
-            if (!raw) { return false; }
-            // Match whole slug in space-separated list
-            return (' ' + raw + ' ').indexOf(' ' + cat + ' ') !== -1;
-        }
-
-        // Featured post
-        if (featured) {
-            var fMatch = matches(featured);
-            featured.style.display = fMatch ? '' : 'none';
-            if (fMatch) { visibleCount++; }
-        }
-
-        // Grid cards
-        cards.forEach(function (card) {
-            var m = matches(card);
-            card.style.display = m ? '' : 'none';
-            if (m) { visibleCount++; }
+        // Show only the featured block targeted at this category
+        featureds.forEach(function (f) {
+            var match = f.getAttribute('data-featured-for') === cat;
+            f.style.display = match ? '' : 'none';
+            if (match) {
+                visibleCount++;
+                activeFeaturedId = f.getAttribute('data-post-id');
+            }
         });
 
-        // Empty state
+        // Grid cards — hide non-matching, and de-dupe the active featured post
+        cards.forEach(function (card) {
+            var m = matchesCat(card, cat);
+            var isFeaturedDup = activeFeaturedId && card.getAttribute('data-post-id') === activeFeaturedId;
+            card.style.display = (m && !isFeaturedDup) ? '' : 'none';
+            if (m && !isFeaturedDup) { visibleCount++; }
+        });
+
         if (empty) {
             empty.style.display = visibleCount === 0 ? '' : 'none';
         }
@@ -359,6 +411,9 @@ $g_insure_aff  = tw_aff_by_cat($affiliates, 'Insurance');
             if (allPill) { allPill.click(); }
         });
     }
+
+    // Init on load
+    applyFilter('all');
 })();
 </script>
 
