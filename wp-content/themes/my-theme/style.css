@@ -3475,8 +3475,15 @@ h5, h6 {
 .ba-aff-chip-icon { font-size: 1.1rem; }
 .ba-aff-chip-label { color: #6b7a8f; font-size: 0.72rem; font-weight: 600; display: block; }
 .ba-filters { display: flex; gap: 8px; flex-wrap: wrap; padding: 0 0 28px; border-bottom: 1px solid #e0e8f0; margin-bottom: 36px; }
-.ba-filter-pill { padding: 6px 16px; border-radius: 999px; border: 1px solid #e0e8f0; background: transparent; color: #6b7a8f; font-size: 0.83rem; font-weight: 700; cursor: pointer; font-family: 'Nunito', sans-serif; transition: background 0.2s, border-color 0.2s, color 0.2s; }
+.ba-filter-pill { display:inline-flex; align-items:center; gap:7px; padding: 6px 14px; border-radius: 999px; border: 1px solid #e0e8f0; background: transparent; color: #6b7a8f; font-size: 0.83rem; font-weight: 700; cursor: pointer; font-family: 'Nunito', sans-serif; transition: background 0.2s, border-color 0.2s, color 0.2s, opacity 0.2s; }
 .ba-filter-pill.active, .ba-filter-pill:hover { background: #FCB415; border-color: #FCB415; color: #0D1526; }
+/* Post-count badge inside each pill */
+.ba-filter-count { display:inline-flex; align-items:center; justify-content:center; min-width:18px; height:18px; padding:0 6px; border-radius:999px; background:rgba(13,21,38,0.08); color:#475569; font-size:0.7rem; font-weight:800; line-height:1; }
+.ba-filter-pill.active .ba-filter-count,
+.ba-filter-pill:hover .ba-filter-count { background:rgba(13,21,38,0.16); color:#0D1526; }
+/* Empty categories — faded but still clickable; reveal-on-hover for discoverability */
+.ba-filter-pill--empty { opacity:0.45; }
+.ba-filter-pill--empty:hover { opacity:1; }
 .ba-featured { display: grid; grid-template-columns: 1fr 1fr; gap: 0; background: #fff; border-radius: 16px; overflow: hidden; border: 1px solid #e0e8f0; box-shadow: 0 6px 24px rgba(0,0,0,0.07); margin-bottom: 48px; }
 .ba-featured-img { position: relative; min-height: 340px; overflow: hidden; background: #f0f4f8; }
 .ba-featured-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
