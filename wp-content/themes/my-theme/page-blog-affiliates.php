@@ -172,11 +172,16 @@ $g_insure_aff  = tw_aff_by_cat($affiliates, 'Insurance');
         <!-- BLOG GRID -->
         <div class="ba-section-row">
             <h2 class="ba-section-head">Latest Guides</h2>
-            <?php if (is_user_logged_in()) : ?>
-            <a href="<?php echo esc_url(home_url('/submit-blog/')); ?>" class="ba-write-btn">
-                ✍️ Write a Post
-            </a>
-            <?php endif; ?>
+            <div class="ba-section-row-actions">
+                <a href="<?php echo esc_url( home_url('/blogs/') ); ?>" class="ba-view-all-btn">
+                    View All Blogs →
+                </a>
+                <?php if ( is_user_logged_in() ) : ?>
+                <a href="<?php echo esc_url( home_url('/submit-blog/') ); ?>" class="ba-write-btn">
+                    ✍️ Write a Post
+                </a>
+                <?php endif; ?>
+            </div>
         </div>
 
         <?php
