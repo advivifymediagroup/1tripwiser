@@ -55,10 +55,10 @@ while ( have_posts() ) :
             <p class="explore-hero-sub"><?php echo esc_html( $dest_name ?: '' ); ?><?php if ( $region && $dest_name ) { echo ' · '; } ?><?php if ( $region ) { echo esc_html( $region->name ); } ?></p>
             <?php endif; ?>
             <div class="ev-hero-facts">
-                <?php if ( $duration )  : ?><span class="ev-hero-fact"><span class="ev-fact-icon">⏱️</span><?php echo esc_html( $duration ); ?></span><?php endif; ?>
-                <?php if ( $best_time ) : ?><span class="ev-hero-fact"><span class="ev-fact-icon">🌤️</span><?php echo esc_html( $best_time ); ?></span><?php endif; ?>
-                <?php if ( $region )    : ?><span class="ev-hero-fact"><span class="ev-fact-icon">📍</span><a href="<?php echo esc_url( get_term_link( $region ) ); ?>"><?php echo esc_html( $region->name ); ?></a></span><?php endif; ?>
-                <?php if ( $price )     : ?><span class="ev-hero-fact ev-hero-fact--price"><span class="ev-fact-icon">💰</span><?php echo esc_html( function_exists('mytheme_format_rupee_amount') ? mytheme_format_rupee_amount( $price ) : '₹' . $price ); ?></span><?php endif; ?>
+                <?php if ( $duration )  : ?><span class="ev-hero-fact"><i class="fa-regular fa-clock ev-fact-icon"></i><?php echo esc_html( $duration ); ?></span><?php endif; ?>
+                <?php if ( $best_time ) : ?><span class="ev-hero-fact"><i class="fa-solid fa-sun ev-fact-icon"></i><?php echo esc_html( $best_time ); ?></span><?php endif; ?>
+                <?php if ( $region )    : ?><span class="ev-hero-fact"><i class="fa-solid fa-location-dot ev-fact-icon"></i><a href="<?php echo esc_url( get_term_link( $region ) ); ?>"><?php echo esc_html( $region->name ); ?></a></span><?php endif; ?>
+                <?php if ( $price )     : ?><span class="ev-hero-fact ev-hero-fact--price"><i class="fa-solid fa-tag ev-fact-icon"></i><?php echo esc_html( function_exists('mytheme_format_rupee_amount') ? mytheme_format_rupee_amount( $price ) : '₹' . $price ); ?></span><?php endif; ?>
             </div>
         </div>
     </section>
@@ -78,10 +78,10 @@ while ( have_posts() ) :
                 <!-- 2. Trip details -->
                 <?php
                 $details = array_filter( array(
-                    array( '🗺️', 'Route',       $route_sum ),
-                    array( '🌤️', 'Best Time',    $best_time ),
-                    array( '⏱️', 'Duration',     $duration ),
-                    array( '📍', 'Destination',  $dest_name ),
+                    array( '<i class="fa-solid fa-route"></i>',         'Route',       $route_sum ),
+                    array( '<i class="fa-solid fa-sun"></i>',           'Best Time',    $best_time ),
+                    array( '<i class="fa-regular fa-clock"></i>',       'Duration',     $duration ),
+                    array( '<i class="fa-solid fa-location-dot"></i>',  'Destination',  $dest_name ),
                 ), function( $d ) { return ! empty( $d[2] ); } );
                 if ( $details ) : ?>
                 <div class="ev-trip-details">
