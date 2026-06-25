@@ -410,10 +410,10 @@ function tw_womens_trips_showcase( $limit = 6 ) {
             </div>
 
             <div class="tw-womens-trust">
-                <div class="tw-womens-trust-item"><span>🛡️</span><strong>Safety First</strong><small>Verified women-only groups</small></div>
-                <div class="tw-womens-trust-item"><span>👩‍🦰</span><strong>Women-Led</strong><small>Female trip leaders</small></div>
-                <div class="tw-womens-trust-item"><span>🌍</span><strong>50+ Destinations</strong><small>India & international</small></div>
-                <div class="tw-womens-trust-item"><span>💬</span><strong>Community</strong><small>10K+ women tribe</small></div>
+                <div class="tw-womens-trust-item"><i class="fa-solid fa-shield-halved"></i><strong>Safety First</strong><small>Verified women-only groups</small></div>
+                <div class="tw-womens-trust-item"><i class="fa-solid fa-venus"></i><strong>Women-Led</strong><small>Female trip leaders</small></div>
+                <div class="tw-womens-trust-item"><i class="fa-solid fa-globe"></i><strong>50+ Destinations</strong><small>India &amp; international</small></div>
+                <div class="tw-womens-trust-item"><i class="fa-regular fa-comments"></i><strong>Community</strong><small>10K+ women tribe</small></div>
             </div>
 
             <div class="tw-womens-grid">
@@ -432,15 +432,15 @@ function tw_womens_trips_showcase( $limit = 6 ) {
                 <a class="tw-womens-card" href="<?php echo esc_url( get_permalink( $trip->ID ) ); ?>" data-reveal="scale">
                     <div class="tw-womens-card-img"
                          <?php if ( $thumb ) : ?>style="background-image:url('<?php echo esc_url( $thumb ); ?>')"<?php endif; ?>>
-                        <?php if ( ! $thumb ) : ?><span class="tw-womens-card-placeholder">👩‍🦰</span><?php endif; ?>
+                        <?php if ( ! $thumb ) : ?><i class="fa-solid fa-venus tw-womens-card-placeholder"></i><?php endif; ?>
                         <div class="tw-womens-card-overlay"></div>
                         <span class="tw-womens-badge">Women Only</span>
                     </div>
                     <div class="tw-womens-card-body">
-                        <?php if ( $loc ) : ?><span class="tw-womens-card-loc">📍 <?php echo esc_html( $loc ); ?></span><?php endif; ?>
+                        <?php if ( $loc ) : ?><span class="tw-womens-card-loc"><i class="fa-solid fa-location-dot"></i> <?php echo esc_html( $loc ); ?></span><?php endif; ?>
                         <h3 class="tw-womens-card-title"><?php echo esc_html( get_the_title( $trip->ID ) ); ?></h3>
                         <div class="tw-womens-card-foot">
-                            <?php if ( $dur ) : ?><span class="tw-womens-card-dur">⏱ <?php echo esc_html( $dur ); ?></span><?php endif; ?>
+                            <?php if ( $dur ) : ?><span class="tw-womens-card-dur"><i class="fa-regular fa-clock"></i> <?php echo esc_html( $dur ); ?></span><?php endif; ?>
                             <?php if ( $price_raw ) : ?><span class="tw-womens-card-price"><?php echo esc_html( function_exists('mytheme_format_rupee_amount') ? mytheme_format_rupee_amount($price_raw) : '₹'.$price_raw ); ?></span><?php endif; ?>
                         </div>
                     </div>
@@ -449,7 +449,7 @@ function tw_womens_trips_showcase( $limit = 6 ) {
             </div>
 
             <div class="tw-womens-cta">
-                <a href="<?php echo esc_url( $page_url ); ?>" class="tw-womens-cta-btn">Explore All Women's Trips →</a>
+                <a href="<?php echo esc_url( $page_url ); ?>" class="tw-womens-cta-btn">Explore All Women's Trips <i class="fa-solid fa-arrow-right"></i></a>
             </div>
         </div>
     </section>
@@ -636,7 +636,7 @@ function tw_explore_events_showcase( $limit = 8 ) {
                 ?>
                     <a class="tw-event-card" href="<?php echo esc_url( get_permalink( $ev->ID ) ); ?>" data-reveal="scale">
                         <div class="tw-event-card-media" <?php if ( $thumb ) : ?>style="background-image:url('<?php echo esc_url( $thumb ); ?>')"<?php endif; ?>>
-                            <?php if ( ! $thumb ) : ?><span class="tw-event-card-icon">🎟️</span><?php endif; ?>
+                            <?php if ( ! $thumb ) : ?><i class="fa-solid fa-ticket tw-event-card-icon"></i><?php endif; ?>
                         </div>
                         <div class="tw-event-card-body">
                             <h3 class="tw-event-card-name"><?php echo esc_html( get_the_title( $ev->ID ) ); ?></h3>

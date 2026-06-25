@@ -1838,24 +1838,24 @@ function mytheme_build_travel_filter_meta_query($post_type, $filter) {
 function mytheme_travel_filter_box($post_type, $param, $base_url, $anchor = '') {
     $active = mytheme_get_active_travel_filter($param, $post_type);
 
-    // Emoji-labelled destination pills
+    // Destination pills — clean text labels, no emoji
     $dest_pills = array(
-        'all'           => array( '✦', 'All' ),
-        'india'         => array( '🇮🇳', 'India' ),
-        'international' => array( '✈️', 'International' ),
-        'asia'          => array( '🌏', 'Asia' ),
-        'europe'        => array( '🌍', 'Europe' ),
-        'africa'        => array( '🌍', 'Africa' ),
-        'north-america' => array( '🌎', 'North America' ),
-        'south-america' => array( '🌎', 'South America' ),
-        'oceania'       => array( '🌊', 'Oceania' ),
-        'budget-under-30k' => array( '💰', 'Budget < 30K' ),
+        'all'              => array( '', 'All' ),
+        'india'            => array( '', 'India' ),
+        'international'    => array( '', 'International' ),
+        'asia'             => array( '', 'Asia' ),
+        'europe'           => array( '', 'Europe' ),
+        'africa'           => array( '', 'Africa' ),
+        'north-america'    => array( '', 'North America' ),
+        'south-america'    => array( '', 'South America' ),
+        'oceania'          => array( '', 'Oceania' ),
+        'budget-under-30k' => array( '', 'Budget < 30K' ),
     );
     // Type pills (packages only)
     $type_pills = array(
-        'bestseller' => array( '⭐', 'Bestseller' ),
-        'trending'   => array( '🔥', 'Trending' ),
-        'new'        => array( '✨', 'New' ),
+        'bestseller' => array( '', 'Bestseller' ),
+        'trending'   => array( '', 'Trending' ),
+        'new'        => array( '', 'New' ),
     );
 
     // Which dest options apply to this post type
@@ -1886,7 +1886,7 @@ function mytheme_travel_filter_box($post_type, $param, $base_url, $anchor = '') 
                     $extra_cls = $val === 'budget-under-30k' ? ' tw-filter-pill--budget' : ''; ?>
                 <a class="tw-filter-pill<?php echo $is_active ? ' active' : ''; echo $extra_cls; ?>"
                    href="<?php echo $build_url( $val ); ?>" role="listitem">
-                    <span class="tw-filter-pill-icon" aria-hidden="true"><?php echo $icon; ?></span>
+                    <?php if ( $icon ) : ?><span class="tw-filter-pill-icon" aria-hidden="true"><?php echo $icon; ?></span><?php endif; ?>
                     <?php echo esc_html( $label ); ?>
                 </a>
                 <?php endforeach; ?>
@@ -1901,7 +1901,7 @@ function mytheme_travel_filter_box($post_type, $param, $base_url, $anchor = '') 
                     $is_active = ( $active === $val ); ?>
                 <a class="tw-filter-pill tw-filter-pill--type<?php echo $is_active ? ' active' : ''; ?>"
                    href="<?php echo $build_url( $val ); ?>" role="listitem">
-                    <span class="tw-filter-pill-icon" aria-hidden="true"><?php echo $icon; ?></span>
+                    <?php if ( $icon ) : ?><span class="tw-filter-pill-icon" aria-hidden="true"><?php echo $icon; ?></span><?php endif; ?>
                     <?php echo esc_html( $label ); ?>
                 </a>
                 <?php endforeach; ?>
