@@ -59,18 +59,18 @@ if ( $tw_hero_video ) {
         <p class="tw-hero-desc"><?php bloginfo('description'); ?></p>
 
         <div class="tw-hero-actions">
-            <a href="#featured-packages" class="tw-hero-btn tw-hero-btn--primary">🗺️ Explore Packages</a>
-            <a href="<?php echo esc_url(mytheme_get_plan_trip_url()); ?>" class="tw-hero-btn tw-hero-btn--outline">✈️ Plan a Trip — Free</a>
+            <a href="#featured-packages" class="tw-hero-btn tw-hero-btn--primary">Explore Packages</a>
+            <a href="<?php echo esc_url(mytheme_get_plan_trip_url()); ?>" class="tw-hero-btn tw-hero-btn--outline">Plan a Trip — Free</a>
         </div>
 
         <div class="tw-hero-tags">
-            <a href="<?php echo esc_url(home_url('/blog-affiliates/')); ?>" class="tw-hero-tag">⛰️ Mountains</a>
-            <a href="<?php echo esc_url(home_url('/blog-affiliates/')); ?>" class="tw-hero-tag">🏖️ Beaches</a>
-            <a href="<?php echo esc_url(home_url('/blog-affiliates/')); ?>" class="tw-hero-tag">🌴 Offbeat</a>
-            <a href="<?php echo esc_url(home_url('/blog-affiliates/')); ?>" class="tw-hero-tag">💍 Honeymoon</a>
-            <a href="<?php echo esc_url(home_url('/blog-affiliates/')); ?>" class="tw-hero-tag">👥 Group Trips</a>
-            <a href="<?php echo esc_url(home_url('/blog-affiliates/')); ?>" class="tw-hero-tag">💰 Budget</a>
-            <a href="<?php echo esc_url(home_url('/blog-affiliates/')); ?>" class="tw-hero-tag">🌍 International</a>
+            <a href="<?php echo esc_url(home_url('/blog-affiliates/')); ?>" class="tw-hero-tag">Mountains</a>
+            <a href="<?php echo esc_url(home_url('/blog-affiliates/')); ?>" class="tw-hero-tag">Beaches</a>
+            <a href="<?php echo esc_url(home_url('/blog-affiliates/')); ?>" class="tw-hero-tag">Offbeat</a>
+            <a href="<?php echo esc_url(home_url('/blog-affiliates/')); ?>" class="tw-hero-tag">Honeymoon</a>
+            <a href="<?php echo esc_url(home_url('/blog-affiliates/')); ?>" class="tw-hero-tag">Group Trips</a>
+            <a href="<?php echo esc_url(home_url('/blog-affiliates/')); ?>" class="tw-hero-tag">Budget</a>
+            <a href="<?php echo esc_url(home_url('/blog-affiliates/')); ?>" class="tw-hero-tag">International</a>
         </div>
     </div>
 
@@ -86,7 +86,7 @@ if ( $tw_hero_video ) {
         <div class="tw-stat-divider" aria-hidden="true"></div>
         <div class="tw-stat"><span class="tw-stat-num">58+</span><span class="tw-stat-label">Destinations</span></div>
         <div class="tw-stat-divider" aria-hidden="true"></div>
-        <div class="tw-stat"><span class="tw-stat-num">4.9 ⭐</span><span class="tw-stat-label">Average Rating</span></div>
+        <div class="tw-stat"><span class="tw-stat-num">4.9<i class="fa-solid fa-star tw-stat-star" aria-hidden="true"></i></span><span class="tw-stat-label">Average Rating</span></div>
         <div class="tw-stat-divider" aria-hidden="true"></div>
         <div class="tw-stat"><span class="tw-stat-num">₹0</span><span class="tw-stat-label">Planning Fee</span></div>
     </div>
