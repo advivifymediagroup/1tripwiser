@@ -2828,12 +2828,12 @@ h5, h6 {
 .tw-nav-link:hover, .tw-nav-link.tw-active { background: rgba(6,146,175,0.15); color: #fff; }
 .tw-cta {
     display: inline-flex; align-items: center; gap: 6px; margin-left: 8px;
-    padding: 8px 16px; background: linear-gradient(135deg,#FCB415 0%,#f09a00 100%);
-    color: #0D1526 !important; font-size: 0.84rem; font-weight: 800; border-radius: 8px;
-    text-decoration: none; letter-spacing: 0.02em; transition: opacity 0.2s, transform 0.15s;
-    white-space: nowrap; flex-shrink: 0; position: relative; overflow: hidden;
+    padding: 8px 16px; background: #FCB415;
+    color: #0D1526 !important; font-size: 0.84rem; font-weight: 700; border-radius: 6px;
+    text-decoration: none; letter-spacing: 0; transition: background 0.18s;
+    white-space: nowrap; flex-shrink: 0;
 }
-.tw-cta:hover { opacity: 0.88; transform: translateY(-1px); }
+.tw-cta:hover { background: #e8a30c; }
 .tw-user-nav { display: flex; align-items: center; gap: 6px; margin-left: 6px; flex-shrink: 0; }
 .tw-auth-link { color: rgba(255,255,255,0.75); text-decoration: none; font-size: 0.84rem; font-weight: 700; padding: 6px 11px; border-radius: 7px; transition: background 0.2s, color 0.2s; white-space: nowrap; }
 .tw-auth-link:hover { background: rgba(255,255,255,0.08); color: #fff; }

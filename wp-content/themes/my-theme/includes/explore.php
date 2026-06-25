@@ -466,12 +466,11 @@ function tw_explore_subheader() {
             <?php foreach ( $top_terms as $top ) :
                 $zones = tw_region_children( $top->term_id );
                 if ( empty( $zones ) ) { continue; }
-                $icon = tw_region_icon( $top->term_id );
             ?>
             <div class="tw-sub-item has-mega">
                 <a class="tw-sub-link" href="<?php echo esc_url( get_term_link( $top ) ); ?>">
-                    <?php echo esc_html( trim( $icon . ' ' . $top->name ) ); ?>
-                    <span class="tw-sub-caret" aria-hidden="true">▾</span>
+                    <?php echo esc_html( $top->name ); ?>
+                    <i class="fa-solid fa-chevron-down tw-sub-caret" aria-hidden="true"></i>
                 </a>
                 <div class="tw-mega" role="menu">
                     <div class="tw-mega-grid">
@@ -499,15 +498,15 @@ function tw_explore_subheader() {
             ?>
             <div class="tw-sub-item has-mega">
                 <a class="tw-sub-link" href="<?php echo esc_url( get_post_type_archive_link( 'group_trip' ) ); ?>">
-                    👥 Group Trips
-                    <span class="tw-sub-caret" aria-hidden="true">▾</span>
+                    Group Trips
+                    <i class="fa-solid fa-chevron-down tw-sub-caret" aria-hidden="true"></i>
                 </a>
                 <div class="tw-mega tw-mega-events" role="menu">
                     <?php if ( $group_dests ) : ?>
                     <div class="tw-mega-events-grid">
                         <?php foreach ( $group_dests as $d ) : ?>
                             <a class="tw-mega-event" href="<?php echo esc_url( tw_group_trip_region_url( $d->slug ) ); ?>">
-                                <span class="tw-mega-event-icon">📍</span>
+                                <i class="fa-solid fa-location-dot tw-mega-event-icon"></i>
                                 <span class="tw-mega-event-name"><?php echo esc_html( $d->name ); ?></span>
                             </a>
                         <?php endforeach; ?>
@@ -524,22 +523,22 @@ function tw_explore_subheader() {
             <?php $womens_trips = tw_recent_womens_trips( 8 ); ?>
             <div class="tw-sub-item has-mega">
                 <a class="tw-sub-link tw-sub-link--womens" href="<?php echo esc_url( tw_womens_trips_page_url() ); ?>">
-                    👩‍🦰 Women's Trips
-                    <span class="tw-sub-caret" aria-hidden="true">▾</span>
+                    Women's Trips
+                    <i class="fa-solid fa-chevron-down tw-sub-caret" aria-hidden="true"></i>
                 </a>
                 <div class="tw-mega tw-mega-events tw-mega--womens" role="menu">
                     <div class="tw-mega-womens-hero">
-                        <span class="tw-mega-womens-icon">👩‍🦰</span>
+                        <i class="fa-solid fa-venus tw-mega-womens-icon"></i>
                         <div>
                             <strong>Women's Group Trips</strong>
-                            <small>Safe · Curated · Empowering</small>
+                            <small>Safe &middot; Curated &middot; Empowering</small>
                         </div>
                     </div>
                     <?php if ( $womens_trips ) : ?>
                     <div class="tw-mega-events-grid">
                         <?php foreach ( $womens_trips as $wt ) : ?>
                             <a class="tw-mega-event" href="<?php echo esc_url( get_permalink( $wt->ID ) ); ?>">
-                                <span class="tw-mega-event-icon">🌸</span>
+                                <i class="fa-solid fa-venus tw-mega-event-icon"></i>
                                 <span class="tw-mega-event-name"><?php echo esc_html( get_the_title( $wt->ID ) ); ?></span>
                             </a>
                         <?php endforeach; ?>
@@ -553,8 +552,8 @@ function tw_explore_subheader() {
 
             <div class="tw-sub-item has-mega">
                 <a class="tw-sub-link" href="<?php echo esc_url( tw_events_page_url() ); ?>">
-                    🎉 Events &amp; Festivals
-                    <span class="tw-sub-caret" aria-hidden="true">▾</span>
+                    Events &amp; Festivals
+                    <i class="fa-solid fa-chevron-down tw-sub-caret" aria-hidden="true"></i>
                 </a>
                 <div class="tw-mega tw-mega-events" role="menu">
                     <?php if ( $events ) : ?>
@@ -562,7 +561,7 @@ function tw_explore_subheader() {
                         <?php foreach ( $events as $ev ) :
                             $cur = get_queried_object_id() === $ev->ID; ?>
                             <a class="tw-mega-event <?php echo $cur ? 'active' : ''; ?>" href="<?php echo esc_url( get_permalink( $ev->ID ) ); ?>">
-                                <span class="tw-mega-event-icon">🎟️</span>
+                                <i class="fa-solid fa-ticket tw-mega-event-icon"></i>
                                 <span class="tw-mega-event-name"><?php echo esc_html( get_the_title( $ev->ID ) ); ?></span>
                             </a>
                         <?php endforeach; ?>
