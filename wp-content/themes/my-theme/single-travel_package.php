@@ -60,11 +60,11 @@ while ( have_posts() ) :
             <p class="explore-hero-sub"><?php echo esc_html( $location ); ?><?php if ( $region ) { echo ' · ' . esc_html( $region->name ); } ?></p>
             <?php endif; ?>
             <div class="ev-hero-facts">
-                <?php if ( $dur )       : ?><span class="ev-hero-fact"><span class="ev-fact-icon">⏱️</span><?php echo esc_html( $dur ); ?></span><?php endif; ?>
-                <?php if ( $trip_type ) : ?><span class="ev-hero-fact"><span class="ev-fact-icon">👥</span><?php echo esc_html( $trip_type ); ?></span><?php endif; ?>
-                <?php if ( $grp_size )  : ?><span class="ev-hero-fact"><span class="ev-fact-icon">🧑‍🤝‍🧑</span><?php echo esc_html( $grp_size ); ?></span><?php endif; ?>
-                <?php if ( $region )    : ?><span class="ev-hero-fact"><span class="ev-fact-icon">📍</span><a href="<?php echo esc_url( get_term_link( $region ) ); ?>"><?php echo esc_html( $region->name ); ?></a></span><?php endif; ?>
-                <?php if ( $price )     : ?><span class="ev-hero-fact ev-hero-fact--price"><span class="ev-fact-icon">💰</span><?php echo esc_html( mytheme_format_rupee_amount( $price ) ); ?> <small>/ person</small></span><?php endif; ?>
+                <?php if ( $dur )       : ?><span class="ev-hero-fact"><i class="fa-regular fa-clock ev-fact-icon"></i><?php echo esc_html( $dur ); ?></span><?php endif; ?>
+                <?php if ( $trip_type ) : ?><span class="ev-hero-fact"><i class="fa-solid fa-user-group ev-fact-icon"></i><?php echo esc_html( $trip_type ); ?></span><?php endif; ?>
+                <?php if ( $grp_size )  : ?><span class="ev-hero-fact"><i class="fa-solid fa-people-group ev-fact-icon"></i><?php echo esc_html( $grp_size ); ?></span><?php endif; ?>
+                <?php if ( $region )    : ?><span class="ev-hero-fact"><i class="fa-solid fa-location-dot ev-fact-icon"></i><a href="<?php echo esc_url( get_term_link( $region ) ); ?>"><?php echo esc_html( $region->name ); ?></a></span><?php endif; ?>
+                <?php if ( $price )     : ?><span class="ev-hero-fact ev-hero-fact--price"><i class="fa-solid fa-tag ev-fact-icon"></i><?php echo esc_html( mytheme_format_rupee_amount( $price ) ); ?> <small>/ person</small></span><?php endif; ?>
             </div>
         </div>
     </section>
@@ -84,11 +84,11 @@ while ( have_posts() ) :
                 <!-- 2. Trip details panel -->
                 <?php
                 $details = array_filter( array(
-                    array( '🗺️', 'Route',       $route ),
-                    array( '🌤️', 'Best Time',    $best_time ),
-                    array( '👥', 'Group Size',   $grp_size ),
-                    array( '🏷️', 'Trip Type',    $trip_type ),
-                    array( '📍', 'Destination',  $location ),
+                    array( '<i class="fa-solid fa-route"></i>',         'Route',       $route ),
+                    array( '<i class="fa-solid fa-sun"></i>',           'Best Time',    $best_time ),
+                    array( '<i class="fa-solid fa-user-group"></i>',    'Group Size',   $grp_size ),
+                    array( '<i class="fa-solid fa-tag"></i>',           'Trip Type',    $trip_type ),
+                    array( '<i class="fa-solid fa-location-dot"></i>',  'Destination',  $location ),
                 ), function( $d ) { return ! empty( $d[2] ); } );
                 if ( $details ) : ?>
                 <div class="ev-trip-details">

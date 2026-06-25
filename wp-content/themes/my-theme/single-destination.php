@@ -41,10 +41,10 @@ while ( have_posts() ) :
             <p class="explore-hero-sub"><?php echo esc_html( $destination['country'] ); ?></p>
             <?php endif; ?>
             <div class="ev-hero-facts">
-                <?php if ( $destination['country'] )        : ?><span class="ev-hero-fact"><span class="ev-fact-icon">📍</span><?php echo esc_html( $destination['country'] ); ?></span><?php endif; ?>
-                <?php if ( $destination['best_time'] )      : ?><span class="ev-hero-fact"><span class="ev-fact-icon">🌤️</span><?php echo esc_html( $destination['best_time'] ); ?></span><?php endif; ?>
-                <?php if ( $destination['ideal_duration'] ) : ?><span class="ev-hero-fact"><span class="ev-fact-icon">⏱️</span><?php echo esc_html( $destination['ideal_duration'] ); ?></span><?php endif; ?>
-                <?php if ( $destination['starting_price'] ) : ?><span class="ev-hero-fact ev-hero-fact--price"><span class="ev-fact-icon">💰</span><?php echo esc_html( $destination['starting_price'] ); ?> <small>onwards</small></span><?php endif; ?>
+                <?php if ( $destination['country'] )        : ?><span class="ev-hero-fact"><i class="fa-solid fa-location-dot ev-fact-icon"></i><?php echo esc_html( $destination['country'] ); ?></span><?php endif; ?>
+                <?php if ( $destination['best_time'] )      : ?><span class="ev-hero-fact"><i class="fa-solid fa-sun ev-fact-icon"></i><?php echo esc_html( $destination['best_time'] ); ?></span><?php endif; ?>
+                <?php if ( $destination['ideal_duration'] ) : ?><span class="ev-hero-fact"><i class="fa-regular fa-clock ev-fact-icon"></i><?php echo esc_html( $destination['ideal_duration'] ); ?></span><?php endif; ?>
+                <?php if ( $destination['starting_price'] ) : ?><span class="ev-hero-fact ev-hero-fact--price"><i class="fa-solid fa-tag ev-fact-icon"></i><?php echo esc_html( $destination['starting_price'] ); ?> <small>onwards</small></span><?php endif; ?>
             </div>
         </div>
     </section>
@@ -64,10 +64,10 @@ while ( have_posts() ) :
                 <!-- 2. Destination details panel -->
                 <?php
                 $details = array_filter( array(
-                    array( '📍', 'Country / Region', $destination['country'] ),
-                    array( '🌤️', 'Best Time',         $destination['best_time'] ),
-                    array( '⏱️', 'Ideal Duration',    $destination['ideal_duration'] ),
-                    array( '💰', 'Starting Price',    $destination['starting_price'] ),
+                    array( '<i class="fa-solid fa-location-dot"></i>',  'Country / Region', $destination['country'] ),
+                    array( '<i class="fa-solid fa-sun"></i>',           'Best Time',         $destination['best_time'] ),
+                    array( '<i class="fa-regular fa-clock"></i>',       'Ideal Duration',    $destination['ideal_duration'] ),
+                    array( '<i class="fa-solid fa-tag"></i>',           'Starting Price',    $destination['starting_price'] ),
                 ), function( $d ) { return ! empty( $d[2] ); } );
                 if ( $details ) : ?>
                 <div class="ev-trip-details">
