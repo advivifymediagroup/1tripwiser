@@ -139,7 +139,7 @@
                 <i class="fas fa-search" aria-hidden="true"></i>
             </button>
             <a class="tw-cta" href="<?php echo esc_url(mytheme_get_plan_trip_url()); ?>">
-                <span aria-hidden="true">✈</span> Plan My Trip
+                <i class="fa-solid fa-paper-plane" aria-hidden="true"></i> Plan My Trip
             </a>
 
             <!-- User account nav -->
@@ -152,15 +152,15 @@
                 <div class="tw-user-dropdown">
                     <button class="tw-user-trigger" aria-expanded="false" aria-haspopup="true">
                         <div class="tw-user-avatar-wrap">
-                            <?php echo $tw_avatar ?: '<span>👤</span>'; ?>
+                            <?php echo $tw_avatar ?: '<i class="fa-regular fa-user"></i>'; ?>
                         </div>
                         <span class="tw-user-display"><?php echo esc_html($tw_name); ?></span>
-                        <span class="tw-user-chevron" aria-hidden="true">▾</span>
+                        <i class="fa-solid fa-chevron-down tw-user-chevron" aria-hidden="true"></i>
                     </button>
                     <div class="tw-user-menu" role="menu">
-                        <a href="<?php echo esc_url(home_url('/profile/')); ?>" role="menuitem">👤 My Profile</a>
-                        <a href="<?php echo esc_url(home_url('/submit-blog/')); ?>" role="menuitem">✍️ Write a Post</a>
-                        <a href="<?php echo esc_url(wp_logout_url(home_url('/'))); ?>" class="tw-logout" role="menuitem">🚪 Log Out</a>
+                        <a href="<?php echo esc_url(home_url('/profile/')); ?>" role="menuitem"><i class="fa-regular fa-user"></i> My Profile</a>
+                        <a href="<?php echo esc_url(home_url('/submit-blog/')); ?>" role="menuitem"><i class="fa-regular fa-pen-to-square"></i> Write a Post</a>
+                        <a href="<?php echo esc_url(wp_logout_url(home_url('/'))); ?>" class="tw-logout" role="menuitem"><i class="fa-solid fa-right-from-bracket"></i> Log Out</a>
                     </div>
                 </div>
             <?php else : ?>
@@ -189,15 +189,15 @@
             'fallback_cb'    => 'tw_default_mobile_nav',
         ));
         ?>
-        <a class="tw-cta tw-cta-mobile" href="<?php echo esc_url(mytheme_get_plan_trip_url()); ?>">✈ Plan My Trip</a>
-        <button type="button" class="tw-cta tw-cta-mobile" id="tw-search-open-mobile" style="width:100%;background:rgba(255,255,255,0.08);color:#fff;border:1px solid rgba(255,255,255,0.15);margin-top:10px;">🔍 Search the site</button>
+        <a class="tw-cta tw-cta-mobile" href="<?php echo esc_url(mytheme_get_plan_trip_url()); ?>"><i class="fa-solid fa-paper-plane"></i> Plan My Trip</a>
+        <button type="button" class="tw-cta tw-cta-mobile" id="tw-search-open-mobile" style="width:100%;background:rgba(255,255,255,0.08);color:#fff;border:1px solid rgba(255,255,255,0.15);margin-top:10px;"><i class="fa-solid fa-magnifying-glass"></i> Search the site</button>
 
         <!-- Mobile auth links -->
         <div class="tw-mobile-auth">
         <?php if (is_user_logged_in()) :
             $tw_mob_user = wp_get_current_user();
         ?>
-            <a href="<?php echo esc_url(home_url('/profile/')); ?>" class="login">👤 <?php echo esc_html($tw_mob_user->display_name ?: $tw_mob_user->user_login); ?></a>
+            <a href="<?php echo esc_url(home_url('/profile/')); ?>" class="login"><i class="fa-regular fa-user"></i> <?php echo esc_html($tw_mob_user->display_name ?: $tw_mob_user->user_login); ?></a>
             <a href="<?php echo esc_url(wp_logout_url(home_url('/'))); ?>" class="signup">Log Out</a>
         <?php else : ?>
             <a href="<?php echo esc_url(home_url('/login/')); ?>" class="login">Log In</a>
