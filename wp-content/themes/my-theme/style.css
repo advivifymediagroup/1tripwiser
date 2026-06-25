@@ -400,25 +400,26 @@ h5, h6 {
 
 .post-card {
   background: white;
-  border-radius: 5px;
+  border-radius: 12px;
+  border: 1px solid #e7eaf0;
   overflow: hidden;
-  padding-top: 1rem;
-  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
-  transition:
-    transform 0.3s,
-    box-shadow 0.3s;
+  padding-top: 0;
+  box-shadow: 0 2px 8px rgba(13,21,38,0.04);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 .post-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(13,21,38,0.12);
 }
 
 .post-thumbnail img {
   width: 100%;
-  height: 200px;
+  height: 230px;
   object-fit: cover;
+  transition: transform 0.5s ease;
 }
+.post-card:hover .post-thumbnail img { transform: scale(1.05); }
 
 .post-content {
   padding: 20px;
@@ -1147,64 +1148,92 @@ h5, h6 {
   padding: 20px;
 }
 
+/* Trip.com-style card: image dominant, title overlaid on dark gradient,
+   minimal footer with price + CTA. */
 .package-card,
 .destination-card {
-  border-radius: 8px;
+  border-radius: 12px;
   display: flex;
   flex-direction: column;
   min-height: 100%;
+  background: #fff;
+  border: 1px solid #e7eaf0;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(13,21,38,0.04);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.package-card:hover,
+.destination-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(13,21,38,0.12);
 }
 
 .package-media {
-  aspect-ratio: 16 / 11;
+  aspect-ratio: 4 / 3;
   background: #eef7f6;
   margin: 0;
   overflow: hidden;
   position: relative;
 }
 
+.package-media > a { display: block; height: 100%; }
+
 .package-media img {
   display: block;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.35s ease;
+  transition: transform 0.5s ease;
   width: 100%;
 }
 
 .package-card:hover .package-media img,
 .destination-card:hover .package-media img {
-  transform: scale(1.04);
+  transform: scale(1.05);
+}
+
+/* Dark gradient at the bottom of the image so overlaid text is readable */
+.package-media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(13,21,38,0.78) 0%, rgba(13,21,38,0.0) 55%);
+  pointer-events: none;
+  z-index: 1;
 }
 
 .package-tag {
-  background: #f1af1a;
-  border-radius: 999px;
+  background: #FCB415;
+  border-radius: 4px;
   color: #0d1526;
-  font-size: 0.74rem;
+  font-size: 0.7rem;
   font-weight: 800;
-  left: 14px;
-  padding: 6px 12px;
+  left: 12px;
+  padding: 4px 10px;
   position: absolute;
   text-transform: uppercase;
-  top: 14px;
+  top: 12px;
+  z-index: 2;
+  letter-spacing: 0.04em;
 }
 
 .package-compare-check {
   align-items: center;
-  background: rgba(13, 21, 38, 0.78);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  border-radius: 999px;
-  bottom: 12px;
-  color: #ffffff;
+  background: rgba(255,255,255,0.95);
+  border: none;
+  border-radius: 4px;
+  color: #0d1526;
   cursor: pointer;
   display: inline-flex;
-  font-size: 0.8rem;
-  font-weight: 800;
-  gap: 7px;
-  padding: 7px 11px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  gap: 6px;
+  padding: 5px 9px;
   position: absolute;
   right: 12px;
+  top: 12px;
   z-index: 2;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
 }
 
 .package-compare-check input {
@@ -1217,86 +1246,116 @@ h5, h6 {
   display: flex;
   flex: 1;
   flex-direction: column;
-  padding: 18px;
+  padding: 14px 16px 16px;
+  position: relative;
 }
 
-.package-content h2,
-.package-content h3 {
-  font-size: 1.18rem;
-  line-height: 1.35;
-  margin: 8px 0 12px;
-}
-
-.package-content h2 a,
-.package-content h3 a {
-  color: #0d1526;
-  text-decoration: none;
-}
-
-.package-location {
-  color: #667085;
+/* Location + Title slide UP and overlay the bottom of the image */
+.package-card .package-location {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  top: -78px;
+  z-index: 2;
+  color: rgba(255,255,255,0.92);
+  font-size: 0.78rem;
+  font-weight: 600;
   display: inline-flex;
-  font-size: 0.9rem;
+  align-items: center;
   gap: 6px;
-  line-height: 1.4;
+  margin: 0;
+  pointer-events: none;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.4);
 }
 
-.package-location i {
-  color: #0692af;
-  margin-top: 3px;
+.package-card .package-location i {
+  color: #FCB415;
+  margin: 0;
 }
 
+.package-card .package-content h2,
+.package-card .package-content h3 {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  top: -54px;
+  z-index: 2;
+  font-size: 1.15rem;
+  line-height: 1.25;
+  margin: 0;
+  color: #fff;
+  font-weight: 800;
+  pointer-events: none;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+  /* Allow clicks on the link inside */
+}
+.package-card .package-content h2 a,
+.package-card .package-content h3 a {
+  color: #fff;
+  text-decoration: none;
+  pointer-events: auto;
+}
+
+/* Below image: clean facts row */
 .package-facts {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 16px;
+  gap: 12px;
+  margin-bottom: 14px;
+  font-size: 0.82rem;
+  color: #667085;
 }
 
 .package-facts span {
-  background: #eef7f6;
-  border: 1px solid #cfe7e5;
-  border-radius: 999px;
-  color: #0d6b68;
-  font-size: 0.82rem;
-  font-weight: 700;
-  padding: 6px 10px;
+  background: transparent;
+  border: none;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: #667085;
+  font-weight: 600;
 }
+.package-facts span i { color: #0692af; }
 
 .package-price-row {
-  align-items: end;
-  border-top: 1px solid #e7eaf0;
+  align-items: center;
+  border-top: 1px solid #f1f3f7;
   display: flex;
   gap: 12px;
   justify-content: space-between;
   margin-top: auto;
-  padding-top: 16px;
+  padding-top: 12px;
 }
 
 .package-price-row strong {
-  color: #0d1526;
+  color: #0692af;
   display: block;
-  font-size: 1.25rem;
+  font-size: 1.3rem;
+  font-weight: 800;
   line-height: 1.1;
 }
 
 .package-price-row small {
-  color: #667085;
+  color: #9ba8bb;
   display: block;
-  font-size: 0.78rem;
-  margin-top: 5px;
+  font-size: 0.72rem;
+  margin-top: 3px;
+  font-weight: 600;
 }
 
 .book-now-btn {
-  background: #0d6b68;
+  background: #0692af;
   border-radius: 6px;
   color: #fff;
   flex: 0 0 auto;
-  font-size: 0.9rem;
-  font-weight: 800;
-  padding: 10px 14px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 9px 16px;
   text-decoration: none;
+  transition: background 0.18s;
 }
+.book-now-btn:hover { background: #057a92; color: #fff; }
 
 .book-now-btn:hover {
   background: #095654;
@@ -3930,27 +3989,25 @@ select.fi { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w
    GRADIENT HEADINGS
    ================================================================ */
 
-/* Light-background headings — blue → gold → green */
+/* Light-background headings — solid dark navy */
 .section-heading h2,
 .ba-hero-title,
 .ba-section-head,
 .plan-hero-title,
 .tw-cta-title {
-    background: linear-gradient(135deg, #0692AF 0%, #FCB415 55%, #306C35 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: #0d1526;
+    background: none;
+    -webkit-text-fill-color: currentColor;
 }
 
-/* Dark-background headings — gold → ice-blue → gold */
+/* Dark-background headings — solid white */
 .tw-blog-title,
 .tw-community-title,
 .sp-hero-title,
 .sb-hero h1 {
-    background: linear-gradient(135deg, #FCB415 0%, #7ddcea 52%, #FCB415 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: #fff;
+    background: none;
+    -webkit-text-fill-color: currentColor;
 }
 
 /* Spans inside gradient headings inherit the transparent fill —
