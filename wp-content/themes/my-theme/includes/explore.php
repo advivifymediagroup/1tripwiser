@@ -120,7 +120,7 @@ function tw_group_trip_register_acf_fields() {
         array( 'key' => 'field_twgt_tag',    'label' => 'Trip Tag',                 'name' => 'package_tag',         'type' => 'select',   'choices' => array( 'bestseller' => 'Bestseller', 'trending' => 'Trending', 'new' => 'New', 'limited' => 'Limited Seats', 'popular' => 'Popular' ), 'allow_null' => 0, 'wrapper' => array( 'width' => '50' ) ),
         array( 'key' => 'field_twgt_nights', 'label' => 'Total Nights',             'name' => 'total_nights',        'type' => 'number',   'wrapper' => array( 'width' => '50' ) ),
         array( 'key' => 'field_twgt_days',   'label' => 'Total Days',               'name' => 'total_days',          'type' => 'number',   'wrapper' => array( 'width' => '50' ) ),
-        array( 'key' => 'field_twgt_type',   'label' => 'Trip Type',                'name' => 'package_trip_type',   'type' => 'select',   'choices' => array( 'Group Trip' => 'Group Trip', 'Women Trip' => "Women's Trip 👩‍🦰", 'Backpacking' => 'Backpacking', 'Adventure' => 'Adventure', 'Trekking' => 'Trekking', 'Weekend Getaway' => 'Weekend Getaway', 'Family Trip' => 'Family Trip' ), 'allow_null' => 0, 'wrapper' => array( 'width' => '50' ) ),
+        array( 'key' => 'field_twgt_type',   'label' => 'Trip Type',                'name' => 'package_trip_type',   'type' => 'select',   'choices' => array( 'Group Trip' => 'Group Trip', 'Women Trip' => "Women's Trip", 'Luxe Trip' => 'Luxe Trip (Premium)', 'Backpacking' => 'Backpacking', 'Adventure' => 'Adventure', 'Trekking' => 'Trekking', 'Weekend Getaway' => 'Weekend Getaway', 'Family Trip' => 'Family Trip' ), 'allow_null' => 0, 'wrapper' => array( 'width' => '50' ) ),
         array( 'key' => 'field_twgt_amt',    'label' => 'Price Per Person (₹)',     'name' => 'package_amount',      'type' => 'number',   'wrapper' => array( 'width' => '50' ) ),
         array( 'key' => 'field_twgt_emi',    'label' => 'EMI Option',               'name' => 'package_emi',         'type' => 'text',     'instructions' => 'e.g. ₹2,166/mo', 'wrapper' => array( 'width' => '50' ) ),
         array( 'key' => 'field_twgt_size',   'label' => 'Group Size',               'name' => 'group_size',          'type' => 'text',     'instructions' => 'e.g. 8–15 Pax', 'wrapper' => array( 'width' => '50' ) ),
@@ -362,6 +362,90 @@ function tw_group_trip_region_url( $slug = '' ) {
 /* =============================================================
  * 5. SUBHEADER MEGA-MENU  (replaces the old travel-tabs)
  * ============================================================= */
+/* ── LUXE (Luxury / Concierge-style trips) helpers ── */
+
+/** URL of the LUXE landing page (looks for a page using the template). */
+function tw_luxe_page_url() {
+    $pages = get_posts( array(
+        'post_type'  => 'page',
+        'meta_key'   => '_wp_page_template',
+        'meta_value' => 'page-luxe.php',
+        'numberposts'=> 1,
+        'fields'     => 'ids',
+    ) );
+    if ( $pages ) { return get_permalink( $pages[0] ); }
+    return home_url( '/luxe/' );
+}
+
+/** Fetch recent LUXE trips (across group_trip + travel_package + tw_event). */
+function tw_recent_luxe_trips( $limit = 8 ) {
+    return get_posts( array(
+        'post_type'   => array( 'group_trip', 'travel_package', 'tw_event' ),
+        'post_status' => 'publish',
+        'numberposts' => $limit,
+        'meta_query'  => array(
+            'relation' => 'OR',
+            array( 'key' => 'package_trip_type',  'value' => 'Luxe Trip', 'compare' => '=' ),
+            array( 'key' => '_package_trip_type', 'value' => 'Luxe Trip', 'compare' => '=' ),
+        ),
+        'orderby'     => 'date',
+        'order'       => 'DESC',
+    ) );
+}
+
+/** Homepage LUXE showcase — dark elegant section with gold accents. */
+function tw_luxe_showcase( $limit = 3 ) {
+    $trips    = tw_recent_luxe_trips( $limit );
+    if ( empty( $trips ) ) { return; }
+    $page_url = tw_luxe_page_url();
+    ?>
+    <section class="tw-luxe-section">
+        <div class="container tw-luxe-inner">
+
+            <div class="tw-luxe-header">
+                <span class="tw-luxe-kicker">By Invitation &middot; Curated for Connoisseurs</span>
+                <h2 class="tw-luxe-title">LUXE</h2>
+                <p class="tw-luxe-sub">Private yachts, charter jets, Michelin-starred experiences and quiet villas. Concierge-level travel for those who travel differently.</p>
+            </div>
+
+            <div class="tw-luxe-grid">
+                <?php foreach ( $trips as $trip ) :
+                    $thumb = get_the_post_thumbnail_url( $trip->ID, 'large' );
+                    $price = '';
+                    foreach ( array( 'package_amount', 'starting_price', '_starting_price', '_package_amount' ) as $_k ) {
+                        $_v = get_post_meta( $trip->ID, $_k, true );
+                        if ( is_numeric( $_v ) && $_v > 0 ) { $price = $_v; break; }
+                    }
+                    $loc = get_post_meta( $trip->ID, 'package_location', true ) ?: mytheme_get_travel_field( 'destination_name', $trip->ID );
+                    $nights = (int) get_post_meta( $trip->ID, 'total_nights', true );
+                    $days   = (int) get_post_meta( $trip->ID, 'total_days', true );
+                    $dur    = $nights ? $nights . 'N / ' . ( $days ?: $nights + 1 ) . 'D' : '';
+                ?>
+                <a class="tw-luxe-card" href="<?php echo esc_url( get_permalink( $trip->ID ) ); ?>">
+                    <div class="tw-luxe-card-img" <?php if ( $thumb ) : ?>style="background-image:url('<?php echo esc_url( $thumb ); ?>')"<?php endif; ?>>
+                        <?php if ( ! $thumb ) : ?><i class="fa-solid fa-crown tw-luxe-card-ph"></i><?php endif; ?>
+                        <span class="tw-luxe-badge">LUXE</span>
+                    </div>
+                    <div class="tw-luxe-card-body">
+                        <?php if ( $loc ) : ?><span class="tw-luxe-card-loc"><?php echo esc_html( $loc ); ?></span><?php endif; ?>
+                        <h3 class="tw-luxe-card-title"><?php echo esc_html( get_the_title( $trip->ID ) ); ?></h3>
+                        <div class="tw-luxe-card-foot">
+                            <?php if ( $dur ) : ?><span class="tw-luxe-card-dur"><?php echo esc_html( $dur ); ?></span><?php endif; ?>
+                            <?php if ( $price ) : ?><span class="tw-luxe-card-price"><?php echo esc_html( function_exists('mytheme_format_rupee_amount') ? mytheme_format_rupee_amount( $price ) : '₹'.$price ); ?> <small>onwards</small></span><?php endif; ?>
+                        </div>
+                    </div>
+                </a>
+                <?php endforeach; ?>
+            </div>
+
+            <div class="tw-luxe-cta">
+                <a href="<?php echo esc_url( $page_url ); ?>" class="tw-luxe-cta-btn">Enter LUXE <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </section>
+    <?php
+}
+
 /* ── Women's Group Trips helpers ── */
 
 /** URL of the Women's Group Trips page (looks for a page using the template). */
@@ -547,6 +631,36 @@ function tw_explore_subheader() {
                         <div class="tw-mega-empty"><p>Women's trips coming soon.</p></div>
                     <?php endif; ?>
                     <a class="tw-mega-allcta" href="<?php echo esc_url( tw_womens_trips_page_url() ); ?>">View all women's trips →</a>
+                </div>
+            </div>
+
+            <?php $luxe_trips = tw_recent_luxe_trips( 6 ); ?>
+            <div class="tw-sub-item has-mega">
+                <a class="tw-sub-link tw-sub-link--luxe" href="<?php echo esc_url( tw_luxe_page_url() ); ?>">
+                    LUXE
+                    <i class="fa-solid fa-chevron-down tw-sub-caret" aria-hidden="true"></i>
+                </a>
+                <div class="tw-mega tw-mega-events tw-mega--luxe" role="menu">
+                    <div class="tw-mega-luxe-hero">
+                        <i class="fa-solid fa-crown tw-mega-luxe-icon"></i>
+                        <div>
+                            <strong>LUXE</strong>
+                            <small>By Invitation &middot; Concierge-Style</small>
+                        </div>
+                    </div>
+                    <?php if ( $luxe_trips ) : ?>
+                    <div class="tw-mega-events-grid">
+                        <?php foreach ( $luxe_trips as $lt ) : ?>
+                            <a class="tw-mega-event" href="<?php echo esc_url( get_permalink( $lt->ID ) ); ?>">
+                                <i class="fa-solid fa-gem tw-mega-event-icon"></i>
+                                <span class="tw-mega-event-name"><?php echo esc_html( get_the_title( $lt->ID ) ); ?></span>
+                            </a>
+                        <?php endforeach; ?>
+                    </div>
+                    <?php else : ?>
+                        <div class="tw-mega-empty"><p>Curated luxe experiences coming soon.</p></div>
+                    <?php endif; ?>
+                    <a class="tw-mega-allcta" href="<?php echo esc_url( tw_luxe_page_url() ); ?>">Enter LUXE <i class="fa-solid fa-arrow-right"></i></a>
                 </div>
             </div>
 
