@@ -410,6 +410,89 @@ function tw_demo_generate() {
         ), $created );
     }
 
+    /* ---- LUXE TRIPS (luxury / private travel) ---- */
+    $luxe_trips = array(
+        array(
+            'title' => 'Mediterranean Yacht Charter', 'slug' => 'demo-luxe-yacht', 'regions' => array( $spain ), 'thumb' => 'luxe-yacht-mediterranean',
+            'excerpt' => 'Seven nights aboard a private 50m crewed yacht through Mallorca, Ibiza and the Côte d\'Azur.',
+            'content' => '<p>Seven nights at sea on a privately chartered 50-metre motor yacht with a crew of eight — captain, chef, two stewards, two deckhands, an engineer and a tender driver. The yacht sails by night and anchors by day, never docking in busy marinas so guests step ashore on their own quiet beach each morning.</p>'
+                . '<p>The week opens in Mallorca with a chef\'s tasting on the foredeck and a slow drift to the Formentera sandbars. From there, an evening crossing to Ibiza, where the yacht moors off Cala Llonga and an after-hours table is arranged at a hillside finca that doesn\'t take public bookings. The northern leg is for the French Riviera — Saint-Tropez, Antibes, Monaco — with a helicopter on call for inland day-trips to Eze or a Michelin-three-star lunch in Mougins.</p>'
+                . '<p>Every detail is scripted in advance with a private travel director: dietary preferences are sent to the chef before embarkation, the wine list is built around guest provenance, and an NDA covers the crew throughout the engagement. Photography is at guests\' discretion only.</p>',
+            'core' => array( 'location' => 'Western Mediterranean', 'price' => '4500000', 'nights' => '7', 'days' => '8', 'duration' => '7 Nights 8 Days', 'best_time' => 'June to September', 'group_size' => 'Up to 10 Guests', 'trip_type' => 'Private Yacht', 'tag' => 'signature', 'emi' => 'On request', 'route' => 'Mallorca → Formentera → Ibiza → Saint-Tropez → Antibes → Monaco', 'overview' => 'Seven nights of quiet Mediterranean summer aboard a privately chartered 50m yacht. The crew is briefed weeks in advance; nothing is rented twice, and nothing is shared.' ),
+            'highlights' => "Chef\'s tasting on the foredeck at sunset\nAnchor swim at the Formentera sandbars before crowds arrive\nAfter-hours table at an Ibiza hillside finca with no public bookings\nHelicopter access from Saint-Tropez to a Mougins three-star lunch\nDawn paddle-board through Calanques de Marseille\nPrivate beach drop-off at Pampelonne with butler service\nSeabob, jet-ski and certified dive instructors aboard\nOptional photographer on the final evening only",
+            'inclusions' => "Sole use of a 50-metre yacht with full crew of eight\nPrivate chef with bespoke menu planned to guest profiles\nAll premium dining, wines and a curated open bar\nButler service in every cabin\nHelicopter transfers (up to two day-trips)\nAll water sports — jet skis, seabob, paddleboards, kayaks, sailing dinghy\nNDA-bound crew, no third-party media on board\nDoor-to-door private transfers from Palma de Mallorca",
+        ),
+        array(
+            'title' => 'Aman Bhutan — Five Lodges Private Tour', 'slug' => 'demo-luxe-bhutan', 'regions' => array( $bhutan ?? 0 ), 'thumb' => 'luxe-bhutan-mountains',
+            'excerpt' => 'Eight nights across all five Amankora lodges with private guide and helicopter transfers.',
+            'content' => '<p>Eight nights traversing all five Amankora lodges — Paro, Thimphu, Punakha, Gangtey, Bumthang — done at the slow pace the kingdom demands. A single licensed guide accompanies the party from arrival to departure, with the same driver throughout, so the relationship deepens as the valleys open out.</p>'
+                . '<p>The route is reverse-engineered around the seasons. Punakha for the long-stem prayer-flag valley walks, Gangtey for the black-necked cranes if travelling in autumn, Bumthang for the cluster of monasteries that few foreign guests reach. A helicopter handles the Bumthang–Paro return so the final day is reserved for the pre-dawn climb to Taktsang, the Tiger\'s Nest, before any group arrives.</p>'
+                . '<p>One evening is held for an audience with a senior monk at Punakha Dzong, arranged privately. Another for a hot-stone bath in a riverside farmhouse with the family who runs it. A private archery match with a national-team coach is offered at Thimphu — competitive, surprising, and the photograph nobody takes home.</p>',
+            'core' => array( 'location' => 'Bhutan', 'price' => '3200000', 'nights' => '8', 'days' => '9', 'duration' => '8 Nights 9 Days', 'best_time' => 'March to May, September to November', 'group_size' => '2 Guests', 'trip_type' => 'Bespoke', 'tag' => 'limited', 'emi' => 'On request', 'route' => 'Paro → Thimphu → Punakha → Gangtey → Bumthang → Paro', 'overview' => 'The full Aman circuit, done privately and slowly. The most considered way to see the last Himalayan kingdom — five lodges, one guide, eight nights.' ),
+            'highlights' => "Audience with a senior monk at Punakha Dzong\nHelicopter transfer between Bumthang and Paro\nPre-dawn private climb to Taktsang (the Tiger\'s Nest)\nArchery match with a member of the Bhutanese national team\nRiverside hot-stone bath at a private farmhouse\nLong-stem prayer-flag walk above Punakha\nBlessing ceremony at a 16th-century lhakhang in Bumthang\nWeaving and indigo-dye demonstration with a master textile family",
+            'inclusions' => "All five Amankora lodges — Paro, Thimphu, Punakha, Gangtey, Bumthang\nPrivate licensed Bhutanese guide and dedicated driver throughout\nInternal helicopter transfer (Bumthang → Paro)\nAll meals, premium beverages, in-suite dining where preferred\nDaily wellness program designed around the day\'s walk\nGovernment visa and royalty contributions\nNight-by-night NDA, no images on social channels\nDoor-to-door transfers in armoured Land Cruiser",
+        ),
+        array(
+            'title' => 'Maldives — Private Atoll Reserve', 'slug' => 'demo-luxe-maldives', 'regions' => array( $singapore ?? 0 ), 'thumb' => 'luxe-maldives-overwater-villa',
+            'excerpt' => 'A six-villa private reserve in the Baa Atoll, taken in its entirety. One party at a time.',
+            'content' => '<p>A six-villa private reserve in the Baa Atoll — a UNESCO Biosphere — taken in its entirety for the duration of stay. The island operates for one party at a time; the staff of forty resets between guests so no overlap is possible.</p>'
+                . '<p>A resident marine biologist plans the week around manta-ray season, hosts a night-snorkel through the house reef, and arranges a dawn dolphin cruise on the reserve\'s 32-metre support yacht. The master chef arrives the day before the party and stays through; the kitchen is unmenued, working entirely to brief.</p>'
+                . '<p>A typical evening: butler-drawn bath at sundown, candlelit dinner laid on a sandbank at low tide, then a fire-lit nightcap on the western beach with no other lights for kilometres. The week closes with a privately catered farewell aboard the support yacht as it carries the party back to the seaplane.</p>',
+            'core' => array( 'location' => 'Baa Atoll, Maldives', 'price' => '5800000', 'nights' => '6', 'days' => '7', 'duration' => '6 Nights 7 Days', 'best_time' => 'November to April', 'group_size' => 'Up to 12 Guests', 'trip_type' => 'Private Villa', 'tag' => 'signature', 'emi' => 'On request', 'route' => 'Malé → Private Reserve, Baa Atoll → Malé', 'overview' => 'A UNESCO-biosphere island reserve, taken privately for one party. Six pavilions, a marine biologist on call, a master chef in residence. The most discreet week in the Indian Ocean.' ),
+            'highlights' => "Sole-use of a six-villa private island in the Baa Atoll\nResident marine biologist and manta-ray season expedition\nCandlelit sandbank dinner with the chef cooking on the bar\nDawn dolphin cruise aboard a 32-metre support yacht\nHouse-reef night snorkel with bio-luminescence\nButler-drawn bath rituals from a Maldivian apothecary\nPrivate sunset cocktails on an uninhabited neighbouring island\nNDA-bound staff team of forty, fully reset between guests",
+            'inclusions' => "Sole occupancy of six beach pavilions for six nights\nReturn seaplane and private launch transfers from Malé\nMaster chef in residence with unmenued kitchen\nAll meals, premium beverages, private cellar of curated wines\nResident marine biologist and dive instructor\n32m support yacht for two excursion days\nButler per pavilion, complimentary spa rituals\nAll motor-yachts and water sports — diving, manta excursions, jet-ski",
+        ),
+        array(
+            'title' => 'Royal Rajasthan by Private Train', 'slug' => 'demo-luxe-rajasthan-train', 'regions' => array( $rajasthan ), 'thumb' => 'luxe-rajasthan-palace-jaipur',
+            'excerpt' => 'Eight nights aboard a charter carriage of the Maharajas\' Express across Rajasthan.',
+            'content' => '<p>Eight nights aboard a privately chartered carriage of the Maharajas\' Express — the carriage detached from public service for the duration, with its own butler, chef de partie and security team. The train moves at night, holding by day so the morning view from the dining car opens onto a different palace each sunrise.</p>'
+                . '<p>The route runs Delhi to Delhi via Jaipur, Ranthambore, Jodhpur, Udaipur and Bikaner. At each city, a palace dinner is hosted by a descendant of the original ruling family — the Marwars at Umaid Bhawan, the Mewars beside Lake Pichola — with the food prepared in the household\'s own kitchens and served on the family\'s heirloom silver.</p>'
+                . '<p>Beyond the train: private tiger drives at Ranthambore with a senior naturalist, an after-hours visit to the Mehrangarh armoury, a polo demonstration laid on at the Bikaner Cavalry, and an audience with a Rajput descendant in Udaipur whose private collection is normally closed to all visitors. A personal valet travels with the party from boarding to disembarkation.</p>',
+            'core' => array( 'location' => 'Rajasthan, India', 'price' => '2800000', 'nights' => '8', 'days' => '9', 'duration' => '8 Nights 9 Days', 'best_time' => 'October to March', 'group_size' => '2–4 Guests', 'trip_type' => 'Private Rail', 'tag' => 'bespoke', 'emi' => 'On request', 'route' => 'Delhi → Jaipur → Ranthambore → Jodhpur → Udaipur → Bikaner → Delhi', 'overview' => 'India\'s royal trail, taken privately. A charter carriage of the Maharajas\' Express, palace dinners with descendants of the original ruling families, after-hours museum access and private tiger drives at Ranthambore.' ),
+            'highlights' => "Palace dinner at Umaid Bhawan with the Marwar royal family\nPrivate tiger drive at Ranthambore with a senior naturalist\nAudience with a Rajput descendant in Udaipur — closed collection\nAfter-hours visit to the Mehrangarh armoury at Jodhpur\nPolo demonstration laid on at the Bikaner Cavalry\nChef\'s table on the dining car as the train rolls into Jaipur at dawn\nPrivate aarti at the City Palace ghats, Udaipur\nBlessing ceremony at Karni Mata, with a temple priest as guide",
+            'inclusions' => "Private carriage of the Maharajas\' Express for eight nights\nDedicated butler, chef de partie and personal valet\nAll meals on board and at the palaces — banquet style on heirloom silver\nPalace stays where the route holds overnight (Udaipur)\nPrivate tiger jeeps and naturalist at Ranthambore\nAll ground transfers in chauffeured BMW 7 / Range Rover\nGuided after-hours museum access at four cities\nReturn private transfer Delhi airport ↔ rail",
+        ),
+    );
+    foreach ( $luxe_trips as $lt ) {
+        $pid = tw_demo_post( array(
+            'post_type'    => 'tw_luxe',
+            'post_title'   => $lt['title'],
+            'post_name'    => $lt['slug'],
+            'post_content' => $lt['content'],
+            'post_excerpt' => $lt['excerpt'],
+            'regions'      => array_filter( $lt['regions'] ),
+            'meta'         => tw_demo_full_meta( $lt['core'] ),
+            'thumb_seed'   => $lt['thumb'],
+        ), $created );
+        // tw_demo_post returns the existing ID if the slug exists. Refresh body + LUXE-only
+        // meta on demo posts so re-running the seeder propagates richer content without
+        // touching non-demo edits.
+        $existing = get_page_by_path( $lt['slug'], OBJECT, 'tw_luxe' );
+        if ( $existing && get_post_meta( $existing->ID, '_tw_demo', true ) ) {
+            wp_update_post( array(
+                'ID'           => $existing->ID,
+                'post_content' => $lt['content'],
+                'post_excerpt' => $lt['excerpt'],
+            ) );
+            // Re-apply the full meta set (also writes non-underscored keys the LUXE template reads).
+            $full = tw_demo_full_meta( $lt['core'] );
+            foreach ( $full as $k => $v ) { update_post_meta( $existing->ID, $k, $v ); }
+            update_post_meta( $existing->ID, 'package_location',  $lt['core']['location'] );
+            update_post_meta( $existing->ID, 'package_amount',    $lt['core']['price'] );
+            update_post_meta( $existing->ID, 'package_overview',  $lt['core']['overview'] );
+            update_post_meta( $existing->ID, 'package_trip_type', $lt['core']['trip_type'] );
+            update_post_meta( $existing->ID, 'package_tag',       $lt['core']['tag'] );
+            update_post_meta( $existing->ID, 'event_date',        'On request' );
+            update_post_meta( $existing->ID, 'group_size',        $lt['core']['group_size'] );
+            update_post_meta( $existing->ID, 'best_time',         $lt['core']['best_time'] );
+            update_post_meta( $existing->ID, 'route_summary',     $lt['core']['route'] );
+            update_post_meta( $existing->ID, 'total_nights',      $lt['core']['nights'] );
+            update_post_meta( $existing->ID, 'total_days',        $lt['core']['days'] );
+            update_post_meta( $existing->ID, 'luxe_highlights',   $lt['highlights'] );
+            update_post_meta( $existing->ID, 'luxe_inclusions',   $lt['inclusions'] );
+        }
+    }
+
     /* ---- DESTINATIONS ---- */
     $dests = array(
         array( 'Bali, Indonesia', 'demo-dest-bali', 'Island of temples, surf and rice terraces.', array( $bali ), 'balidest' ),
@@ -480,7 +563,7 @@ function tw_demo_generate() {
 function tw_demo_remove() {
     $removed = 0;
     $ids = get_posts( array(
-        'post_type'      => array( 'travel_package', 'itinerary', 'group_trip', 'tw_event', 'destination', 'post', 'forum_topic' ),
+        'post_type'      => array( 'travel_package', 'itinerary', 'group_trip', 'tw_event', 'tw_luxe', 'destination', 'post', 'forum_topic' ),
         'post_status'    => 'any',
         'posts_per_page' => -1,
         'fields'         => 'ids',
