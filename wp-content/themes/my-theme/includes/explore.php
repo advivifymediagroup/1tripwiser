@@ -51,6 +51,93 @@ function tw_explore_register_event_cpt() {
 }
 add_action( 'init', 'tw_explore_register_event_cpt', 5 );
 
+/* =============================================================
+ * LUXE — exclusive luxury / private journeys
+ * A dedicated CPT with its own admin menu, fully separated from
+ * Group Trips / Packages so the main site experience and the
+ * LUXE collection are managed independently.
+ * ============================================================= */
+function tw_explore_register_luxe_cpt() {
+    register_post_type( 'tw_luxe', array(
+        'labels' => array(
+            'name'          => __( 'LUXE', 'mytheme' ),
+            'singular_name' => __( 'LUXE Journey', 'mytheme' ),
+            'add_new'       => __( 'Add Journey', 'mytheme' ),
+            'add_new_item'  => __( 'Add LUXE Journey', 'mytheme' ),
+            'edit_item'     => __( 'Edit LUXE Journey', 'mytheme' ),
+            'new_item'      => __( 'New LUXE Journey', 'mytheme' ),
+            'view_item'     => __( 'View Journey', 'mytheme' ),
+            'search_items'  => __( 'Search LUXE', 'mytheme' ),
+            'all_items'     => __( 'All Journeys', 'mytheme' ),
+            'menu_name'     => __( 'LUXE', 'mytheme' ),
+        ),
+        'public'        => true,
+        'has_archive'   => false,                       // /luxe/ landing page is the listing
+        'menu_icon'     => 'dashicons-awards',          // discreet gold-cup icon
+        'menu_position' => 24,                          // top of the trip CPTs cluster
+        'rewrite'       => array( 'slug' => 'luxe-journey', 'with_front' => false ),
+        'show_in_rest'  => true,
+        'supports'      => array( 'title', 'editor', 'excerpt', 'thumbnail', 'author', 'revisions' ),
+        'taxonomies'    => array( 'destination_region' ),
+    ) );
+}
+add_action( 'init', 'tw_explore_register_luxe_cpt', 5 );
+
+/** LUXE — full ACF field group, parity with Group Trips + luxury-specific tweaks. */
+function tw_luxe_register_acf_fields() {
+    if ( ! function_exists( 'acf_add_local_field_group' ) ) { return; }
+
+    $f = array(
+        array( 'key' => 'field_twlx_img',    'label' => 'Hero Image',                'name' => 'package_image',       'type' => 'image',    'return_format' => 'array', 'preview_size' => 'medium', 'library' => 'all' ),
+        array( 'key' => 'field_twlx_loc',    'label' => 'Location / Destination',    'name' => 'package_location',    'type' => 'text',     'instructions' => 'e.g. Mediterranean, Bhutan, Maldives', 'wrapper' => array( 'width' => '50' ) ),
+        array( 'key' => 'field_twlx_dep',    'label' => 'Departure',                 'name' => 'event_date',          'type' => 'text',     'instructions' => 'e.g. On request, May 2026', 'wrapper' => array( 'width' => '50' ) ),
+        array( 'key' => 'field_twlx_tag',    'label' => 'Journey Tag',               'name' => 'package_tag',         'type' => 'select',   'choices' => array( 'signature' => 'Signature', 'limited' => 'Limited Invitations', 'private' => 'By Private Enquiry', 'new' => 'New', 'bespoke' => 'Bespoke' ), 'allow_null' => 0, 'wrapper' => array( 'width' => '50' ) ),
+        array( 'key' => 'field_twlx_nights', 'label' => 'Total Nights',              'name' => 'total_nights',        'type' => 'number',   'wrapper' => array( 'width' => '50' ) ),
+        array( 'key' => 'field_twlx_days',   'label' => 'Total Days',                'name' => 'total_days',          'type' => 'number',   'wrapper' => array( 'width' => '50' ) ),
+        array( 'key' => 'field_twlx_type',   'label' => 'Journey Type',              'name' => 'package_trip_type',   'type' => 'select',   'choices' => array(
+            'Private Yacht'    => 'Private Yacht',
+            'Private Villa'    => 'Private Villa',
+            'Private Jet'      => 'Private Jet / Aviation',
+            'Private Rail'     => 'Private Rail / Charter Train',
+            'Safari'           => 'Safari / Conservation',
+            'Wellness Retreat' => 'Wellness Retreat',
+            'Heli Adventure'   => 'Heli / Adventure',
+            'Bespoke'          => 'Bespoke (Custom)',
+        ), 'allow_null' => 0, 'wrapper' => array( 'width' => '50' ) ),
+        array( 'key' => 'field_twlx_amt',    'label' => 'Invitation From (₹)',       'name' => 'package_amount',      'type' => 'number',   'instructions' => 'Indicative starting figure. Leave blank for "By Private Enquiry".', 'wrapper' => array( 'width' => '50' ) ),
+        array( 'key' => 'field_twlx_size',   'label' => 'Party Size',                'name' => 'group_size',          'type' => 'text',     'instructions' => 'e.g. Up to 10 Guests', 'wrapper' => array( 'width' => '50' ) ),
+        array( 'key' => 'field_twlx_book',   'label' => 'Enquiry URL (optional)',    'name' => 'package_book_url',    'type' => 'url',      'instructions' => 'Leave blank to send to this LUXE journey page.', 'wrapper' => array( 'width' => '50' ) ),
+        array( 'key' => 'field_twlx_route',  'label' => 'Route Summary',             'name' => 'route_summary',       'type' => 'text',     'instructions' => 'e.g. Mallorca → Ibiza → Saint-Tropez' ),
+        array( 'key' => 'field_twlx_best',   'label' => 'Best Time to Visit',        'name' => 'best_time',           'type' => 'text',     'instructions' => 'e.g. April to October', 'wrapper' => array( 'width' => '50' ) ),
+        array( 'key' => 'field_twlx_ov',     'label' => 'Journey Overview',          'name' => 'package_overview',    'type' => 'wysiwyg',  'tabs' => 'all', 'toolbar' => 'full', 'media_upload' => 1 ),
+        array( 'key' => 'field_twlx_high',   'label' => 'Signature Highlights',      'name' => 'luxe_highlights',     'type' => 'textarea', 'instructions' => 'One highlight per line — chef-table dinner, helicopter transfer, private docking, etc.', 'rows' => 5, 'new_lines' => 'br' ),
+        array( 'key' => 'field_twlx_incl',   'label' => 'What\'s Included',          'name' => 'luxe_inclusions',     'type' => 'textarea', 'instructions' => 'One item per line — flights, transfers, butler, dining, etc.', 'rows' => 5, 'new_lines' => 'br' ),
+        array( 'key' => 'field_twlx_dest',   'label' => 'Linked Destination',        'name' => 'linked_destination',  'type' => 'post_object', 'post_type' => array( 'destination' ), 'post_status' => array( 'publish' ), 'return_format' => 'object', 'ui' => 1, 'allow_null' => 1 ),
+        array( 'key' => 'field_twlx_reg',    'label' => 'Region',                    'name' => 'package_region',      'type' => 'checkbox', 'choices' => array( 'india' => 'India', 'international' => 'International', 'asia' => 'Asia', 'europe' => 'Europe', 'middle-east' => 'Middle East', 'africa' => 'Africa', 'americas' => 'Americas' ), 'layout' => 'vertical' ),
+        array( 'key' => 'field_twlx_mon',    'label' => 'Available Months',          'name' => 'package_months',      'type' => 'checkbox', 'choices' => array( 'january' => 'January', 'february' => 'February', 'march' => 'March', 'april' => 'April', 'may' => 'May', 'june' => 'June', 'july' => 'July', 'august' => 'August', 'september' => 'September', 'october' => 'October', 'november' => 'November', 'december' => 'December' ), 'layout' => 'vertical' ),
+        array( 'key' => 'field_twlx_priv',   'label' => 'Private Sales Notes',       'name' => 'luxe_private_notes',  'type' => 'textarea', 'instructions' => 'Admin-only notes for the private travel team (NDA contacts, partner estate, host name). Never displayed on the site.', 'rows' => 4 ),
+    );
+    acf_add_local_field_group( array(
+        'key' => 'group_tw_luxe', 'title' => 'LUXE Journey Details', 'fields' => $f,
+        'location' => array( array( array( 'param' => 'post_type', 'operator' => '==', 'value' => 'tw_luxe' ) ) ),
+        'menu_order' => 0, 'position' => 'normal', 'style' => 'default', 'label_placement' => 'top', 'active' => true,
+    ) );
+}
+add_action( 'acf/init', 'tw_luxe_register_acf_fields' );
+
+/* LUXE uses Classic Editor so the ACF panel sits prominently below the title,
+   matching the Group Trips / Events admin experience. */
+add_filter( 'use_block_editor_for_post_type', function ( $use_block_editor, $post_type ) {
+    if ( $post_type === 'tw_luxe' ) { return false; }
+    return $use_block_editor;
+}, 10, 2 );
+
+/* Hide the Private Sales Notes field from anyone who isn't editor/admin. */
+add_filter( 'acf/prepare_field/key=field_twlx_priv', function ( $field ) {
+    if ( ! current_user_can( 'edit_others_posts' ) ) { return false; }
+    return $field;
+} );
+
 /* -----------------------------------------------------------------
  * ACF FIELD GROUPS — Events & Festivals + Group Trips
  * These PHP-registered (local) groups are the live fallback.
@@ -120,7 +207,7 @@ function tw_group_trip_register_acf_fields() {
         array( 'key' => 'field_twgt_tag',    'label' => 'Trip Tag',                 'name' => 'package_tag',         'type' => 'select',   'choices' => array( 'bestseller' => 'Bestseller', 'trending' => 'Trending', 'new' => 'New', 'limited' => 'Limited Seats', 'popular' => 'Popular' ), 'allow_null' => 0, 'wrapper' => array( 'width' => '50' ) ),
         array( 'key' => 'field_twgt_nights', 'label' => 'Total Nights',             'name' => 'total_nights',        'type' => 'number',   'wrapper' => array( 'width' => '50' ) ),
         array( 'key' => 'field_twgt_days',   'label' => 'Total Days',               'name' => 'total_days',          'type' => 'number',   'wrapper' => array( 'width' => '50' ) ),
-        array( 'key' => 'field_twgt_type',   'label' => 'Trip Type',                'name' => 'package_trip_type',   'type' => 'select',   'choices' => array( 'Group Trip' => 'Group Trip', 'Women Trip' => "Women's Trip", 'Luxe Trip' => 'Luxe Trip (Premium)', 'Backpacking' => 'Backpacking', 'Adventure' => 'Adventure', 'Trekking' => 'Trekking', 'Weekend Getaway' => 'Weekend Getaway', 'Family Trip' => 'Family Trip' ), 'allow_null' => 0, 'wrapper' => array( 'width' => '50' ) ),
+        array( 'key' => 'field_twgt_type',   'label' => 'Trip Type',                'name' => 'package_trip_type',   'type' => 'select',   'choices' => array( 'Group Trip' => 'Group Trip', 'Women Trip' => "Women's Trip", 'Backpacking' => 'Backpacking', 'Adventure' => 'Adventure', 'Trekking' => 'Trekking', 'Weekend Getaway' => 'Weekend Getaway', 'Family Trip' => 'Family Trip' ), 'allow_null' => 0, 'wrapper' => array( 'width' => '50' ) ),
         array( 'key' => 'field_twgt_amt',    'label' => 'Price Per Person (₹)',     'name' => 'package_amount',      'type' => 'number',   'wrapper' => array( 'width' => '50' ) ),
         array( 'key' => 'field_twgt_emi',    'label' => 'EMI Option',               'name' => 'package_emi',         'type' => 'text',     'instructions' => 'e.g. ₹2,166/mo', 'wrapper' => array( 'width' => '50' ) ),
         array( 'key' => 'field_twgt_size',   'label' => 'Group Size',               'name' => 'group_size',          'type' => 'text',     'instructions' => 'e.g. 8–15 Pax', 'wrapper' => array( 'width' => '50' ) ),
@@ -180,12 +267,66 @@ add_filter( 'use_block_editor_for_post_type', function ( $use_block_editor, $pos
 /* Flush rewrites once so /event/, /group-trips/ + region term URLs resolve.
    Bump the version to force a re-flush when rewrite-affecting rules change. */
 function tw_explore_maybe_flush() {
-    if ( get_option( 'tw_explore_rewrites_v' ) !== '3' ) {
+    if ( get_option( 'tw_explore_rewrites_v' ) !== '4' ) {
         flush_rewrite_rules( false );
-        update_option( 'tw_explore_rewrites_v', '3' );
+        update_option( 'tw_explore_rewrites_v', '4' );
     }
 }
 add_action( 'init', 'tw_explore_maybe_flush', 99 );
+
+/* One-time auto-refresh: if LUXE demo posts exist but lack the new richer body
+   + highlights/inclusions, re-run the seeder once so they get updated. The
+   seeder is gated by _tw_demo=1 inside the LUXE loop, so non-demo content is
+   untouched. */
+function tw_luxe_demo_autorefresh() {
+    if ( get_option( 'tw_luxe_demo_refreshed_v' ) === '2' ) { return; }
+    if ( ! function_exists( 'tw_demo_generate' ) ) { return; }
+
+    $has_luxe_demo = get_posts( array(
+        'post_type'      => 'tw_luxe',
+        'post_status'    => 'any',
+        'posts_per_page' => 1,
+        'fields'         => 'ids',
+        'meta_key'       => '_tw_demo',
+        'meta_value'     => 1,
+        'no_found_rows'  => true,
+    ) );
+    if ( ! empty( $has_luxe_demo ) ) {
+        tw_demo_generate();
+    }
+    update_option( 'tw_luxe_demo_refreshed_v', '2' );
+}
+add_action( 'admin_init', 'tw_luxe_demo_autorefresh' );
+
+/* One-time migration: any group_trip post that's a LUXE entry (slug demo-luxe-*
+   or trip_type = "Luxe Trip") gets moved into the new tw_luxe CPT so it picks
+   up single-tw_luxe.php instead of the standard group-trip template. */
+function tw_luxe_migrate_from_group_trip() {
+    if ( get_option( 'tw_luxe_migrated_v' ) === '1' ) { return; }
+
+    $q = new WP_Query( array(
+        'post_type'      => 'group_trip',
+        'post_status'    => 'any',
+        'posts_per_page' => -1,
+        'fields'         => 'ids',
+        'no_found_rows'  => true,
+    ) );
+    $moved = 0;
+    foreach ( $q->posts as $pid ) {
+        $slug      = get_post_field( 'post_name', $pid );
+        $trip_type = get_post_meta( $pid, 'package_trip_type', true );
+        if ( strpos( $slug, 'demo-luxe-' ) === 0 || $trip_type === 'Luxe Trip' ) {
+            set_post_type( $pid, 'tw_luxe' );
+            if ( $trip_type === 'Luxe Trip' ) {
+                update_post_meta( $pid, 'package_trip_type', 'Bespoke' );
+            }
+            $moved++;
+        }
+    }
+    update_option( 'tw_luxe_migrated_v', '1' );
+    if ( $moved ) { flush_rewrite_rules( false ); }
+}
+add_action( 'init', 'tw_luxe_migrate_from_group_trip', 20 );
 
 /* =============================================================
  * 2. STARTER SEEDING (idempotent; admin can edit/expand after)
@@ -377,17 +518,12 @@ function tw_luxe_page_url() {
     return home_url( '/luxe/' );
 }
 
-/** Fetch recent LUXE trips (across group_trip + travel_package + tw_event). */
+/** Fetch recent LUXE journeys from the dedicated tw_luxe CPT. */
 function tw_recent_luxe_trips( $limit = 8 ) {
     return get_posts( array(
-        'post_type'   => array( 'group_trip', 'travel_package', 'tw_event' ),
+        'post_type'   => 'tw_luxe',
         'post_status' => 'publish',
         'numberposts' => $limit,
-        'meta_query'  => array(
-            'relation' => 'OR',
-            array( 'key' => 'package_trip_type',  'value' => 'Luxe Trip', 'compare' => '=' ),
-            array( 'key' => '_package_trip_type', 'value' => 'Luxe Trip', 'compare' => '=' ),
-        ),
         'orderby'     => 'date',
         'order'       => 'DESC',
     ) );
@@ -403,9 +539,9 @@ function tw_luxe_showcase( $limit = 3 ) {
         <div class="container tw-luxe-inner">
 
             <div class="tw-luxe-header">
-                <span class="tw-luxe-kicker">By Invitation &middot; Curated for Connoisseurs</span>
+                <span class="tw-luxe-kicker">By Invitation</span>
                 <h2 class="tw-luxe-title">LUXE</h2>
-                <p class="tw-luxe-sub">Private yachts, charter jets, Michelin-starred experiences and quiet villas. Concierge-level travel for those who travel differently.</p>
+                <p class="tw-luxe-sub">A quieter way to travel. Private villas, crewed yachts, light jets and tables at restaurants without phone numbers — for those who prefer to travel privately.</p>
             </div>
 
             <div class="tw-luxe-grid">
@@ -439,7 +575,7 @@ function tw_luxe_showcase( $limit = 3 ) {
             </div>
 
             <div class="tw-luxe-cta">
-                <a href="<?php echo esc_url( $page_url ); ?>" class="tw-luxe-cta-btn">Enter LUXE <i class="fa-solid fa-arrow-right"></i></a>
+                <a href="<?php echo esc_url( $page_url ); ?>" class="tw-luxe-cta-btn">Explore the Collection <i class="fa-solid fa-arrow-right"></i></a>
             </div>
         </div>
     </section>
@@ -642,10 +778,10 @@ function tw_explore_subheader() {
                 </a>
                 <div class="tw-mega tw-mega-events tw-mega--luxe" role="menu">
                     <div class="tw-mega-luxe-hero">
-                        <i class="fa-solid fa-crown tw-mega-luxe-icon"></i>
+                        <i class="fa-solid fa-feather tw-mega-luxe-icon"></i>
                         <div>
                             <strong>LUXE</strong>
-                            <small>By Invitation &middot; Concierge-Style</small>
+                            <small>By Invitation &middot; Privately Curated</small>
                         </div>
                     </div>
                     <?php if ( $luxe_trips ) : ?>
@@ -658,9 +794,9 @@ function tw_explore_subheader() {
                         <?php endforeach; ?>
                     </div>
                     <?php else : ?>
-                        <div class="tw-mega-empty"><p>Curated luxe experiences coming soon.</p></div>
+                        <div class="tw-mega-empty"><p>The next collection is being composed.</p></div>
                     <?php endif; ?>
-                    <a class="tw-mega-allcta" href="<?php echo esc_url( tw_luxe_page_url() ); ?>">Enter LUXE <i class="fa-solid fa-arrow-right"></i></a>
+                    <a class="tw-mega-allcta" href="<?php echo esc_url( tw_luxe_page_url() ); ?>">Explore the Collection <i class="fa-solid fa-arrow-right"></i></a>
                 </div>
             </div>
 
