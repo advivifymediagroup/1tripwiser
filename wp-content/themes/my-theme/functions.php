@@ -4167,6 +4167,11 @@ function tw_maybe_create_pages() {
             'title'    => 'All Blogs',
             'template' => 'page-all-blogs.php',
         ),
+        array(
+            'slug'     => 'luxe',
+            'title'    => 'LUXE',
+            'template' => 'page-luxe.php',
+        ),
     );
 
     $home_page_id = 0;

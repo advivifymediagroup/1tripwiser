@@ -149,6 +149,9 @@ if ( $tw_hero_video ) {
         </div>
     </section>
 
+    <!-- ═══════════ LUXE ═══════════ -->
+    <?php if ( function_exists( 'tw_luxe_showcase' ) ) { tw_luxe_showcase( 3 ); } ?>
+
     <!-- ═══════════ WOMEN'S GROUP TRIPS ═══════════ -->
     <?php if ( function_exists( 'tw_womens_trips_showcase' ) ) { tw_womens_trips_showcase( 3 ); } ?>
 
