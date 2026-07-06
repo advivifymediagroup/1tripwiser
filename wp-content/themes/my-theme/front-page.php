@@ -47,22 +47,25 @@ if ( $tw_hero_video ) {
 
     <div class="container tw-hero-inner">
 
+        <p class="tw-hero-kicker">Wiser Trips · Better Memories</p>
+
+        <h1 class="tw-hero-title">
+            Trips designed around <span class="tw-hero-title-accent">you</span>.<br>
+            <span class="tw-hero-title-quiet">Not around a package.</span>
+        </h1>
+        <p class="tw-hero-desc">Handcrafted itineraries across India &amp; the world &mdash; planned by real travellers, priced fairly, ready in 24 hours.</p>
+
         <div class="tw-hero-pill">
             <span class="tw-hero-pill-dot"></span>
             India's Most Trusted Travel Community &nbsp;·&nbsp; 300K+ on Instagram
         </div>
 
-        <h1 class="tw-hero-title">
-            <span class="tw-hero-title-gold">1</span>TRIP<span class="tw-hero-title-accent">WISER</span>
-        </h1>
-        <p class="tw-hero-tagline">Wiser Trips · Better Memories</p>
-        <p class="tw-hero-desc"><?php bloginfo('description'); ?></p>
-
         <div class="tw-hero-actions">
-            <a href="#featured-packages" class="tw-hero-btn tw-hero-btn--primary">Explore Packages</a>
-            <a href="<?php echo esc_url(mytheme_get_plan_trip_url()); ?>" class="tw-hero-btn tw-hero-btn--outline">Plan a Trip — Free</a>
+            <a href="<?php echo esc_url(mytheme_get_plan_trip_url()); ?>" class="tw-hero-btn tw-hero-btn--primary">Plan a Trip &mdash; Free</a>
+            <a href="#featured-packages" class="tw-hero-btn tw-hero-btn--outline">Explore Packages</a>
         </div>
 
+        <p class="tw-hero-tags-prompt">Or browse by mood</p>
         <div class="tw-hero-tags">
             <a href="<?php echo esc_url(home_url('/blog-affiliates/')); ?>" class="tw-hero-tag">Mountains</a>
             <a href="<?php echo esc_url(home_url('/blog-affiliates/')); ?>" class="tw-hero-tag">Beaches</a>
@@ -80,13 +83,13 @@ if ( $tw_hero_video ) {
 <!-- ═══════════════════════ STATS ═══════════════════════ -->
 <section class="tw-stats-bar">
     <div class="tw-stats-inner">
-        <div class="tw-stat"><span class="tw-stat-num">300K+</span><span class="tw-stat-label">Instagram Community</span></div>
+        <div class="tw-stat"><span class="tw-stat-num">4.9<i class="fa-solid fa-star tw-stat-star" aria-hidden="true"></i></span><span class="tw-stat-label">Average Rating</span></div>
         <div class="tw-stat-divider" aria-hidden="true"></div>
         <div class="tw-stat"><span class="tw-stat-num">1000+</span><span class="tw-stat-label">Trips Planned</span></div>
         <div class="tw-stat-divider" aria-hidden="true"></div>
         <div class="tw-stat"><span class="tw-stat-num">58+</span><span class="tw-stat-label">Destinations</span></div>
         <div class="tw-stat-divider" aria-hidden="true"></div>
-        <div class="tw-stat"><span class="tw-stat-num">4.9<i class="fa-solid fa-star tw-stat-star" aria-hidden="true"></i></span><span class="tw-stat-label">Average Rating</span></div>
+        <div class="tw-stat"><span class="tw-stat-num">300K+</span><span class="tw-stat-label">Instagram Community</span></div>
         <div class="tw-stat-divider" aria-hidden="true"></div>
         <div class="tw-stat"><span class="tw-stat-num">₹0</span><span class="tw-stat-label">Planning Fee</span></div>
     </div>
