@@ -712,6 +712,8 @@ function tw_explore_subheader() {
             </div>
             <?php endforeach; ?>
 
+            <span class="tw-sub-divider" aria-hidden="true"></span>
+
             <?php
             /* Group Trips — destinations that have group trips */
             $group_dests = tw_group_trip_destinations();
