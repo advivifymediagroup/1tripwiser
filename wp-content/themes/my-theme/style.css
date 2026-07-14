@@ -5,7 +5,7 @@ Version: 11.0
 Description: This is my custom theme for the website 1tripwiser.
 */
 
-@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@300;400;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@300;400;600;700;800&family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap");
 
 /* ── Brand colour tokens ── */
 :root {
@@ -5590,4 +5590,545 @@ img, video, iframe, embed, object { max-width: 100%; height: auto; }
     .ev-single-book { position: static; flex-direction: row; flex-wrap: wrap; align-items: center; }
     .ev-single-price { border-bottom: none; border-right: 1px solid #eef2f6; padding: 0 18px 0 0; text-align: left; }
     .ev-single-btn { flex: 1; }
+}
+
+/* Improved Typography */
+:root {
+    --tw-font-body: "Plus Jakarta Sans", "Nunito", Arial, sans-serif;
+    --tw-font-heading: "Outfit", "Plus Jakarta Sans", "Nunito", Arial, sans-serif;
+    --tw-text: #172033;
+    --tw-muted: #5f6f86;
+    --tw-soft: #f4f8fb;
+    --tw-line: #e3ebf3;
+    --tw-shadow-soft: 0 14px 34px rgba(13, 21, 38, 0.08);
+    --tw-shadow-lift: 0 22px 54px rgba(13, 21, 38, 0.14);
+}
+
+html {
+    font-size: 16px;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+}
+
+body,
+button,
+input,
+select,
+textarea {
+    font-family: var(--tw-font-body);
+}
+
+body {
+    color: var(--tw-text);
+    font-size: 1rem;
+    line-height: 1.65;
+    background: #f6f9fc;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.section-heading h2,
+.tw-blog-title,
+.tw-community-title,
+.tw-cta-title,
+.travel-archive-header h1,
+.travel-single-header h1,
+.visa-services-heading h2,
+.ev-trip-details-title {
+    font-family: var(--tw-font-heading);
+    letter-spacing: 0;
+}
+
+p,
+li,
+.post-excerpt,
+.package-excerpt,
+.tw-blog-card-excerpt,
+.ev-card-excerpt,
+.dest-card-excerpt,
+.ev-single-content,
+.ev-overview-card p {
+    color: var(--tw-muted);
+}
+
+.container {
+    max-width: 1180px;
+}
+
+.section-heading,
+.tw-blog-header,
+.instagram-feed-heading {
+    margin-bottom: 30px;
+}
+
+.section-heading span,
+.section-kicker,
+.tw-blog-kicker,
+.tw-community-kicker,
+.tw-cta-kicker,
+.tw-ig-kicker,
+.travel-archive-header span,
+.travel-single-header > span,
+.visa-services-heading span {
+    color: var(--tw-blue);
+    font-family: var(--tw-font-body);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    line-height: 1.4;
+}
+
+.section-heading h2,
+.tw-blog-title,
+.tw-ig-title,
+.visa-services-heading h2 {
+    color: var(--tw-navy);
+    font-size: clamp(1.85rem, 2.6vw, 2.8rem);
+    font-weight: 800;
+    line-height: 1.08;
+}
+
+.featured-posts,
+.visa-services-section,
+.tw-blog-section,
+.instagram-feed-section {
+    padding: clamp(54px, 7vw, 86px) 0;
+}
+
+.travel-section {
+    background: #ffffff;
+}
+
+.itinerary-section {
+    background: linear-gradient(180deg, #f1fbfb 0%, #ffffff 100%);
+}
+
+.tw-nav-link,
+.tw-auth-link,
+.tw-auth-btn,
+.travel-tabs a {
+    font-family: var(--tw-font-body);
+    font-size: 0.82rem;
+    font-weight: 700;
+}
+
+.tw-brand-name {
+    font-family: var(--tw-font-heading);
+    font-size: 1.28rem;
+    font-weight: 800;
+}
+
+.tw-hero {
+    min-height: 86svh;
+}
+
+.tw-hero-overlay {
+    background:
+        linear-gradient(to bottom, rgba(9, 15, 28, 0.58) 0%, rgba(9, 15, 28, 0.2) 40%, rgba(9, 15, 28, 0.76) 100%),
+        linear-gradient(to right, rgba(9, 15, 28, 0.74) 0%, rgba(9, 15, 28, 0.22) 68%, rgba(9, 15, 28, 0.5) 100%);
+}
+
+.tw-hero-inner {
+    max-width: 980px;
+    padding-bottom: 72px;
+}
+
+.tw-hero-kicker {
+    color: #ffd36c;
+    font-family: var(--tw-font-body);
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    margin-bottom: 16px;
+}
+
+.tw-hero-title {
+    font-family: var(--tw-font-heading);
+    font-size: clamp(2.75rem, 5.7vw, 5.25rem);
+    font-weight: 800;
+    letter-spacing: 0;
+    line-height: 0.98;
+    max-width: 890px;
+    text-wrap: balance;
+}
+
+.tw-hero-title-quiet {
+    color: rgba(255, 255, 255, 0.78);
+    font-family: var(--tw-font-heading);
+    font-style: normal;
+    font-weight: 600;
+}
+
+.tw-hero-desc {
+    color: rgba(255, 255, 255, 0.84);
+    font-size: clamp(1rem, 1.4vw, 1.18rem);
+    font-weight: 500;
+    line-height: 1.75;
+    max-width: 680px;
+}
+
+.tw-hero-pill {
+    border-color: rgba(255, 255, 255, 0.22);
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    margin-bottom: 30px;
+}
+
+.tw-hero-actions {
+    gap: 12px;
+    margin-bottom: 38px;
+}
+
+.tw-hero-btn,
+.btn-primary,
+.btn-secondary,
+.read-more,
+.book-now-btn,
+.book-now-gold,
+.ev-card-btn,
+.free-itinerary-link {
+    border-radius: 10px;
+    font-family: var(--tw-font-body);
+    font-size: 0.9rem;
+    font-weight: 800;
+    letter-spacing: 0;
+}
+
+.tw-hero-btn {
+    min-height: 48px;
+    padding: 13px 24px;
+}
+
+.tw-hero-btn--primary {
+    background: linear-gradient(135deg, #ffcc4d 0%, #f7a600 100%);
+    box-shadow: 0 12px 26px rgba(252, 180, 21, 0.28);
+}
+
+.tw-hero-btn--primary:hover {
+    background: linear-gradient(135deg, #ffd76f 0%, #f7a600 100%);
+    transform: translateY(-1px);
+}
+
+.tw-hero-btn--outline {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.34);
+    backdrop-filter: blur(10px);
+}
+
+.tw-hero-tags-prompt {
+    color: rgba(255, 255, 255, 0.58);
+    font-size: 0.7rem;
+    letter-spacing: 0.16em;
+}
+
+.tw-hero-tags {
+    gap: 8px;
+    max-width: 780px;
+}
+
+.tw-hero-tag,
+.travel-filter-options a,
+.tw-filter-pill,
+.tw-fchip {
+    border-radius: 999px;
+    font-family: var(--tw-font-body);
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0;
+}
+
+.tw-hero-tag {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.18);
+    color: rgba(255, 255, 255, 0.86);
+    padding: 7px 14px;
+}
+
+.tw-stats-bar {
+    background: #08111f;
+}
+
+.tw-stats-inner {
+    padding: 14px 20px;
+}
+
+.tw-stat {
+    min-width: 132px;
+    padding: 14px 24px;
+}
+
+.tw-stat-num {
+    font-family: var(--tw-font-heading);
+    font-size: clamp(1.65rem, 2.1vw, 2.15rem);
+    font-weight: 800;
+    letter-spacing: 0;
+}
+
+.tw-stat-label {
+    font-size: 0.68rem;
+    letter-spacing: 0.09em;
+}
+
+.posts-grid,
+.tw-blog-grid,
+.visa-services-grid,
+.ev-grid {
+    gap: 24px;
+}
+
+.post-card,
+.package-card,
+.travel-card,
+.destination-card,
+.visa-service-card,
+.tw-blog-card,
+.ev-card {
+    border: 1px solid var(--tw-line);
+    border-radius: 14px;
+    box-shadow: 0 8px 24px rgba(13, 21, 38, 0.06);
+}
+
+.post-card:hover,
+.package-card:hover,
+.travel-card:hover,
+.destination-card:hover,
+.visa-service-card:hover,
+.tw-blog-card:hover,
+.ev-card:hover {
+    box-shadow: var(--tw-shadow-lift);
+    transform: translateY(-5px);
+}
+
+.package-media,
+.post-thumbnail img,
+.tw-blog-card-img-wrap,
+.ev-card-img {
+    background-color: #dce9ef;
+}
+
+.package-content,
+.post-content,
+.tw-blog-card-body,
+.ev-card-body {
+    padding: 18px 20px 20px;
+}
+
+.package-card .package-content h2,
+.package-card .package-content h3,
+.travel-card h2,
+.travel-card h3,
+.post-content h2,
+.post-content h3,
+.tw-blog-card-title,
+.ev-card-title {
+    font-family: var(--tw-font-heading);
+    font-size: clamp(1.02rem, 1.25vw, 1.18rem);
+    font-weight: 800;
+    line-height: 1.25;
+    letter-spacing: 0;
+}
+
+.package-card .package-location,
+.package-location,
+.package-facts span,
+.ev-card-meta,
+.tw-blog-card-meta,
+.post-meta {
+    font-size: 0.76rem;
+    font-weight: 700;
+}
+
+.package-excerpt,
+.post-excerpt,
+.tw-blog-card-excerpt,
+.ev-card-excerpt {
+    font-size: 0.9rem;
+    line-height: 1.65;
+}
+
+.package-facts,
+.itin-actions,
+.ev-card-foot {
+    gap: 8px;
+}
+
+.package-facts span {
+    background: #edf5f8;
+    color: #233044;
+    padding: 6px 11px;
+}
+
+.travel-filter-box,
+.tw-filter-bar,
+.tw-filter {
+    border-color: var(--tw-line);
+    border-radius: 14px;
+    box-shadow: 0 10px 30px rgba(13, 21, 38, 0.07);
+}
+
+.travel-filter-label,
+.tw-filter-row-label,
+.tw-filter-label {
+    font-size: 0.68rem;
+    letter-spacing: 0.11em;
+}
+
+.visa-service-card {
+    padding: 28px;
+}
+
+.visa-service-card h3 {
+    font-family: var(--tw-font-heading);
+    font-size: 1.2rem;
+    font-weight: 800;
+    line-height: 1.25;
+}
+
+.visa-service-card p {
+    font-size: 0.94rem;
+    line-height: 1.7;
+}
+
+.tw-blog-title,
+.tw-community-title,
+.tw-cta-title {
+    font-family: var(--tw-font-heading);
+    letter-spacing: 0;
+}
+
+.tw-community-copy p,
+.tw-cta-copy p {
+    font-size: 1rem;
+    line-height: 1.75;
+}
+
+.tw-cstat strong {
+    font-family: var(--tw-font-heading);
+    letter-spacing: 0;
+}
+
+.travel-archive-header h1,
+.travel-single-header h1 {
+    font-family: var(--tw-font-heading);
+    font-size: clamp(2rem, 4vw, 3.4rem);
+    font-weight: 800;
+    letter-spacing: 0;
+    line-height: 1.05;
+}
+
+.ev-single-content,
+.ev-itin-intro p,
+.ev-overview-card p,
+.ev-content-styled p,
+.ev-content-styled li {
+    font-size: 0.98rem;
+}
+
+.ev-content-styled h2,
+.ev-content-styled h3,
+.ev-content-styled h4 {
+    font-family: var(--tw-font-heading);
+    letter-spacing: 0;
+}
+
+@media (max-width: 768px) {
+    body {
+        font-size: 0.96rem;
+    }
+
+    .featured-posts,
+    .visa-services-section,
+    .tw-blog-section,
+    .instagram-feed-section {
+        padding: 44px 0;
+    }
+
+    .section-heading h2,
+    .tw-blog-title,
+    .tw-ig-title,
+    .visa-services-heading h2 {
+        font-size: clamp(1.65rem, 8vw, 2.2rem);
+    }
+
+    .tw-hero {
+        min-height: 82svh;
+    }
+
+    .tw-hero-inner {
+        padding: 88px 20px 58px;
+    }
+
+    .tw-hero-title {
+        font-size: clamp(2.25rem, 12vw, 3.45rem);
+        line-height: 1.02;
+    }
+
+    .tw-hero-desc {
+        font-size: 0.98rem;
+    }
+
+    .tw-hero-pill {
+        align-items: flex-start;
+        white-space: normal;
+    }
+
+    .tw-hero-actions {
+        align-items: stretch;
+        margin-bottom: 30px;
+    }
+
+    .tw-hero-btn {
+        width: 100%;
+    }
+
+    .tw-stats-inner {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .tw-stat {
+        min-width: 0;
+        padding: 16px 10px;
+    }
+
+    .posts-grid,
+    .tw-blog-grid,
+    .visa-services-grid,
+    .ev-grid {
+        gap: 18px;
+    }
+
+    .package-content,
+    .post-content,
+    .tw-blog-card-body,
+    .ev-card-body {
+        padding: 16px;
+    }
+
+    .travel-filter-box {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 430px) {
+    .tw-hero-kicker,
+    .section-heading span,
+    .tw-blog-kicker,
+    .tw-community-kicker,
+    .tw-cta-kicker {
+        letter-spacing: 0.1em;
+    }
+
+    .tw-stats-inner {
+        grid-template-columns: 1fr;
+    }
+
+    .tw-stat {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
 }
