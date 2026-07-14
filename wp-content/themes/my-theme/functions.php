@@ -62,6 +62,15 @@ function mytheme_enqueue_styles() {
 
 add_action('wp_enqueue_scripts', 'mytheme_enqueue_styles');
 
+/* LUXURY sprint template — scroll-scrubbed headline animation, loaded only there. */
+function tw_luxury_enqueue_scripts() {
+    if ( ! is_page_template( 'page-luxury.php' ) ) { return; }
+    $path = get_template_directory() . '/assets/js/tw-luxury.js';
+    $ver  = file_exists( $path ) ? filemtime( $path ) : '1.0';
+    wp_enqueue_script( 'tw-luxury', get_template_directory_uri() . '/assets/js/tw-luxury.js', array(), $ver, true );
+}
+add_action( 'wp_enqueue_scripts', 'tw_luxury_enqueue_scripts' );
+
 // ============================================================
 // Hide WordPress admin bar on the frontend (keeps it in wp-admin)
 // ============================================================
@@ -994,8 +1003,8 @@ function mytheme_render_trip_pdf_document($post_id) {
         <?php wp_site_icon(); ?>
         <style>
             :root {
-                --tw-blue: #0692af;
-                --tw-gold: #fcb415;
+                --tw-blue: #1B93B0;
+                --tw-gold: #D83550;
                 --tw-navy: #0d1526;
                 --tw-muted: #526070;
                 --tw-line: #dfe7ef;
@@ -1022,7 +1031,7 @@ function mytheme_render_trip_pdf_document($post_id) {
             }
             .tw-pdf-toolbar a,
             .tw-pdf-toolbar button {
-                background: #fcb415;
+                background: #D83550;
                 border: 0;
                 border-radius: 999px;
                 color: #0d1526;
@@ -1623,27 +1632,28 @@ function tw_homepage_itinerary_card() {
     if ( ! $duration )      $duration      = mytheme_get_travel_field('trip_duration');
     if ( ! $best_time )     $best_time     = mytheme_get_travel_field('best_time');
     if ( ! $route_summary ) $route_summary = mytheme_get_travel_field('route_summary');
+    $thumb = get_the_post_thumbnail_url( get_the_ID(), 'medium_large' );
     ?>
-    <article class="post-card travel-card">
-        <?php if ( has_post_thumbnail() ) : ?>
-        <div class="post-thumbnail"><a href="<?php the_permalink(); ?>"><?php the_post_thumbnail('large'); ?></a></div>
-        <?php endif; ?>
-        <div class="post-content">
-            <h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
-            <div class="travel-meta">
-                <?php if ( $duration )  : ?><span><?php echo esc_html( $duration ); ?></span><?php endif; ?>
-                <?php if ( $best_time ) : ?><span><?php echo esc_html( $best_time ); ?></span><?php endif; ?>
+    <article class="post-card travel-card tw-itin-row">
+        <a class="tw-itin-media" href="<?php the_permalink(); ?>">
+            <?php if ( $thumb ) : ?>
+                <img src="<?php echo esc_url( $thumb ); ?>" alt="" loading="lazy">
+            <?php else : ?>
+                <i class="fa-solid fa-route tw-itin-media-ph" aria-hidden="true"></i>
+            <?php endif; ?>
+        </a>
+        <div class="post-content tw-itin-body">
+            <h3 class="tw-itin-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
+            <div class="travel-meta tw-itin-meta">
+                <?php if ( $duration )  : ?><span><i class="fa-regular fa-clock" aria-hidden="true"></i> <?php echo esc_html( $duration ); ?></span><?php endif; ?>
+                <?php if ( $best_time ) : ?><span><i class="fa-regular fa-calendar" aria-hidden="true"></i> <?php echo esc_html( $best_time ); ?></span><?php endif; ?>
             </div>
-            <div class="post-excerpt">
-                <?php
-                $summary = $route_summary ? wp_strip_all_tags( $route_summary ) : get_the_excerpt();
-                echo wp_trim_words( $summary, 28, '...' );
-                ?>
-                <a href="<?php the_permalink(); ?>" class="inline-read-more">Read More</a>
-            </div>
-            <div class="itin-actions">
-                <a href="<?php the_permalink(); ?>" class="read-more">Open Itinerary</a>
-                <a href="<?php echo esc_url( mytheme_get_travel_field('book_url') ?: get_permalink() ); ?>" class="book-now-gold">Book Now</a>
+            <?php if ( $route_summary ) : ?>
+            <p class="tw-itin-route"><?php echo esc_html( wp_strip_all_tags( $route_summary ) ); ?></p>
+            <?php endif; ?>
+            <div class="itin-actions tw-itin-actions">
+                <a href="<?php the_permalink(); ?>" class="read-more tw-itin-open">Open Itinerary</a>
+                <a href="<?php echo esc_url( mytheme_get_travel_field('book_url') ?: get_permalink() ); ?>" class="book-now-gold tw-itin-book">Book Now</a>
             </div>
         </div>
     </article>
@@ -3031,6 +3041,10 @@ function mytheme_register_page_settings() {
     register_setting('tripwiser_hero_settings', 'tw_hero_image_url',        array('sanitize_callback' => 'esc_url_raw'));
     register_setting('tripwiser_hero_settings', 'tw_hero_mobile_image_url', array('sanitize_callback' => 'esc_url_raw'));
     register_setting('tripwiser_hero_settings', 'tw_instagram_feed_id', array('sanitize_callback' => 'absint'));
+    // Hero floating images (top-right, middle-left, bottom-right of the video)
+    register_setting('tripwiser_hero_settings', 'tw_hero_float_img_tr', array('sanitize_callback' => 'esc_url_raw'));
+    register_setting('tripwiser_hero_settings', 'tw_hero_float_img_ml', array('sanitize_callback' => 'esc_url_raw'));
+    register_setting('tripwiser_hero_settings', 'tw_hero_float_img_br', array('sanitize_callback' => 'esc_url_raw'));
     // WhatsApp widget + Cloud API
     register_setting('tripwiser_wa_settings', 'tw_wa_widget_number',  array('sanitize_callback' => 'sanitize_text_field'));
     register_setting('tripwiser_wa_settings', 'tw_wa_widget_message', array('sanitize_callback' => 'sanitize_text_field'));
@@ -3209,7 +3223,7 @@ add_action('tw_trip_inquiry_saved', 'tw_send_whatsapp_inquiry_notification', 10,
 // SHARED HELPER — settings page chrome (header + breadcrumb)
 // ============================================================
 function tw_settings_page_header( $title, $icon, $description = '' ) {
-    $logo_html = '<span style="display:inline-flex;align-items:center;gap:10px;font-size:1.5rem;font-weight:800;color:#0d1526;font-family:Georgia,serif;margin-bottom:4px"><span style="color:#FCB415">1</span>TRIPWISER</span>';
+    $logo_html = '<span style="display:inline-flex;align-items:center;gap:10px;font-size:1.5rem;font-weight:800;color:#0d1526;font-family:Georgia,serif;margin-bottom:4px"><span style="color:#D83550">1</span>TRIPWISER</span>';
     ?>
     <style>
     .tw-admin-wrap { max-width:900px; }
@@ -3229,7 +3243,7 @@ function tw_settings_page_header( $title, $icon, $description = '' ) {
     .tw-admin-note.success { background:#f0fff4; border:1px solid #9ae6b4; color:#1c4532; }
     .tw-admin-quicklinks { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:14px; }
     .tw-admin-ql { display:flex; align-items:center; gap:12px; background:#f8fafc; border:1px solid #e0e6ed; border-radius:9px; padding:14px 16px; text-decoration:none; color:#0d1526; font-weight:700; font-size:0.9rem; transition:border-color .2s,background .2s; }
-    .tw-admin-ql:hover { border-color:#0692AF; background:#eef7fb; color:#0692AF; }
+    .tw-admin-ql:hover { border-color:#1B93B0; background:#eef7fb; color:#1B93B0; }
     .tw-admin-ql-icon { font-size:1.4rem; flex-shrink:0; }
     </style>
     <div class="wrap tw-admin-wrap">
@@ -3362,7 +3376,7 @@ function tw_render_hero_settings_page() {
                         </td>
                     </tr>
                     <tr>
-                        <th><label for="tw_hero_mobile_image_url">Mobile Image URL <span style="font-weight:400;color:#0692af">(mobile only)</span></label></th>
+                        <th><label for="tw_hero_mobile_image_url">Mobile Image URL <span style="font-weight:400;color:#1B93B0">(mobile only)</span></label></th>
                         <td>
                             <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:6px">
                                 <input type="url" id="tw_hero_mobile_image_url" name="tw_hero_mobile_image_url"
@@ -3385,6 +3399,46 @@ function tw_render_hero_settings_page() {
                         </td>
                     </tr>
                 </table>
+                <div class="tw-admin-card" style="margin-top:24px;margin-bottom:0">
+                    <div class="tw-admin-card-head">
+                        <div>
+                            <h2>Floating Images</h2>
+                            <p>Three small photos that float around the hero video, tilted and gently animated. Each appears from a dot and scales up to full size on page load. Leave any blank to hide that one.</p>
+                        </div>
+                    </div>
+                    <div class="tw-admin-card-body">
+                        <table class="form-table">
+                            <?php
+                            $tw_float_fields = array(
+                                'tw_hero_float_img_tr' => 'Top Right',
+                                'tw_hero_float_img_ml' => 'Middle Left',
+                                'tw_hero_float_img_br' => 'Bottom Right',
+                            );
+                            foreach ( $tw_float_fields as $tw_ff_key => $tw_ff_label ) :
+                                $tw_ff_val = get_option( $tw_ff_key, '' );
+                            ?>
+                            <tr>
+                                <th><label for="<?php echo esc_attr( $tw_ff_key ); ?>"><?php echo esc_html( $tw_ff_label ); ?></label></th>
+                                <td>
+                                    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:6px">
+                                        <input type="url" id="<?php echo esc_attr( $tw_ff_key ); ?>" name="<?php echo esc_attr( $tw_ff_key ); ?>"
+                                               value="<?php echo esc_attr( $tw_ff_val ); ?>"
+                                               style="flex:1;min-width:300px" placeholder="https://yoursite.com/floating-image.jpg">
+                                        <button type="button" class="button button-secondary tw-media-pick" data-target="<?php echo esc_attr( $tw_ff_key ); ?>" data-type="image">
+                                            🖼 Select from Media Library
+                                        </button>
+                                    </div>
+                                    <?php if ( $tw_ff_val ) : ?>
+                                    <div style="margin-top:12px">
+                                        <img src="<?php echo esc_url( $tw_ff_val ); ?>" style="max-width:160px;border-radius:8px;border:1px solid #dde5ef;box-shadow:0 4px 12px rgba(0,0,0,0.1)">
+                                    </div>
+                                    <?php endif; ?>
+                                </td>
+                            </tr>
+                            <?php endforeach; ?>
+                        </table>
+                    </div>
+                </div>
                 <div class="tw-admin-note info" style="margin-top:8px">
                     💡 <strong>Tip:</strong> Upload your video via <a href="<?php echo esc_url(admin_url('media-new.php')); ?>">Media → Add New</a>, then use <em>Select from Media Library</em> — clean full-screen background, zero player controls. Landscape 1920×1080 .mp4 works best.
                 </div>
@@ -4172,6 +4226,11 @@ function tw_maybe_create_pages() {
             'title'    => 'LUXE',
             'template' => 'page-luxe.php',
         ),
+        array(
+            'slug'     => 'luxury',
+            'title'    => 'LUXURY',
+            'template' => 'page-luxury.php',
+        ),
     );
 
     $home_page_id = 0;
@@ -4372,7 +4431,7 @@ add_action( 'manage_tw_agency_posts_custom_column', function ( $col, $post_id ) 
         case 'agency_company':
             echo '<strong><a href="' . esc_url( admin_url( 'post.php?post=' . $post_id . '&action=edit' ) ) . '">' . esc_html( get_post_meta( $post_id, '_tw_ag_company_name', true ) ) . '</a></strong>';
             $w = get_post_meta( $post_id, '_tw_ag_website', true );
-            if ( $w ) { echo '<br><a href="' . esc_url( $w ) . '" target="_blank" style="font-size:0.8em;color:#0692af">' . esc_html( $w ) . '</a>'; }
+            if ( $w ) { echo '<br><a href="' . esc_url( $w ) . '" target="_blank" style="font-size:0.8em;color:#1B93B0">' . esc_html( $w ) . '</a>'; }
             break;
         case 'agency_contact':
             echo esc_html( get_post_meta( $post_id, '_tw_ag_contact_person', true ) );

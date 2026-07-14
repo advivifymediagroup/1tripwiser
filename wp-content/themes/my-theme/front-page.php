@@ -5,6 +5,13 @@
 $tw_hero_video        = get_option('tw_hero_video_url', '');
 $tw_hero_image        = get_option('tw_hero_image_url', '');
 $tw_hero_mobile_image = get_option('tw_hero_mobile_image_url', '');
+
+/* Hero floating images — small tilted photos that float around the video */
+$tw_hero_float_images = array(
+    'tr' => get_option( 'tw_hero_float_img_tr', '' ),
+    'ml' => get_option( 'tw_hero_float_img_ml', '' ),
+    'br' => get_option( 'tw_hero_float_img_br', '' ),
+);
 $tw_yt_id = '';
 if ( $tw_hero_video ) {
     if ( preg_match('/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/', $tw_hero_video, $m ) ) {
@@ -15,66 +22,89 @@ if ( $tw_hero_video ) {
 
 <main class="main-content">
 
-<!-- ═══════════════════════ HERO ═══════════════════════ -->
+<!-- ═══════════════════════ HERO — copy left, video in a right-aligned container ═══════════════════════ -->
 <section class="tw-hero" id="tw-hero-top">
 
-    <div class="tw-hero-bg" aria-hidden="true">
-        <?php if ( $tw_yt_id ) : ?>
-        <div class="tw-hero-yt-wrap">
-            <iframe class="tw-hero-yt"
-                src="https://www.youtube.com/embed/<?php echo esc_attr($tw_yt_id); ?>?autoplay=1&mute=1&loop=1&playlist=<?php echo esc_attr($tw_yt_id); ?>&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&playsinline=1&disablekb=1&fs=0&cc_load_policy=0&color=white"
-                frameborder="0" allow="autoplay; encrypted-media" loading="lazy" title=""></iframe>
-            <div class="tw-hero-yt-shield" aria-hidden="true"></div>
-        </div>
-        <?php elseif ( $tw_hero_video ) : ?>
-        <video class="tw-hero-vid" autoplay muted loop playsinline preload="metadata">
-            <source src="<?php echo esc_url($tw_hero_video); ?>">
-        </video>
-        <?php elseif ( $tw_hero_image ) : ?>
-        <div class="tw-hero-img" style="background-image:url('<?php echo esc_url($tw_hero_image); ?>')"></div>
-        <?php endif; ?>
+    <div class="tw-hero-split">
 
-        <?php /* Mobile-only background image — overrides the video on phones via CSS @media (max-width:768px) */ ?>
-        <?php if ( $tw_hero_mobile_image ) : ?>
-        <div class="tw-hero-mobile-img" style="background-image:url('<?php echo esc_url($tw_hero_mobile_image); ?>')"></div>
-        <?php endif; ?>
+        <div class="tw-hero-copy">
 
-        <div class="tw-hero-overlay"></div>
-    </div>
+            <div class="tw-hero-pill">
+                <span class="tw-hero-pill-dot"></span>
+                India's Most Trusted Travel Community &nbsp;·&nbsp; 300K+ on Instagram
+            </div>
 
-    <div class="tw-hero-accent tw-hero-accent--1" aria-hidden="true"></div>
-    <div class="tw-hero-accent tw-hero-accent--2" aria-hidden="true"></div>
+            <h1 class="tw-hero-title">
+                Trips designed around <span class="tw-hero-title-accent">you</span>.<br>
+                <span class="tw-hero-title-quiet">Not around a package.</span>
+            </h1>
+            <p class="tw-hero-desc">Handcrafted itineraries, priced fairly, ready in 24 hours.</p>
 
-    <div class="container tw-hero-inner">
+            <div class="tw-hero-actions">
+                <a href="<?php echo esc_url(mytheme_get_plan_trip_url()); ?>" class="tw-hero-btn tw-hero-btn--primary">Plan a Trip &mdash; Free</a>
+                <a href="#featured-packages" class="tw-hero-btn tw-hero-btn--outline">Explore Packages</a>
+            </div>
 
-        <p class="tw-hero-kicker">Wiser Trips · Better Memories</p>
-
-        <h1 class="tw-hero-title">
-            Trips designed around <span class="tw-hero-title-accent">you</span>.<br>
-            <span class="tw-hero-title-quiet">Not around a package.</span>
-        </h1>
-        <p class="tw-hero-desc">Handcrafted itineraries across India &amp; the world &mdash; planned by real travellers, priced fairly, ready in 24 hours.</p>
-
-        <div class="tw-hero-pill">
-            <span class="tw-hero-pill-dot"></span>
-            India's Most Trusted Travel Community &nbsp;·&nbsp; 300K+ on Instagram
+            <?php
+            $tw_pkg_archive = get_post_type_archive_link( 'travel_package' );
+            $tw_mood_tags   = array(
+                'Mountains'     => $tw_pkg_archive,
+                'Beaches'       => $tw_pkg_archive,
+                'Offbeat'       => $tw_pkg_archive,
+                'Honeymoon'     => $tw_pkg_archive,
+                'Group Trips'   => get_post_type_archive_link( 'group_trip' ) ?: $tw_pkg_archive,
+                'Budget'        => add_query_arg( 'package_filter', 'budget-under-30k', $tw_pkg_archive ),
+                'International' => add_query_arg( 'package_filter', 'international', $tw_pkg_archive ),
+            );
+            ?>
+            <div class="tw-hero-tags">
+                <?php foreach ( $tw_mood_tags as $tw_mood_label => $tw_mood_url ) : ?>
+                <a href="<?php echo esc_url( $tw_mood_url ); ?>" class="tw-hero-tag"><?php echo esc_html( $tw_mood_label ); ?></a>
+                <?php endforeach; ?>
+            </div>
         </div>
 
-        <div class="tw-hero-actions">
-            <a href="<?php echo esc_url(mytheme_get_plan_trip_url()); ?>" class="tw-hero-btn tw-hero-btn--primary">Plan a Trip &mdash; Free</a>
-            <a href="#featured-packages" class="tw-hero-btn tw-hero-btn--outline">Explore Packages</a>
+        <!-- Right-aligned media container — video plays here, not as a full-bleed section background -->
+        <div class="tw-hero-media">
+            <div class="tw-hero-media-frame">
+                <?php if ( $tw_yt_id ) : ?>
+                <div class="tw-hero-yt-wrap">
+                    <iframe class="tw-hero-yt"
+                        src="https://www.youtube.com/embed/<?php echo esc_attr($tw_yt_id); ?>?autoplay=1&mute=1&loop=1&playlist=<?php echo esc_attr($tw_yt_id); ?>&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&playsinline=1&disablekb=1&fs=0&cc_load_policy=0&color=white"
+                        frameborder="0" allow="autoplay; encrypted-media" loading="lazy" title=""></iframe>
+                </div>
+                <?php elseif ( $tw_hero_video ) : ?>
+                <video class="tw-hero-vid" autoplay muted loop playsinline preload="metadata">
+                    <source src="<?php echo esc_url($tw_hero_video); ?>">
+                </video>
+                <?php elseif ( $tw_hero_image ) : ?>
+                <div class="tw-hero-img" style="background-image:url('<?php echo esc_url($tw_hero_image); ?>')"></div>
+                <?php endif; ?>
+
+                <?php /* Mobile-only image — replaces the video on phones via CSS @media (max-width:768px) */ ?>
+                <?php if ( $tw_hero_mobile_image ) : ?>
+                <div class="tw-hero-mobile-img" style="background-image:url('<?php echo esc_url($tw_hero_mobile_image); ?>')"></div>
+                <?php endif; ?>
+            </div>
+
+            <?php /* Floating images — admin-editable, positioned around the video frame */ ?>
+            <?php if ( $tw_hero_float_images['tr'] ) : ?>
+            <div class="tw-hero-float tw-hero-float--tr" aria-hidden="true">
+                <img src="<?php echo esc_url( $tw_hero_float_images['tr'] ); ?>" alt="" loading="lazy">
+            </div>
+            <?php endif; ?>
+            <?php if ( $tw_hero_float_images['ml'] ) : ?>
+            <div class="tw-hero-float tw-hero-float--ml" aria-hidden="true">
+                <img src="<?php echo esc_url( $tw_hero_float_images['ml'] ); ?>" alt="" loading="lazy">
+            </div>
+            <?php endif; ?>
+            <?php if ( $tw_hero_float_images['br'] ) : ?>
+            <div class="tw-hero-float tw-hero-float--br" aria-hidden="true">
+                <img src="<?php echo esc_url( $tw_hero_float_images['br'] ); ?>" alt="" loading="lazy">
+            </div>
+            <?php endif; ?>
         </div>
 
-        <p class="tw-hero-tags-prompt">Or browse by mood</p>
-        <div class="tw-hero-tags">
-            <a href="<?php echo esc_url(home_url('/blog-affiliates/')); ?>" class="tw-hero-tag">Mountains</a>
-            <a href="<?php echo esc_url(home_url('/blog-affiliates/')); ?>" class="tw-hero-tag">Beaches</a>
-            <a href="<?php echo esc_url(home_url('/blog-affiliates/')); ?>" class="tw-hero-tag">Offbeat</a>
-            <a href="<?php echo esc_url(home_url('/blog-affiliates/')); ?>" class="tw-hero-tag">Honeymoon</a>
-            <a href="<?php echo esc_url(home_url('/blog-affiliates/')); ?>" class="tw-hero-tag">Group Trips</a>
-            <a href="<?php echo esc_url(home_url('/blog-affiliates/')); ?>" class="tw-hero-tag">Budget</a>
-            <a href="<?php echo esc_url(home_url('/blog-affiliates/')); ?>" class="tw-hero-tag">International</a>
-        </div>
     </div>
 
     <div class="tw-hero-scroll" aria-hidden="true"><div class="tw-hero-scroll-line"></div></div>
@@ -252,7 +282,7 @@ if ( $tw_hero_video ) {
             <div class="tw-community-inner">
                 <div class="tw-community-copy" data-reveal="left">
                     <span class="tw-community-kicker">Join Our Community</span>
-                    <h2 class="tw-community-title">1TRIPWISER <span>TRIBE</span></h2>
+                    <h2 class="tw-community-title"><span class="tw-community-title-num">1</span>TRIPWISER <span>TRIBE</span></h2>
                     <p>Connect, share, and grow with 300K+ travel enthusiasts. Ask questions, share tips, and get inspired by real travelers.</p>
                     <a href="<?php echo esc_url( post_type_exists('forum_topic') ? get_post_type_archive_link('forum_topic') : mytheme_get_plan_trip_url() ); ?>" class="tw-community-btn">Enter the Tribe →</a>
                 </div>
@@ -269,7 +299,7 @@ if ( $tw_hero_video ) {
     <!-- ═══════════ INSTAGRAM ═══════════ -->
     <section class="instagram-feed-section">
         <div class="container">
-            <div class="instagram-feed-heading">
+            <div class="instagram-feed-heading" data-reveal="up">
                 <span class="tw-ig-kicker">Follow the journey</span>
                 <h2 class="tw-ig-title">Our Instagram</h2>
                 <a class="tw-ig-handle" href="https://www.instagram.com/1tripwiser/" target="_blank" rel="noopener noreferrer">📸 @1tripwiser</a>
@@ -283,16 +313,23 @@ if ( $tw_hero_video ) {
     <!-- ═══════════ TESTIMONIALS ═══════════ -->
     <?php if ( function_exists( 'tw_homepage_testimonials_section' ) ) { tw_homepage_testimonials_section(); } ?>
 
-    <!-- ═══════════ FREE ITINERARY CTA ═══════════ -->
+    <!-- ═══════════ GET A FREE ITINERARY ═══════════ -->
+    <?php
+    $tw_cta_wa_num = get_option( 'tw_wa_widget_number', get_option( 'tw_pat_whatsapp', '' ) );
+    $tw_cta_wa_url = $tw_cta_wa_num
+        ? 'https://wa.me/' . preg_replace( '/[^0-9]/', '', $tw_cta_wa_num ) . '?text=' . rawurlencode( "Hi! I'd like a free itinerary." )
+        : '';
+    ?>
     <section class="tw-cta-section">
-        <div class="container">
-            <div class="tw-cta-inner" data-reveal="up">
-                <div class="tw-cta-copy">
-                    <span class="tw-cta-kicker">100% Free · No Hidden Charges</span>
-                    <h2 class="tw-cta-title">GET A <span>FREE</span> ITINERARY</h2>
-                    <p>Tell us your dream destination — we'll craft a personalised trip plan.</p>
-                </div>
-                <a class="free-itinerary-link" href="<?php echo esc_url(mytheme_get_plan_trip_url()); ?>">✈ Plan My Trip</a>
+        <div class="container tw-cta-inner" data-reveal="up">
+            <span class="tw-cta-kicker">100% Free &middot; No Hidden Charges</span>
+            <h2 class="tw-cta-title">Get a <em>free</em> itinerary &mdash; ready in <span>24 hours</span>.</h2>
+            <p class="tw-cta-desc">Tell us your dream destination, dates and rough budget. A real travel planner will hand-craft your itinerary and hop on a call.</p>
+            <div class="tw-cta-actions">
+                <a class="free-itinerary-link" href="<?php echo esc_url(mytheme_get_plan_trip_url()); ?>"><i class="fa-solid fa-paper-plane" aria-hidden="true"></i> Plan My Trip</a>
+                <?php if ( $tw_cta_wa_url ) : ?>
+                <a class="tw-cta-whatsapp" href="<?php echo esc_url( $tw_cta_wa_url ); ?>" target="_blank" rel="noopener noreferrer">Or chat on WhatsApp</a>
+                <?php endif; ?>
             </div>
         </div>
     </section>

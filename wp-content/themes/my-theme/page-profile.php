@@ -195,7 +195,7 @@ if ( isset($_GET['updated']) && $_GET['updated'] === '1' ) {
                 <div class="pf-card-head"><span class="pf-card-title">🖼️ Profile Photo</span></div>
                 <div class="pf-card-body">
                     <div style="text-align:center;margin-bottom:16px">
-                        <div style="width:80px;height:80px;border-radius:50%;overflow:hidden;border:3px solid var(--gold);margin:0 auto 12px;display:flex;align-items:center;justify-content:center;background:rgba(252,180,21,0.1);font-size:2rem;">
+                        <div style="width:80px;height:80px;border-radius:50%;overflow:hidden;border:3px solid var(--gold);margin:0 auto 12px;display:flex;align-items:center;justify-content:center;background:rgba(216,53,80,0.1);font-size:2rem;">
                             <?php echo get_avatar($uid, 80, '', '', array('class'=>'')) ?: '👤'; ?>
                         </div>
                     </div>

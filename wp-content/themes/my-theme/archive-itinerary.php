@@ -10,7 +10,7 @@
                 <a href="<?php echo esc_url( home_url('/') ); ?>">Home</a><span>›</span><span>Itineraries</span>
             </nav>
             <span class="explore-hero-kicker">Ready-made Routes</span>
-            <h1 class="explore-hero-title">Itin<span style="color:#FCB415">eraries</span></h1>
+            <h1 class="explore-hero-title">Itin<span style="color:#D83550">eraries</span></h1>
             <p class="explore-hero-sub">Browse day-wise routes, practical travel notes and inspiration for your next journey.</p>
         </div>
     </section>

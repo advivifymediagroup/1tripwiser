@@ -35,8 +35,8 @@ $has_trips = $trips_query->have_posts();
                 <a href="<?php echo esc_url( home_url('/') ); ?>">Home</a><span>›</span>
                 <span>Women's Group Trips</span>
             </nav>
-            <span class="explore-hero-kicker" style="background:rgba(255,182,193,0.18);border-color:rgba(255,182,193,0.4);color:#ffb6c1;">✦ Travel Together · Grow Together</span>
-            <h1 class="explore-hero-title">Women's <span style="color:#ff8fab">Group Trips</span></h1>
+            <span class="explore-hero-kicker" style="background:rgba(216,53,80,0.1);border-color:rgba(216,53,80,0.3);color:#D83550;">✦ Travel Together · Grow Together</span>
+            <h1 class="explore-hero-title">Women's <span style="color:#D83550">Group Trips</span></h1>
             <p class="explore-hero-sub">Safe, curated and empowering travel experiences designed exclusively for women. Join your tribe, explore the world.</p>
 
             <div class="tw-womens-hero-stats">

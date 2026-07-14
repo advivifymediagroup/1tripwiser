@@ -69,15 +69,60 @@
 
 <!-- ===== SITE SEARCH OVERLAY ===== -->
 <div class="tw-search-overlay" id="tw-search-overlay" aria-hidden="true">
-    <button type="button" class="tw-search-close" id="tw-search-close" aria-label="Close search">✕</button>
-    <div class="tw-search-box">
-        <form class="tw-search-form" role="search" method="get" action="<?php echo esc_url(home_url('/')); ?>">
-            <input type="search" class="tw-search-input" name="s" id="tw-search-input"
-                   placeholder="Search trips, itineraries, group trips, blogs, the Tribe…"
-                   autocomplete="off" value="<?php echo esc_attr(get_search_query()); ?>">
-            <button type="submit" class="tw-search-submit">Search</button>
-        </form>
-        <p class="tw-search-hint">Try <span>Bali</span>, <span>Ladakh</span>, <span>Honeymoon</span> or <span>Oktoberfest</span></p>
+    <div class="tw-search-modal">
+        <div class="tw-search-topbar">
+            <i class="fa-solid fa-magnifying-glass tw-search-icon" aria-hidden="true"></i>
+            <form class="tw-search-form" role="search" method="get" action="<?php echo esc_url(home_url('/')); ?>">
+                <input type="search" class="tw-search-input" name="s" id="tw-search-input"
+                       placeholder="Try Bali, Ladakh, Honeymoon or Oktoberfest&hellip;"
+                       autocomplete="off" value="<?php echo esc_attr(get_search_query()); ?>">
+                <button type="submit" class="tw-visually-hidden">Search</button>
+            </form>
+            <span class="tw-search-esc-badge">ESC</span>
+            <button type="button" class="tw-search-close" id="tw-search-close" aria-label="Close search">
+                <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+            </button>
+        </div>
+
+        <div class="tw-search-body">
+            <div class="tw-search-col">
+                <span class="tw-search-col-label"><i class="fa-solid fa-arrow-trend-up" aria-hidden="true"></i> Trending Searches</span>
+                <div class="tw-search-pills">
+                    <?php
+                    $tw_trending = array(
+                        array('label' => 'Bali',            'mod' => 'red'),
+                        array('label' => 'Ladakh',           'mod' => 'blue'),
+                        array('label' => 'Switzerland',      'mod' => 'gold'),
+                        array('label' => 'Oktoberfest',      'mod' => 'navy'),
+                        array('label' => 'Kerala Monsoon',   'mod' => ''),
+                        array('label' => 'Rajasthan',        'mod' => 'red'),
+                    );
+                    foreach ($tw_trending as $tw_t) :
+                        $tw_url = esc_url(add_query_arg('s', urlencode($tw_t['label']), home_url('/')));
+                        $tw_cls = 'tw-search-pill' . ($tw_t['mod'] ? ' tw-pill-' . $tw_t['mod'] : '');
+                    ?>
+                        <a href="<?php echo $tw_url; ?>" class="<?php echo esc_attr($tw_cls); ?>"><?php echo esc_html($tw_t['label']); ?></a>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+            <div class="tw-search-col">
+                <span class="tw-search-col-label">Browse by Mood</span>
+                <div class="tw-search-mood-grid">
+                    <?php
+                    $tw_moods = array('Mountains', 'Beaches', 'Offbeat', 'Honeymoon', 'Group Trips', 'Budget', 'International');
+                    foreach ($tw_moods as $tw_m) :
+                        $tw_url = esc_url(add_query_arg('s', urlencode($tw_m), home_url('/')));
+                    ?>
+                        <a href="<?php echo $tw_url; ?>" class="tw-search-mood"><?php echo esc_html($tw_m); ?> <span aria-hidden="true">&#8599;</span></a>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        </div>
+
+        <div class="tw-search-footer">
+            <span>Search 1TripWiser</span>
+            <span><kbd>&#8629;</kbd> to select &nbsp;&middot;&nbsp; <kbd>ESC</kbd> to close</span>
+        </div>
     </div>
 </div>
 
@@ -106,12 +151,12 @@
             else : ?>
             <div class="tw-logo-ring">
                 <svg class="tw-compass" viewBox="0 0 36 36" aria-hidden="true" focusable="false">
-                    <circle cx="18" cy="18" r="16" fill="none" stroke="#306C35" stroke-width="2"/>
+                    <circle cx="18" cy="18" r="16" fill="none" stroke="#1B93B0" stroke-width="2"/>
                     <circle cx="18" cy="10" r="7" fill="#D5374F" opacity="0.9"/>
-                    <circle cx="18" cy="26" r="7" fill="#0692AF" opacity="0.9"/>
-                    <polygon points="18,3 15,15 18,13 21,15" fill="#FCB415"/>
-                    <polygon points="18,33 15,21 18,23 21,21" fill="#FCB415" opacity="0.7"/>
-                    <line x1="2" y1="18" x2="34" y2="18" stroke="#306C35" stroke-width="1.5"/>
+                    <circle cx="18" cy="26" r="7" fill="#1B93B0" opacity="0.9"/>
+                    <polygon points="18,3 15,15 18,13 21,15" fill="#D83550"/>
+                    <polygon points="18,33 15,21 18,23 21,21" fill="#D83550" opacity="0.7"/>
+                    <line x1="2" y1="18" x2="34" y2="18" stroke="#1B93B0" stroke-width="1.5"/>
                 </svg>
             </div>
             <?php endif; ?>
@@ -123,6 +168,10 @@
 
         <!-- Desktop Nav Links -->
         <nav class="tw-links" aria-label="Primary navigation">
+            <button type="button" class="tw-search-toggle" id="tw-search-open" aria-label="Search the site">
+                <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                <span class="tw-search-toggle-label">Search destinations&hellip;</span>
+            </button>
             <?php
             $walker_args = array(
                 'theme_location' => 'primary',
@@ -135,9 +184,6 @@
             }
             wp_nav_menu($walker_args);
             ?>
-            <button type="button" class="tw-search-toggle" id="tw-search-open" aria-label="Search the site">
-                <i class="fas fa-search" aria-hidden="true"></i>
-            </button>
             <a class="tw-cta" href="<?php echo esc_url(mytheme_get_plan_trip_url()); ?>">
                 <i class="fa-solid fa-paper-plane" aria-hidden="true"></i> Plan My Trip
             </a>
@@ -299,6 +345,10 @@ function tw_default_mobile_nav() {
         sOverlay.addEventListener('click', function (e) { if (e.target === sOverlay) closeSearch(); });
         document.addEventListener('keydown', function (e) {
             if (e.key === 'Escape' && sOverlay.classList.contains('open')) closeSearch();
+            if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+                e.preventDefault();
+                sOverlay.classList.contains('open') ? closeSearch() : openSearch();
+            }
         });
     }
 })();
@@ -339,17 +389,17 @@ function tw_default_mobile_nav() {
     ].join(';');
 
     var LOAD_STYLE = BTN_BASE + ';' + [
-        'background:linear-gradient(135deg,#FCB415 0%,#f09a00 100%)',
-        'background-color:#FCB415',
+        'background:#D83550',
+        'background-color:#D83550',
         'color:#0d1526',
-        'box-shadow:0 4px 14px rgba(252,180,21,0.32)'
+        'box-shadow:0 4px 14px rgba(216,53,80,0.32)'
     ].join(';');
 
     var FOLLOW_STYLE = BTN_BASE + ';' + [
-        'background:linear-gradient(135deg,#0692af 0%,#056d83 100%)',
-        'background-color:#0692af',
+        'background:linear-gradient(135deg,#1B93B0 0%,#056d83 100%)',
+        'background-color:#1B93B0',
         'color:#ffffff',
-        'box-shadow:0 4px 14px rgba(6,146,175,0.32)'
+        'box-shadow:0 4px 14px rgba(27,147,176,0.32)'
     ].join(';');
 
     var WRAP_STYLE = [

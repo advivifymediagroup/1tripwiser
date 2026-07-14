@@ -74,7 +74,7 @@ while ( have_posts() ) :
 
             <span class="explore-hero-kicker">
                 <?php echo esc_html( $trip_type ?: 'Group Trip' ); ?>
-                <?php if ( $tag ) : ?> &nbsp;·&nbsp; <span style="color:#FCB415;"><?php echo esc_html( ucfirst( $tag ) ); ?></span><?php endif; ?>
+                <?php if ( $tag ) : ?> &nbsp;·&nbsp; <span style="color:#D83550;"><?php echo esc_html( ucfirst( $tag ) ); ?></span><?php endif; ?>
             </span>
 
             <h1 class="explore-hero-title"><?php the_title(); ?></h1>

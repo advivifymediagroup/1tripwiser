@@ -138,7 +138,7 @@ get_header();
         if (/[^A-Za-z0-9]/.test(pw)) score++;
 
         var labels = ['', 'Weak', 'Fair', 'Good', 'Strong', 'Very Strong'];
-        var colors = ['', '#D5374F', '#f09a00', '#FCB415', '#306C35', '#0692AF'];
+        var colors = ['', '#D5374F', '#1B93B0', '#D83550', '#1B93B0', '#1B93B0'];
         var widths = ['0%', '20%', '40%', '60%', '80%', '100%'];
 
         pwBar.style.width      = pw.length ? widths[score] || '20%' : '0%';
