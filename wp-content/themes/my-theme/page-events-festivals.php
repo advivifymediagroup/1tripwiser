@@ -110,7 +110,7 @@ endif;
         <div class="explore-hero-overlay" aria-hidden="true"></div>
         <div class="container explore-hero-inner">
             <span class="explore-hero-kicker">Plan around the moment</span>
-            <h1 class="explore-hero-title">Events &amp; <span style="color:#FCB415">Festivals</span></h1>
+            <h1 class="explore-hero-title">Events &amp; <span style="color:#D83550">Festivals</span></h1>
             <p class="explore-hero-sub">Beyond ordinary — live the story worth telling. Bookable trips built around the world's best events &amp; festivals.</p>
         </div>
     </section>

@@ -104,18 +104,18 @@ $total = array_sum( $counts );
 
         <!-- Tab filters -->
         <div class="dest-tabs" role="tablist">
-            <button class="dest-tab active" data-filter="all" role="tab">✦ All <span><?php echo $total; ?></span></button>
+            <button class="dest-tab active" data-filter="all" role="tab">All <span><?php echo $total; ?></span></button>
             <?php if ( $counts['travel_package'] ) : ?>
-            <button class="dest-tab" data-filter="travel_package" role="tab">🧳 Packages <span><?php echo $counts['travel_package']; ?></span></button>
+            <button class="dest-tab" data-filter="travel_package" role="tab">Packages <span><?php echo $counts['travel_package']; ?></span></button>
             <?php endif; ?>
             <?php if ( $counts['group_trip'] ) : ?>
-            <button class="dest-tab" data-filter="group_trip" role="tab">👥 Group Trips <span><?php echo $counts['group_trip']; ?></span></button>
+            <button class="dest-tab" data-filter="group_trip" role="tab">Group Trips <span><?php echo $counts['group_trip']; ?></span></button>
             <?php endif; ?>
             <?php if ( $counts['itinerary'] ) : ?>
-            <button class="dest-tab" data-filter="itinerary" role="tab">🗺️ Itineraries <span><?php echo $counts['itinerary']; ?></span></button>
+            <button class="dest-tab" data-filter="itinerary" role="tab">Itineraries <span><?php echo $counts['itinerary']; ?></span></button>
             <?php endif; ?>
             <?php if ( $counts['tw_event'] ) : ?>
-            <button class="dest-tab" data-filter="tw_event" role="tab">🎉 Events <span><?php echo $counts['tw_event']; ?></span></button>
+            <button class="dest-tab" data-filter="tw_event" role="tab">Events <span><?php echo $counts['tw_event']; ?></span></button>
             <?php endif; ?>
         </div>
 
@@ -150,10 +150,10 @@ $total = array_sum( $counts );
 
                 /* type badge */
                 $badges = array(
-                    'travel_package' => array( '🧳 Package',    '#FCB415', '#0d1526' ),
-                    'group_trip'     => array( '👥 Group Trip',  '#0692AF', '#fff'    ),
-                    'tw_event'       => array( '🎉 Event',       '#ff6b8a', '#fff'    ),
-                    'itinerary'      => array( '🗺️ Itinerary',  '#10b981', '#fff'    ),
+                    'travel_package' => array( 'Package',    '#D83550', '#0d1526' ),
+                    'group_trip'     => array( 'Group Trip',  '#1B93B0', '#fff'    ),
+                    'tw_event'       => array( 'Event',       '#D83550', '#fff'    ),
+                    'itinerary'      => array( 'Itinerary',  '#10b981', '#fff'    ),
                 );
                 $badge     = isset( $badges[$pt] ) ? $badges[$pt] : array( '✈ Trip', '#6b7a8f', '#fff' );
                 $book_url  = get_post_meta( $pid, 'package_book_url', true ) ?: get_permalink( $pid );
@@ -202,7 +202,7 @@ $total = array_sum( $counts );
             <div class="tribe-empty-icon"><?php echo esc_html( $icon ); ?></div>
             <h3>No trips for <?php echo esc_html( $term->name ); ?> yet</h3>
             <p>We're curating amazing trips here. Tell us where you want to go and we'll build a custom itinerary.</p>
-            <a class="tribe-btn-primary" href="<?php echo esc_url( mytheme_get_plan_trip_url() ); ?>">✈️ Plan a Trip — Free</a>
+            <a class="tribe-btn-primary" href="<?php echo esc_url( mytheme_get_plan_trip_url() ); ?>">Plan a Trip — Free</a>
         </div>
         <?php endif; ?>
 

@@ -328,6 +328,61 @@ function tw_luxe_migrate_from_group_trip() {
 }
 add_action( 'init', 'tw_luxe_migrate_from_group_trip', 20 );
 
+/* One-time dedupe: the group_trip → tw_luxe migration and the demo seeder
+   could each produce a copy of the same journey (same title, base slug vs
+   suffixed slug). Keep the richest copy per title — prefer the one carrying
+   luxe_highlights, else the base demo-luxe-* slug — and delete the rest. */
+function tw_luxe_dedupe_demo() {
+    if ( get_option( 'tw_luxe_demo_deduped_v' ) === '1' ) { return; }
+
+    $posts = get_posts( array(
+        'post_type'      => 'tw_luxe',
+        'post_status'    => 'any',
+        'posts_per_page' => -1,
+        'no_found_rows'  => true,
+    ) );
+
+    $groups = array();
+    foreach ( $posts as $p ) {
+        // Only demo posts are dedupe candidates — never touch admin-authored journeys.
+        if ( strpos( $p->post_name, 'demo-luxe-' ) !== 0 && ! get_post_meta( $p->ID, '_tw_demo', true ) ) { continue; }
+        $groups[ $p->post_title ][] = $p;
+    }
+
+    $removed = 0;
+    foreach ( $groups as $list ) {
+        if ( count( $list ) < 2 ) { continue; }
+        usort( $list, function ( $a, $b ) {
+            $ah = get_post_meta( $a->ID, 'luxe_highlights', true ) ? 1 : 0;
+            $bh = get_post_meta( $b->ID, 'luxe_highlights', true ) ? 1 : 0;
+            if ( $ah !== $bh ) { return $bh - $ah; }                     // richest content first
+            $as = preg_match( '/-\d+$/', $a->post_name ) ? 1 : 0;
+            $bs = preg_match( '/-\d+$/', $b->post_name ) ? 1 : 0;
+            if ( $as !== $bs ) { return $as - $bs; }                     // base slug beats suffixed
+            return $b->ID - $a->ID;                                      // else newest
+        } );
+        $winner = array_shift( $list ); // keep the winner
+        foreach ( $list as $dupe ) {
+            wp_delete_post( $dupe->ID, true );
+            $removed++;
+        }
+        // Restore the canonical slug on the winner — otherwise the idempotent
+        // seeder wouldn't find it by path and would recreate the duplicate.
+        if ( preg_match( '/^(demo-luxe-.+?)-\d+$/', $winner->post_name, $m )
+            && ! get_page_by_path( $m[1], OBJECT, 'tw_luxe' ) ) {
+            wp_update_post( array( 'ID' => $winner->ID, 'post_name' => $m[1] ) );
+        }
+    }
+
+    update_option( 'tw_luxe_demo_deduped_v', '1' );
+    // Survivors may carry suffixed slugs; re-run the seeder so the canonical
+    // slugs/meta are restored (idempotent, demo-gated).
+    if ( $removed && function_exists( 'tw_demo_generate' ) ) {
+        delete_option( 'tw_luxe_demo_refreshed_v' );
+    }
+}
+add_action( 'admin_init', 'tw_luxe_dedupe_demo', 5 );
+
 /* =============================================================
  * 2. STARTER SEEDING (idempotent; admin can edit/expand after)
  * ============================================================= */
@@ -505,17 +560,18 @@ function tw_group_trip_region_url( $slug = '' ) {
  * ============================================================= */
 /* ── LUXE (Luxury / Concierge-style trips) helpers ── */
 
-/** URL of the LUXE landing page (looks for a page using the template). */
+/** URL of the LUXE landing page (looks for a page using the LUXURY template —
+ *  the video-hero page that replaced the original /luxe/ landing). */
 function tw_luxe_page_url() {
     $pages = get_posts( array(
         'post_type'  => 'page',
         'meta_key'   => '_wp_page_template',
-        'meta_value' => 'page-luxe.php',
+        'meta_value' => 'page-luxury.php',
         'numberposts'=> 1,
         'fields'     => 'ids',
     ) );
     if ( $pages ) { return get_permalink( $pages[0] ); }
-    return home_url( '/luxe/' );
+    return home_url( '/luxury/' );
 }
 
 /** Fetch recent LUXE journeys from the dedicated tw_luxe CPT. */
@@ -538,7 +594,7 @@ function tw_luxe_showcase( $limit = 3 ) {
     <section class="tw-luxe-section">
         <div class="container tw-luxe-inner">
 
-            <div class="tw-luxe-header">
+            <div class="tw-luxe-header" data-reveal="up">
                 <span class="tw-luxe-kicker">By Invitation</span>
                 <h2 class="tw-luxe-title">LUXE</h2>
                 <p class="tw-luxe-sub">A quieter way to travel. Private villas, crewed yachts, light jets and tables at restaurants without phone numbers — for those who prefer to travel privately.</p>
@@ -557,7 +613,7 @@ function tw_luxe_showcase( $limit = 3 ) {
                     $days   = (int) get_post_meta( $trip->ID, 'total_days', true );
                     $dur    = $nights ? $nights . 'N / ' . ( $days ?: $nights + 1 ) . 'D' : '';
                 ?>
-                <a class="tw-luxe-card" href="<?php echo esc_url( get_permalink( $trip->ID ) ); ?>">
+                <a class="tw-luxe-card" href="<?php echo esc_url( get_permalink( $trip->ID ) ); ?>" data-reveal="scale">
                     <div class="tw-luxe-card-img" <?php if ( $thumb ) : ?>style="background-image:url('<?php echo esc_url( $thumb ); ?>')"<?php endif; ?>>
                         <?php if ( ! $thumb ) : ?><i class="fa-solid fa-crown tw-luxe-card-ph"></i><?php endif; ?>
                         <span class="tw-luxe-badge">LUXE</span>
@@ -870,39 +926,44 @@ function tw_explore_active_tax_query() {
  * Homepage "Events & Festivals" showcase row.
  * Renders Event CPT posts as cards (image, name, price/date) → each event page.
  */
-function tw_explore_events_showcase( $limit = 8 ) {
+/** Homepage Events & Festivals — numbered list, flat navy panel, red + blue only. */
+function tw_explore_events_showcase( $limit = 5 ) {
     $events = tw_recent_events( $limit );
     if ( empty( $events ) ) { return; }
     ?>
     <section class="tw-events-showcase">
-        <div class="container">
-            <div class="section-heading" data-reveal="up">
-                <span>Plan around the moment</span>
-                <h2>Events &amp; Festivals</h2>
+        <div class="container tw-events-inner">
+
+            <div class="tw-events-intro" data-reveal="up">
+                <span class="tw-events-kicker">Plan Around The Moment</span>
+                <h2 class="tw-events-title">Events &amp;<br><em>festivals</em>.</h2>
+                <p class="tw-events-desc">Some trips deserve a date on the calendar &mdash; festivals, races and stages where we handle tickets, flights, hotels and transfers.</p>
             </div>
-            <div class="tw-events-grid">
-                <?php foreach ( $events as $ev ) :
-                    $thumb = get_the_post_thumbnail_url( $ev->ID, 'medium_large' );
+
+            <ol class="tw-events-list">
+                <?php foreach ( $events as $tw_ev_i => $ev ) :
                     $price = function_exists( 'mytheme_get_travel_field' ) ? ( mytheme_get_travel_field( 'starting_price', $ev->ID ) ?: mytheme_get_travel_field( 'package_amount', $ev->ID ) ) : '';
                     $date  = function_exists( 'mytheme_get_travel_field' ) ? mytheme_get_travel_field( 'event_date', $ev->ID ) : '';
                 ?>
-                    <a class="tw-event-card" href="<?php echo esc_url( get_permalink( $ev->ID ) ); ?>" data-reveal="scale">
-                        <div class="tw-event-card-media" <?php if ( $thumb ) : ?>style="background-image:url('<?php echo esc_url( $thumb ); ?>')"<?php endif; ?>>
-                            <?php if ( ! $thumb ) : ?><i class="fa-solid fa-ticket tw-event-card-icon"></i><?php endif; ?>
-                        </div>
-                        <div class="tw-event-card-body">
-                            <h3 class="tw-event-card-name"><?php echo esc_html( get_the_title( $ev->ID ) ); ?></h3>
-                            <span class="tw-event-card-count">
-                                <?php
-                                if ( $date )  { echo esc_html( $date ); }
-                                if ( $price ) { echo $date ? ' · ' : ''; echo esc_html( function_exists( 'mytheme_format_rupee_amount' ) ? mytheme_format_rupee_amount( $price ) : $price ); }
-                                if ( ! $date && ! $price ) { echo 'View event →'; }
-                                ?>
-                            </span>
-                        </div>
+                <li class="tw-events-row" data-reveal="up" style="--rd: <?php echo esc_attr( $tw_ev_i * 80 ); ?>ms;">
+                    <a href="<?php echo esc_url( get_permalink( $ev->ID ) ); ?>" class="tw-events-row-link">
+                        <span class="tw-events-num"><?php echo esc_html( sprintf( '%02d', $tw_ev_i + 1 ) ); ?></span>
+                        <span class="tw-events-name">
+                            <?php echo esc_html( get_the_title( $ev->ID ) ); ?>
+                            <?php if ( $date ) : ?><span class="tw-events-date"><i class="fa-regular fa-calendar" aria-hidden="true"></i> <?php echo esc_html( $date ); ?></span><?php endif; ?>
+                        </span>
+                        <span class="tw-events-price">
+                            <?php if ( $price ) : ?>
+                            <small>From</small>
+                            <strong><?php echo esc_html( function_exists( 'mytheme_format_rupee_amount' ) ? mytheme_format_rupee_amount( $price ) : $price ); ?></strong>
+                            <?php endif; ?>
+                        </span>
+                        <span class="tw-events-arrow" aria-hidden="true"><i class="fa-solid fa-arrow-right"></i></span>
                     </a>
+                </li>
                 <?php endforeach; ?>
-            </div>
+            </ol>
+
         </div>
     </section>
     <?php
