@@ -69,15 +69,60 @@
 
 <!-- ===== SITE SEARCH OVERLAY ===== -->
 <div class="tw-search-overlay" id="tw-search-overlay" aria-hidden="true">
-    <button type="button" class="tw-search-close" id="tw-search-close" aria-label="Close search">✕</button>
-    <div class="tw-search-box">
-        <form class="tw-search-form" role="search" method="get" action="<?php echo esc_url(home_url('/')); ?>">
-            <input type="search" class="tw-search-input" name="s" id="tw-search-input"
-                   placeholder="Search trips, itineraries, group trips, blogs, the Tribe…"
-                   autocomplete="off" value="<?php echo esc_attr(get_search_query()); ?>">
-            <button type="submit" class="tw-search-submit">Search</button>
-        </form>
-        <p class="tw-search-hint">Try <span>Bali</span>, <span>Ladakh</span>, <span>Honeymoon</span> or <span>Oktoberfest</span></p>
+    <div class="tw-search-modal">
+        <div class="tw-search-topbar">
+            <i class="fa-solid fa-magnifying-glass tw-search-icon" aria-hidden="true"></i>
+            <form class="tw-search-form" role="search" method="get" action="<?php echo esc_url(home_url('/')); ?>">
+                <input type="search" class="tw-search-input" name="s" id="tw-search-input"
+                       placeholder="Try Bali, Ladakh, Honeymoon or Oktoberfest&hellip;"
+                       autocomplete="off" value="<?php echo esc_attr(get_search_query()); ?>">
+                <button type="submit" class="tw-visually-hidden">Search</button>
+            </form>
+            <span class="tw-search-esc-badge">ESC</span>
+            <button type="button" class="tw-search-close" id="tw-search-close" aria-label="Close search">
+                <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+            </button>
+        </div>
+
+        <div class="tw-search-body">
+            <div class="tw-search-col">
+                <span class="tw-search-col-label"><i class="fa-solid fa-arrow-trend-up" aria-hidden="true"></i> Trending Searches</span>
+                <div class="tw-search-pills">
+                    <?php
+                    $tw_trending = array(
+                        array('label' => 'Bali',            'mod' => 'red'),
+                        array('label' => 'Ladakh',           'mod' => 'blue'),
+                        array('label' => 'Switzerland',      'mod' => 'gold'),
+                        array('label' => 'Oktoberfest',      'mod' => 'navy'),
+                        array('label' => 'Kerala Monsoon',   'mod' => ''),
+                        array('label' => 'Rajasthan',        'mod' => 'red'),
+                    );
+                    foreach ($tw_trending as $tw_t) :
+                        $tw_url = esc_url(add_query_arg('s', urlencode($tw_t['label']), home_url('/')));
+                        $tw_cls = 'tw-search-pill' . ($tw_t['mod'] ? ' tw-pill-' . $tw_t['mod'] : '');
+                    ?>
+                        <a href="<?php echo $tw_url; ?>" class="<?php echo esc_attr($tw_cls); ?>"><?php echo esc_html($tw_t['label']); ?></a>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+            <div class="tw-search-col">
+                <span class="tw-search-col-label">Browse by Mood</span>
+                <div class="tw-search-mood-grid">
+                    <?php
+                    $tw_moods = array('Mountains', 'Beaches', 'Offbeat', 'Honeymoon', 'Group Trips', 'Budget', 'International');
+                    foreach ($tw_moods as $tw_m) :
+                        $tw_url = esc_url(add_query_arg('s', urlencode($tw_m), home_url('/')));
+                    ?>
+                        <a href="<?php echo $tw_url; ?>" class="tw-search-mood"><?php echo esc_html($tw_m); ?> <span aria-hidden="true">&#8599;</span></a>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        </div>
+
+        <div class="tw-search-footer">
+            <span>Search 1TripWiser</span>
+            <span><kbd>&#8629;</kbd> to select &nbsp;&middot;&nbsp; <kbd>ESC</kbd> to close</span>
+        </div>
     </div>
 </div>
 
