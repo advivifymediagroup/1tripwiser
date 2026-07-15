@@ -318,7 +318,7 @@ if ( isset($_GET['updated']) && $_GET['updated'] === '1' ) {
             return;
         }
 
-        infoBtnT.textContent = '⏳ Saving…';
+        infoBtnT.innerHTML = '<i class="fi-rr-hourglass" aria-hidden="true"></i> Saving…';
         infoBtn.disabled     = true;
 
         var fd = new FormData(infoForm);
@@ -363,7 +363,7 @@ if ( isset($_GET['updated']) && $_GET['updated'] === '1' ) {
         if (nw.length < 8)   { show(pwMsg, 'New password must be at least 8 characters.', 'error'); return; }
         if (nw !== conf)     { show(pwMsg, 'New passwords do not match.', 'error'); return; }
 
-        pwBtnT.textContent = '⏳ Updating…';
+        pwBtnT.innerHTML = '<i class="fi-rr-hourglass" aria-hidden="true"></i> Updating…';
         pwBtn.disabled     = true;
 
         var fd = new FormData(pwForm);

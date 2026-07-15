@@ -172,7 +172,7 @@ get_header();
         if (password !== confirm)           { showMsg('Passwords do not match.', 'error'); return; }
         if (!terms)                         { showMsg('Please accept the Terms of Service to continue.', 'error'); return; }
 
-        btnText.textContent = '⏳ Creating account…';
+        btnText.innerHTML = '<i class="fi-rr-hourglass" aria-hidden="true"></i> Creating account…';
         btn.disabled = true;
 
         var fd = new FormData(form);

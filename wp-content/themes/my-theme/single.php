@@ -51,7 +51,7 @@ $sp_title_enc = rawurlencode(get_the_title());
             <span class="sp-hero-divider">·</span>
             <div class="sp-hero-meta-item"><i class="fi-rr-calendar" aria-hidden="true"></i> <?php echo esc_html(get_the_date()); ?></div>
             <span class="sp-hero-divider">·</span>
-            <div class="sp-hero-meta-item">⏱ <?php echo esc_html($sp_read_min); ?> min read</div>
+            <div class="sp-hero-meta-item"><i class="fi-rr-clock" aria-hidden="true"></i> <?php echo esc_html($sp_read_min); ?> min read</div>
             <?php if ($sp_word_cnt > 0) : ?>
             <span class="sp-hero-divider">·</span>
             <div class="sp-hero-meta-item"><i class="fi-rr-book-open-reader" aria-hidden="true"></i> <?php echo number_format($sp_word_cnt); ?> words</div>

@@ -177,7 +177,7 @@ $total = array_sum( $counts );
                 <div class="dest-card-body">
                     <h3 class="dest-card-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
                     <div class="dest-card-meta">
-                        <?php if ( $dur ) : ?><span class="dest-card-dur">⏱ <?php echo esc_html( $dur ); ?></span><?php endif; ?>
+                        <?php if ( $dur ) : ?><span class="dest-card-dur"><i class="fi-rr-clock" aria-hidden="true"></i> <?php echo esc_html( $dur ); ?></span><?php endif; ?>
                     </div>
                     <p class="dest-card-excerpt"><?php echo esc_html( wp_trim_words( get_the_excerpt(), 16, '…' ) ); ?></p>
                     <div class="dest-card-foot">

@@ -114,7 +114,7 @@ $has_trips = $trips_query->have_posts();
                 <div class="tw-womens-trip-body">
                     <div class="tw-womens-trip-meta">
                         <?php if ( $region ) : ?><span><i class="fi-rr-marker" aria-hidden="true"></i> <?php echo esc_html( $region ); ?></span><?php endif; ?>
-                        <?php if ( $dur )    : ?><span>⏱ <?php echo esc_html( $dur ); ?></span><?php endif; ?>
+                        <?php if ( $dur )    : ?><span><i class="fi-rr-clock" aria-hidden="true"></i> <?php echo esc_html( $dur ); ?></span><?php endif; ?>
                     </div>
                     <h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
                     <p><?php echo wp_trim_words( get_the_excerpt(), 20, '…' ); ?></p>
