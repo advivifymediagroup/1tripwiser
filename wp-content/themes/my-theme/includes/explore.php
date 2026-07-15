@@ -432,6 +432,24 @@ function tw_explore_seed() {
 }
 add_action( 'init', 'tw_explore_seed', 25 );
 
+/* One-time heal for sites that already ran tw_explore_seed() before the
+ * emoji→Flaticon migration — the seeded International icon is stuck on the
+ * old emoji value forever otherwise, since tw_explore_seed() short-circuits
+ * once tw_explore_seeded is set. */
+function tw_explore_heal_region_icons() {
+    if ( get_option( 'tw_explore_icons_healed' ) === '1' ) { return; }
+    if ( ! taxonomy_exists( 'destination_region' ) ) { return; }
+    $intl = get_term_by( 'name', 'International', 'destination_region' );
+    if ( $intl ) {
+        $current = get_term_meta( $intl->term_id, 'tw_region_icon', true );
+        if ( strpos( (string) $current, '<i ' ) !== 0 ) {
+            update_term_meta( $intl->term_id, 'tw_region_icon', '<i class="fi-rr-globe" aria-hidden="true"></i>' );
+        }
+    }
+    update_option( 'tw_explore_icons_healed', '1' );
+}
+add_action( 'init', 'tw_explore_heal_region_icons', 26 );
+
 /** Create a term if missing; return its ID (or existing ID). */
 function tw_explore_ensure_term( $name, $taxonomy, $parent = 0 ) {
     $existing = get_term_by( 'name', $name, $taxonomy );

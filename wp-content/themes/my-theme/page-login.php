@@ -118,7 +118,7 @@ if ( isset( $_GET['login'] ) && $_GET['login'] === 'failed' ) {
             return;
         }
 
-        btnText.textContent = '⏳ Logging in…';
+        btnText.innerHTML = '<i class="fi-rr-hourglass" aria-hidden="true"></i> Logging in…';
         btn.disabled = true;
 
         var fd = new FormData(form);

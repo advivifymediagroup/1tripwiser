@@ -82,6 +82,17 @@ function tw_forum_seed_categories() {
             if ( ! is_wp_error( $term ) ) {
                 update_term_meta( $term['term_id'], 'tw_cat_icon', $data[1] );
             }
+        } else {
+            /* Category already existed from before the emoji→Flaticon migration —
+             * seeding above skips it, so the old emoji icon value is stuck in
+             * termmeta forever unless we heal it here. */
+            $existing = term_exists( $slug, 'forum_category' );
+            if ( $existing ) {
+                $current = get_term_meta( $existing['term_id'], 'tw_cat_icon', true );
+                if ( $current !== $data[1] && strpos( (string) $current, '<i ' ) !== 0 ) {
+                    update_term_meta( $existing['term_id'], 'tw_cat_icon', $data[1] );
+                }
+            }
         }
     }
 }

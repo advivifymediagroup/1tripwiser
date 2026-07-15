@@ -30,7 +30,7 @@ $categories    = get_categories(array('hide_empty' => false, 'orderby' => 'name'
             <?php if ($can_publish) : ?>
             <span class="sb-status-badge publish"><i class="fi-rr-check" aria-hidden="true"></i> Will publish immediately</span>
             <?php else : ?>
-            <span class="sb-status-badge pending">⏳ Pending review before publishing</span>
+            <span class="sb-status-badge pending"><i class="fi-rr-hourglass" aria-hidden="true"></i> Pending review before publishing</span>
             <?php endif; ?>
         </div>
 
@@ -315,7 +315,7 @@ $categories    = get_categories(array('hide_empty' => false, 'orderby' => 'name'
         var fd = new FormData(form);
         fd.append('action', 'tw_submit_blog');
 
-        btnText.textContent = '⏳ Submitting…';
+        btnText.innerHTML = '<i class="fi-rr-hourglass" aria-hidden="true"></i> Submitting…';
         submitBtn.disabled  = true;
 
         fetch(<?php echo json_encode(admin_url('admin-ajax.php')); ?>, {

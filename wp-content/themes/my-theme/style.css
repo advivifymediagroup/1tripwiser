@@ -5099,7 +5099,7 @@ img, video, iframe, embed, object { max-width: 100%; height: auto; }
 .tribe-topic-body { flex: 1; min-width: 0; }
 .tribe-topic-meta-top { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 6px; }
 .tribe-chip-cat {
-    display: inline-flex; align-items: center; font-size: 0.72rem; font-weight: 800; letter-spacing: 0.02em;
+    display: inline-flex; align-items: center; gap: 5px; font-size: 0.72rem; font-weight: 800; letter-spacing: 0.02em;
     color: var(--tw-blue); background: rgba(27,147,176,0.08); border: 1px solid rgba(27,147,176,0.2);
     padding: 3px 10px; border-radius: 4px; text-decoration: none;
 }
