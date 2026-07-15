@@ -35,7 +35,7 @@ $has_trips = $trips_query->have_posts();
                 <a href="<?php echo esc_url( home_url('/') ); ?>">Home</a><span>›</span>
                 <span>Women's Group Trips</span>
             </nav>
-            <span class="explore-hero-kicker" style="background:rgba(216,53,80,0.1);border-color:rgba(216,53,80,0.3);color:#D83550;">✦ Travel Together · Grow Together</span>
+            <span class="explore-hero-kicker" style="background:rgba(216,53,80,0.1);border-color:rgba(216,53,80,0.3);color:#D83550;"><i class="fi-rr-sparkles" aria-hidden="true"></i> Travel Together · Grow Together</span>
             <h1 class="explore-hero-title">Women's <span style="color:#D83550">Group Trips</span></h1>
             <p class="explore-hero-sub">Safe, curated and empowering travel experiences designed exclusively for women. Join your tribe, explore the world.</p>
 
@@ -56,22 +56,22 @@ $has_trips = $trips_query->have_posts();
         <!-- WHY SECTION -->
         <div class="tw-womens-why">
             <div class="tw-womens-why-card">
-                <span class="tw-womens-why-icon">🛡️</span>
+                <span class="tw-womens-why-icon"><i class="fi-rr-shield" aria-hidden="true"></i></span>
                 <h3>Safety First</h3>
                 <p>Every trip is designed with women's safety at the core — verified accommodations, trusted operators and 24/7 support.</p>
             </div>
             <div class="tw-womens-why-card">
-                <span class="tw-womens-why-icon">👩‍🦰</span>
+                <span class="tw-womens-why-icon"><i class="fi-rr-user" aria-hidden="true"></i></span>
                 <h3>Women-Led</h3>
                 <p>Our female trip leaders bring local expertise and a personal touch that makes every journey feel like travelling with a friend.</p>
             </div>
             <div class="tw-womens-why-card">
-                <span class="tw-womens-why-icon">🌸</span>
+                <span class="tw-womens-why-icon"><i class="fi-rr-flower" aria-hidden="true"></i></span>
                 <h3>Curated Experiences</h3>
                 <p>From wellness retreats to adventure hikes — every itinerary is handcrafted with experiences that resonate with women travellers.</p>
             </div>
             <div class="tw-womens-why-card">
-                <span class="tw-womens-why-icon">💬</span>
+                <span class="tw-womens-why-icon"><i class="fi-rr-comment" aria-hidden="true"></i></span>
                 <h3>Build Your Tribe</h3>
                 <p>Meet incredible women, form lifelong bonds and join the 1TRIPWISER Tribe community of 10K+ women adventurers.</p>
             </div>
@@ -107,14 +107,14 @@ $has_trips = $trips_query->have_posts();
                     <?php if ( $thumb ) : ?>
                         <img src="<?php echo esc_url( $thumb ); ?>" alt="" loading="lazy">
                     <?php else : ?>
-                        <span class="tw-womens-trip-placeholder">🌸</span>
+                        <span class="tw-womens-trip-placeholder"><i class="fi-rr-flower" aria-hidden="true"></i></span>
                     <?php endif; ?>
                     <span class="tw-womens-trip-badge">Women Only</span>
                 </a>
                 <div class="tw-womens-trip-body">
                     <div class="tw-womens-trip-meta">
-                        <?php if ( $region ) : ?><span>📍 <?php echo esc_html( $region ); ?></span><?php endif; ?>
-                        <?php if ( $dur )    : ?><span>⏱️ <?php echo esc_html( $dur ); ?></span><?php endif; ?>
+                        <?php if ( $region ) : ?><span><i class="fi-rr-marker" aria-hidden="true"></i> <?php echo esc_html( $region ); ?></span><?php endif; ?>
+                        <?php if ( $dur )    : ?><span>⏱ <?php echo esc_html( $dur ); ?></span><?php endif; ?>
                     </div>
                     <h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
                     <p><?php echo wp_trim_words( get_the_excerpt(), 20, '…' ); ?></p>
@@ -134,10 +134,10 @@ $has_trips = $trips_query->have_posts();
 
         <?php else : ?>
         <div class="tribe-empty">
-            <div class="tribe-empty-icon">🌸</div>
+            <div class="tribe-empty-icon"><i class="fi-rr-flower" aria-hidden="true"></i></div>
             <h3>Women's trips coming soon</h3>
             <p>We're curating the most empowering travel experiences. In the meantime, plan a custom women's trip with us!</p>
-            <a class="tribe-btn-primary" href="<?php echo esc_url( mytheme_get_plan_trip_url() ); ?>">✈️ Plan a Custom Trip — Free</a>
+            <a class="tribe-btn-primary" href="<?php echo esc_url( mytheme_get_plan_trip_url() ); ?>"><i class="fi-rr-plane" aria-hidden="true"></i> Plan a Custom Trip — Free</a>
         </div>
         <?php endif; ?>
 
@@ -154,7 +154,7 @@ $has_trips = $trips_query->have_posts();
         if ( ! empty( $testimonials ) ) : ?>
         <div class="tw-womens-testimonials">
             <div class="tw-womens-testi-head">
-                <span class="tw-womens-kicker" style="background:rgba(255,105,135,0.08);border-color:rgba(255,105,135,0.25);color:#e05580;">💬 What our travellers say</span>
+                <span class="tw-womens-kicker" style="background:rgba(255,105,135,0.08);border-color:rgba(255,105,135,0.25);color:#e05580;"><i class="fi-rr-comment" aria-hidden="true"></i> What our travellers say</span>
                 <h2 class="tw-womens-testi-title">Stories from <span>Our Tribe</span></h2>
             </div>
             <div class="tw-womens-testi-grid">
@@ -163,7 +163,7 @@ $has_trips = $trips_query->have_posts();
                 ?>
                 <div class="tw-womens-testi-card">
                     <div class="tw-womens-testi-stars">
-                        <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                        <span><i class="fi-rr-star" aria-hidden="true"></i></span><span><i class="fi-rr-star" aria-hidden="true"></i></span><span><i class="fi-rr-star" aria-hidden="true"></i></span><span><i class="fi-rr-star" aria-hidden="true"></i></span><span><i class="fi-rr-star" aria-hidden="true"></i></span>
                     </div>
                     <span class="tw-womens-testi-quote-mark">"</span>
                     <p class="tw-womens-testi-text"><?php echo esc_html( $t['quote'] ); ?>"</p>

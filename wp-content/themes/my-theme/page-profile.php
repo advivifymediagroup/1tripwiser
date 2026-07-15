@@ -51,7 +51,7 @@ if ( isset($_GET['updated']) && $_GET['updated'] === '1' ) {
     <!-- Identity card -->
     <div class="pf-identity">
         <div class="pf-avatar-wrap">
-            <?php echo get_avatar($uid, 88, '', '', array('class' => '')) ?: '👤'; ?>
+            <?php echo get_avatar($uid, 88, '', '', array('class' => '')) ?: '<i class="fi-rr-user" aria-hidden="true"></i>'; ?>
         </div>
         <div class="pf-identity-info">
             <div class="pf-display-name"><?php echo esc_html($user->display_name ?: $user->user_login); ?></div>
@@ -86,9 +86,9 @@ if ( isset($_GET['updated']) && $_GET['updated'] === '1' ) {
         <div>
             <!-- Notice from redirect -->
             <?php if ($notice === 'success') : ?>
-            <div class="pf-msg success" style="display:block">✅ Profile updated successfully!</div>
+            <div class="pf-msg success" style="display:block"><i class="fi-rr-check-circle" aria-hidden="true"></i> Profile updated successfully!</div>
             <?php elseif ($notice) : ?>
-            <div class="pf-msg error" style="display:block">⚠️ <?php echo esc_html($notice); ?></div>
+            <div class="pf-msg error" style="display:block"><i class="fi-rr-triangle-warning" aria-hidden="true"></i> <?php echo esc_html($notice); ?></div>
             <?php endif; ?>
 
             <!-- AJAX messages -->
@@ -97,7 +97,7 @@ if ( isset($_GET['updated']) && $_GET['updated'] === '1' ) {
             <!-- Personal info -->
             <div class="pf-card" style="margin-bottom:20px">
                 <div class="pf-card-head">
-                    <span class="pf-card-title">✏️ Personal Information</span>
+                    <span class="pf-card-title"><i class="fi-rr-pencil" aria-hidden="true"></i> Personal Information</span>
                 </div>
                 <div class="pf-card-body">
                     <form id="pf-info-form" novalidate>
@@ -146,7 +146,7 @@ if ( isset($_GET['updated']) && $_GET['updated'] === '1' ) {
             <!-- Change password -->
             <div class="pf-card">
                 <div class="pf-card-head">
-                    <span class="pf-card-title">🔒 Change Password</span>
+                    <span class="pf-card-title"><i class="fi-rr-lock" aria-hidden="true"></i> Change Password</span>
                 </div>
                 <div class="pf-card-body">
                     <div class="pf-msg" id="pf-pw-msg"></div>
@@ -158,7 +158,7 @@ if ( isset($_GET['updated']) && $_GET['updated'] === '1' ) {
                             <div class="pf-pw-group">
                                 <input type="password" id="pf_cur_pw" name="pf_cur_pw" class="pf-input"
                                        placeholder="Enter your current password" autocomplete="current-password">
-                                <button type="button" class="pf-pw-toggle" data-target="pf_cur_pw">👁</button>
+                                <button type="button" class="pf-pw-toggle" data-target="pf_cur_pw"><i class="fi-rr-eye" aria-hidden="true"></i></button>
                             </div>
                         </div>
 
@@ -167,7 +167,7 @@ if ( isset($_GET['updated']) && $_GET['updated'] === '1' ) {
                             <div class="pf-pw-group">
                                 <input type="password" id="pf_new_pw" name="pf_new_pw" class="pf-input"
                                        placeholder="At least 8 characters" autocomplete="new-password">
-                                <button type="button" class="pf-pw-toggle" data-target="pf_new_pw">👁</button>
+                                <button type="button" class="pf-pw-toggle" data-target="pf_new_pw"><i class="fi-rr-eye" aria-hidden="true"></i></button>
                             </div>
                         </div>
 
@@ -176,7 +176,7 @@ if ( isset($_GET['updated']) && $_GET['updated'] === '1' ) {
                             <div class="pf-pw-group">
                                 <input type="password" id="pf_conf_pw" name="pf_conf_pw" class="pf-input"
                                        placeholder="Repeat new password" autocomplete="new-password">
-                                <button type="button" class="pf-pw-toggle" data-target="pf_conf_pw">👁</button>
+                                <button type="button" class="pf-pw-toggle" data-target="pf_conf_pw"><i class="fi-rr-eye" aria-hidden="true"></i></button>
                             </div>
                         </div>
 
@@ -192,11 +192,11 @@ if ( isset($_GET['updated']) && $_GET['updated'] === '1' ) {
         <div>
             <!-- Gravatar note -->
             <div class="pf-card" style="margin-bottom:20px">
-                <div class="pf-card-head"><span class="pf-card-title">🖼️ Profile Photo</span></div>
+                <div class="pf-card-head"><span class="pf-card-title"><i class="fi-rr-picture" aria-hidden="true"></i> Profile Photo</span></div>
                 <div class="pf-card-body">
                     <div style="text-align:center;margin-bottom:16px">
                         <div style="width:80px;height:80px;border-radius:50%;overflow:hidden;border:3px solid var(--gold);margin:0 auto 12px;display:flex;align-items:center;justify-content:center;background:rgba(216,53,80,0.1);font-size:2rem;">
-                            <?php echo get_avatar($uid, 80, '', '', array('class'=>'')) ?: '👤'; ?>
+                            <?php echo get_avatar($uid, 80, '', '', array('class'=>'')) ?: '<i class="fi-rr-user" aria-hidden="true"></i>'; ?>
                         </div>
                     </div>
                     <div class="pf-avatar-note">
@@ -207,31 +207,31 @@ if ( isset($_GET['updated']) && $_GET['updated'] === '1' ) {
 
             <!-- Quick info -->
             <div class="pf-card" style="margin-bottom:20px">
-                <div class="pf-card-head"><span class="pf-card-title">ℹ️ Account Details</span></div>
+                <div class="pf-card-head"><span class="pf-card-title">ℹ Account Details</span></div>
                 <div class="pf-card-body" style="padding-top:8px;padding-bottom:8px">
                     <div class="pf-info-row">
-                        <div class="pf-info-icon">👤</div>
+                        <div class="pf-info-icon"><i class="fi-rr-user" aria-hidden="true"></i></div>
                         <div>
                             <div class="pf-info-label">Username</div>
                             <div class="pf-info-val"><?php echo esc_html($user->user_login); ?></div>
                         </div>
                     </div>
                     <div class="pf-info-row">
-                        <div class="pf-info-icon">📅</div>
+                        <div class="pf-info-icon"><i class="fi-rr-calendar" aria-hidden="true"></i></div>
                         <div>
                             <div class="pf-info-label">Member Since</div>
                             <div class="pf-info-val"><?php echo esc_html($join_date); ?></div>
                         </div>
                     </div>
                     <div class="pf-info-row">
-                        <div class="pf-info-icon">✍️</div>
+                        <div class="pf-info-icon"><i class="fi-rr-edit-alt" aria-hidden="true"></i></div>
                         <div>
                             <div class="pf-info-label">Published Posts</div>
                             <div class="pf-info-val"><?php echo esc_html($pub_count); ?></div>
                         </div>
                     </div>
                     <div class="pf-info-row">
-                        <div class="pf-info-icon">📧</div>
+                        <div class="pf-info-icon"><i class="fi-rr-envelope" aria-hidden="true"></i></div>
                         <div>
                             <div class="pf-info-label">Email</div>
                             <div class="pf-info-val" style="word-break:break-all"><?php echo esc_html($user->user_email); ?></div>
@@ -243,7 +243,7 @@ if ( isset($_GET['updated']) && $_GET['updated'] === '1' ) {
             <!-- My posts -->
             <div class="pf-card">
                 <div class="pf-card-head">
-                    <span class="pf-card-title">📝 My Posts</span>
+                    <span class="pf-card-title"><i class="fi-rr-memo" aria-hidden="true"></i> My Posts</span>
                     <a href="<?php echo esc_url(home_url('/submit-blog/')); ?>"
                        style="font-size:0.78rem;font-weight:800;color:var(--gold);text-decoration:none">+ New Post</a>
                 </div>
@@ -258,7 +258,7 @@ if ( isset($_GET['updated']) && $_GET['updated'] === '1' ) {
                                 <?php if ($thumb) : ?>
                                 <img src="<?php echo esc_url($thumb); ?>" alt="" loading="lazy">
                                 <?php else : ?>
-                                ✈️
+                                <i class="fi-rr-plane" aria-hidden="true"></i>
                                 <?php endif; ?>
                             </div>
                             <div style="flex:1;min-width:0">
@@ -296,7 +296,7 @@ if ( isset($_GET['updated']) && $_GET['updated'] === '1' ) {
             var inp  = document.getElementById(btn.dataset.target);
             var show = inp.type === 'password';
             inp.type      = show ? 'text' : 'password';
-            btn.textContent = show ? '🙈' : '👁';
+            btn.innerHTML = show ? '<i class="fi-rr-eye-crossed" aria-hidden="true"></i>' : '<i class="fi-rr-eye" aria-hidden="true"></i>';
         });
     });
 
@@ -328,12 +328,12 @@ if ( isset($_GET['updated']) && $_GET['updated'] === '1' ) {
             .then(function (r) { return r.json(); })
             .then(function (data) {
                 if (data.success) {
-                    show(infoMsg, '✅ ' + data.data.message, 'success');
+                    show(infoMsg, data.data.message, 'success');
                     // Update displayed name in header if changed
                     var dn = document.querySelector('.tw-user-display');
                     if (dn && data.data.display_name) dn.textContent = data.data.display_name;
                 } else {
-                    show(infoMsg, '⚠️ ' + (data.data || 'Update failed.'), 'error');
+                    show(infoMsg, (data.data || 'Update failed.'), 'error');
                 }
                 infoBtnT.textContent = 'Save Changes';
                 infoBtn.disabled     = false;
@@ -373,12 +373,12 @@ if ( isset($_GET['updated']) && $_GET['updated'] === '1' ) {
             .then(function (r) { return r.json(); })
             .then(function (data) {
                 if (data.success) {
-                    show(pwMsg, '✅ Password updated! You may need to log in again.', 'success');
+                    show(pwMsg, 'Password updated! You may need to log in again.', 'success');
                     pwForm.reset();
                     // Re-auth cookie is refreshed server-side; just reload after short delay
                     setTimeout(function () { window.location.reload(); }, 2200);
                 } else {
-                    show(pwMsg, '⚠️ ' + (data.data || 'Update failed.'), 'error');
+                    show(pwMsg, (data.data || 'Update failed.'), 'error');
                     pwBtnT.textContent = 'Update Password';
                     pwBtn.disabled     = false;
                 }

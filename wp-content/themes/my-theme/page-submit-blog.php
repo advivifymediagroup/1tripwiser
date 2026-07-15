@@ -16,7 +16,7 @@ $categories    = get_categories(array('hide_empty' => false, 'orderby' => 'name'
 
 <!-- HERO -->
 <section class="sb-hero">
-    <div class="sb-hero-kicker">✍️ Community Blog</div>
+    <div class="sb-hero-kicker"><i class="fi-rr-edit-alt" aria-hidden="true"></i> Community Blog</div>
     <h1>Share Your <span>Travel Story</span></h1>
     <p>Write a guide, tip, or travel experience — inspire thousands of explorers worldwide.</p>
 </section>
@@ -26,9 +26,9 @@ $categories    = get_categories(array('hide_empty' => false, 'orderby' => 'name'
 
         <!-- Form header -->
         <div class="sb-form-header">
-            <div class="sb-form-header-title">📝 New Blog Post</div>
+            <div class="sb-form-header-title"><i class="fi-rr-memo" aria-hidden="true"></i> New Blog Post</div>
             <?php if ($can_publish) : ?>
-            <span class="sb-status-badge publish">✓ Will publish immediately</span>
+            <span class="sb-status-badge publish"><i class="fi-rr-check" aria-hidden="true"></i> Will publish immediately</span>
             <?php else : ?>
             <span class="sb-status-badge pending">⏳ Pending review before publishing</span>
             <?php endif; ?>
@@ -36,7 +36,7 @@ $categories    = get_categories(array('hide_empty' => false, 'orderby' => 'name'
 
         <!-- Success screen (hidden until submit) -->
         <div class="sb-success-screen" id="sb-success-screen">
-            <div class="sb-success-icon">🎉</div>
+            <div class="sb-success-icon"><i class="fi-rr-confetti" aria-hidden="true"></i></div>
             <h2>Post Submitted!</h2>
             <p id="sb-success-msg">Your post has been submitted and is pending review. We'll publish it within 24–48 hours.</p>
             <div class="sb-success-btns">
@@ -54,7 +54,7 @@ $categories    = get_categories(array('hide_empty' => false, 'orderby' => 'name'
 
             <?php if (!$is_logged_in) : ?>
             <div class="sb-login-notice">
-                💡 <strong>Have an account?</strong> <a href="<?php echo esc_url(wp_login_url(get_permalink())); ?>">Log in</a> to publish under your name. Or fill in your details below to submit as a guest.
+                <i class="fi-rr-bulb" aria-hidden="true"></i> <strong>Have an account?</strong> <a href="<?php echo esc_url(wp_login_url(get_permalink())); ?>">Log in</a> to publish under your name. Or fill in your details below to submit as a guest.
             </div>
             <?php endif; ?>
 
@@ -95,11 +95,11 @@ $categories    = get_categories(array('hide_empty' => false, 'orderby' => 'name'
             <div class="sb-field">
                 <div class="sb-img-preview" id="sb-img-preview">
                     <img id="sb-img-preview-img" src="" alt="Preview">
-                    <button type="button" class="sb-img-preview-remove" id="sb-img-remove">✕ Remove</button>
+                    <button type="button" class="sb-img-preview-remove" id="sb-img-remove"><i class="fi-rr-cross-small" aria-hidden="true"></i> Remove</button>
                 </div>
                 <div class="sb-img-zone" id="sb-img-zone">
                     <input type="file" id="sb_image" name="sb_image" accept="image/*">
-                    <div class="sb-img-icon">🖼️</div>
+                    <div class="sb-img-icon"><i class="fi-rr-picture" aria-hidden="true"></i></div>
                     <p><strong>Click to upload</strong> or drag &amp; drop<br>JPG, PNG, WebP · Max 4 MB</p>
                 </div>
             </div>
@@ -111,7 +111,7 @@ $categories    = get_categories(array('hide_empty' => false, 'orderby' => 'name'
             <div class="sb-field">
                 <textarea id="sb_content" name="sb_content" class="sb-textarea sb-content-area"
                           placeholder="Start writing your travel story… Use blank lines to separate paragraphs. You can use *bold*, _italic_, and ## Heading 2 formatting." required></textarea>
-                <p class="sb-hint">💡 Aim for at least 500 words. Well-structured posts with headings and tips perform best.</p>
+                <p class="sb-hint"><i class="fi-rr-bulb" aria-hidden="true"></i> Aim for at least 500 words. Well-structured posts with headings and tips perform best.</p>
             </div>
 
             <div class="sb-field">
@@ -153,7 +153,7 @@ $categories    = get_categories(array('hide_empty' => false, 'orderby' => 'name'
             <!-- Submit -->
             <div class="sb-submit-row">
                 <button type="submit" class="sb-submit-btn" id="sb-submit-btn">
-                    <span id="sb-btn-text">✈ Submit Post</span>
+                    <span id="sb-btn-text"><i class="fi-rr-plane" aria-hidden="true"></i> Submit Post</span>
                 </button>
                 <p class="sb-submit-note">
                     <?php if ($can_publish) : ?>
@@ -172,14 +172,14 @@ $categories    = get_categories(array('hide_empty' => false, 'orderby' => 'name'
 
     <!-- Writing guidelines card -->
     <div class="sb-guidelines">
-        <h3>📋 Submission Guidelines</h3>
+        <h3><i class="fi-rr-clipboard-list" aria-hidden="true"></i> Submission Guidelines</h3>
         <ul>
-            <li><span class="icon">✅</span> Write original, first-hand travel experiences or helpful guides. No copy-pasted content.</li>
-            <li><span class="icon">✅</span> Include practical tips — costs, transport, opening hours, insider advice.</li>
-            <li><span class="icon">✅</span> Minimum 400 words. The more detailed, the better for our readers.</li>
-            <li><span class="icon">🚫</span> No promotional content, spam links, or affiliate links in the body (we handle monetisation separately).</li>
-            <li><span class="icon">🚫</span> No AI-generated text. We check all submissions. Authentic voices only.</li>
-            <li><span class="icon">📸</span> Use only images you own or that have a Creative Commons licence.</li>
+            <li><span class="icon"><i class="fi-rr-check-circle" aria-hidden="true"></i></span> Write original, first-hand travel experiences or helpful guides. No copy-pasted content.</li>
+            <li><span class="icon"><i class="fi-rr-check-circle" aria-hidden="true"></i></span> Include practical tips — costs, transport, opening hours, insider advice.</li>
+            <li><span class="icon"><i class="fi-rr-check-circle" aria-hidden="true"></i></span> Minimum 400 words. The more detailed, the better for our readers.</li>
+            <li><span class="icon"><i class="fi-rr-ban" aria-hidden="true"></i></span> No promotional content, spam links, or affiliate links in the body (we handle monetisation separately).</li>
+            <li><span class="icon"><i class="fi-rr-ban" aria-hidden="true"></i></span> No AI-generated text. We check all submissions. Authentic voices only.</li>
+            <li><span class="icon"><i class="fi-rr-camera" aria-hidden="true"></i></span> Use only images you own or that have a Creative Commons licence.</li>
         </ul>
     </div>
 </div>
@@ -328,8 +328,8 @@ $categories    = get_categories(array('hide_empty' => false, 'orderby' => 'name'
             if (data.success) {
                 // Show success screen
                 var msg = data.data.status === 'publish'
-                    ? '🎉 Your post is live! <a href="' + data.data.url + '" style="color:inherit;font-weight:800">View it here →</a>'
-                    : '✅ Post submitted! Our team will review it and publish within 48 hours. Thank you!';
+                    ? '<i class="fi-rr-confetti" aria-hidden="true"></i> Your post is live! <a href="' + data.data.url + '" style="color:inherit;font-weight:800">View it here →</a>'
+                    : '<i class="fi-rr-check-circle" aria-hidden="true"></i> Post submitted! Our team will review it and publish within 48 hours. Thank you!';
                 document.getElementById('sb-success-msg').innerHTML = msg;
                 // If published, update the "Back to blog" button
                 if (data.data.status === 'publish') {
@@ -342,19 +342,19 @@ $categories    = get_categories(array('hide_empty' => false, 'orderby' => 'name'
                 successScr.style.display = 'block';
             } else {
                 showError(data.data || 'Something went wrong. Please try again.');
-                btnText.textContent = '✈ Submit Post';
+                btnText.innerHTML = '<i class="fi-rr-plane" aria-hidden="true"></i> Submit Post';
                 submitBtn.disabled  = false;
             }
         })
         .catch(function () {
             showError('Network error. Please check your connection and try again.');
-            btnText.textContent = '✈ Submit Post';
+            btnText.innerHTML = '<i class="fi-rr-plane" aria-hidden="true"></i> Submit Post';
             submitBtn.disabled  = false;
         });
     });
 
     function showError(msg) {
-        errMsg.textContent    = '⚠️ ' + msg;
+        errMsg.textContent    = msg;
         errMsg.className      = 'sb-msg error';
         errMsg.style.display  = 'block';
         errMsg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });

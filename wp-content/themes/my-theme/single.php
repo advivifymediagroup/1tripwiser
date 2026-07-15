@@ -28,7 +28,7 @@ $sp_title_enc = rawurlencode(get_the_title());
     <div class="sp-hero-content">
         <!-- Breadcrumb -->
         <nav class="sp-breadcrumb" aria-label="Breadcrumb">
-            <a href="<?php echo esc_url(home_url('/')); ?>">🏠 Home</a>
+            <a href="<?php echo esc_url(home_url('/')); ?>"><i class="fi-rr-home" aria-hidden="true"></i> Home</a>
             <span class="sep">›</span>
             <a href="<?php echo esc_url(home_url('/blog-affiliates/')); ?>">Blog</a>
             <span class="sep">›</span>
@@ -44,17 +44,17 @@ $sp_title_enc = rawurlencode(get_the_title());
         <div class="sp-hero-meta">
             <div class="sp-hero-meta-item">
                 <div class="sp-hero-avatar">
-                    <?php echo get_avatar(get_the_author_meta('email'), 34, '', '', array('extra_attr' => 'loading="lazy"')) ?: '✍️'; ?>
+                    <?php echo get_avatar(get_the_author_meta('email'), 34, '', '', array('extra_attr' => 'loading="lazy"')) ?: '<i class="fi-rr-edit-alt" aria-hidden="true"></i>'; ?>
                 </div>
                 <span><?php the_author(); ?></span>
             </div>
             <span class="sp-hero-divider">·</span>
-            <div class="sp-hero-meta-item">📅 <?php echo esc_html(get_the_date()); ?></div>
+            <div class="sp-hero-meta-item"><i class="fi-rr-calendar" aria-hidden="true"></i> <?php echo esc_html(get_the_date()); ?></div>
             <span class="sp-hero-divider">·</span>
             <div class="sp-hero-meta-item">⏱ <?php echo esc_html($sp_read_min); ?> min read</div>
             <?php if ($sp_word_cnt > 0) : ?>
             <span class="sp-hero-divider">·</span>
-            <div class="sp-hero-meta-item">📖 <?php echo number_format($sp_word_cnt); ?> words</div>
+            <div class="sp-hero-meta-item"><i class="fi-rr-book-open-reader" aria-hidden="true"></i> <?php echo number_format($sp_word_cnt); ?> words</div>
             <?php endif; ?>
         </div>
     </div>
@@ -93,10 +93,10 @@ $sp_title_enc = rawurlencode(get_the_title());
         <a class="sp-share-btn sp-share-whatsapp"
            href="https://wa.me/?text=<?php echo $sp_title_enc; ?>%20<?php echo $sp_post_enc; ?>"
            target="_blank" rel="noopener noreferrer">
-            💬 WhatsApp
+            <i class="fi-rr-comment" aria-hidden="true"></i> WhatsApp
         </a>
-        <button class="sp-share-btn sp-share-copy" onclick="navigator.clipboard.writeText('<?php echo esc_js($sp_post_url); ?>').then(function(){this.textContent='✅ Copied!';}.bind(this))">
-            🔗 Copy Link
+        <button class="sp-share-btn sp-share-copy" onclick="navigator.clipboard.writeText('<?php echo esc_js($sp_post_url); ?>').then(function(){this.innerHTML='<i class=\'fi-rr-check-circle\' aria-hidden=\'true\'></i> Copied!';}.bind(this))">
+            <i class="fi-rr-link" aria-hidden="true"></i> Copy Link
         </button>
     </div>
 
@@ -104,7 +104,7 @@ $sp_title_enc = rawurlencode(get_the_title());
     <div class="sp-author">
         <div class="sp-author-avatar">
             <?php $sp_av = get_avatar($sp_author_id, 64, '', '', array('extra_attr' => 'loading="lazy"'));
-            echo $sp_av ?: '✍️'; ?>
+            echo $sp_av ?: '<i class="fi-rr-edit-alt" aria-hidden="true"></i>'; ?>
         </div>
         <div>
             <div class="sp-author-label">Written by</div>

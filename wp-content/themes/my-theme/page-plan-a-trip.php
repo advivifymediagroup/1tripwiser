@@ -49,32 +49,32 @@ $pat_whatsapp  = get_option('tw_pat_whatsapp', '919999999999');
 
       <div class="tile-g3" id="dest-grid">
         <div class="ptile sel" data-v="Bali">
-          <div class="ptile-em">🌴</div>
+          <div class="ptile-em"><i class="fi-rr-tree" aria-hidden="true"></i></div>
           <div class="ptile-n">Bali</div>
           <div class="ptile-s">Indonesia</div>
         </div>
         <div class="ptile" data-v="Kashmir">
-          <div class="ptile-em">🌸</div>
+          <div class="ptile-em"><i class="fi-rr-flower" aria-hidden="true"></i></div>
           <div class="ptile-n">Kashmir</div>
           <div class="ptile-s">India</div>
         </div>
         <div class="ptile" data-v="Europe">
-          <div class="ptile-em">🏰</div>
+          <div class="ptile-em"><i class="fi-rr-castle" aria-hidden="true"></i></div>
           <div class="ptile-n">Europe</div>
           <div class="ptile-s">Multi-country</div>
         </div>
         <div class="ptile" data-v="Ladakh">
-          <div class="ptile-em">🏔️</div>
+          <div class="ptile-em"><i class="fi-rr-mountain" aria-hidden="true"></i></div>
           <div class="ptile-n">Ladakh</div>
           <div class="ptile-s">India</div>
         </div>
         <div class="ptile" data-v="Maldives">
-          <div class="ptile-em">🐠</div>
+          <div class="ptile-em"><i class="fi-rr-fish" aria-hidden="true"></i></div>
           <div class="ptile-n">Maldives</div>
           <div class="ptile-s">Islands</div>
         </div>
         <div class="ptile" data-v="Meghalaya">
-          <div class="ptile-em">🌿</div>
+          <div class="ptile-em"><i class="fi-rr-leaf" aria-hidden="true"></i></div>
           <div class="ptile-n">Meghalaya</div>
           <div class="ptile-s">India</div>
         </div>
@@ -115,17 +115,17 @@ $pat_whatsapp  = get_option('tw_pat_whatsapp', '919999999999');
       <span class="sec-label">Preferred Time of Travel</span>
       <div class="tile-g3" id="time-grid">
         <div class="ttile sel" data-v="Morning">
-          <div class="ttile-em">🌅</div>
+          <div class="ttile-em"><i class="fi-rr-sunrise" aria-hidden="true"></i></div>
           <div class="ttile-n">Morning</div>
           <div class="ttile-s">6am – 12pm</div>
         </div>
         <div class="ttile" data-v="Afternoon">
-          <div class="ttile-em">☀️</div>
+          <div class="ttile-em"><i class="fi-rr-sun" aria-hidden="true"></i></div>
           <div class="ttile-n">Afternoon</div>
           <div class="ttile-s">12pm – 6pm</div>
         </div>
         <div class="ttile" data-v="Evening">
-          <div class="ttile-em">🌙</div>
+          <div class="ttile-em"><i class="fi-rr-moon" aria-hidden="true"></i></div>
           <div class="ttile-n">Evening</div>
           <div class="ttile-s">6pm – midnight</div>
         </div>
@@ -134,15 +134,15 @@ $pat_whatsapp  = get_option('tw_pat_whatsapp', '919999999999');
       <span class="sec-label" style="margin-top: 20px;">Trip Type</span>
       <div class="tile-g3" id="type-grid">
         <div class="ptile sel" data-v="Leisure">
-          <div class="ptile-em">🌅</div>
+          <div class="ptile-em"><i class="fi-rr-sunrise" aria-hidden="true"></i></div>
           <div class="ptile-n">Leisure</div>
         </div>
         <div class="ptile" data-v="Honeymoon">
-          <div class="ptile-em">💍</div>
+          <div class="ptile-em"><i class="fi-rr-rings-wedding" aria-hidden="true"></i></div>
           <div class="ptile-n">Honeymoon</div>
         </div>
         <div class="ptile" data-v="Adventure">
-          <div class="ptile-em">🧗</div>
+          <div class="ptile-em"><i class="fi-rr-hiking" aria-hidden="true"></i></div>
           <div class="ptile-n">Adventure</div>
         </div>
       </div>
@@ -183,19 +183,19 @@ $pat_whatsapp  = get_option('tw_pat_whatsapp', '919999999999');
 
       <div class="tile-g2" id="budget-grid">
         <div class="btile" data-v="Budget — Under ₹25,000">
-          <div class="bt-name">🎒 Budget</div>
+          <div class="bt-name"><i class="fi-rr-backpack" aria-hidden="true"></i> Budget</div>
           <div class="bt-range">Under ₹25,000 / person</div>
         </div>
         <div class="btile sel" data-v="Mid-range — ₹25K–₹60K">
-          <div class="bt-name">🌟 Mid-range</div>
+          <div class="bt-name"><i class="fi-rr-star" aria-hidden="true"></i> Mid-range</div>
           <div class="bt-range">₹25,000–₹60,000 / person</div>
         </div>
         <div class="btile" data-v="Premium — ₹60K–₹1.5L">
-          <div class="bt-name">💎 Premium</div>
+          <div class="bt-name"><i class="fi-rr-gem" aria-hidden="true"></i> Premium</div>
           <div class="bt-range">₹60,000–₹1,50,000 / person</div>
         </div>
         <div class="btile" data-v="Luxury — Above ₹1.5L">
-          <div class="bt-name">👑 Luxury</div>
+          <div class="bt-name"><i class="fi-rr-crown" aria-hidden="true"></i> Luxury</div>
           <div class="bt-range">Above ₹1,50,000 / person</div>
         </div>
       </div>
@@ -229,7 +229,7 @@ $pat_whatsapp  = get_option('tw_pat_whatsapp', '919999999999');
       </div>
 
       <div class="sum-box" id="sum-box">
-        <div class="sum-title">📋 Your Trip Summary</div>
+        <div class="sum-title"><i class="fi-rr-clipboard-list" aria-hidden="true"></i> Your Trip Summary</div>
         <div class="sum-row"><span class="sum-k">Destination</span><span class="sum-v" id="s-dest">—</span></div>
         <div class="sum-row"><span class="sum-k">Departure Date</span><span class="sum-v" id="s-date">—</span></div>
         <div class="sum-row"><span class="sum-k">Travel Time</span><span class="sum-v" id="s-time">—</span></div>
@@ -252,7 +252,7 @@ $pat_whatsapp  = get_option('tw_pat_whatsapp', '919999999999');
 
     <div class="plan-step" id="pstep-success">
       <div class="success-box">
-        <div class="succ-icon">🎉</div>
+        <div class="succ-icon"><i class="fi-rr-confetti" aria-hidden="true"></i></div>
         <div class="succ-title">YOUR TRIP IS READY!</div>
         <p class="succ-sub">
           Click below to open WhatsApp and send us your trip details. Our team will craft a custom itinerary and reply within 24 hours — completely free.
@@ -414,7 +414,7 @@ $pat_whatsapp  = get_option('tw_pat_whatsapp', '919999999999');
     }
 
     var msg = [
-      'Hi 1tripwiser! 🌍 I want to plan a trip.',
+      'Hi 1tripwiser! I want to plan a trip.',
       '',
       '*Destination:* ' + tripData.dest,
       '*Departure Date:* ' + (tripData.date || 'Flexible'),
@@ -428,7 +428,7 @@ $pat_whatsapp  = get_option('tw_pat_whatsapp', '919999999999');
       '*Email:* ' + (tripData.email || 'Not provided'),
       tripData.notes ? '*Special Requests:* ' + tripData.notes : '',
       '',
-      'Please send me a custom itinerary! 🙏'
+      'Please send me a custom itinerary!'
     ].filter(function (l) { return l !== null; }).join('\n');
 
     /* ── Save to WordPress database via AJAX ── */

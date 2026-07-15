@@ -23,9 +23,9 @@ $status = isset( $_GET['agency'] ) ? sanitize_key( $_GET['agency'] ) : '';
             <h1 class="tw-agency-hero-title">Travel Agency <span>Registration</span></h1>
             <p class="tw-agency-hero-sub">Join the 1TRIPWISER partner network. Share your details below and our team will get in touch within 48 hours.</p>
             <div class="tw-agency-hero-perks">
-                <span>✓ Quality leads</span>
-                <span>✓ Verified profile listing</span>
-                <span>✓ Marketing support</span>
+                <span><i class="fi-rr-check" aria-hidden="true"></i> Quality leads</span>
+                <span><i class="fi-rr-check" aria-hidden="true"></i> Verified profile listing</span>
+                <span><i class="fi-rr-check" aria-hidden="true"></i> Marketing support</span>
             </div>
         </div>
     </section>
@@ -34,7 +34,7 @@ $status = isset( $_GET['agency'] ) ? sanitize_key( $_GET['agency'] ) : '';
 
         <?php if ( $status === 'success' ) : ?>
             <div class="tw-agency-notice success">
-                <strong>🎉 Thank you for registering!</strong>
+                <strong><i class="fi-rr-confetti" aria-hidden="true"></i> Thank you for registering!</strong>
                 <p>Your details have been received. Our partnerships team will reach out within 48 hours.</p>
             </div>
         <?php elseif ( $status === 'missing' ) : ?>

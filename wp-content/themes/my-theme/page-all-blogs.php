@@ -54,7 +54,7 @@ $total_posts = (int) $blog_q->found_posts;
                     <?php if ( has_post_thumbnail() ) : ?>
                         <a href="<?php the_permalink(); ?>"><?php the_post_thumbnail( 'large' ); ?></a>
                     <?php else : ?>
-                        <a href="<?php the_permalink(); ?>" class="ba-card-img-placeholder">✈️</a>
+                        <a href="<?php the_permalink(); ?>" class="ba-card-img-placeholder"><i class="fi-rr-plane" aria-hidden="true"></i></a>
                     <?php endif; ?>
                     <?php if ( $cat_name ) : ?>
                         <span class="ba-card-cat"><?php echo esc_html( $cat_name ); ?></span>
@@ -89,11 +89,11 @@ $total_posts = (int) $blog_q->found_posts;
 
         <?php else : ?>
         <div class="tribe-empty">
-            <div class="tribe-empty-icon">✍️</div>
+            <div class="tribe-empty-icon"><i class="fi-rr-edit-alt" aria-hidden="true"></i></div>
             <h3>No blog posts yet</h3>
             <p>Our writers are crafting fresh travel stories. Check back soon.</p>
             <?php if ( is_user_logged_in() ) : ?>
-                <a class="tribe-btn-primary" href="<?php echo esc_url( home_url('/submit-blog/') ); ?>">✍️ Write a Post</a>
+                <a class="tribe-btn-primary" href="<?php echo esc_url( home_url('/submit-blog/') ); ?>"><i class="fi-rr-edit-alt" aria-hidden="true"></i> Write a Post</a>
             <?php else : ?>
                 <a class="tribe-btn-primary" href="<?php echo esc_url( home_url('/blog-affiliates/') ); ?>">← Back to Blog</a>
             <?php endif; ?>

@@ -16,7 +16,7 @@ get_header();
 
     <!-- Hero -->
     <section class="auth-hero">
-        <div class="auth-hero-kicker">🌍 Join the Community</div>
+        <div class="auth-hero-kicker"><i class="fi-rr-globe" aria-hidden="true"></i> Join the Community</div>
         <h1>Create Your <span>Free Account</span></h1>
         <p>Join thousands of travellers sharing honest guides, tips, and experiences.</p>
     </section>
@@ -64,7 +64,7 @@ get_header();
                     <input type="password" id="tw_reg_password" name="tw_reg_password"
                            autocomplete="new-password" required minlength="8">
                     <label for="tw_reg_password">Password</label>
-                    <button type="button" class="toggle-pw" data-target="tw_reg_password" aria-label="Show/hide password">👁</button>
+                    <button type="button" class="toggle-pw" data-target="tw_reg_password" aria-label="Show/hide password"><i class="fi-rr-eye" aria-hidden="true"></i></button>
                 </div>
                 <!-- Strength meter -->
                 <div class="pw-strength">
@@ -77,7 +77,7 @@ get_header();
                     <input type="password" id="tw_reg_confirm" name="tw_reg_confirm"
                            autocomplete="new-password" required>
                     <label for="tw_reg_confirm">Confirm Password</label>
-                    <button type="button" class="toggle-pw" data-target="tw_reg_confirm" aria-label="Show/hide password">👁</button>
+                    <button type="button" class="toggle-pw" data-target="tw_reg_confirm" aria-label="Show/hide password"><i class="fi-rr-eye" aria-hidden="true"></i></button>
                 </div>
 
                 <!-- Terms -->
@@ -102,10 +102,10 @@ get_header();
 
         <!-- Benefits -->
         <div class="auth-benefits">
-            <div class="auth-benefit"><span class="icon">✍️</span> Publish travel guides</div>
-            <div class="auth-benefit"><span class="icon">🗺️</span> Save your trip plans</div>
-            <div class="auth-benefit"><span class="icon">🌟</span> Build your travel profile</div>
-            <div class="auth-benefit"><span class="icon">🔔</span> Get deal alerts</div>
+            <div class="auth-benefit"><span class="icon"><i class="fi-rr-edit-alt" aria-hidden="true"></i></span> Publish travel guides</div>
+            <div class="auth-benefit"><span class="icon"><i class="fi-rr-map" aria-hidden="true"></i></span> Save your trip plans</div>
+            <div class="auth-benefit"><span class="icon"><i class="fi-rr-star" aria-hidden="true"></i></span> Build your travel profile</div>
+            <div class="auth-benefit"><span class="icon"><i class="fi-rr-bell" aria-hidden="true"></i></span> Get deal alerts</div>
         </div>
 
     </div>
@@ -119,7 +119,7 @@ get_header();
             var inp = document.getElementById(btn.dataset.target);
             var show = inp.type === 'password';
             inp.type = show ? 'text' : 'password';
-            btn.textContent = show ? '🙈' : '👁';
+            btn.innerHTML = show ? '<i class="fi-rr-eye-crossed" aria-hidden="true"></i>' : '<i class="fi-rr-eye" aria-hidden="true"></i>';
         });
     });
 
@@ -184,7 +184,7 @@ get_header();
         .then(function (r) { return r.json(); })
         .then(function (data) {
             if (data.success) {
-                showMsg('🎉 Account created! Redirecting…', 'success');
+                showMsg('<i class="fi-rr-confetti" aria-hidden="true"></i> Account created! Redirecting…', 'success');
                 setTimeout(function () {
                     window.location.href = data.data.redirect || <?php echo json_encode( home_url('/') ); ?>;
                 }, 900);

@@ -29,7 +29,7 @@ while ( have_posts() ) :
 
         <!-- Breadcrumb -->
         <nav class="tribe-crumbs" aria-label="Breadcrumb">
-            <a href="<?php echo esc_url( get_post_type_archive_link( 'forum_topic' ) ); ?>">🏕️ Tribe</a>
+            <a href="<?php echo esc_url( get_post_type_archive_link( 'forum_topic' ) ); ?>"><i class="fi-rr-camping" aria-hidden="true"></i> Tribe</a>
             <?php if ( $tw_cat ) : ?>
                 <span>›</span>
                 <a href="<?php echo esc_url( get_term_link( $tw_cat ) ); ?>"><?php echo esc_html( $tw_cat->name ); ?></a>
@@ -42,11 +42,11 @@ while ( have_posts() ) :
                 <div class="tribe-post-flags">
                     <?php if ( $tw_cat ) : ?>
                         <a class="tribe-chip-cat" href="<?php echo esc_url( get_term_link( $tw_cat ) ); ?>">
-                            <?php echo esc_html( tw_forum_cat_icon( $tw_cat->term_id ) . ' ' . $tw_cat->name ); ?>
+                            <?php echo tw_forum_cat_icon( $tw_cat->term_id ) . ' ' . esc_html( $tw_cat->name ); ?>
                         </a>
                     <?php endif; ?>
-                    <?php if ( $tw_pinned ) : ?><span class="tribe-flag tribe-flag-pin">📌 Pinned</span><?php endif; ?>
-                    <span class="tribe-flag tribe-flag-solved <?php echo $tw_solved ? '' : 'is-off'; ?>" id="tribe-solved-badge"><?php echo $tw_solved ? '✅ Solved' : '⬜ Unsolved'; ?></span>
+                    <?php if ( $tw_pinned ) : ?><span class="tribe-flag tribe-flag-pin"><i class="fi-rr-thumbtack" aria-hidden="true"></i> Pinned</span><?php endif; ?>
+                    <span class="tribe-flag tribe-flag-solved <?php echo $tw_solved ? '' : 'is-off'; ?>" id="tribe-solved-badge"><?php echo $tw_solved ? '<i class="fi-rr-check-circle" aria-hidden="true"></i> Solved' : '<i class="fi-rr-checkbox" aria-hidden="true"></i> Unsolved'; ?></span>
                 </div>
 
                 <h1 class="tribe-post-title"><?php the_title(); ?></h1>
@@ -72,17 +72,17 @@ while ( have_posts() ) :
                 <button type="button"
                         class="tribe-like-btn <?php echo $tw_liked ? 'is-liked' : ''; ?>"
                         data-type="topic" data-id="<?php echo esc_attr( $tw_id ); ?>">
-                    <span class="tribe-like-icon"><?php echo $tw_liked ? '❤️' : '🤍'; ?></span>
+                    <span class="tribe-like-icon"><?php echo $tw_liked ? '<i class="fi-rr-heart" aria-hidden="true"></i>' : '<i class="fi-rr-heart" aria-hidden="true"></i>'; ?></span>
                     <span class="tribe-like-count"><?php echo esc_html( $tw_likes ); ?></span>
                     <span class="tribe-like-label">Like</span>
                 </button>
 
-                <span class="tribe-action-stat">💬 <?php echo esc_html( $tw_repl ); ?> replies</span>
-                <span class="tribe-action-stat">👁️ <?php echo esc_html( $tw_views ); ?> views</span>
+                <span class="tribe-action-stat"><i class="fi-rr-comment" aria-hidden="true"></i> <?php echo esc_html( $tw_repl ); ?> replies</span>
+                <span class="tribe-action-stat"><i class="fi-rr-eye" aria-hidden="true"></i> <?php echo esc_html( $tw_views ); ?> views</span>
 
                 <?php if ( $tw_can_solve ) : ?>
                     <button type="button" class="tribe-solve-btn <?php echo $tw_solved ? 'is-solved' : ''; ?>" data-id="<?php echo esc_attr( $tw_id ); ?>">
-                        <?php echo $tw_solved ? '↩️ Mark unsolved' : '✅ Mark solved'; ?>
+                        <?php echo $tw_solved ? '<i class="fi-rr-undo" aria-hidden="true"></i> Mark unsolved' : '<i class="fi-rr-check-circle" aria-hidden="true"></i> Mark solved'; ?>
                     </button>
                 <?php endif; ?>
             </div>
@@ -109,7 +109,7 @@ while ( have_posts() ) :
             <!-- Reply form -->
             <div class="tribe-reply-form-wrap" id="reply-form">
                 <?php if ( is_user_logged_in() ) : ?>
-                    <div class="tribe-mod-note">📝 Replies are reviewed by a moderator before they appear publicly.</div>
+                    <div class="tribe-mod-note"><i class="fi-rr-memo" aria-hidden="true"></i> Replies are reviewed by a moderator before they appear publicly.</div>
                     <?php
                     comment_form( array(
                         'title_reply'         => 'Add your reply',

@@ -22,7 +22,7 @@ if ( isset( $_GET['login'] ) && $_GET['login'] === 'failed' ) {
 
     <!-- Hero -->
     <section class="auth-hero">
-        <div class="auth-hero-kicker">✈ Welcome Back</div>
+        <div class="auth-hero-kicker"><i class="fi-rr-plane" aria-hidden="true"></i> Welcome Back</div>
         <h1>Log In to <span>1TripWiser</span></h1>
         <p>Your travel dashboard, saved trips, and community posts are waiting.</p>
     </section>
@@ -53,7 +53,7 @@ if ( isset( $_GET['login'] ) && $_GET['login'] === 'failed' ) {
                 <div class="tw-float-group">
                     <input type="password" id="tw_password" name="tw_password" autocomplete="current-password" required>
                     <label for="tw_password">Password</label>
-                    <button type="button" class="toggle-pw" aria-label="Show/hide password" data-target="tw_password">👁</button>
+                    <button type="button" class="toggle-pw" aria-label="Show/hide password" data-target="tw_password"><i class="fi-rr-eye" aria-hidden="true"></i></button>
                 </div>
 
                 <!-- Forgot + Remember row -->
@@ -79,10 +79,10 @@ if ( isset( $_GET['login'] ) && $_GET['login'] === 'failed' ) {
 
         <!-- Benefits -->
         <div class="auth-benefits">
-            <div class="auth-benefit"><span class="icon">✍️</span> Publish travel guides</div>
-            <div class="auth-benefit"><span class="icon">🗺️</span> Save your trip plans</div>
-            <div class="auth-benefit"><span class="icon">💬</span> Join the community</div>
-            <div class="auth-benefit"><span class="icon">🔔</span> Get travel deal alerts</div>
+            <div class="auth-benefit"><span class="icon"><i class="fi-rr-edit-alt" aria-hidden="true"></i></span> Publish travel guides</div>
+            <div class="auth-benefit"><span class="icon"><i class="fi-rr-map" aria-hidden="true"></i></span> Save your trip plans</div>
+            <div class="auth-benefit"><span class="icon"><i class="fi-rr-comment" aria-hidden="true"></i></span> Join the community</div>
+            <div class="auth-benefit"><span class="icon"><i class="fi-rr-bell" aria-hidden="true"></i></span> Get travel deal alerts</div>
         </div>
 
     </div>
@@ -96,7 +96,7 @@ if ( isset( $_GET['login'] ) && $_GET['login'] === 'failed' ) {
             var inp = document.getElementById(btn.dataset.target);
             var show = inp.type === 'password';
             inp.type = show ? 'text' : 'password';
-            btn.textContent = show ? '🙈' : '👁';
+            btn.innerHTML = show ? '<i class="fi-rr-eye-crossed" aria-hidden="true"></i>' : '<i class="fi-rr-eye" aria-hidden="true"></i>';
         });
     });
 
@@ -130,7 +130,7 @@ if ( isset( $_GET['login'] ) && $_GET['login'] === 'failed' ) {
         .then(function (r) { return r.json(); })
         .then(function (data) {
             if (data.success) {
-                showMsg('✅ Logged in! Redirecting…', 'success');
+                showMsg('<i class="fi-rr-check-circle" aria-hidden="true"></i> Logged in! Redirecting…', 'success');
                 setTimeout(function () {
                     window.location.href = data.data.redirect || <?php echo json_encode( home_url('/') ); ?>;
                 }, 700);

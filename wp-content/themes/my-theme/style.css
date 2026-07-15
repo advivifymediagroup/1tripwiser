@@ -2891,6 +2891,14 @@ body.page-template-page-plan-a-trip-php { padding-top: 0; }
 .tw-menu { list-style: none; margin: 0; padding: 0; display: flex; align-items: center; gap: 2px; flex-shrink: 0; }
 .tw-menu-item { margin: 0; }
 .instagram-follow { margin-left: 12px; }
+/* .tw-f-social is styled for the dark footer (light icon on dark bg) — override for the
+   light header context so the Instagram button is actually visible here. */
+.instagram-follow.tw-f-social a {
+    color: var(--tw-navy); background: rgba(13,21,38,0.05); border-color: rgba(13,21,38,0.14);
+}
+.instagram-follow.tw-f-social a:hover {
+    color: #fff; background: var(--tw-blue); border-color: var(--tw-blue);
+}
 .tw-nav-link {
     color: rgba(13,21,38,0.7); text-decoration: none; font-size: 0.86rem; font-weight: 600;
     padding: 6px 11px; border-radius: 6px; transition: background 0.2s, color 0.2s;
@@ -3162,6 +3170,25 @@ body.page-template-page-plan-a-trip-php { padding-top: 0; }
 .tw-stat-label { font-size:0.7rem; font-weight:800; text-transform:uppercase; letter-spacing:0.1em; color:rgba(13,21,38,0.5); text-align:center; min-height:2.2em; display:flex; align-items:center; justify-content:center; }
 .tw-stat-divider { width:1px; background:rgba(13,21,38,0.1); align-self:stretch; margin:12px 0; }
 @media(max-width:600px){.tw-stat-divider{display:none} .tw-stat{padding:20px 16px;flex:1 1 90px} .tw-stat-num{font-size:1.6rem}}
+
+/* ══════════════════════════════════════════════════════════════
+   DESTINATIONS MARQUEE — scrolling strip between Packages & Itineraries
+   ══════════════════════════════════════════════════════════════ */
+.tw-marquee-section { background:var(--tw-red); overflow:hidden; padding:22px 0; }
+.tw-marquee-track {
+    display:inline-flex; align-items:center; white-space:nowrap; width:max-content;
+    animation:tw-marquee-scroll 32s linear infinite;
+}
+.tw-marquee-section:hover .tw-marquee-track { animation-play-state:paused; }
+.tw-marquee-item { font-family:'Fraunces',serif; font-style:italic; font-weight:400; font-size:clamp(1.3rem,2.6vw,1.9rem); color:#fff; letter-spacing:0.01em; }
+.tw-marquee-dot { color:rgba(255,255,255,0.55); font-size:0.9rem; margin:0 28px; }
+@keyframes tw-marquee-scroll { from { transform:translateX(0); } to { transform:translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) { .tw-marquee-track { animation:none; } }
+@media(max-width:600px){
+    .tw-marquee-section { padding:16px 0; }
+    .tw-marquee-item { font-size:1.15rem; }
+    .tw-marquee-dot { margin:0 16px; }
+}
 
 /* ══════════════════════════════════════════════════════════════
    WOMEN'S GROUP TRIPS — Homepage showcase + landing page
@@ -5051,7 +5078,7 @@ img, video, iframe, embed, object { max-width: 100%; height: auto; }
 /* ── Category chips ── */
 .tribe-cats { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 22px; }
 .tribe-cat-chip {
-    display: inline-flex; align-items: center; background: #fff; border: 1px solid #e0e8f0;
+    display: inline-flex; align-items: center; gap: 7px; background: #fff; border: 1px solid #e0e8f0;
     color: #1a2535; font-size: 0.84rem; font-weight: 700; padding: 8px 15px; border-radius: 4px;
     text-decoration: none; transition: border-color 0.2s, color 0.2s, background 0.2s;
 }
@@ -5077,7 +5104,7 @@ img, video, iframe, embed, object { max-width: 100%; height: auto; }
     padding: 3px 10px; border-radius: 4px; text-decoration: none;
 }
 .tribe-chip-cat:hover { background: rgba(27,147,176,0.16); }
-.tribe-flag { font-size: 0.7rem; font-weight: 800; padding: 3px 9px; border-radius: 4px; }
+.tribe-flag { display: inline-flex; align-items: center; gap: 5px; font-size: 0.7rem; font-weight: 800; padding: 3px 9px; border-radius: 4px; }
 .tribe-flag-pin { color: #b8860b; background: rgba(216,53,80,0.15); }
 .tribe-flag-solved { color: var(--tw-blue); background: rgba(27,147,176,0.12); }
 .tribe-flag-solved.is-off { color: #94a3b8; background: #eef2f6; }
@@ -5405,7 +5432,7 @@ img, video, iframe, embed, object { max-width: 100%; height: auto; }
 
 .explore-wrap { padding-top: 32px; padding-bottom: 64px; }
 .explore-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 26px; }
-.explore-chip { display: inline-flex; align-items: center; background: #fff; border: 1px solid #e0e8f0; color: #1a2535; font-size: 0.84rem; font-weight: 700; padding: 8px 15px; border-radius: 4px; text-decoration: none; transition: border-color 0.2s, color 0.2s; }
+.explore-chip { display: inline-flex; align-items: center; gap: 7px; background: #fff; border: 1px solid #e0e8f0; color: #1a2535; font-size: 0.84rem; font-weight: 700; padding: 8px 15px; border-radius: 4px; text-decoration: none; transition: border-color 0.2s, color 0.2s; }
 .explore-chip:hover { border-color: var(--tw-blue); color: var(--tw-blue); }
 
 .explore-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr)); gap: 22px; }
@@ -5760,8 +5787,8 @@ img, video, iframe, embed, object { max-width: 100%; height: auto; }
 /* Branded placeholder behind the image so image-less cards look intentional */
 .package-media { background: linear-gradient(135deg, #0d2d44 0%, #0a3a4a 100%); }
 .package-media::after {
-    content: '🧭'; position: absolute; inset: 0; z-index: 0;
-    display: flex; align-items: center; justify-content: center;
+    content: '\f631'; font-family: 'uicons-regular-rounded'; position: absolute; inset: 0; z-index: 0;
+    display: flex; align-items: center; justify-content: center; color: #fff;
     font-size: 2.6rem; opacity: 0.45; filter: drop-shadow(0 3px 8px rgba(0,0,0,0.35));
 }
 .package-media img { position: relative; z-index: 1; }
@@ -5842,7 +5869,7 @@ img, video, iframe, embed, object { max-width: 100%; height: auto; }
 .gt-womens-callout-copy { flex:1; min-width:200px; }
 .gt-womens-callout-copy strong { display:block; font-size:0.92rem; font-weight:800; color:var(--tw-navy); margin-bottom:3px; }
 .gt-womens-callout-copy span { font-size:0.82rem; color:#6b7a8f; }
-.gt-womens-callout-btn { display:inline-flex; align-items:center; padding:9px 20px; background:var(--tw-red); color:#fff; font-size:0.85rem; font-weight:800; border-radius:10px; text-decoration:none; white-space:nowrap; transition:opacity 0.2s,transform 0.2s; flex-shrink:0; }
+.gt-womens-callout-btn { display:inline-flex; align-items:center; gap:6px; padding:9px 20px; background:var(--tw-red); color:#fff; font-size:0.85rem; font-weight:800; border-radius:10px; text-decoration:none; white-space:nowrap; transition:opacity 0.2s,transform 0.2s; flex-shrink:0; }
 .gt-womens-callout-btn:hover { opacity:0.9; transform:translateY(-2px); color:#fff; }
 /* ── Styled overview / day-by-day content ── */
 .ev-content-styled { margin-top:28px; }
@@ -5857,7 +5884,7 @@ img, video, iframe, embed, object { max-width: 100%; height: auto; }
 .ev-content-styled p { font-size:0.92rem; color:#374151; line-height:1.8; margin:0 0 12px; }
 .ev-content-styled ul,.ev-content-styled ol { margin:0 0 16px 0; padding-left:0; list-style:none; display:flex; flex-direction:column; gap:6px; }
 .ev-content-styled ul li { display:flex; align-items:flex-start; gap:8px; font-size:0.9rem; color:#374151; line-height:1.7; }
-.ev-content-styled ul li::before { content:'✓'; color:var(--tw-blue); font-weight:800; font-size:0.85rem; margin-top:3px; flex-shrink:0; }
+.ev-content-styled ul li::before { content:'\f2de'; font-family:'uicons-regular-rounded'; color:var(--tw-blue); font-weight:800; font-size:0.85rem; margin-top:3px; flex-shrink:0; }
 .ev-content-styled ol { counter-reset:ol-count; }
 .ev-content-styled ol li { display:flex; align-items:flex-start; gap:10px; font-size:0.9rem; color:#374151; line-height:1.7; counter-increment:ol-count; }
 .ev-content-styled ol li::before { content:counter(ol-count); min-width:22px; height:22px; background:var(--tw-blue); color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.72rem; font-weight:800; flex-shrink:0; margin-top:2px; }

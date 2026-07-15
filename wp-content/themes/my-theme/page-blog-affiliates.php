@@ -36,7 +36,7 @@ while ($aff_query->have_posts()) {
         'url'        => get_post_meta($aid, '_taff_url',        true),
         'category'   => get_post_meta($aid, '_taff_category',   true),
         'commission' => get_post_meta($aid, '_taff_commission',  true),
-        'icon'       => get_post_meta($aid, '_taff_icon',        true) ?: '🔗',
+        'icon'       => get_post_meta($aid, '_taff_icon',        true) ?: 'link',
         'cta'        => get_post_meta($aid, '_taff_cta',         true) ?: 'Book',
     );
 }
@@ -45,10 +45,10 @@ wp_reset_postdata();
 // Fallback: if no CPT entries yet, use the old global options so nothing breaks
 if (empty($affiliates)) {
     $affiliates = array(
-        'booking'    => array('name'=>'Booking.com',  'desc'=>'Hotels & Stays',       'url'=>get_option('tw_aff_booking_url',    'https://www.booking.com'),    'category'=>'Hotels',             'commission'=>'4–6%',    'icon'=>'🏨', 'cta'=>'Book'),
-        'skyscanner' => array('name'=>'Skyscanner',   'desc'=>'Cheap flights',         'url'=>get_option('tw_aff_skyscanner_url', 'https://www.skyscanner.com'),  'category'=>'Flights',            'commission'=>'Varies',  'icon'=>'✈️', 'cta'=>'Compare'),
-        'viator'     => array('name'=>'Viator',        'desc'=>'Tours & Activities',    'url'=>get_option('tw_aff_viator_url',     'https://www.viator.com'),      'category'=>'Tours & Activities', 'commission'=>'8–12%',   'icon'=>'🎟️', 'cta'=>'Explore'),
-        'safetywing' => array('name'=>'SafetyWing',   'desc'=>'Travel Insurance',      'url'=>get_option('tw_aff_safetywing_url', 'https://www.safetywing.com'),  'category'=>'Travel Insurance',   'commission'=>'10%',     'icon'=>'🛡️', 'cta'=>'Insure'),
+        'booking'    => array('name'=>'Booking.com',  'desc'=>'Hotels & Stays',       'url'=>get_option('tw_aff_booking_url',    'https://www.booking.com'),    'category'=>'Hotels',             'commission'=>'4–6%',    'icon'=>'hotel', 'cta'=>'Book'),
+        'skyscanner' => array('name'=>'Skyscanner',   'desc'=>'Cheap flights',         'url'=>get_option('tw_aff_skyscanner_url', 'https://www.skyscanner.com'),  'category'=>'Flights',            'commission'=>'Varies',  'icon'=>'plane', 'cta'=>'Compare'),
+        'viator'     => array('name'=>'Viator',        'desc'=>'Tours & Activities',    'url'=>get_option('tw_aff_viator_url',     'https://www.viator.com'),      'category'=>'Tours & Activities', 'commission'=>'8–12%',   'icon'=>'ticket-alt', 'cta'=>'Explore'),
+        'safetywing' => array('name'=>'SafetyWing',   'desc'=>'Travel Insurance',      'url'=>get_option('tw_aff_safetywing_url', 'https://www.safetywing.com'),  'category'=>'Travel Insurance',   'commission'=>'10%',     'icon'=>'shield', 'cta'=>'Insure'),
     );
 }
 
@@ -93,7 +93,7 @@ $g_insure_aff  = tw_aff_by_cat($affiliates, 'Insurance');
             <?php foreach ($affiliates as $aff) :
                 if (empty($aff['url'])) continue; ?>
             <a class="ba-aff-chip" href="<?php echo esc_url($aff['url']); ?>" target="_blank" rel="noopener sponsored">
-                <span class="ba-aff-chip-icon"><?php echo esc_html($aff['icon']); ?></span>
+                <span class="ba-aff-chip-icon"><?php tw_render_aff_icon($aff['icon']); ?></span>
                 <span>
                     <strong><?php echo esc_html($aff['name']); ?></strong>
                     <span class="ba-aff-chip-label"><?php echo esc_html($aff['category'] ?: $aff['desc']); ?></span>
@@ -207,9 +207,9 @@ $g_insure_aff  = tw_aff_by_cat($affiliates, 'Insurance');
                 <?php if ( has_post_thumbnail( $featured_post->ID ) ) : ?>
                     <a href="<?php echo esc_url( get_permalink( $featured_post->ID ) ); ?>"><?php echo get_the_post_thumbnail( $featured_post->ID, 'large' ); ?></a>
                 <?php else : ?>
-                    <a href="<?php echo esc_url( get_permalink( $featured_post->ID ) ); ?>" style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--ba-muted);font-size:3rem;">✈️</a>
+                    <a href="<?php echo esc_url( get_permalink( $featured_post->ID ) ); ?>" style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--ba-muted);font-size:3rem;"><i class="fi-rr-plane" aria-hidden="true"></i></a>
                 <?php endif; ?>
-                <span class="ba-featured-badge">⭐ Featured</span>
+                <span class="ba-featured-badge"><i class="fi-rr-star" aria-hidden="true"></i> Featured</span>
             </div>
             <div class="ba-featured-body">
                 <div>
@@ -253,7 +253,7 @@ $g_insure_aff  = tw_aff_by_cat($affiliates, 'Insurance');
                 </a>
                 <?php if ( is_user_logged_in() ) : ?>
                 <a href="<?php echo esc_url( home_url('/submit-blog/') ); ?>" class="ba-write-btn">
-                    ✍️ Write a Post
+                    <i class="fi-rr-edit-alt" aria-hidden="true"></i> Write a Post
                 </a>
                 <?php endif; ?>
             </div>
@@ -285,7 +285,7 @@ $g_insure_aff  = tw_aff_by_cat($affiliates, 'Insurance');
                     <?php if (has_post_thumbnail()) : ?>
                         <a href="<?php the_permalink(); ?>"><?php the_post_thumbnail('large'); ?></a>
                     <?php else : ?>
-                        <a href="<?php the_permalink(); ?>" class="ba-card-img-placeholder">✈️</a>
+                        <a href="<?php the_permalink(); ?>" class="ba-card-img-placeholder"><i class="fi-rr-plane" aria-hidden="true"></i></a>
                     <?php endif; ?>
                     <?php if ($cat_name) : ?>
                         <span class="ba-card-cat"><?php echo esc_html($cat_name); ?></span>
@@ -303,11 +303,11 @@ $g_insure_aff  = tw_aff_by_cat($affiliates, 'Insurance');
 
         <!-- Empty state for filter results — hidden until JS toggles it -->
         <div class="ba-no-filter-results" style="display:none;">
-            <p>📭 No posts in this category yet. <button type="button" class="ba-reset-filter">Show all posts</button></p>
+            <p><i class="fi-rr-inbox" aria-hidden="true"></i> No posts in this category yet. <button type="button" class="ba-reset-filter">Show all posts</button></p>
         </div>
         <?php else : ?>
         <div class="ba-no-posts">
-            <p>📝 No blog posts yet. <a href="<?php echo esc_url(admin_url('post-new.php')); ?>">Create your first post</a> in the WordPress admin.</p>
+            <p><i class="fi-rr-memo" aria-hidden="true"></i> No blog posts yet. <a href="<?php echo esc_url(admin_url('post-new.php')); ?>">Create your first post</a> in the WordPress admin.</p>
         </div>
         <?php endif; ?>
 
@@ -332,7 +332,7 @@ $g_insure_aff  = tw_aff_by_cat($affiliates, 'Insurance');
                     <?php foreach ($affiliates as $aff) :
                         if (empty($aff['url'])) continue; ?>
                     <tr>
-                        <td><span class="ba-partner-logo"><?php echo esc_html($aff['icon'] . ' ' . $aff['name']); ?></span></td>
+                        <td><span class="ba-partner-logo"><?php tw_render_aff_icon($aff['icon']); ?> <?php echo esc_html($aff['name']); ?></span></td>
                         <td><?php echo esc_html($aff['category']); ?></td>
                         <td><span class="ba-commission-rate"><?php echo esc_html($aff['commission'] ?: '—'); ?></span></td>
                         <td><?php echo esc_html($aff['desc'] ?: '—'); ?></td>

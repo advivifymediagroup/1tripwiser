@@ -155,6 +155,24 @@ if ( $tw_hero_video ) {
         </div>
     </section>
 
+    <!-- ═══════════ DESTINATIONS MARQUEE ═══════════ -->
+    <?php
+    $tw_marquee_destinations = array(
+        'Ladakh', 'Bali', 'Rajasthan', 'Kerala', 'Vietnam', 'Bhutan',
+        'Maldives', 'Iceland', 'Japan', 'Switzerland', 'Thailand', 'Dubai',
+    );
+    ?>
+    <section class="tw-marquee-section" aria-label="Popular destinations">
+        <div class="tw-marquee-track" aria-hidden="true">
+            <?php for ( $tw_mq_r = 0; $tw_mq_r < 2; $tw_mq_r++ ) : ?>
+                <?php foreach ( $tw_marquee_destinations as $tw_mq_dest ) : ?>
+                    <span class="tw-marquee-item"><?php echo esc_html( $tw_mq_dest ); ?></span>
+                    <span class="tw-marquee-dot">&bull;</span>
+                <?php endforeach; ?>
+            <?php endfor; ?>
+        </div>
+    </section>
+
     <!-- ═══════════ ITINERARIES ═══════════ -->
     <section id="upcoming-trips" class="featured-posts itinerary-section">
         <div class="container">
@@ -197,19 +215,19 @@ if ( $tw_hero_video ) {
             </div>
             <div class="visa-services-grid">
                 <a class="visa-service-card" href="<?php echo esc_url(mytheme_get_page_url_by_path('visa-assistance')); ?>">
-                    <span class="visa-service-icon">📄</span>
+                    <span class="visa-service-icon"><i class="fi-rr-document-signed" aria-hidden="true"></i></span>
                     <h3>Visa Assistance</h3>
                     <p>Complete guidance for Schengen, UK, US, and Asia visas. We handle documentation, interviews, and follow-ups.</p>
                     <span class="visa-service-link">Learn More -></span>
                 </a>
                 <a class="visa-service-card" href="<?php echo esc_url(mytheme_get_page_url_by_path('passport-services')); ?>">
-                    <span class="visa-service-icon">🛂</span>
+                    <span class="visa-service-icon"><i class="fi-rr-passport" aria-hidden="true"></i></span>
                     <h3>Passport Services</h3>
                     <p>New passport, renewal, or emergency services. Fast-track assistance for urgent travel plans.</p>
                     <span class="visa-service-link">Learn More -></span>
                 </a>
                 <a class="visa-service-card" href="<?php echo esc_url(mytheme_get_page_url_by_path('travel-insurance')); ?>">
-                    <span class="visa-service-icon">🌍</span>
+                    <span class="visa-service-icon"><i class="fi-rr-globe" aria-hidden="true"></i></span>
                     <h3>Travel Insurance</h3>
                     <p>Protect your trip with medical, cancellation, baggage, and emergency coverage for domestic and international travel.</p>
                     <span class="visa-service-link">Learn More -></span>
@@ -223,7 +241,7 @@ if ( $tw_hero_video ) {
         <div class="container">
             <div class="tw-blog-header" data-reveal="up">
                 <div>
-                    <div class="tw-blog-kicker">✈ From the Blog</div>
+                    <div class="tw-blog-kicker"><i class="fi-rr-plane" aria-hidden="true"></i> From the Blog</div>
                     <h2 class="tw-blog-title">Latest Travel Stories</h2>
                 </div>
                 <a href="<?php echo esc_url(home_url('/blog-affiliates/')); ?>" class="tw-blog-viewall">All Stories <span aria-hidden="true">→</span></a>
@@ -302,7 +320,7 @@ if ( $tw_hero_video ) {
             <div class="instagram-feed-heading" data-reveal="up">
                 <span class="tw-ig-kicker">Follow the journey</span>
                 <h2 class="tw-ig-title">Our Instagram</h2>
-                <a class="tw-ig-handle" href="https://www.instagram.com/1tripwiser/" target="_blank" rel="noopener noreferrer">📸 @1tripwiser</a>
+                <a class="tw-ig-handle" href="https://www.instagram.com/1tripwiser/" target="_blank" rel="noopener noreferrer"><i class="fi-rr-camera" aria-hidden="true"></i> @1tripwiser</a>
             </div>
             <div class="instagram-feed-wrap">
                 <?php echo do_shortcode('[instagram-feed feed=1]'); ?>

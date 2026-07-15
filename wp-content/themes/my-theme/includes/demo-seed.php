@@ -32,10 +32,10 @@ function tw_demo_admin_page() {
     if ( isset( $_POST['tw_demo_action'] ) && check_admin_referer( 'tw_demo_run', 'tw_demo_nonce' ) ) {
         if ( $_POST['tw_demo_action'] === 'generate' ) {
             $n = tw_demo_generate();
-            $notice = "<div class='notice notice-success'><p>✅ Demo content generated. Created {$n} new item(s). Re-running only adds what's missing.</p></div>";
+            $notice = "<div class='notice notice-success'><p><i class='fi-rr-check-circle' aria-hidden='true'></i> Demo content generated. Created {$n} new item(s). Re-running only adds what's missing.</p></div>";
         } elseif ( $_POST['tw_demo_action'] === 'remove' ) {
             $n = tw_demo_remove();
-            $notice = "<div class='notice notice-success'><p>🗑️ Removed {$n} demo item(s).</p></div>";
+            $notice = "<div class='notice notice-success'><p><i class='fi-rr-trash' aria-hidden='true'></i> Removed {$n} demo item(s).</p></div>";
         }
     }
 
