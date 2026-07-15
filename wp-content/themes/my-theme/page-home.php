@@ -69,18 +69,18 @@ if ( $tw_hero_video ) {
         <p class="tw-hero-desc"><?php bloginfo('description'); ?></p>
 
         <div class="tw-hero-actions">
-            <a href="#featured-packages" class="tw-hero-btn tw-hero-btn--primary">🗺️ Explore Packages</a>
-            <a href="<?php echo esc_url(mytheme_get_plan_trip_url()); ?>" class="tw-hero-btn tw-hero-btn--outline">✈️ Plan a Trip — Free</a>
+            <a href="#featured-packages" class="tw-hero-btn tw-hero-btn--primary"><i class="fi-rr-map" aria-hidden="true"></i> Explore Packages</a>
+            <a href="<?php echo esc_url(mytheme_get_plan_trip_url()); ?>" class="tw-hero-btn tw-hero-btn--outline"><i class="fi-rr-plane" aria-hidden="true"></i> Plan a Trip — Free</a>
         </div>
 
         <div class="tw-hero-tags">
-            <a href="<?php echo esc_url(home_url('/blog-affiliates/')); ?>" class="tw-hero-tag">⛰️ Mountains</a>
-            <a href="<?php echo esc_url(home_url('/blog-affiliates/')); ?>" class="tw-hero-tag">🏖️ Beaches</a>
-            <a href="<?php echo esc_url(home_url('/blog-affiliates/')); ?>" class="tw-hero-tag">🌴 Offbeat</a>
-            <a href="<?php echo esc_url(home_url('/blog-affiliates/')); ?>" class="tw-hero-tag">💍 Honeymoon</a>
-            <a href="<?php echo esc_url(home_url('/blog-affiliates/')); ?>" class="tw-hero-tag">👥 Group Trips</a>
-            <a href="<?php echo esc_url(home_url('/blog-affiliates/')); ?>" class="tw-hero-tag">💰 Budget</a>
-            <a href="<?php echo esc_url(home_url('/blog-affiliates/')); ?>" class="tw-hero-tag">🌍 International</a>
+            <a href="<?php echo esc_url(home_url('/blog-affiliates/')); ?>" class="tw-hero-tag"><i class="fi-rr-mountain" aria-hidden="true"></i> Mountains</a>
+            <a href="<?php echo esc_url(home_url('/blog-affiliates/')); ?>" class="tw-hero-tag"><i class="fi-rr-umbrella-beach" aria-hidden="true"></i> Beaches</a>
+            <a href="<?php echo esc_url(home_url('/blog-affiliates/')); ?>" class="tw-hero-tag"><i class="fi-rr-tree" aria-hidden="true"></i> Offbeat</a>
+            <a href="<?php echo esc_url(home_url('/blog-affiliates/')); ?>" class="tw-hero-tag"><i class="fi-rr-rings-wedding" aria-hidden="true"></i> Honeymoon</a>
+            <a href="<?php echo esc_url(home_url('/blog-affiliates/')); ?>" class="tw-hero-tag"><i class="fi-rr-users" aria-hidden="true"></i> Group Trips</a>
+            <a href="<?php echo esc_url(home_url('/blog-affiliates/')); ?>" class="tw-hero-tag"><i class="fi-rr-money" aria-hidden="true"></i> Budget</a>
+            <a href="<?php echo esc_url(home_url('/blog-affiliates/')); ?>" class="tw-hero-tag"><i class="fi-rr-globe" aria-hidden="true"></i> International</a>
         </div>
     </div>
 
@@ -96,7 +96,7 @@ if ( $tw_hero_video ) {
         <div class="tw-stat-divider" aria-hidden="true"></div>
         <div class="tw-stat"><span class="tw-stat-num">58+</span><span class="tw-stat-label">Destinations</span></div>
         <div class="tw-stat-divider" aria-hidden="true"></div>
-        <div class="tw-stat"><span class="tw-stat-num">4.9 ⭐</span><span class="tw-stat-label">Average Rating</span></div>
+        <div class="tw-stat"><span class="tw-stat-num">4.9 <i class="fi-rr-star" aria-hidden="true"></i></span><span class="tw-stat-label">Average Rating</span></div>
         <div class="tw-stat-divider" aria-hidden="true"></div>
         <div class="tw-stat"><span class="tw-stat-num">₹0</span><span class="tw-stat-label">Planning Fee</span></div>
     </div>
@@ -190,7 +190,7 @@ if ( $tw_hero_video ) {
         <div class="container">
             <div class="tw-blog-header" data-reveal="up">
                 <div>
-                    <div class="tw-blog-kicker">✈ From the Blog</div>
+                    <div class="tw-blog-kicker"><i class="fi-rr-plane" aria-hidden="true"></i> From the Blog</div>
                     <h2 class="tw-blog-title">Latest Travel Stories</h2>
                 </div>
                 <a href="<?php echo esc_url(home_url('/blog-affiliates/')); ?>" class="tw-blog-viewall">All Stories <span aria-hidden="true">→</span></a>
@@ -249,19 +249,19 @@ if ( $tw_hero_video ) {
             </div>
             <div class="visa-services-grid">
                 <a class="visa-service-card" href="<?php echo esc_url(mytheme_get_page_url_by_path('visa-assistance')); ?>">
-                    <span class="visa-service-icon">📄</span>
+                    <span class="visa-service-icon"><i class="fi-rr-document-signed" aria-hidden="true"></i></span>
                     <h3>Visa Assistance</h3>
                     <p>Complete guidance for Schengen, UK, US, and Asia visas. We handle documentation, interviews, and follow-ups.</p>
                     <span class="visa-service-link">Learn More -></span>
                 </a>
                 <a class="visa-service-card" href="<?php echo esc_url(mytheme_get_page_url_by_path('passport-services')); ?>">
-                    <span class="visa-service-icon">🛂</span>
+                    <span class="visa-service-icon"><i class="fi-rr-passport" aria-hidden="true"></i></span>
                     <h3>Passport Services</h3>
                     <p>New passport, renewal, or emergency services. Fast-track assistance for urgent travel plans.</p>
                     <span class="visa-service-link">Learn More -></span>
                 </a>
                 <a class="visa-service-card" href="<?php echo esc_url(mytheme_get_page_url_by_path('travel-insurance')); ?>">
-                    <span class="visa-service-icon">🌍</span>
+                    <span class="visa-service-icon"><i class="fi-rr-globe" aria-hidden="true"></i></span>
                     <h3>Travel Insurance</h3>
                     <p>Protect your trip with medical, cancellation, baggage, and emergency coverage for domestic and international travel.</p>
                     <span class="visa-service-link">Learn More -></span>
@@ -299,7 +299,7 @@ if ( $tw_hero_video ) {
             <div class="instagram-feed-heading">
                 <span class="tw-ig-kicker">Follow the journey</span>
                 <h2 class="tw-ig-title">Our Instagram</h2>
-                <a class="tw-ig-handle" href="https://www.instagram.com/1tripwiser/" target="_blank" rel="noopener noreferrer">📸 @1tripwiser</a>
+                <a class="tw-ig-handle" href="https://www.instagram.com/1tripwiser/" target="_blank" rel="noopener noreferrer"><i class="fi-rr-camera" aria-hidden="true"></i> @1tripwiser</a>
             </div>
             <div class="instagram-feed-wrap">
                 <?php echo do_shortcode('[instagram-feed feed=1]'); ?>
@@ -316,7 +316,7 @@ if ( $tw_hero_video ) {
                     <h2 class="tw-cta-title">GET A <span>FREE</span> ITINERARY</h2>
                     <p>Tell us your dream destination — we'll craft a personalised trip plan.</p>
                 </div>
-                <a class="free-itinerary-link" href="<?php echo esc_url(mytheme_get_plan_trip_url()); ?>">✈ Plan My Trip</a>
+                <a class="free-itinerary-link" href="<?php echo esc_url(mytheme_get_plan_trip_url()); ?>"><i class="fi-rr-plane" aria-hidden="true"></i> Plan My Trip</a>
             </div>
         </div>
     </section>

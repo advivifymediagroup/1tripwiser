@@ -82,7 +82,7 @@ function tw_ev_card( $row ) {
     ?>
     <article class="ev-card">
         <a class="ev-card-img" href="<?php echo esc_url( $row['url'] ); ?>">
-            <?php if ( $row['thumb'] ) : ?><img src="<?php echo esc_url( $row['thumb'] ); ?>" alt="" loading="lazy"><?php else : ?><span class="ev-card-ph">🎟️</span><?php endif; ?>
+            <?php if ( $row['thumb'] ) : ?><img src="<?php echo esc_url( $row['thumb'] ); ?>" alt="" loading="lazy"><?php else : ?><span class="ev-card-ph"><i class="fi-rr-ticket-alt" aria-hidden="true"></i></span><?php endif; ?>
             <span class="ev-card-tag">Event</span>
         </a>
         <div class="ev-card-body">
@@ -129,10 +129,10 @@ endif;
                 </div>
             <?php else : ?>
                 <div class="tribe-empty">
-                    <div class="tribe-empty-icon">🎟️</div>
+                    <div class="tribe-empty-icon"><i class="fi-rr-ticket-alt" aria-hidden="true"></i></div>
                     <h3>No event packages yet</h3>
                     <p>Add one under <strong>Events &amp; Festivals → Add Event</strong> in the dashboard — it works just like a Travel Package.</p>
-                    <a class="tribe-btn-primary" href="<?php echo esc_url( mytheme_get_plan_trip_url() ); ?>">✈️ Plan a Trip — Free</a>
+                    <a class="tribe-btn-primary" href="<?php echo esc_url( mytheme_get_plan_trip_url() ); ?>"><i class="fi-rr-plane" aria-hidden="true"></i> Plan a Trip — Free</a>
                 </div>
             <?php endif; ?>
         </section>
@@ -154,7 +154,7 @@ endif;
                             <div class="ev-row">
                                 <div class="ev-row-date"><strong><?php echo esc_html( $d ); ?></strong><span><?php echo esc_html( $m ); ?></span></div>
                                 <a class="ev-row-img" href="<?php echo esc_url( $row['url'] ); ?>">
-                                    <?php if ( $row['thumb'] ) : ?><img src="<?php echo esc_url( $row['thumb'] ); ?>" alt="" loading="lazy"><?php else : ?><span class="ev-card-ph">🎟️</span><?php endif; ?>
+                                    <?php if ( $row['thumb'] ) : ?><img src="<?php echo esc_url( $row['thumb'] ); ?>" alt="" loading="lazy"><?php else : ?><span class="ev-card-ph"><i class="fi-rr-ticket-alt" aria-hidden="true"></i></span><?php endif; ?>
                                 </a>
                                 <div class="ev-row-body">
                                     <h4 class="ev-row-title"><a href="<?php echo esc_url( $row['url'] ); ?>"><?php echo esc_html( $row['title'] ); ?></a></h4>

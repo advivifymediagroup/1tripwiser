@@ -402,7 +402,7 @@ function tw_explore_seed() {
             ),
         ),
         'International' => array(
-            'icon'  => '🌍',
+            'icon'  => '<i class="fi-rr-globe" aria-hidden="true"></i>',
             'zones' => array(
                 'Asia'        => array( 'Bali', 'Thailand', 'Vietnam', 'Singapore', 'Malaysia', 'Japan', 'Bhutan', 'Nepal', 'Sri Lanka', 'Maldives' ),
                 'Europe'      => array( 'France', 'Italy', 'Switzerland', 'Iceland', 'Greece' ),
@@ -491,7 +491,7 @@ function tw_region_icon( $term_id ) {
     return get_term_meta( $term_id, 'tw_region_icon', true );
 }
 /** Legacy fallback icon (events are now a CPT; kept to avoid stray call errors). */
-function tw_event_icon( $term_id = 0 ) { return '🎉'; }
+function tw_event_icon( $term_id = 0 ) { return '<i class="fi-rr-confetti" aria-hidden="true"></i>'; }
 /** Top-level region terms (India, International). */
 function tw_region_top_terms() {
     return get_terms( array(
@@ -680,7 +680,7 @@ function tw_womens_trips_showcase( $limit = 6 ) {
         <div class="container tw-womens-inner">
 
             <div class="tw-womens-header" data-reveal="up">
-                <div class="tw-womens-kicker">✦ Only for the brave ones</div>
+                <div class="tw-womens-kicker"><i class="fi-rr-sparkles" aria-hidden="true"></i> Only for the brave ones</div>
                 <h2 class="tw-womens-title">Women's <span>Group Trips</span></h2>
                 <p class="tw-womens-sub">Safe. Curated. Empowering. Join a crew of like-minded women and explore the world your way.</p>
             </div>
@@ -985,7 +985,7 @@ function tw_explore_region_filter_box( $base_url, $anchor = '' ) {
                 $url  = remove_query_arg( 'paged', add_query_arg( 'region', $slug, $base_url ) );
             ?>
                 <a class="<?php echo $active === $slug ? 'active' : ''; ?>" href="<?php echo esc_url( $url . $anchor ); ?>">
-                    <?php echo esc_html( trim( tw_region_icon( $top->term_id ) . ' ' . $top->name ) ); ?>
+                    <?php echo wp_kses_post( tw_region_icon( $top->term_id ) ) . ' ' . esc_html( $top->name ); ?>
                 </a>
             <?php endforeach; ?>
         </div>
@@ -1036,7 +1036,7 @@ function tw_explore_unified_filter_box( $post_type, $base_url, $anchor = '' ) {
 
             <?php foreach ( $region_chips as $t ) : ?>
                 <a class="tw-fchip <?php echo $active_region === $t->slug ? 'active' : ''; ?>" href="<?php echo $build( $t->slug, $active_meta ); ?>">
-                    <?php echo esc_html( trim( tw_region_icon( $t->term_id ) . ' ' . $t->name ) ); ?>
+                    <?php echo wp_kses_post( tw_region_icon( $t->term_id ) ) . ' ' . esc_html( $t->name ); ?>
                 </a>
             <?php endforeach; ?>
 

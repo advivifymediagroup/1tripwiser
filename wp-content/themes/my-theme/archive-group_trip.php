@@ -16,7 +16,7 @@ if ( ! function_exists( 'tw_explore_card' ) ) {
         ?>
         <article class="explore-card">
             <a class="explore-card-img" href="<?php the_permalink(); ?>">
-                <?php if ( $thumb ) : ?><img src="<?php echo esc_url( $thumb ); ?>" alt="" loading="lazy"><?php else : ?><span class="explore-card-img--ph" aria-hidden="true">👥</span><?php endif; ?>
+                <?php if ( $thumb ) : ?><img src="<?php echo esc_url( $thumb ); ?>" alt="" loading="lazy"><?php else : ?><span class="explore-card-img--ph" aria-hidden="true"><i class="fi-rr-users" aria-hidden="true"></i></span><?php endif; ?>
                 <span class="explore-card-type">Group Trip</span>
             </a>
             <div class="explore-card-body">
@@ -36,7 +36,7 @@ if ( ! function_exists( 'tw_explore_card' ) ) {
         <div class="explore-hero-overlay" aria-hidden="true"></div>
         <div class="container explore-hero-inner">
             <span class="explore-hero-kicker">Travel together</span>
-            <h1 class="explore-hero-title">👥 Group Trips</h1>
+            <h1 class="explore-hero-title">Group <span style="color:#D83550">Trips</span></h1>
             <p class="explore-hero-sub">
                 <?php
                 echo $tw_region_term
@@ -56,7 +56,7 @@ if ( ! function_exists( 'tw_explore_card' ) ) {
         <!-- Women's Trips callout -->
         <?php if ( function_exists( 'tw_womens_trips_page_url' ) ) : ?>
         <div class="gt-womens-callout">
-            <span class="gt-womens-callout-icon">👩‍🦰</span>
+            <span class="gt-womens-callout-icon"><i class="fi-rr-user" aria-hidden="true"></i></span>
             <div class="gt-womens-callout-copy">
                 <strong>Looking for Women-Only Group Trips?</strong>
                 <span>We have a dedicated section with safe, curated travel experiences exclusively for women.</span>
@@ -76,10 +76,10 @@ if ( ! function_exists( 'tw_explore_card' ) ) {
             </div>
         <?php else : ?>
             <div class="tribe-empty">
-                <div class="tribe-empty-icon">👥</div>
+                <div class="tribe-empty-icon"><i class="fi-rr-users" aria-hidden="true"></i></div>
                 <h3>No group trips here yet</h3>
                 <p>We're lining up new group departures. Tell us where you want to go and we'll plan one.</p>
-                <a class="tribe-btn-primary" href="<?php echo esc_url( mytheme_get_plan_trip_url() ); ?>">✈️ Plan a Trip — Free</a>
+                <a class="tribe-btn-primary" href="<?php echo esc_url( mytheme_get_plan_trip_url() ); ?>"><i class="fi-rr-plane" aria-hidden="true"></i> Plan a Trip — Free</a>
             </div>
         <?php endif; ?>
     </div>

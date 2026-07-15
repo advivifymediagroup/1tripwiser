@@ -23,12 +23,12 @@ if ( have_posts() ) {
 
 /* Display order + labels/icons for each content type */
 $tw_meta = array(
-    'travel_package' => array( '🧳 Packages', 'Package' ),
-    'itinerary'      => array( '🧭 Itineraries', 'Itinerary' ),
-    'group_trip'     => array( '👥 Group Trips', 'Group Trip' ),
-    'destination'    => array( '📍 Destinations', 'Destination' ),
-    'post'           => array( '✍️ Blog & Stories', 'Story' ),
-    'forum_topic'    => array( '💬 Tribe Discussions', 'Tribe' ),
+    'travel_package' => array( 'icon' => 'suitcase-alt',         'label' => 'Packages',          'type' => 'Package' ),
+    'itinerary'      => array( 'icon' => 'location-crosshairs',  'label' => 'Itineraries',        'type' => 'Itinerary' ),
+    'group_trip'     => array( 'icon' => 'users',                'label' => 'Group Trips',        'type' => 'Group Trip' ),
+    'destination'    => array( 'icon' => 'marker',                'label' => 'Destinations',       'type' => 'Destination' ),
+    'post'           => array( 'icon' => 'edit-alt',             'label' => 'Blog & Stories',      'type' => 'Story' ),
+    'forum_topic'    => array( 'icon' => 'comment',              'label' => 'Tribe Discussions',   'type' => 'Tribe' ),
 );
 
 if ( ! function_exists( 'tw_search_card' ) ) :
@@ -37,7 +37,7 @@ function tw_search_card( $post, $type_label ) {
     ?>
     <article class="explore-card">
         <a class="explore-card-img" href="<?php echo esc_url( get_permalink( $post->ID ) ); ?>">
-            <?php if ( $thumb ) : ?><img src="<?php echo esc_url( $thumb ); ?>" alt="" loading="lazy"><?php else : ?><span class="explore-card-img--ph" aria-hidden="true">🔎</span><?php endif; ?>
+            <?php if ( $thumb ) : ?><img src="<?php echo esc_url( $thumb ); ?>" alt="" loading="lazy"><?php else : ?><span class="explore-card-img--ph" aria-hidden="true"><i class="fi-rr-search" aria-hidden="true"></i></span><?php endif; ?>
             <span class="explore-card-type"><?php echo esc_html( $type_label ); ?></span>
         </a>
         <div class="explore-card-body">
@@ -70,14 +70,11 @@ endif;
                         if ( empty( $tw_groups[ $pt ] ) ) { continue; }
                         $count   = count( $tw_groups[ $pt ] );
                         $section = 'tw-cat-' . sanitize_html_class( $pt );
-                        $parts   = explode( ' ', $info[0], 2 );
-                        $icon    = $parts[0] ?? '';
-                        $label   = $parts[1] ?? $info[0];
                     ?>
                     <li>
                         <a href="#<?php echo esc_attr( $section ); ?>" data-section="<?php echo esc_attr( $section ); ?>">
-                            <span class="tw-search-nav-icon"><?php echo esc_html( $icon ); ?></span>
-                            <span class="tw-search-nav-label"><?php echo esc_html( $label ); ?></span>
+                            <span class="tw-search-nav-icon"><i class="fi-rr-<?php echo esc_attr( $info['icon'] ); ?>" aria-hidden="true"></i></span>
+                            <span class="tw-search-nav-label"><?php echo esc_html( $info['label'] ); ?></span>
                             <span class="tw-search-nav-badge"><?php echo (int) $count; ?></span>
                         </a>
                     </li>
@@ -94,11 +91,11 @@ endif;
                     $section = 'tw-cat-' . sanitize_html_class( $pt ); ?>
                     <section class="tw-results-group" id="<?php echo esc_attr( $section ); ?>" data-section="<?php echo esc_attr( $section ); ?>">
                         <h2 class="tw-results-group-title">
-                            <?php echo esc_html( $info[0] ); ?>
+                            <i class="fi-rr-<?php echo esc_attr( $info['icon'] ); ?>" aria-hidden="true"></i> <?php echo esc_html( $info['label'] ); ?>
                             <span class="tw-results-badge"><?php echo esc_html( count( $items ) ); ?></span>
                         </h2>
                         <div class="explore-grid">
-                            <?php foreach ( $items as $item ) { tw_search_card( $item, $info[1] ); } ?>
+                            <?php foreach ( $items as $item ) { tw_search_card( $item, $info['type'] ); } ?>
                         </div>
                     </section>
                 <?php endforeach; ?>
@@ -106,10 +103,10 @@ endif;
 
         <?php else : ?>
             <div class="tribe-empty" style="margin-top:36px;">
-                <div class="tribe-empty-icon">🔎</div>
+                <div class="tribe-empty-icon"><i class="fi-rr-search" aria-hidden="true"></i></div>
                 <h3>No results for "<?php echo esc_html( $tw_q ); ?>"</h3>
                 <p>Try a destination (Bali, Ladakh), a trip style (Honeymoon, Group), or an event (Oktoberfest).</p>
-                <a class="tribe-btn-primary" href="<?php echo esc_url( mytheme_get_plan_trip_url() ); ?>">✈️ Plan a Trip — Free</a>
+                <a class="tribe-btn-primary" href="<?php echo esc_url( mytheme_get_plan_trip_url() ); ?>"><i class="fi-rr-plane" aria-hidden="true"></i> Plan a Trip — Free</a>
             </div>
         <?php endif; ?>
     </div>

@@ -11,7 +11,7 @@ get_header();
 
 $term    = get_queried_object();
 $parent  = ( $term && $term->parent ) ? get_term( $term->parent, 'destination_region' ) : null;
-$icon    = function_exists( 'tw_region_icon' ) ? tw_region_icon( $term->term_id ) : '🧭';
+$icon    = function_exists( 'tw_region_icon' ) ? tw_region_icon( $term->term_id ) : '<i class="fi-rr-location-crosshairs" aria-hidden="true"></i>';
 $kids    = get_terms( array( 'taxonomy' => 'destination_region', 'parent' => $term->term_id, 'hide_empty' => false ) );
 
 /* ACF term meta */
@@ -65,7 +65,7 @@ $total = array_sum( $counts );
             </nav>
 
             <h1 class="dest-hero-title">
-                <?php if ( $icon ) : ?><span class="dest-hero-icon" aria-hidden="true"><?php echo esc_html( $icon ); ?></span><?php endif; ?>
+                <?php if ( $icon ) : ?><span class="dest-hero-icon" aria-hidden="true"><?php echo wp_kses_post( $icon ); ?></span><?php endif; ?>
                 <?php echo esc_html( $term->name ); ?>
             </h1>
 
@@ -155,7 +155,7 @@ $total = array_sum( $counts );
                     'tw_event'       => array( 'Event',       '#D83550', '#fff'    ),
                     'itinerary'      => array( 'Itinerary',  '#10b981', '#fff'    ),
                 );
-                $badge     = isset( $badges[$pt] ) ? $badges[$pt] : array( '✈ Trip', '#6b7a8f', '#fff' );
+                $badge     = isset( $badges[$pt] ) ? $badges[$pt] : array( '<i class="fi-rr-plane" aria-hidden="true"></i> Trip', '#6b7a8f', '#fff' );
                 $book_url  = get_post_meta( $pid, 'package_book_url', true ) ?: get_permalink( $pid );
                 $tag_label = get_post_meta( $pid, 'package_tag', true );
             ?>
@@ -164,7 +164,7 @@ $total = array_sum( $counts );
                     <?php if ( $thumb ) : ?>
                         <img src="<?php echo esc_url( $thumb ); ?>" alt="" loading="lazy">
                     <?php else : ?>
-                        <span class="dest-card-ph">🧭</span>
+                        <span class="dest-card-ph"><i class="fi-rr-location-crosshairs" aria-hidden="true"></i></span>
                     <?php endif; ?>
                     <span class="dest-card-badge"
                           style="background:<?php echo esc_attr($badge[1]); ?>;color:<?php echo esc_attr($badge[2]); ?>;">
@@ -199,7 +199,7 @@ $total = array_sum( $counts );
 
         <?php else : ?>
         <div class="tribe-empty">
-            <div class="tribe-empty-icon"><?php echo esc_html( $icon ); ?></div>
+            <div class="tribe-empty-icon"><?php echo wp_kses_post( $icon ); ?></div>
             <h3>No trips for <?php echo esc_html( $term->name ); ?> yet</h3>
             <p>We're curating amazing trips here. Tell us where you want to go and we'll build a custom itinerary.</p>
             <a class="tribe-btn-primary" href="<?php echo esc_url( mytheme_get_plan_trip_url() ); ?>">Plan a Trip — Free</a>

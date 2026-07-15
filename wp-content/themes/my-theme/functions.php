@@ -33,6 +33,7 @@ function mytheme_enqueue_styles() {
     $style_ver  = file_exists( $style_path ) ? filemtime( $style_path ) : '1.0';
     wp_enqueue_style('main-style', get_stylesheet_uri(), array(), $style_ver);
     wp_enqueue_style('font-awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css');
+    wp_enqueue_style('flaticon-uicons', 'https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css');
     // Animations CSS (global) — same filemtime cache-busting
     $anim_path = get_template_directory() . '/assets/css/tw-animations.css';
     $anim_ver  = file_exists( $anim_path ) ? filemtime( $anim_path ) : '1.1';
@@ -611,6 +612,18 @@ add_action('save_post_travel_package', 'mytheme_save_travel_meta');
 function mytheme_get_plan_trip_url() {
     $page = get_page_by_path('plan-a-trip');
     return $page ? get_permalink($page) : home_url('/plan-a-trip/');
+}
+
+/** Render an affiliate "icon" value as a Flaticon UIcon (slug like "hotel"),
+ *  falling back to printing the raw value verbatim for any legacy emoji
+ *  an admin may have already saved in the icon meta field. */
+function tw_render_aff_icon($icon) {
+    $icon = trim((string) $icon);
+    if ($icon !== '' && preg_match('/^[a-z0-9-]+$/', $icon)) {
+        echo '<i class="fi-rr-' . esc_attr($icon) . '" aria-hidden="true"></i>';
+    } else {
+        echo esc_html($icon);
+    }
 }
 
 function mytheme_get_page_url_by_path($path) {
@@ -2171,10 +2184,10 @@ function mytheme_render_affiliate_cpt_meta_box($post) {
     ?>
     <table class="form-table" style="margin-top:0">
         <tr>
-            <th style="width:160px"><label for="taff_icon"><?php esc_html_e('Icon (emoji)', 'mytheme'); ?></label></th>
+            <th style="width:160px"><label for="taff_icon"><?php esc_html_e('Icon (Flaticon slug)', 'mytheme'); ?></label></th>
             <td>
-                <input type="text" id="taff_icon" name="taff_icon" value="<?php echo esc_attr($icon ?: '🔗'); ?>" style="width:80px;font-size:1.4rem;text-align:center" />
-                <p class="description">e.g. 🏨 ✈️ 🎟️ 🛡️ 🚗</p>
+                <input type="text" id="taff_icon" name="taff_icon" value="<?php echo esc_attr($icon ?: 'link'); ?>" style="width:120px;text-align:center" />
+                <p class="description">e.g. hotel, plane, ticket-alt, shield, car — any slug from <a href="https://www.flaticon.com/uicons" target="_blank" rel="noopener">Flaticon UIcons (regular-rounded)</a></p>
             </td>
         </tr>
         <tr>
@@ -2333,7 +2346,7 @@ function mytheme_register_admin_menus() {
     add_submenu_page(
         'tw-settings',
         __('Overview', 'mytheme'),
-        __('📊 Overview', 'mytheme'),
+        __('<i class="fi-rr-chart-histogram" aria-hidden="true"></i> Overview', 'mytheme'),
         'manage_options',
         'tw-settings',
         'tw_render_overview_page'
@@ -2341,7 +2354,7 @@ function mytheme_register_admin_menus() {
     add_submenu_page(
         'tw-settings',
         __('Homepage Hero Banner', 'mytheme'),
-        __('🎬 Hero Banner', 'mytheme'),
+        __('<i class="fi-rr-clapperboard" aria-hidden="true"></i> Hero Banner', 'mytheme'),
         'manage_options',
         'tw-hero-settings',
         'tw_render_hero_settings_page'
@@ -2349,7 +2362,7 @@ function mytheme_register_admin_menus() {
     add_submenu_page(
         'tw-settings',
         __('Plan A Trip Page', 'mytheme'),
-        __('✈️ Plan A Trip Page', 'mytheme'),
+        __('<i class="fi-rr-plane" aria-hidden="true"></i> Plan A Trip Page', 'mytheme'),
         'manage_options',
         'tw-plan-trip-settings',
         'tw_render_plan_trip_settings_page'
@@ -2357,7 +2370,7 @@ function mytheme_register_admin_menus() {
     add_submenu_page(
         'tw-settings',
         __('Blog & Affiliates Page', 'mytheme'),
-        __('📰 Blog & Affiliates Page', 'mytheme'),
+        __('<i class="fi-rr-note" aria-hidden="true"></i> Blog & Affiliates Page', 'mytheme'),
         'manage_options',
         'tw-blog-settings',
         'tw_render_blog_settings_page'
@@ -2365,7 +2378,7 @@ function mytheme_register_admin_menus() {
     add_submenu_page(
         'tw-settings',
         __('WhatsApp Chat Widget', 'mytheme'),
-        __('💬 WhatsApp Widget', 'mytheme'),
+        __('<i class="fi-rr-comment" aria-hidden="true"></i> WhatsApp Widget', 'mytheme'),
         'manage_options',
         'tw-wa-widget-settings',
         'tw_render_wa_widget_settings_page'
@@ -2373,7 +2386,7 @@ function mytheme_register_admin_menus() {
     add_submenu_page(
         'tw-settings',
         __('WhatsApp Cloud API', 'mytheme'),
-        __('🤖 WhatsApp API', 'mytheme'),
+        __('<i class="fi-rr-brain-circuit" aria-hidden="true"></i> WhatsApp API', 'mytheme'),
         'manage_options',
         'tw-wa-api-settings',
         'tw_render_wa_api_settings_page'
@@ -2381,7 +2394,7 @@ function mytheme_register_admin_menus() {
     add_submenu_page(
         'tw-settings',
         __('Testimonials', 'mytheme'),
-        __('💬 Testimonials', 'mytheme'),
+        __('<i class="fi-rr-comment" aria-hidden="true"></i> Testimonials', 'mytheme'),
         'manage_options',
         'tw-testimonials-settings',
         'tw_render_testimonials_settings_page'
@@ -2429,7 +2442,7 @@ function tw_homepage_testimonials_section() {
     <section class="tw-testimonials-section">
         <div class="container tw-testimonials-inner">
             <div class="tw-testimonials-head" data-reveal="up">
-                <span class="tw-testimonials-kicker">💬 Real travellers. Real stories.</span>
+                <span class="tw-testimonials-kicker"><i class="fi-rr-comment" aria-hidden="true"></i> Real travellers. Real stories.</span>
                 <h2 class="tw-testimonials-title">What Our <span>Travellers Say</span></h2>
             </div>
             <div class="tw-testimonials-grid">
@@ -2438,7 +2451,7 @@ function tw_homepage_testimonials_section() {
                 ?>
                 <div class="tw-testi-card" data-reveal="scale">
                     <div class="tw-testi-card-stars">
-                        <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                        <span><i class="fi-rr-star" aria-hidden="true"></i></span><span><i class="fi-rr-star" aria-hidden="true"></i></span><span><i class="fi-rr-star" aria-hidden="true"></i></span><span><i class="fi-rr-star" aria-hidden="true"></i></span><span><i class="fi-rr-star" aria-hidden="true"></i></span>
                     </div>
                     <span class="tw-testi-card-quote-mark">"</span>
                     <p class="tw-testi-card-text"><?php echo esc_html( $t['quote'] ); ?>"</p>
@@ -2447,7 +2460,7 @@ function tw_homepage_testimonials_section() {
                         <div>
                             <?php if ( ! empty( $t['name'] ) ) : ?><strong><?php echo esc_html( $t['name'] ); ?></strong><?php endif; ?>
                             <?php if ( ! empty( $t['location'] ) ) : ?><span><?php echo esc_html( $t['location'] ); ?></span><?php endif; ?>
-                            <?php if ( ! empty( $t['trip'] ) ) : ?><span class="tw-testi-card-trip">✈ <?php echo esc_html( $t['trip'] ); ?></span><?php endif; ?>
+                            <?php if ( ! empty( $t['trip'] ) ) : ?><span class="tw-testi-card-trip"><i class="fi-rr-plane" aria-hidden="true"></i> <?php echo esc_html( $t['trip'] ); ?></span><?php endif; ?>
                         </div>
                     </div>
                 </div>
@@ -2461,7 +2474,7 @@ function tw_homepage_testimonials_section() {
 function tw_render_testimonials_settings_page() {
     if ( ! current_user_can( 'manage_options' ) ) { return; }
     wp_enqueue_script( 'jquery' );
-    tw_settings_page_header( 'Testimonials', '💬', 'Manage testimonials shown on the Homepage and the Women\'s Group Trips page.' );
+    tw_settings_page_header( 'Testimonials', '<i class="fi-rr-comment" aria-hidden="true"></i>', 'Manage testimonials shown on the Homepage and the Women\'s Group Trips page.' );
 
     $hp_defaults = array(
         array( 'quote' => 'Planning a trip has never been this easy. The team handled everything — hotels, permits, itinerary. We just showed up and enjoyed!', 'name' => 'Aditya M.', 'location' => 'Pune', 'trip' => 'Ladakh Road Trip' ),
@@ -2483,7 +2496,7 @@ function tw_render_testimonials_settings_page() {
     $render_rows = function( $list, $option_key, $testi_array, $has_trip = true ) {
         foreach ( $testi_array as $i => $t ) : ?>
         <div class="tw-testi-row" style="background:#f9fafb;border:1px solid #e8edf5;border-radius:12px;padding:16px 20px;position:relative;margin-bottom:12px;">
-            <button type="button" class="button tw-tr-remove" style="position:absolute;top:12px;right:12px;color:#c0392b;border-color:#c0392b;" onclick="this.closest('.tw-testi-row').remove()">✕ Remove</button>
+            <button type="button" class="button tw-tr-remove" style="position:absolute;top:12px;right:12px;color:#c0392b;border-color:#c0392b;" onclick="this.closest('.tw-testi-row').remove()"><i class="fi-rr-cross-small" aria-hidden="true"></i> Remove</button>
             <div style="display:grid;grid-template-columns:2fr 1fr 1fr <?php echo $has_trip ? '1fr' : ''; ?>;gap:10px;margin-right:90px;">
                 <div style="grid-column:1/-1;">
                     <label style="font-weight:700;display:block;margin-bottom:4px;font-size:0.82rem;">Quote *</label>
@@ -2524,8 +2537,8 @@ function tw_render_testimonials_settings_page() {
         <div class="tw-admin-card" style="margin-bottom:28px;">
             <div class="tw-admin-card-head">
                 <div>
-                    <h2>🏠 Homepage Testimonials</h2>
-                    <p>Shown in the "What Our Travellers Say" section on the homepage. Up to 6. Include a Trip Name to show the ✈ trip badge.</p>
+                    <h2><i class="fi-rr-home" aria-hidden="true"></i> Homepage Testimonials</h2>
+                    <p>Shown in the "What Our Travellers Say" section on the homepage. Up to 6. Include a Trip Name to show the <i class="fi-rr-plane" aria-hidden="true"></i> trip badge.</p>
                 </div>
             </div>
             <div class="tw-admin-card-body">
@@ -2540,7 +2553,7 @@ function tw_render_testimonials_settings_page() {
         <div class="tw-admin-card" style="margin-bottom:28px;">
             <div class="tw-admin-card-head">
                 <div>
-                    <h2>👩‍🦰 Women's Trips Testimonials</h2>
+                    <h2><i class="fi-rr-user" aria-hidden="true"></i> Women's Trips Testimonials</h2>
                     <p>Shown on the Women's Group Trips landing page. Up to 6.</p>
                 </div>
             </div>
@@ -2574,7 +2587,7 @@ function tw_render_testimonials_settings_page() {
                 var row = document.createElement('div');
                 row.className = 'tw-testi-row';
                 row.style.cssText = 'background:#f9fafb;border:1px solid #e8edf5;border-radius:12px;padding:16px 20px;position:relative;margin-bottom:12px;';
-                row.innerHTML = '<button type="button" class="button tw-tr-remove" style="position:absolute;top:12px;right:12px;color:#c0392b;border-color:#c0392b;" onclick="this.closest(\'.tw-testi-row\').remove()">✕ Remove</button>'
+                row.innerHTML = '<button type="button" class="button tw-tr-remove" style="position:absolute;top:12px;right:12px;color:#c0392b;border-color:#c0392b;" onclick="this.closest(\'.tw-testi-row\').remove()"><i class="fi-rr-cross-small" aria-hidden="true"></i> Remove</button>'
                     + '<div style="display:grid;grid-template-columns:2fr 1fr 1fr' + (hasTrip?' 1fr':'') + ';gap:10px;margin-right:90px;">'
                     + '<div style="grid-column:1/-1;"><label style="font-weight:700;display:block;margin-bottom:4px;font-size:0.82rem;">Quote *</label>'
                     + '<textarea name="' + optKey + '[' + i + '][quote]" rows="2" style="width:100%;border-radius:8px;border:1px solid #dde5ef;padding:8px 10px;font-size:0.88rem;resize:vertical;" placeholder="What the traveller said…"></textarea></div>'
@@ -2942,11 +2955,11 @@ function mytheme_render_inquiries_page() {
             <span style="margin-left:auto;display:flex;gap:8px;">
                 <a href="<?php echo $csv_url; ?>"
                    style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;background:#2271b1;color:#fff;border-radius:4px;text-decoration:none;font-size:13px;font-weight:600;line-height:1.4">
-                    ⬇ Export CSV
+                    <i class="fi-rr-arrow-down" aria-hidden="true"></i> Export CSV
                 </a>
                 <a href="<?php echo $xlsx_url; ?>"
                    style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;background:#1d7a3a;color:#fff;border-radius:4px;text-decoration:none;font-size:13px;font-weight:600;line-height:1.4">
-                    ⬇ Export Excel
+                    <i class="fi-rr-arrow-down" aria-hidden="true"></i> Export Excel
                 </a>
             </span>
         </h1>
@@ -3063,7 +3076,7 @@ function tw_whatsapp_widget() {
     if ( is_admin() ) return;
     $wa_num     = get_option('tw_wa_widget_number',  get_option('tw_pat_whatsapp', '') );
     $wa_msg     = get_option('tw_wa_widget_message',  'Hi! I have a question about a trip.');
-    $wa_greet   = get_option('tw_wa_widget_greeting', 'Hi there! 👋 How can we help you plan your perfect trip?');
+    $wa_greet   = get_option('tw_wa_widget_greeting', 'Hi there! How can we help you plan your perfect trip?');
     if ( ! $wa_num ) return;
     $wa_url = 'https://wa.me/' . preg_replace('/[^0-9]/', '', $wa_num) . '?text=' . rawurlencode($wa_msg);
     ?>
@@ -3078,7 +3091,7 @@ function tw_whatsapp_widget() {
                     <strong>1TripWiser</strong>
                     <span>Typically replies instantly</span>
                 </div>
-                <button class="tw-wa-popup-close" id="tw-wa-close" aria-label="Close chat">✕</button>
+                <button class="tw-wa-popup-close" id="tw-wa-close" aria-label="Close chat"><i class="fi-rr-cross-small" aria-hidden="true"></i></button>
             </div>
             <div class="tw-wa-popup-body">
                 <div class="tw-wa-bubble"><?php echo esc_html($wa_greet); ?></div>
@@ -3094,7 +3107,7 @@ function tw_whatsapp_widget() {
             <span class="tw-wa-btn-icon tw-wa-btn-open" aria-hidden="true">
                 <svg viewBox="0 0 32 32" width="28" height="28" fill="currentColor"><path d="M16 2a14 14 0 0 0-12.12 20.93L2 30l7.26-1.85A14 14 0 1 0 16 2zm0 26a12 12 0 0 1-6.18-1.71l-.44-.26-4.58 1.17 1.19-4.47-.29-.46A12 12 0 1 1 16 28z"/><path d="M21.49 18.55c-.3-.15-1.77-.87-2.04-.97-.28-.1-.48-.15-.68.15s-.78.97-.95 1.17-.35.22-.65.07a8.16 8.16 0 0 1-2.4-1.48 9.03 9.03 0 0 1-1.66-2.07c-.17-.3 0-.46.13-.61l.43-.5c.14-.17.18-.3.28-.5s.05-.37-.02-.52-.68-1.64-.93-2.24c-.24-.59-.49-.51-.68-.52l-.57-.01c-.2 0-.52.07-.8.37S10 12.27 10 13.76s1.08 2.9 1.23 3.1 2.12 3.24 5.14 4.54c.72.31 1.28.5 1.72.64.72.23 1.38.2 1.9.12.58-.09 1.78-.73 2.03-1.43s.25-1.3.18-1.43-.28-.2-.57-.35z"/></svg>
             </span>
-            <span class="tw-wa-btn-icon tw-wa-btn-close" aria-hidden="true" style="display:none">✕</span>
+            <span class="tw-wa-btn-icon tw-wa-btn-close" aria-hidden="true" style="display:none"><i class="fi-rr-cross-small" aria-hidden="true"></i></span>
             <span class="tw-wa-badge" aria-label="1 new message">1</span>
         </button>
     </div>
@@ -3185,14 +3198,14 @@ function tw_send_whatsapp_inquiry_notification( $post_id, $data ) {
         ));
     } else {
         // Free-form text (works only if user messaged the business within 24h)
-        $msg = "Hi " . ($data['name'] ?? 'there') . "! 👋\n\n"
+        $msg = "Hi " . ($data['name'] ?? 'there') . "!\n\n"
              . "Thanks for your trip inquiry with *1TripWiser*! Here's your summary:\n\n"
-             . "📍 *Destination:* " . ($data['destination'] ?? '-') . "\n"
-             . "📅 *Travel Date:* "  . ($data['date'] ?? '-') . "\n"
-             . "💰 *Budget:* "        . ($data['budget'] ?? '-') . "\n"
-             . "👥 *Adults:* "        . ($data['adults'] ?? '1') . "  |  *Children:* " . ($data['children'] ?? '0') . "\n"
-             . "🗺️ *Trip Type:* "     . ($data['trip_type'] ?? '-') . "\n\n"
-             . "Our team will send your personalised quotation shortly. Stay tuned! ✈️\n\n"
+             . "*Destination:* " . ($data['destination'] ?? '-') . "\n"
+             . "*Travel Date:* "  . ($data['date'] ?? '-') . "\n"
+             . "*Budget:* "        . ($data['budget'] ?? '-') . "\n"
+             . "*Adults:* "        . ($data['adults'] ?? '1') . "  |  *Children:* " . ($data['children'] ?? '0') . "\n"
+             . "*Trip Type:* "     . ($data['trip_type'] ?? '-') . "\n\n"
+             . "Our team will send your personalised quotation shortly. Stay tuned!\n\n"
              . "_— 1TripWiser Team_";
 
         $body = json_encode(array(
@@ -3265,52 +3278,52 @@ function tw_settings_page_footer() {
 // OVERVIEW DASHBOARD PAGE
 // ============================================================
 function tw_render_overview_page() {
-    tw_settings_page_header('Settings Overview', '📊', 'All site settings at a glance — click any card to jump straight there.');
+    tw_settings_page_header('Settings Overview', '<i class="fi-rr-chart-histogram" aria-hidden="true"></i>', 'All site settings at a glance — click any card to jump straight there.');
     $inquiry_count = wp_count_posts('trip_inquiry')->publish ?? 0;
     ?>
     <div class="tw-admin-card">
-        <div class="tw-admin-card-head"><h2>⚡ Quick Actions</h2></div>
+        <div class="tw-admin-card-head"><h2><i class="fi-rr-bolt" aria-hidden="true"></i> Quick Actions</h2></div>
         <div class="tw-admin-card-body">
             <div class="tw-admin-quicklinks">
                 <a class="tw-admin-ql" href="<?php echo esc_url(admin_url('admin.php?page=tw-hero-settings')); ?>">
-                    <span class="tw-admin-ql-icon">🎬</span><span>Hero Banner<br><small style="font-weight:500;color:#667085">Video / image background</small></span>
+                    <span class="tw-admin-ql-icon"><i class="fi-rr-clapperboard" aria-hidden="true"></i></span><span>Hero Banner<br><small style="font-weight:500;color:#667085">Video / image background</small></span>
                 </a>
                 <a class="tw-admin-ql" href="<?php echo esc_url(admin_url('admin.php?page=tw-plan-trip-settings')); ?>">
-                    <span class="tw-admin-ql-icon">✈️</span><span>Plan A Trip Page<br><small style="font-weight:500;color:#667085">Hero text &amp; WhatsApp number</small></span>
+                    <span class="tw-admin-ql-icon"><i class="fi-rr-plane" aria-hidden="true"></i></span><span>Plan A Trip Page<br><small style="font-weight:500;color:#667085">Hero text &amp; WhatsApp number</small></span>
                 </a>
                 <a class="tw-admin-ql" href="<?php echo esc_url(admin_url('admin.php?page=tw-blog-settings')); ?>">
-                    <span class="tw-admin-ql-icon">📰</span><span>Blog &amp; Affiliates Page<br><small style="font-weight:500;color:#667085">Page hero &amp; partner banner</small></span>
+                    <span class="tw-admin-ql-icon"><i class="fi-rr-note" aria-hidden="true"></i></span><span>Blog &amp; Affiliates Page<br><small style="font-weight:500;color:#667085">Page hero &amp; partner banner</small></span>
                 </a>
                 <a class="tw-admin-ql" href="<?php echo esc_url(admin_url('admin.php?page=tw-wa-widget-settings')); ?>">
-                    <span class="tw-admin-ql-icon">💬</span><span>WhatsApp Widget<br><small style="font-weight:500;color:#667085">Floating chat button</small></span>
+                    <span class="tw-admin-ql-icon"><i class="fi-rr-comment" aria-hidden="true"></i></span><span>WhatsApp Widget<br><small style="font-weight:500;color:#667085">Floating chat button</small></span>
                 </a>
                 <a class="tw-admin-ql" href="<?php echo esc_url(admin_url('admin.php?page=tw-wa-api-settings')); ?>">
-                    <span class="tw-admin-ql-icon">🤖</span><span>WhatsApp API<br><small style="font-weight:500;color:#667085">Auto quotation messages</small></span>
+                    <span class="tw-admin-ql-icon"><i class="fi-rr-brain-circuit" aria-hidden="true"></i></span><span>WhatsApp API<br><small style="font-weight:500;color:#667085">Auto quotation messages</small></span>
                 </a>
                 <a class="tw-admin-ql" href="<?php echo esc_url(admin_url('admin.php?page=trip-inquiries')); ?>">
-                    <span class="tw-admin-ql-icon">📋</span><span>Trip Inquiries<br><small style="font-weight:500;color:#667085"><?php echo esc_html($inquiry_count); ?> submissions</small></span>
+                    <span class="tw-admin-ql-icon"><i class="fi-rr-clipboard-list" aria-hidden="true"></i></span><span>Trip Inquiries<br><small style="font-weight:500;color:#667085"><?php echo esc_html($inquiry_count); ?> submissions</small></span>
                 </a>
                 <a class="tw-admin-ql" href="<?php echo esc_url(admin_url('edit.php')); ?>">
-                    <span class="tw-admin-ql-icon">📝</span><span>Blog Posts<br><small style="font-weight:500;color:#667085">Write &amp; manage articles</small></span>
+                    <span class="tw-admin-ql-icon"><i class="fi-rr-memo" aria-hidden="true"></i></span><span>Blog Posts<br><small style="font-weight:500;color:#667085">Write &amp; manage articles</small></span>
                 </a>
                 <a class="tw-admin-ql" href="<?php echo esc_url(admin_url('edit.php?post_type=tw_affiliate')); ?>">
-                    <span class="tw-admin-ql-icon">🔗</span><span>Affiliate Links<br><small style="font-weight:500;color:#667085">Manage partner links</small></span>
+                    <span class="tw-admin-ql-icon"><i class="fi-rr-link" aria-hidden="true"></i></span><span>Affiliate Links<br><small style="font-weight:500;color:#667085">Manage partner links</small></span>
                 </a>
             </div>
         </div>
     </div>
 
     <div class="tw-admin-card">
-        <div class="tw-admin-card-head"><h2>📋 Current Configuration Summary</h2></div>
+        <div class="tw-admin-card-head"><h2><i class="fi-rr-clipboard-list" aria-hidden="true"></i> Current Configuration Summary</h2></div>
         <div class="tw-admin-card-body">
             <table class="widefat striped" style="border:none">
                 <tbody>
                     <tr><td style="width:260px;font-weight:700">Hero Video</td><td><?php $v=get_option('tw_hero_video_url',''); echo $v ? '<a href="'.esc_url($v).'" target="_blank">'.esc_html(substr($v,0,60)).'…</a>' : '<span style="color:#999">Not set — using dark background</span>'; ?></td><td><a href="<?php echo esc_url(admin_url('admin.php?page=tw-hero-settings')); ?>">Edit →</a></td></tr>
-                    <tr><td style="font-weight:700">Hero Image</td><td><?php $i=get_option('tw_hero_image_url',''); echo $i ? '<a href="'.esc_url($i).'" target="_blank">Set ✓</a>' : '<span style="color:#999">Not set</span>'; ?></td><td><a href="<?php echo esc_url(admin_url('admin.php?page=tw-hero-settings')); ?>">Edit →</a></td></tr>
+                    <tr><td style="font-weight:700">Hero Image</td><td><?php $i=get_option('tw_hero_image_url',''); echo $i ? '<a href="'.esc_url($i).'" target="_blank">Set <i class="fi-rr-check" aria-hidden="true"></i></a>' : '<span style="color:#999">Not set</span>'; ?></td><td><a href="<?php echo esc_url(admin_url('admin.php?page=tw-hero-settings')); ?>">Edit →</a></td></tr>
                     <tr><td style="font-weight:700">Instagram Feed ID</td><td><?php echo esc_html(get_option('tw_instagram_feed_id', 1)); ?></td><td><a href="<?php echo esc_url(admin_url('admin.php?page=tw-hero-settings')); ?>">Edit →</a></td></tr>
                     <tr><td style="font-weight:700">Plan A Trip WhatsApp</td><td><?php echo esc_html(get_option('tw_pat_whatsapp','Not set')); ?></td><td><a href="<?php echo esc_url(admin_url('admin.php?page=tw-plan-trip-settings')); ?>">Edit →</a></td></tr>
                     <tr><td style="font-weight:700">WhatsApp Widget Number</td><td><?php $n=get_option('tw_wa_widget_number',get_option('tw_pat_whatsapp','')); echo $n ? esc_html($n) : '<span style="color:#999">Not set</span>'; ?></td><td><a href="<?php echo esc_url(admin_url('admin.php?page=tw-wa-widget-settings')); ?>">Edit →</a></td></tr>
-                    <tr><td style="font-weight:700">WhatsApp Cloud API</td><td><?php echo get_option('tw_wa_api_token','') ? '<span style="color:green">✓ Configured</span>' : '<span style="color:#999">Not configured</span>'; ?></td><td><a href="<?php echo esc_url(admin_url('admin.php?page=tw-wa-api-settings')); ?>">Edit →</a></td></tr>
+                    <tr><td style="font-weight:700">WhatsApp Cloud API</td><td><?php echo get_option('tw_wa_api_token','') ? '<span style="color:green"><i class="fi-rr-check" aria-hidden="true"></i> Configured</span>' : '<span style="color:#999">Not configured</span>'; ?></td><td><a href="<?php echo esc_url(admin_url('admin.php?page=tw-wa-api-settings')); ?>">Edit →</a></td></tr>
                     <tr><td style="font-weight:700">Blog Page Title</td><td><?php echo esc_html(get_option('tw_blog_title','BLOGS + AFFILIATES')); ?></td><td><a href="<?php echo esc_url(admin_url('admin.php?page=tw-blog-settings')); ?>">Edit →</a></td></tr>
                 </tbody>
             </table>
@@ -3325,7 +3338,7 @@ function tw_render_overview_page() {
 // ============================================================
 function tw_render_hero_settings_page() {
     wp_enqueue_media(); // load WP media picker scripts
-    tw_settings_page_header('Hero Banner', '🎬', 'Control the video or image that plays behind the homepage hero section.');
+    tw_settings_page_header('Hero Banner', '<i class="fi-rr-clapperboard" aria-hidden="true"></i>', 'Control the video or image that plays behind the homepage hero section.');
     ?>
     <div class="tw-admin-card">
         <div class="tw-admin-card-head">
@@ -3346,7 +3359,7 @@ function tw_render_hero_settings_page() {
                                        value="<?php echo esc_attr(get_option('tw_hero_video_url','')); ?>"
                                        style="flex:1;min-width:300px" placeholder="YouTube URL  or  direct .mp4 / .webm URL">
                                 <button type="button" class="button button-secondary tw-media-pick" data-target="tw_hero_video_url" data-type="video">
-                                    📁 Select from Media Library
+                                    <i class="fi-rr-folder" aria-hidden="true"></i> Select from Media Library
                                 </button>
                             </div>
                             <p class="description">
@@ -3363,7 +3376,7 @@ function tw_render_hero_settings_page() {
                                        value="<?php echo esc_attr(get_option('tw_hero_image_url','')); ?>"
                                        style="flex:1;min-width:300px" placeholder="https://yoursite.com/hero-image.jpg">
                                 <button type="button" class="button button-secondary tw-media-pick" data-target="tw_hero_image_url" data-type="image">
-                                    🖼 Select from Media Library
+                                    <i class="fi-rr-picture" aria-hidden="true"></i> Select from Media Library
                                 </button>
                             </div>
                             <p class="description">Used when no video is set.</p>
@@ -3383,7 +3396,7 @@ function tw_render_hero_settings_page() {
                                        value="<?php echo esc_attr(get_option('tw_hero_mobile_image_url','')); ?>"
                                        style="flex:1;min-width:300px" placeholder="https://yoursite.com/hero-mobile.jpg">
                                 <button type="button" class="button button-secondary tw-media-pick" data-target="tw_hero_mobile_image_url" data-type="image">
-                                    🖼 Select from Media Library
+                                    <i class="fi-rr-picture" aria-hidden="true"></i> Select from Media Library
                                 </button>
                             </div>
                             <p class="description">
@@ -3425,7 +3438,7 @@ function tw_render_hero_settings_page() {
                                                value="<?php echo esc_attr( $tw_ff_val ); ?>"
                                                style="flex:1;min-width:300px" placeholder="https://yoursite.com/floating-image.jpg">
                                         <button type="button" class="button button-secondary tw-media-pick" data-target="<?php echo esc_attr( $tw_ff_key ); ?>" data-type="image">
-                                            🖼 Select from Media Library
+                                            <i class="fi-rr-picture" aria-hidden="true"></i> Select from Media Library
                                         </button>
                                     </div>
                                     <?php if ( $tw_ff_val ) : ?>
@@ -3440,7 +3453,7 @@ function tw_render_hero_settings_page() {
                     </div>
                 </div>
                 <div class="tw-admin-note info" style="margin-top:8px">
-                    💡 <strong>Tip:</strong> Upload your video via <a href="<?php echo esc_url(admin_url('media-new.php')); ?>">Media → Add New</a>, then use <em>Select from Media Library</em> — clean full-screen background, zero player controls. Landscape 1920×1080 .mp4 works best.
+                    <i class="fi-rr-bulb" aria-hidden="true"></i> <strong>Tip:</strong> Upload your video via <a href="<?php echo esc_url(admin_url('media-new.php')); ?>">Media → Add New</a>, then use <em>Select from Media Library</em> — clean full-screen background, zero player controls. Landscape 1920×1080 .mp4 works best.
                 </div>
                 <div class="tw-admin-card" style="margin-top:24px;margin-bottom:0">
                     <div class="tw-admin-card-head">
@@ -3498,7 +3511,7 @@ function tw_render_hero_settings_page() {
 // PLAN A TRIP PAGE SETTINGS
 // ============================================================
 function tw_render_plan_trip_settings_page() {
-    tw_settings_page_header('Plan A Trip Page', '✈️', 'Edit the hero text and WhatsApp number for the Plan A Trip form page.');
+    tw_settings_page_header('Plan A Trip Page', '<i class="fi-rr-plane" aria-hidden="true"></i>', 'Edit the hero text and WhatsApp number for the Plan A Trip form page.');
     ?>
     <div class="tw-admin-card">
         <div class="tw-admin-card-head"><h2>Hero Section Text</h2></div>
@@ -3567,7 +3580,7 @@ function tw_render_plan_trip_settings_page() {
 // BLOG & AFFILIATES PAGE SETTINGS
 // ============================================================
 function tw_render_blog_settings_page() {
-    tw_settings_page_header('Blog & Affiliates Page', '📰', 'Edit the hero banner text and affiliate partner section on the Blog & Affiliates page.');
+    tw_settings_page_header('Blog & Affiliates Page', '<i class="fi-rr-note" aria-hidden="true"></i>', 'Edit the hero banner text and affiliate partner section on the Blog & Affiliates page.');
     ?>
     <div class="tw-admin-card">
         <div class="tw-admin-card-head"><h2>Page Hero Text</h2></div>
@@ -3609,7 +3622,7 @@ function tw_render_blog_settings_page() {
                     </tr>
                 </table>
                 <div class="tw-admin-note info">
-                    💡 <strong>Individual affiliate partner links</strong> (Booking.com, Skyscanner, etc.) are managed separately under the
+                    <i class="fi-rr-bulb" aria-hidden="true"></i> <strong>Individual affiliate partner links</strong> (Booking.com, Skyscanner, etc.) are managed separately under the
                     <a href="<?php echo esc_url(admin_url('edit.php?post_type=tw_affiliate')); ?>"><strong>Affiliate Links</strong></a> menu in the sidebar.
                 </div>
                 <?php submit_button('Save Banner Text'); ?>
@@ -3623,10 +3636,10 @@ function tw_render_blog_settings_page() {
 // WHATSAPP WIDGET SETTINGS PAGE
 // ============================================================
 function tw_render_wa_widget_settings_page() {
-    tw_settings_page_header('WhatsApp Chat Widget', '💬', 'The green floating chat button that appears on every page of your website.');
+    tw_settings_page_header('WhatsApp Chat Widget', '<i class="fi-rr-comment" aria-hidden="true"></i>', 'The green floating chat button that appears on every page of your website.');
     ?>
     <div class="tw-admin-note success">
-        ✅ <strong>No API needed.</strong> Just enter your WhatsApp number below and the widget will work immediately — visitors click the button and are taken straight to a WhatsApp chat with you.
+        <i class="fi-rr-check-circle" aria-hidden="true"></i> <strong>No API needed.</strong> Just enter your WhatsApp number below and the widget will work immediately — visitors click the button and are taken straight to a WhatsApp chat with you.
     </div>
 
     <div class="tw-admin-card">
@@ -3648,7 +3661,7 @@ function tw_render_wa_widget_settings_page() {
                         <th><label for="tw_wa_widget_greeting">Greeting Message in Popup</label></th>
                         <td>
                             <input type="text" id="tw_wa_widget_greeting" name="tw_wa_widget_greeting"
-                                   value="<?php echo esc_attr(get_option('tw_wa_widget_greeting','Hi there! 👋 How can we help you plan your perfect trip?')); ?>"
+                                   value="<?php echo esc_attr(get_option('tw_wa_widget_greeting','Hi there! How can we help you plan your perfect trip?')); ?>"
                                    class="large-text">
                             <p class="description">The chat bubble message visitors see when the popup opens. Keep it friendly and short.</p>
                         </td>
@@ -3686,10 +3699,10 @@ function tw_render_wa_widget_settings_page() {
 // WHATSAPP CLOUD API SETTINGS PAGE
 // ============================================================
 function tw_render_wa_api_settings_page() {
-    tw_settings_page_header('WhatsApp Cloud API', '🤖', 'Send automatic trip inquiry confirmations directly to a customer\'s WhatsApp when they fill the Plan A Trip form.');
+    tw_settings_page_header('WhatsApp Cloud API', '<i class="fi-rr-brain-circuit" aria-hidden="true"></i>', 'Send automatic trip inquiry confirmations directly to a customer\'s WhatsApp when they fill the Plan A Trip form.');
     ?>
     <div class="tw-admin-note warn">
-        ⚠️ <strong>Requires a Meta Business API account.</strong> This is separate from the chat widget above — it uses the official WhatsApp Business Cloud API to <em>proactively send</em> messages to customers without them messaging you first. You must have a verified Meta Business Account and an approved message template.
+        <i class="fi-rr-triangle-warning" aria-hidden="true"></i> <strong>Requires a Meta Business API account.</strong> This is separate from the chat widget above — it uses the official WhatsApp Business Cloud API to <em>proactively send</em> messages to customers without them messaging you first. You must have a verified Meta Business Account and an approved message template.
     </div>
 
     <div class="tw-admin-card">
@@ -3720,7 +3733,7 @@ function tw_render_wa_api_settings_page() {
                                 Do <strong>not</strong> use a temporary token — it expires after a few hours.
                             </p>
                             <?php if (get_option('tw_wa_api_token','')) : ?>
-                            <p style="color:green;font-weight:700;margin-top:6px">✓ Token saved</p>
+                            <p style="color:green;font-weight:700;margin-top:6px"><i class="fi-rr-check" aria-hidden="true"></i> Token saved</p>
                             <?php endif; ?>
                         </td>
                     </tr>
@@ -3776,7 +3789,7 @@ function tw_render_wa_api_settings_page() {
                 <li>Your team can then send the detailed PDF quotation manually in the same WhatsApp thread.</li>
             </ol>
             <div class="tw-admin-note info" style="margin-top:4px">
-                📖 <strong>Need a template?</strong> Create one at <a href="https://business.facebook.com/wa/manage/message-templates/" target="_blank">WhatsApp Manager → Message Templates</a>. Submit for approval — Meta usually approves within a few hours.
+                <i class="fi-rr-book-open-reader" aria-hidden="true"></i> <strong>Need a template?</strong> Create one at <a href="https://business.facebook.com/wa/manage/message-templates/" target="_blank">WhatsApp Manager → Message Templates</a>. Submit for approval — Meta usually approves within a few hours.
             </div>
         </div>
     </div>
@@ -4487,7 +4500,7 @@ add_action( 'restrict_manage_posts', function () {
     global $typenow;
     if ( $typenow !== 'tw_agency' ) { return; }
     $url = wp_nonce_url( admin_url( 'admin-post.php?action=tw_agency_export_csv' ), 'tw_agency_export' );
-    echo '<a href="' . esc_url( $url ) . '" class="button button-primary" style="margin-left:8px">⬇ Export CSV</a>';
+    echo '<a href="' . esc_url( $url ) . '" class="button button-primary" style="margin-left:8px"><i class="fi-rr-arrow-down" aria-hidden="true"></i> Export CSV</a>';
 } );
 
 /* CSV export handler */

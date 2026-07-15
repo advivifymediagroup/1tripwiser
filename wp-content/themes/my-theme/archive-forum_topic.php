@@ -47,11 +47,11 @@ function tw_forum_card( $post ) {
             <div class="tribe-topic-meta-top">
                 <?php if ( $cat ) : ?>
                     <a class="tribe-chip-cat" href="<?php echo esc_url( get_term_link( $cat ) ); ?>">
-                        <?php echo esc_html( tw_forum_cat_icon( $cat->term_id ) . ' ' . $cat->name ); ?>
+                        <?php echo tw_forum_cat_icon( $cat->term_id ) . ' ' . esc_html( $cat->name ); ?>
                     </a>
                 <?php endif; ?>
-                <?php if ( $pinned ) : ?><span class="tribe-flag tribe-flag-pin">📌 Pinned</span><?php endif; ?>
-                <?php if ( $solved ) : ?><span class="tribe-flag tribe-flag-solved">✅ Solved</span><?php endif; ?>
+                <?php if ( $pinned ) : ?><span class="tribe-flag tribe-flag-pin"><i class="fi-rr-thumbtack" aria-hidden="true"></i> Pinned</span><?php endif; ?>
+                <?php if ( $solved ) : ?><span class="tribe-flag tribe-flag-solved"><i class="fi-rr-check-circle" aria-hidden="true"></i> Solved</span><?php endif; ?>
             </div>
             <h2 class="tribe-topic-title">
                 <a href="<?php echo esc_url( get_permalink( $id ) ); ?>"><?php echo esc_html( get_the_title( $id ) ); ?></a>
@@ -64,9 +64,9 @@ function tw_forum_card( $post ) {
             </div>
         </div>
         <div class="tribe-topic-stats">
-            <span class="tribe-stat" title="Replies">💬 <?php echo esc_html( $replies ); ?></span>
-            <span class="tribe-stat" title="Likes">❤️ <?php echo esc_html( $likes ); ?></span>
-            <span class="tribe-stat" title="Views">👁️ <?php echo esc_html( $views ); ?></span>
+            <span class="tribe-stat" title="Replies"><i class="fi-rr-comment" aria-hidden="true"></i> <?php echo esc_html( $replies ); ?></span>
+            <span class="tribe-stat" title="Likes"><i class="fi-rr-heart" aria-hidden="true"></i> <?php echo esc_html( $likes ); ?></span>
+            <span class="tribe-stat" title="Views"><i class="fi-rr-eye" aria-hidden="true"></i> <?php echo esc_html( $views ); ?></span>
         </div>
     </article>
     <?php
@@ -119,7 +119,7 @@ $tw_pinned_ids = wp_list_pluck( $tw_pinned, 'ID' );
             <p class="tribe-hero-sub">
                 <?php
                 if ( $tw_is_cat && $tw_cat_term ) {
-                    echo esc_html( tw_forum_cat_icon( $tw_cat_term->term_id ) . ' ' . $tw_cat_term->name );
+                    echo tw_forum_cat_icon( $tw_cat_term->term_id ) . ' ' . esc_html( $tw_cat_term->name );
                 } elseif ( $tw_member ) {
                     echo 'Topics by ' . esc_html( $tw_member->display_name ?: $tw_member->user_login );
                 } else {
@@ -136,7 +136,7 @@ $tw_pinned_ids = wp_list_pluck( $tw_pinned, 'ID' );
 
             <div class="tribe-hero-actions">
                 <button type="button" class="tribe-start-btn" id="tribe-open-new">
-                    <span aria-hidden="true">✍️</span> Start a Discussion
+                    <span aria-hidden="true"><i class="fi-rr-edit-alt" aria-hidden="true"></i></span> Start a Discussion
                 </button>
                 <a class="tribe-ig-btn" href="https://www.instagram.com/1tripwiser_tribe/" target="_blank" rel="noopener noreferrer">
                     <i class="fab fa-instagram" aria-hidden="true"></i> Follow on Instagram
@@ -153,11 +153,11 @@ $tw_pinned_ids = wp_list_pluck( $tw_pinned, 'ID' );
             <!-- Category chips -->
             <nav class="tribe-cats" aria-label="Forum categories">
                 <a class="tribe-cat-chip <?php echo ( ! $tw_is_cat && ! $tw_member_id ) ? 'active' : ''; ?>"
-                   href="<?php echo esc_url( get_post_type_archive_link( 'forum_topic' ) ); ?>">🌐 All</a>
+                   href="<?php echo esc_url( get_post_type_archive_link( 'forum_topic' ) ); ?>"><i class="fi-rr-globe-alt" aria-hidden="true"></i> All</a>
                 <?php foreach ( tw_forum_category_list() as $term ) : ?>
                     <a class="tribe-cat-chip <?php echo ( $tw_is_cat && $tw_cat_term && $tw_cat_term->term_id === $term->term_id ) ? 'active' : ''; ?>"
                        href="<?php echo esc_url( get_term_link( $term ) ); ?>">
-                        <?php echo esc_html( tw_forum_cat_icon( $term->term_id ) . ' ' . $term->name ); ?>
+                        <?php echo tw_forum_cat_icon( $term->term_id ) . ' ' . esc_html( $term->name ); ?>
                     </a>
                 <?php endforeach; ?>
             </nav>
@@ -206,10 +206,10 @@ $tw_pinned_ids = wp_list_pluck( $tw_pinned, 'ID' );
                 <?php wp_reset_postdata(); ?>
             <?php else : ?>
                 <div class="tribe-empty">
-                    <div class="tribe-empty-icon">🗺️</div>
+                    <div class="tribe-empty-icon"><i class="fi-rr-map" aria-hidden="true"></i></div>
                     <h3>No discussions here yet</h3>
                     <p>Be the first to break the ice — start a topic and get the conversation going.</p>
-                    <button type="button" class="tribe-start-btn" id="tribe-open-new-2">✍️ Start a Discussion</button>
+                    <button type="button" class="tribe-start-btn" id="tribe-open-new-2"><i class="fi-rr-edit-alt" aria-hidden="true"></i> Start a Discussion</button>
                 </div>
             <?php endif; ?>
         </div>
@@ -219,7 +219,7 @@ $tw_pinned_ids = wp_list_pluck( $tw_pinned, 'ID' );
 
             <!-- Follow on Instagram -->
             <div class="tribe-widget tribe-ig-widget">
-                <h3 class="tribe-widget-title">📸 Tribe on Instagram</h3>
+                <h3 class="tribe-widget-title"><i class="fi-rr-camera" aria-hidden="true"></i> Tribe on Instagram</h3>
                 <p class="tribe-ig-widget-text">Daily travel inspo, member stories & trip drops.</p>
                 <a class="tribe-ig-btn tribe-ig-btn--block" href="https://www.instagram.com/1tripwiser_tribe/" target="_blank" rel="noopener noreferrer">
                     <i class="fab fa-instagram" aria-hidden="true"></i> @1tripwiser_tribe
@@ -228,7 +228,7 @@ $tw_pinned_ids = wp_list_pluck( $tw_pinned, 'ID' );
 
             <!-- Trending -->
             <div class="tribe-widget">
-                <h3 class="tribe-widget-title">🔥 Trending Now</h3>
+                <h3 class="tribe-widget-title"><i class="fi-rr-flame" aria-hidden="true"></i> Trending Now</h3>
                 <?php $tw_trending = tw_forum_trending( 5 ); if ( $tw_trending ) : ?>
                     <ul class="tribe-trending">
                         <?php foreach ( $tw_trending as $i => $t ) : ?>
@@ -236,7 +236,7 @@ $tw_pinned_ids = wp_list_pluck( $tw_pinned, 'ID' );
                                 <span class="tribe-trend-rank"><?php echo (int) ( $i + 1 ); ?></span>
                                 <a href="<?php echo esc_url( get_permalink( $t->ID ) ); ?>">
                                     <span class="tribe-trend-title"><?php echo esc_html( get_the_title( $t->ID ) ); ?></span>
-                                    <span class="tribe-trend-meta">💬 <?php echo esc_html( tw_forum_reply_count( $t->ID ) ); ?> · ❤️ <?php echo esc_html( tw_forum_topic_like_count( $t->ID ) ); ?></span>
+                                    <span class="tribe-trend-meta"><i class="fi-rr-comment" aria-hidden="true"></i> <?php echo esc_html( tw_forum_reply_count( $t->ID ) ); ?> · <i class="fi-rr-heart" aria-hidden="true"></i> <?php echo esc_html( tw_forum_topic_like_count( $t->ID ) ); ?></span>
                                 </a>
                             </li>
                         <?php endforeach; ?>
@@ -248,7 +248,7 @@ $tw_pinned_ids = wp_list_pluck( $tw_pinned, 'ID' );
 
             <!-- Leaderboard -->
             <div class="tribe-widget">
-                <h3 class="tribe-widget-title">🏆 Top Members</h3>
+                <h3 class="tribe-widget-title"><i class="fi-rr-trophy" aria-hidden="true"></i> Top Members</h3>
                 <?php $tw_board = tw_forum_leaderboard( 5 ); if ( $tw_board ) : ?>
                     <ul class="tribe-leaderboard">
                         <?php foreach ( $tw_board as $i => $row ) :
@@ -270,12 +270,12 @@ $tw_pinned_ids = wp_list_pluck( $tw_pinned, 'ID' );
 
             <!-- Categories list -->
             <div class="tribe-widget">
-                <h3 class="tribe-widget-title">📚 Categories</h3>
+                <h3 class="tribe-widget-title"><i class="fi-rr-books" aria-hidden="true"></i> Categories</h3>
                 <ul class="tribe-cat-links">
                     <?php foreach ( tw_forum_category_list() as $term ) : ?>
                         <li>
                             <a href="<?php echo esc_url( get_term_link( $term ) ); ?>">
-                                <span><?php echo esc_html( tw_forum_cat_icon( $term->term_id ) . ' ' . $term->name ); ?></span>
+                                <span><?php echo tw_forum_cat_icon( $term->term_id ) . ' ' . esc_html( $term->name ); ?></span>
                                 <span class="tribe-cat-count"><?php echo esc_html( $term->count ); ?></span>
                             </a>
                         </li>
@@ -290,7 +290,7 @@ $tw_pinned_ids = wp_list_pluck( $tw_pinned, 'ID' );
 <div class="tribe-modal" id="tribe-modal" aria-hidden="true">
     <div class="tribe-modal-backdrop" data-tribe-close></div>
     <div class="tribe-modal-box" role="dialog" aria-modal="true" aria-labelledby="tribe-modal-title">
-        <button type="button" class="tribe-modal-close" data-tribe-close aria-label="Close">✕</button>
+        <button type="button" class="tribe-modal-close" data-tribe-close aria-label="Close"><i class="fi-rr-cross-small" aria-hidden="true"></i></button>
         <h2 class="tribe-modal-title" id="tribe-modal-title">Start a Discussion</h2>
 
         <?php if ( is_user_logged_in() ) : ?>
@@ -303,7 +303,7 @@ $tw_pinned_ids = wp_list_pluck( $tw_pinned, 'ID' );
                 <label for="tribe-f-cat">Category</label>
                 <select id="tribe-f-cat" name="category">
                     <?php foreach ( tw_forum_category_list() as $term ) : ?>
-                        <option value="<?php echo esc_attr( $term->term_id ); ?>"><?php echo esc_html( tw_forum_cat_icon( $term->term_id ) . ' ' . $term->name ); ?></option>
+                        <option value="<?php echo esc_attr( $term->term_id ); ?>"><?php echo esc_html( $term->name ); ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>

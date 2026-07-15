@@ -37,6 +37,7 @@
                 <li><a href="<?php echo esc_url(get_post_type_archive_link('travel_package')); ?>">Packages</a></li>
                 <li><a href="<?php echo esc_url(home_url('/blog-affiliates/')); ?>">Blog</a></li>
                 <li><a href="<?php echo esc_url(mytheme_get_plan_trip_url()); ?>">Plan a Trip</a></li>
+                <li><a href="<?php echo esc_url(home_url('/travel-agency-registration/')); ?>">Travel Agency Registration</a></li>
                 <li><a href="#">About Us</a></li>
                 <li><a href="#">Contact</a></li>
             </ul>

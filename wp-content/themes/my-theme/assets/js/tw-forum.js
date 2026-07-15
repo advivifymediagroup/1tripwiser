@@ -134,10 +134,10 @@
             var count = btn.querySelector('.tribe-like-count');
             if (json.data.liked) {
                 btn.classList.add('is-liked');
-                if (icon) icon.textContent = '❤️';
+                if (icon) icon.innerHTML = '<i class="fi-rr-heart" aria-hidden="true"></i>';
             } else {
                 btn.classList.remove('is-liked');
-                if (icon) icon.textContent = '🤍';
+                if (icon) icon.innerHTML = '<i class="fi-rr-heart" aria-hidden="true"></i>';
             }
             if (count) count.textContent = json.data.count;
         });
@@ -154,12 +154,12 @@
             var badge = document.getElementById('tribe-solved-badge');
             if (json.data.solved) {
                 btn.classList.add('is-solved');
-                btn.textContent = '↩️ Mark unsolved';
-                if (badge) { badge.textContent = '✅ Solved'; badge.classList.remove('is-off'); }
+                btn.innerHTML = '<i class="fi-rr-undo" aria-hidden="true"></i> Mark unsolved';
+                if (badge) { badge.innerHTML = '<i class="fi-rr-check-circle" aria-hidden="true"></i> Solved'; badge.classList.remove('is-off'); }
             } else {
                 btn.classList.remove('is-solved');
-                btn.textContent = '✅ Mark solved';
-                if (badge) { badge.textContent = '⬜ Unsolved'; badge.classList.add('is-off'); }
+                btn.innerHTML = '<i class="fi-rr-check-circle" aria-hidden="true"></i> Mark solved';
+                if (badge) { badge.innerHTML = '<i class="fi-rr-checkbox" aria-hidden="true"></i> Unsolved'; badge.classList.add('is-off'); }
             }
         });
     });

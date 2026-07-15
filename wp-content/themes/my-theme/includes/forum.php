@@ -69,12 +69,12 @@ add_action( 'init', 'tw_forum_maybe_flush', 99 );
 function tw_forum_seed_categories() {
     if ( ! taxonomy_exists( 'forum_category' ) ) { return; }
     $defaults = array(
-        'general'        => array( 'Trip Talk',        '💬', 'General travel chat, intros and anything goes.' ),
-        'destinations'   => array( 'Destinations',     '🗺️', 'Place-specific questions, tips and hidden gems.' ),
-        'planning'       => array( 'Trip Planning',    '🧭', 'Itineraries, budgets, visas and logistics.' ),
-        'gear'           => array( 'Gear & Packing',   '🎒', 'What to pack, gear reviews and travel hacks.' ),
-        'group-trips'    => array( 'Group Trips',      '👥', 'Find travel buddies and discuss group tours.' ),
-        'experiences'    => array( 'Trip Stories',     '📸', 'Share your journeys, photos and memories.' ),
+        'general'        => array( 'Trip Talk',        '<i class="fi-rr-comment" aria-hidden="true"></i>', 'General travel chat, intros and anything goes.' ),
+        'destinations'   => array( 'Destinations',     '<i class="fi-rr-map" aria-hidden="true"></i>', 'Place-specific questions, tips and hidden gems.' ),
+        'planning'       => array( 'Trip Planning',    '<i class="fi-rr-location-crosshairs" aria-hidden="true"></i>', 'Itineraries, budgets, visas and logistics.' ),
+        'gear'           => array( 'Gear & Packing',   '<i class="fi-rr-backpack" aria-hidden="true"></i>', 'What to pack, gear reviews and travel hacks.' ),
+        'group-trips'    => array( 'Group Trips',      '<i class="fi-rr-users" aria-hidden="true"></i>', 'Find travel buddies and discuss group tours.' ),
+        'experiences'    => array( 'Trip Stories',     '<i class="fi-rr-camera" aria-hidden="true"></i>', 'Share your journeys, photos and memories.' ),
     );
     foreach ( $defaults as $slug => $data ) {
         if ( ! term_exists( $slug, 'forum_category' ) ) {
@@ -345,8 +345,8 @@ function tw_forum_meta_box_render( $post ) {
     wp_nonce_field( 'tw_forum_flags_save', 'tw_forum_flags_nonce' );
     $pinned = tw_forum_is_pinned( $post->ID );
     $solved = tw_forum_is_solved( $post->ID );
-    echo '<p><label><input type="checkbox" name="tw_topic_pinned" value="1" ' . checked( $pinned, true, false ) . '> 📌 Pin / feature this topic</label></p>';
-    echo '<p><label><input type="checkbox" name="tw_topic_solved" value="1" ' . checked( $solved, true, false ) . '> ✅ Mark as solved</label></p>';
+    echo '<p><label><input type="checkbox" name="tw_topic_pinned" value="1" ' . checked( $pinned, true, false ) . '> <i class="fi-rr-thumbtack" aria-hidden="true"></i> Pin / feature this topic</label></p>';
+    echo '<p><label><input type="checkbox" name="tw_topic_solved" value="1" ' . checked( $solved, true, false ) . '> <i class="fi-rr-check-circle" aria-hidden="true"></i> Mark as solved</label></p>';
     echo '<p style="color:#666;font-size:12px">Views: ' . esc_html( tw_forum_get_views( $post->ID ) ) . ' · Likes: ' . esc_html( tw_forum_topic_like_count( $post->ID ) ) . '</p>';
 }
 function tw_forum_meta_box_save( $post_id ) {
@@ -384,7 +384,7 @@ function tw_forum_category_list() {
 }
 function tw_forum_cat_icon( $term_id ) {
     $icon = get_term_meta( $term_id, 'tw_cat_icon', true );
-    return $icon ?: '💬';
+    return $icon ?: '<i class="fi-rr-comment" aria-hidden="true"></i>';
 }
 /** Human "x ago" for a post/comment date. */
 function tw_forum_ago( $time ) {
@@ -424,7 +424,7 @@ function tw_forum_render_reply( $comment, $args, $depth ) {
                     <button type="button"
                             class="tribe-like-btn tribe-like-sm <?php echo $liked ? 'is-liked' : ''; ?>"
                             data-type="reply" data-id="<?php echo esc_attr( $cid ); ?>">
-                        <span class="tribe-like-icon"><?php echo $liked ? '❤️' : '🤍'; ?></span>
+                        <span class="tribe-like-icon"><?php echo $liked ? '<i class="fi-rr-heart" aria-hidden="true"></i>' : '<i class="fi-rr-heart" aria-hidden="true"></i>'; ?></span>
                         <span class="tribe-like-count"><?php echo esc_html( $likes ); ?></span>
                     </button>
                     <?php
