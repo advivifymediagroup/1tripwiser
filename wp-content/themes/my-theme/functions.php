@@ -183,7 +183,7 @@ add_action( 'wp_ajax_nopriv_tw_ajax_register', 'tw_ajax_register' );
 
 // Register travel content types and taxonomies
 function mytheme_register_travel_content() {
-    register_taxonomy('destination_region', array('post', 'destination', 'itinerary', 'travel_package'), array(
+    register_taxonomy('destination_region', array('post', 'destination', 'itinerary', 'travel_package', 'group_trip', 'tw_event'), array(
         'labels' => array(
             'name' => __('Destination Regions', 'mytheme'),
             'singular_name' => __('Destination Region', 'mytheme'),
