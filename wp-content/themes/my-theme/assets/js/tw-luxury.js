@@ -26,7 +26,10 @@
     var FALL_DIST  = 70;   // viewBox units — scales with the SVG automatically
     var FALL_DUR   = 0.45; // fraction of scroll-progress each letter's own fall takes
     var SQUISH_AMT = 0.3;
-    var VIDEO_LERP = 0.15; // smoothing factor for the video seek
+    var VIDEO_LERP = 0.22; // smoothing factor for the video seek — the source clip is
+                            // encoded all-intra (every frame a keyframe) so seeks are
+                            // cheap; a tighter lerp tracks scroll more closely without
+                            // losing smoothness.
     var VIDEO_SPAN = 0.85; // video completes at this fraction of the scrolly scroll, then holds its last frame
 
     // Why-cards reveal: the headline fall played in reverse — each card rises
@@ -228,7 +231,7 @@
             // Only issue a seek when the previous one has completed — piling
             // seeks on top of an in-flight one is what freezes the decoder —
             // and skip redundant writes once the lerp has settled.
-            if (!video.seeking && Math.abs(video.currentTime - videoCurrent) > 0.005) {
+            if (!video.seeking && Math.abs(video.currentTime - videoCurrent) > 0.002) {
                 video.currentTime = videoCurrent;
             }
         }

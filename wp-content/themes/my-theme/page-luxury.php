@@ -28,6 +28,13 @@ $tw_luxury_trips_query = new WP_Query( array(
     'order'          => 'DESC',
 ) );
 $tw_luxury_has_trips = $tw_luxury_trips_query->have_posts();
+
+// Scroll-scrubbed hero video — admin-configurable under 1TripWiser → LUXURY Page,
+// falling back to the theme's bundled default clip when unset.
+$tw_luxury_video_url = get_option( 'tw_luxury_hero_video_url', '' );
+if ( ! $tw_luxury_video_url ) {
+    $tw_luxury_video_url = get_template_directory_uri() . '/assets/video/tw-luxury-hero.mp4';
+}
 ?>
 
 <main class="tw-luxury-page">
@@ -40,7 +47,7 @@ $tw_luxury_has_trips = $tw_luxury_trips_query->have_posts();
         <div class="tw-luxury-stage" aria-hidden="true">
             <!-- Scroll-scrubbed background video — driven entirely by tw-luxury.js, not autoplaying on its own timeline. -->
             <video class="tw-luxury-video" muted playsinline preload="auto">
-                <source src="<?php echo esc_url( get_template_directory_uri() . '/assets/video/tw-luxury-hero.mp4' ); ?>" type="video/mp4">
+                <source src="<?php echo esc_url( $tw_luxury_video_url ); ?>" type="video/mp4">
             </video>
             <div class="tw-luxury-stage-shade"></div>
         </div>

@@ -5332,6 +5332,17 @@ img, video, iframe, embed, object { max-width: 100%; height: auto; }
 .tw-sub-item:hover .tw-sub-link,
 .tw-sub-link:focus { color: var(--tw-navy); background: rgba(13,21,38,0.04); }
 .tw-sub-item.is-open .tw-sub-link { color: var(--tw-red); border-bottom-color: var(--tw-red); }
+/* Active-page indicator — a solid pill so the current section stays readable
+   no matter what's behind the translucent subheader (dark hero video, light
+   page, imagery, etc.). Same mechanism on every nav item; each keeps its own
+   accent color. */
+.tw-sub-link.is-active {
+    color: #fff; background: var(--tw-navy); border-radius: 999px; border-bottom-color: transparent;
+    margin: 8px 0; height: auto; padding: 8px 16px;
+}
+.tw-sub-link.is-active:hover { color: #fff; background: var(--tw-navy); }
+.tw-sub-link--luxe.is-active { background: #d4af37; color: var(--tw-navy) !important; }
+.tw-sub-link--womens.is-active { background: var(--tw-red); color: #fff !important; }
 .tw-sub-caret { font-size: 0.6rem; opacity: 0.7; transition: transform 0.2s; }
 .tw-sub-item:hover .tw-sub-caret,
 .tw-sub-item.is-open .tw-sub-caret { transform: rotate(180deg); }
