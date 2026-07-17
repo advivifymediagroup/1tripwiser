@@ -2361,6 +2361,14 @@ function mytheme_register_admin_menus() {
     );
     add_submenu_page(
         'tw-settings',
+        __('LUXURY Page', 'mytheme'),
+        __('<i class="fi-rr-gem" aria-hidden="true"></i> LUXURY Page', 'mytheme'),
+        'manage_options',
+        'tw-luxury-hero-settings',
+        'tw_render_luxury_hero_settings_page'
+    );
+    add_submenu_page(
+        'tw-settings',
         __('Plan A Trip Page', 'mytheme'),
         __('<i class="fi-rr-plane" aria-hidden="true"></i> Plan A Trip Page', 'mytheme'),
         'manage_options',
@@ -3058,6 +3066,8 @@ function mytheme_register_page_settings() {
     register_setting('tripwiser_hero_settings', 'tw_hero_float_img_tr', array('sanitize_callback' => 'esc_url_raw'));
     register_setting('tripwiser_hero_settings', 'tw_hero_float_img_ml', array('sanitize_callback' => 'esc_url_raw'));
     register_setting('tripwiser_hero_settings', 'tw_hero_float_img_br', array('sanitize_callback' => 'esc_url_raw'));
+    // LUXURY page scroll-scrubbed hero video
+    register_setting('tripwiser_luxury_settings', 'tw_luxury_hero_video_url', array('sanitize_callback' => 'esc_url_raw'));
     // WhatsApp widget + Cloud API
     register_setting('tripwiser_wa_settings', 'tw_wa_widget_number',  array('sanitize_callback' => 'sanitize_text_field'));
     register_setting('tripwiser_wa_settings', 'tw_wa_widget_message', array('sanitize_callback' => 'sanitize_text_field'));
@@ -3294,6 +3304,9 @@ function tw_render_overview_page() {
                 <a class="tw-admin-ql" href="<?php echo esc_url(admin_url('admin.php?page=tw-blog-settings')); ?>">
                     <span class="tw-admin-ql-icon"><i class="fi-rr-note" aria-hidden="true"></i></span><span>Blog &amp; Affiliates Page<br><small style="font-weight:500;color:#667085">Page hero &amp; partner banner</small></span>
                 </a>
+                <a class="tw-admin-ql" href="<?php echo esc_url(admin_url('admin.php?page=tw-luxury-hero-settings')); ?>">
+                    <span class="tw-admin-ql-icon"><i class="fi-rr-gem" aria-hidden="true"></i></span><span>LUXURY Page<br><small style="font-weight:500;color:#667085">Scroll-scrubbed hero video</small></span>
+                </a>
                 <a class="tw-admin-ql" href="<?php echo esc_url(admin_url('admin.php?page=tw-wa-widget-settings')); ?>">
                     <span class="tw-admin-ql-icon"><i class="fi-rr-comment" aria-hidden="true"></i></span><span>WhatsApp Widget<br><small style="font-weight:500;color:#667085">Floating chat button</small></span>
                 </a>
@@ -3321,6 +3334,7 @@ function tw_render_overview_page() {
                     <tr><td style="width:260px;font-weight:700">Hero Video</td><td><?php $v=get_option('tw_hero_video_url',''); echo $v ? '<a href="'.esc_url($v).'" target="_blank">'.esc_html(substr($v,0,60)).'…</a>' : '<span style="color:#999">Not set — using dark background</span>'; ?></td><td><a href="<?php echo esc_url(admin_url('admin.php?page=tw-hero-settings')); ?>">Edit →</a></td></tr>
                     <tr><td style="font-weight:700">Hero Image</td><td><?php $i=get_option('tw_hero_image_url',''); echo $i ? '<a href="'.esc_url($i).'" target="_blank">Set <i class="fi-rr-check" aria-hidden="true"></i></a>' : '<span style="color:#999">Not set</span>'; ?></td><td><a href="<?php echo esc_url(admin_url('admin.php?page=tw-hero-settings')); ?>">Edit →</a></td></tr>
                     <tr><td style="font-weight:700">Instagram Feed ID</td><td><?php echo esc_html(get_option('tw_instagram_feed_id', 1)); ?></td><td><a href="<?php echo esc_url(admin_url('admin.php?page=tw-hero-settings')); ?>">Edit →</a></td></tr>
+                    <tr><td style="font-weight:700">LUXURY Page Video</td><td><?php $lv=get_option('tw_luxury_hero_video_url',''); echo $lv ? '<a href="'.esc_url($lv).'" target="_blank">'.esc_html(substr($lv,0,60)).'…</a>' : '<span style="color:#999">Using theme default clip</span>'; ?></td><td><a href="<?php echo esc_url(admin_url('admin.php?page=tw-luxury-hero-settings')); ?>">Edit →</a></td></tr>
                     <tr><td style="font-weight:700">Plan A Trip WhatsApp</td><td><?php echo esc_html(get_option('tw_pat_whatsapp','Not set')); ?></td><td><a href="<?php echo esc_url(admin_url('admin.php?page=tw-plan-trip-settings')); ?>">Edit →</a></td></tr>
                     <tr><td style="font-weight:700">WhatsApp Widget Number</td><td><?php $n=get_option('tw_wa_widget_number',get_option('tw_pat_whatsapp','')); echo $n ? esc_html($n) : '<span style="color:#999">Not set</span>'; ?></td><td><a href="<?php echo esc_url(admin_url('admin.php?page=tw-wa-widget-settings')); ?>">Edit →</a></td></tr>
                     <tr><td style="font-weight:700">WhatsApp Cloud API</td><td><?php echo get_option('tw_wa_api_token','') ? '<span style="color:green"><i class="fi-rr-check" aria-hidden="true"></i> Configured</span>' : '<span style="color:#999">Not configured</span>'; ?></td><td><a href="<?php echo esc_url(admin_url('admin.php?page=tw-wa-api-settings')); ?>">Edit →</a></td></tr>
@@ -3493,6 +3507,74 @@ function tw_render_hero_settings_page() {
             frames[target] = wp.media({
                 title   : mtype === 'video' ? 'Select Hero Video' : 'Select Hero Image',
                 button  : { text: mtype === 'video' ? 'Use This Video' : 'Use This Image' },
+                library : { type: mtype },
+                multiple: false,
+            });
+            frames[target].on('select', function () {
+                var att = frames[target].state().get('selection').first().toJSON();
+                $('#' + target).val(att.url);
+            });
+            frames[target].open();
+        });
+    }(jQuery));
+    </script>
+    <?php tw_settings_page_footer();
+}
+
+// ============================================================
+// LUXURY PAGE SETTINGS
+// ============================================================
+function tw_render_luxury_hero_settings_page() {
+    wp_enqueue_media();
+    $tw_luxury_default_video = get_template_directory_uri() . '/assets/video/tw-luxury-hero.mp4';
+    tw_settings_page_header('LUXURY Page', '<i class="fi-rr-gem" aria-hidden="true"></i>', 'Swap the scroll-scrubbed background video on the /luxury/ page — no code changes needed.');
+    ?>
+    <div class="tw-admin-card">
+        <div class="tw-admin-card-head">
+            <div>
+                <h2>Scroll-Scrubbed Hero Video</h2>
+                <p>This clip plays frame-by-frame as visitors scroll through the hero, "why" cards and journeys grid — it never plays on its own timeline.</p>
+            </div>
+        </div>
+        <div class="tw-admin-card-body">
+            <form method="post" action="options.php">
+                <?php settings_fields('tripwiser_luxury_settings'); ?>
+                <table class="form-table">
+                    <tr>
+                        <th><label for="tw_luxury_hero_video_url">Video URL</label></th>
+                        <td>
+                            <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:6px">
+                                <input type="url" id="tw_luxury_hero_video_url" name="tw_luxury_hero_video_url"
+                                       value="<?php echo esc_attr(get_option('tw_luxury_hero_video_url','')); ?>"
+                                       style="flex:1;min-width:300px" placeholder="<?php echo esc_attr($tw_luxury_default_video); ?>">
+                                <button type="button" class="button button-secondary tw-media-pick" data-target="tw_luxury_hero_video_url" data-type="video">
+                                    <i class="fi-rr-folder" aria-hidden="true"></i> Select from Media Library
+                                </button>
+                            </div>
+                            <p class="description">
+                                Leave blank to use the theme's built-in default clip.<br>
+                                <strong>For smooth scrubbing:</strong> re-encode as all-intra H.264 before uploading (every frame a keyframe —
+                                <code>ffmpeg -i in.mp4 -vf "scale=1280:-2" -an -c:v libx264 -crf 23 -g 1 -keyint_min 1 -sc_threshold 0 -pix_fmt yuv420p -movflags +faststart out.mp4</code>).
+                                A normal export still works, but seeking will feel less smooth while scrolling. H.265/HEVC files will not play in Chrome — export H.264.
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+                <?php submit_button('Save LUXURY Settings', 'primary', 'submit', true, ['style'=>'margin-top:8px']); ?>
+            </form>
+        </div>
+    </div>
+    <script>
+    (function ($) {
+        var frames = {};
+        $('.tw-media-pick').on('click', function (e) {
+            e.preventDefault();
+            var target = $(this).data('target');
+            var mtype  = $(this).data('type');
+            if ( frames[target] ) { frames[target].open(); return; }
+            frames[target] = wp.media({
+                title   : 'Select LUXURY Hero Video',
+                button  : { text: 'Use This Video' },
                 library : { type: mtype },
                 multiple: false,
             });

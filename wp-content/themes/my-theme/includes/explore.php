@@ -750,6 +750,16 @@ function tw_womens_trips_showcase( $limit = 6 ) {
     <?php
 }
 
+/** Is the currently-viewed region term the given top-level term, or one of its descendants? */
+function tw_sub_region_is_active( $top_term_id ) {
+    if ( ! is_tax( 'destination_region' ) ) { return false; }
+    $queried = get_queried_object();
+    if ( ! $queried || empty( $queried->term_id ) ) { return false; }
+    if ( (int) $queried->term_id === (int) $top_term_id ) { return true; }
+    $ancestors = get_ancestors( $queried->term_id, 'destination_region' );
+    return in_array( (int) $top_term_id, array_map( 'intval', $ancestors ), true );
+}
+
 function tw_explore_subheader() {
     $top_terms = tw_region_top_terms();
     $events    = tw_recent_events( 8 );
@@ -760,9 +770,10 @@ function tw_explore_subheader() {
             <?php foreach ( $top_terms as $top ) :
                 $zones = tw_region_children( $top->term_id );
                 if ( empty( $zones ) ) { continue; }
+                $tw_sub_active = tw_sub_region_is_active( $top->term_id );
             ?>
             <div class="tw-sub-item has-mega">
-                <a class="tw-sub-link" href="<?php echo esc_url( get_term_link( $top ) ); ?>">
+                <a class="tw-sub-link<?php echo $tw_sub_active ? ' is-active' : ''; ?>" href="<?php echo esc_url( get_term_link( $top ) ); ?>">
                     <?php echo esc_html( $top->name ); ?>
                     <i class="fa-solid fa-chevron-down tw-sub-caret" aria-hidden="true"></i>
                 </a>
@@ -792,8 +803,9 @@ function tw_explore_subheader() {
             /* Group Trips — destinations that have group trips */
             $group_dests = tw_group_trip_destinations();
             ?>
+            <?php $tw_sub_active_gt = ( is_post_type_archive( 'group_trip' ) || is_singular( 'group_trip' ) ) && ! is_page_template( 'page-womens-trips.php' ); ?>
             <div class="tw-sub-item has-mega">
-                <a class="tw-sub-link" href="<?php echo esc_url( get_post_type_archive_link( 'group_trip' ) ); ?>">
+                <a class="tw-sub-link<?php echo $tw_sub_active_gt ? ' is-active' : ''; ?>" href="<?php echo esc_url( get_post_type_archive_link( 'group_trip' ) ); ?>">
                     Group Trips
                     <i class="fa-solid fa-chevron-down tw-sub-caret" aria-hidden="true"></i>
                 </a>
@@ -816,9 +828,12 @@ function tw_explore_subheader() {
                 </div>
             </div>
 
-            <?php $womens_trips = tw_recent_womens_trips( 8 ); ?>
+            <?php
+            $womens_trips       = tw_recent_womens_trips( 8 );
+            $tw_sub_active_wmns = is_page_template( 'page-womens-trips.php' );
+            ?>
             <div class="tw-sub-item has-mega">
-                <a class="tw-sub-link tw-sub-link--womens" href="<?php echo esc_url( tw_womens_trips_page_url() ); ?>">
+                <a class="tw-sub-link tw-sub-link--womens<?php echo $tw_sub_active_wmns ? ' is-active' : ''; ?>" href="<?php echo esc_url( tw_womens_trips_page_url() ); ?>">
                     Women's Trips
                     <i class="fa-solid fa-chevron-down tw-sub-caret" aria-hidden="true"></i>
                 </a>
@@ -846,9 +861,12 @@ function tw_explore_subheader() {
                 </div>
             </div>
 
-            <?php $luxe_trips = tw_recent_luxe_trips( 6 ); ?>
+            <?php
+            $luxe_trips        = tw_recent_luxe_trips( 6 );
+            $tw_sub_active_lux = is_page_template( 'page-luxury.php' ) || is_page_template( 'page-luxe.php' ) || is_singular( 'tw_luxe' );
+            ?>
             <div class="tw-sub-item has-mega">
-                <a class="tw-sub-link tw-sub-link--luxe" href="<?php echo esc_url( tw_luxe_page_url() ); ?>">
+                <a class="tw-sub-link tw-sub-link--luxe<?php echo $tw_sub_active_lux ? ' is-active' : ''; ?>" href="<?php echo esc_url( tw_luxe_page_url() ); ?>">
                     LUXE
                     <i class="fa-solid fa-chevron-down tw-sub-caret" aria-hidden="true"></i>
                 </a>
@@ -876,8 +894,9 @@ function tw_explore_subheader() {
                 </div>
             </div>
 
+            <?php $tw_sub_active_ev = is_page_template( 'page-events-festivals.php' ) || is_singular( 'tw_event' ) || is_tax( 'event_festival' ); ?>
             <div class="tw-sub-item has-mega">
-                <a class="tw-sub-link" href="<?php echo esc_url( tw_events_page_url() ); ?>">
+                <a class="tw-sub-link<?php echo $tw_sub_active_ev ? ' is-active' : ''; ?>" href="<?php echo esc_url( tw_events_page_url() ); ?>">
                     Events &amp; Festivals
                     <i class="fa-solid fa-chevron-down tw-sub-caret" aria-hidden="true"></i>
                 </a>
