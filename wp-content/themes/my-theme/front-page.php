@@ -197,6 +197,9 @@ if ( $tw_hero_video ) {
                     ); ?>
                 <?php endif; ?>
             </div>
+            <div class="view-all">
+                <a href="<?php echo esc_url(get_post_type_archive_link("itinerary")); ?>" class="btn-secondary">View All Itineraries</a>
+            </div>
         </div>
     </section>
 
