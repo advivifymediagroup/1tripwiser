@@ -1796,6 +1796,111 @@ h5, h6 {
   line-height: 1.7;
 }
 
+/* ══════════════════════════════════════════════════════════════
+   SINGLE DESTINATION — wide editorial layout
+   Sticky contents rail + one continuous article column, instead of
+   a stack of separately-boxed sections.
+   ══════════════════════════════════════════════════════════════ */
+.dest-single-wrap { max-width: 1320px; padding-top: 40px; padding-bottom: 72px; }
+.dest-single-layout {
+    display: grid;
+    grid-template-columns: 288px minmax(0, 1fr);
+    gap: 56px;
+    align-items: start;
+}
+
+/* ── Sticky rail ── */
+.dest-rail { position: sticky; top: 100px; display: flex; flex-direction: column; gap: 18px; }
+.dest-toc { background: #fff; border: 1px solid #e6edf3; border-radius: 10px; padding: 18px 16px; }
+.dest-toc-title {
+    font-family: 'Nunito', sans-serif; font-size: 0.72rem; font-weight: 800;
+    letter-spacing: 0.14em; text-transform: uppercase; color: rgba(13,21,38,0.45);
+    padding: 0 8px 12px; border-bottom: 1px solid #eef2f6; margin-bottom: 8px;
+}
+.dest-toc-list { list-style: none; margin: 0; padding: 0; counter-reset: dest-toc; }
+.dest-toc-list a {
+    display: grid; grid-template-columns: 26px minmax(0, 1fr); align-items: center; gap: 10px;
+    padding: 8px; border-radius: 8px; text-decoration: none;
+    color: #475569; font-size: 0.88rem; font-weight: 700; line-height: 1.4;
+    transition: background 0.18s, color 0.18s;
+}
+.dest-toc-list a:hover { background: #f2f8fb; color: var(--tw-blue); }
+.dest-toc-num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 26px; height: 26px; border-radius: 50%;
+    background: #eef9fc; border: 1px solid #d3eef5; color: var(--tw-blue);
+    font-size: 0.76rem; font-weight: 800; flex-shrink: 0;
+}
+.dest-toc-list a.is-current { background: rgba(37,215,242,0.12); color: var(--tw-navy); }
+.dest-toc-list a.is-current .dest-toc-num { background: var(--tw-blue); border-color: var(--tw-blue); color: #fff; }
+
+.dest-rail-card { background: #fff; border: 1px solid #e6edf3; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+.dest-rail-price { display: flex; flex-direction: column; gap: 2px; padding-bottom: 14px; border-bottom: 1px solid #eef2f6; }
+.dest-rail-price span { font-size: 0.72rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(13,21,38,0.45); }
+.dest-rail-price strong { font-family: 'Fraunces', serif; font-size: 1.7rem; color: var(--tw-red); line-height: 1.1; }
+.dest-rail-price small { font-size: 0.76rem; color: #6b7a8f; }
+.dest-rail-facts { margin: 0; display: flex; flex-direction: column; gap: 10px; }
+.dest-rail-fact { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; }
+.dest-rail-fact dt { font-size: 0.78rem; font-weight: 700; color: #6b7a8f; margin: 0; }
+.dest-rail-fact dd { font-size: 0.84rem; font-weight: 800; color: var(--tw-navy); margin: 0; text-align: right; }
+.dest-rail-btn {
+    display: block; text-align: center; padding: 11px 18px; border-radius: 8px;
+    background: var(--tw-red); color: #fff; font-size: 0.86rem; font-weight: 800;
+    text-decoration: none; transition: filter 0.2s;
+}
+.dest-rail-btn:hover { filter: brightness(1.06); }
+.dest-rail-btn--ghost { background: transparent; color: var(--tw-navy); border: 1.5px solid rgba(13,21,38,0.16); }
+.dest-rail-btn--ghost:hover { border-color: var(--tw-blue); color: var(--tw-blue); }
+
+/* ── Article column — one continuous read ── */
+.dest-article { max-width: 860px; margin-top: 0; }
+.dest-article-section { scroll-margin-top: 130px; }
+.dest-article-section + .dest-article-section { margin-top: 44px; }
+/* Reset the boxed heading treatment inherited from .ev-content-styled —
+   this layout wants headings that read as an article, not as panels.
+   Doubled-up class selector so these win over .ev-content-styled, which
+   has equal specificity but is defined later in this file. */
+.dest-article.ev-content-styled h2,
+.dest-article.ev-content-styled h3,
+.dest-article.ev-content-styled h4 {
+    background: none; border-left: none; border-radius: 0; padding: 0;
+}
+.dest-article.ev-content-styled h2 {
+    font-family: 'Fraunces', serif; font-weight: 400;
+    font-size: clamp(1.6rem, 2.4vw, 2.1rem); color: var(--tw-navy);
+    letter-spacing: -0.01em; line-height: 1.25; margin: 0 0 16px;
+}
+.dest-article.ev-content-styled h3 { font-family: 'Nunito', sans-serif; font-size: 1.12rem; font-weight: 800; color: var(--tw-navy); margin: 28px 0 10px; }
+.dest-article.ev-content-styled h4 { font-family: 'Nunito', sans-serif; font-size: 1rem; font-weight: 800; color: var(--tw-navy); margin: 22px 0 8px; }
+.dest-article.ev-content-styled p { font-size: 1rem; line-height: 1.8; color: #3f4b5a; margin: 0 0 16px; }
+.dest-article.ev-content-styled ul li,
+.dest-article.ev-content-styled ol li { font-size: 1rem; line-height: 1.8; color: #3f4b5a; }
+.dest-article.ev-content-styled ul,
+.dest-article.ev-content-styled ol { gap: 10px; margin-bottom: 20px; }
+.dest-article img { max-width: 100%; height: auto; border-radius: 10px; margin: 8px 0 20px; }
+.dest-article a { color: var(--tw-blue); }
+.dest-article.ev-content-styled .dest-lede p { font-size: 1.1rem; line-height: 1.75; color: #2b3644; }
+
+/* FAQ block sits inside the flow — strip its standalone section chrome */
+.dest-article .dest-article-faqs .tw-faq-section,
+.dest-article-faqs .tw-faq-section { margin: 0; padding: 0; background: none; border: none; }
+.dest-article.ev-content-styled .dest-article-faqs .tw-faq-section > h2,
+.dest-article.ev-content-styled .tw-faq-section > h2 {
+    font-family: 'Fraunces', serif; font-weight: 400;
+    font-size: clamp(1.6rem, 2.4vw, 2.1rem); color: var(--tw-navy); margin: 0 0 16px;
+    background: none; border-left: none; border-radius: 0; padding: 0;
+}
+
+.dest-article-cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 48px; padding-top: 28px; border-top: 1px solid #e6edf3; }
+.dest-article .tribe-back-link { display: inline-block; margin-top: 26px; }
+
+@media (max-width: 1080px) {
+    .dest-single-layout { grid-template-columns: 1fr; gap: 28px; }
+    .dest-rail { position: static; }
+    .dest-toc { padding: 14px; }
+    .dest-article { max-width: none; }
+}
+
 .destination-guide-content p:last-child,
 .destination-guide-content ul:last-child,
 .destination-guide-content ol:last-child {
