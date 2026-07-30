@@ -1801,6 +1801,12 @@ h5, h6 {
    Sticky contents rail + one continuous article column, instead of
    a stack of separately-boxed sections.
    ══════════════════════════════════════════════════════════════ */
+/* header.php forces .main-content{overflow-x:hidden!important}, which makes the
+   element a scroll container and silently kills position:sticky for everything
+   inside it. `clip` contains horizontal overflow the same way but does NOT
+   create a scroll container, so the rail can actually stick. */
+main.dest-single { overflow-x: clip !important; }
+
 .dest-single-wrap { max-width: 1320px; padding-top: 40px; padding-bottom: 72px; }
 .dest-single-layout {
     display: grid;
@@ -1809,8 +1815,17 @@ h5, h6 {
     align-items: start;
 }
 
-/* ── Sticky rail ── */
-.dest-rail { position: sticky; top: 100px; display: flex; flex-direction: column; gap: 18px; }
+/* ── Sticky rail ──
+   max-height + internal scroll so a long contents list can never grow taller
+   than the viewport (which would push its lower half permanently off-screen). */
+.dest-rail {
+    position: sticky; top: 100px;
+    display: flex; flex-direction: column; gap: 18px;
+    max-height: calc(100vh - 120px); overflow-y: auto;
+    scrollbar-width: thin;
+}
+.dest-rail::-webkit-scrollbar { width: 6px; }
+.dest-rail::-webkit-scrollbar-thumb { background: rgba(13,21,38,0.18); border-radius: 3px; }
 .dest-toc { background: #fff; border: 1px solid #e6edf3; border-radius: 10px; padding: 18px 16px; }
 .dest-toc-title {
     font-family: 'Nunito', sans-serif; font-size: 0.72rem; font-weight: 800;
@@ -1878,7 +1893,13 @@ h5, h6 {
 .dest-article.ev-content-styled ul,
 .dest-article.ev-content-styled ol { gap: 10px; margin-bottom: 20px; }
 .dest-article img { max-width: 100%; height: auto; border-radius: 10px; margin: 8px 0 20px; }
-.dest-article a { color: var(--tw-blue); }
+/* Only style genuine inline content links. .ev-content-styled a paints every
+   link blue-and-underlined, which was bleeding onto the CTA buttons and the
+   back link and making them look broken. */
+.dest-article.ev-content-styled .dest-article-cta a { text-decoration: none; }
+.dest-article.ev-content-styled .dest-article-cta .btn-primary,
+.dest-article.ev-content-styled .dest-article-cta .btn-secondary { color: #fff; }
+.dest-article.ev-content-styled .tribe-back-link { color: var(--tw-blue); text-decoration: none; }
 .dest-article.ev-content-styled .dest-lede p { font-size: 1.1rem; line-height: 1.75; color: #2b3644; }
 
 /* FAQ block sits inside the flow — strip its standalone section chrome */
