@@ -1,6 +1,9 @@
 <?php
 /**
- * Single Itinerary — cinematic hero layout.
+ * Single Itinerary — wide editorial layout: one continuous article column
+ * with a sticky table of contents alongside it, rather than a stack of
+ * separate boxed sections. Shares the .dest-* layout classes with
+ * single-destination.php (see style.css → "single-page editorial layout").
  *
  * @package my-theme
  */
@@ -35,9 +38,48 @@ while ( have_posts() ) :
     $region  = ( $regions && ! is_wp_error( $regions ) ) ? $regions[0] : null;
     $thumb   = get_the_post_thumbnail_url( $id, 'full' );
     $archive = get_post_type_archive_link( 'itinerary' );
+
+    /* Collect the day rows up-front so the contents list can mirror them
+       without running the ACF loop twice. */
+    $days = array();
+    if ( function_exists( 'have_rows' ) && have_rows( 'itinerary_days', $id ) ) {
+        while ( have_rows( 'itinerary_days', $id ) ) {
+            the_row();
+            $days[] = array(
+                'title'      => get_sub_field( 'day_title' ),
+                'details'    => get_sub_field( 'day_details' ),
+                'route'      => get_sub_field( 'day_route' ),
+                'stay'       => get_sub_field( 'day_stay' ),
+                'meals'      => get_sub_field( 'day_meals' ),
+                'transfer'   => get_sub_field( 'day_transfer' ),
+                'highlights' => get_sub_field( 'day_highlights' ),
+            );
+        }
+    }
+
+    $excerpt      = get_the_excerpt();
+    $body_content = trim( get_the_content() );
+    $has_faqs     = function_exists( 'have_rows' ) && have_rows( 'faqs', $id );
+
+    /* Single contents list covering the whole page, in render order. */
+    $toc = array();
+    if ( $excerpt )   { $toc[] = array( 'id' => 'itin-overview', 'label' => __( 'Overview', 'mytheme' ) ); }
+    if ( $route_sum ) { $toc[] = array( 'id' => 'itin-route',    'label' => __( 'Route', 'mytheme' ) ); }
+    if ( $days ) {
+        $day_children = array();
+        foreach ( $days as $d_i => $d ) {
+            $day_children[] = array(
+                'id'    => 'itin-day-' . ( $d_i + 1 ),
+                'label' => $d['title'] ?: sprintf( __( 'Day %d', 'mytheme' ), $d_i + 1 ),
+            );
+        }
+        $toc[] = array( 'id' => 'itin-days', 'label' => __( 'Day Wise Plan', 'mytheme' ), 'children' => $day_children );
+    }
+    if ( $body_content ) { $toc[] = array( 'id' => 'itin-more', 'label' => __( 'Good to Know', 'mytheme' ) ); }
+    if ( $has_faqs )     { $toc[] = array( 'id' => 'itin-faqs', 'label' => __( 'FAQs', 'mytheme' ) ); }
     ?>
 
-<main class="main-content explore-page ev-single">
+<main class="main-content explore-page dest-single">
 
     <!-- CINEMATIC HERO -->
     <section class="explore-hero ev-hero-cinematic<?php echo $thumb ? ' has-hero-img' : ''; ?>"
@@ -63,136 +105,189 @@ while ( have_posts() ) :
         </div>
     </section>
 
-    <div class="container ev-single-wrap">
-        <article class="ev-single-card">
+    <div class="container dest-single-wrap">
+        <div class="dest-single-layout">
 
-            <div class="ev-single-body">
-
-                <!-- 1. Description first (excerpt / post content intro) -->
-                <?php if ( get_the_excerpt() ) : ?>
-                <div class="ev-single-content ev-content-styled ev-itin-intro">
-                    <p><?php echo esc_html( get_the_excerpt() ); ?></p>
-                </div>
+            <!-- Sticky rail: contents + at-a-glance facts + CTAs -->
+            <aside class="dest-rail">
+                <?php if ( $toc ) : ?>
+                <nav class="dest-toc" aria-label="<?php esc_attr_e( 'On this page', 'mytheme' ); ?>">
+                    <div class="dest-toc-title"><?php esc_html_e( 'Table of Contents', 'mytheme' ); ?></div>
+                    <ol class="dest-toc-list">
+                        <?php foreach ( $toc as $t_i => $t ) : ?>
+                        <li>
+                            <a href="#<?php echo esc_attr( $t['id'] ); ?>" data-dest-toc="<?php echo esc_attr( $t['id'] ); ?>">
+                                <span class="dest-toc-num"><?php echo esc_html( $t_i + 1 ); ?></span>
+                                <span class="dest-toc-label"><?php echo esc_html( $t['label'] ); ?></span>
+                            </a>
+                            <?php if ( ! empty( $t['children'] ) ) : ?>
+                            <ol class="dest-toc-sublist">
+                                <?php foreach ( $t['children'] as $c_i => $c ) : ?>
+                                <li>
+                                    <a href="#<?php echo esc_attr( $c['id'] ); ?>" data-dest-toc="<?php echo esc_attr( $c['id'] ); ?>">
+                                        <span class="dest-toc-subnum"><?php echo esc_html( ( $t_i + 1 ) . '.' . ( $c_i + 1 ) ); ?></span>
+                                        <span class="dest-toc-label"><?php echo esc_html( $c['label'] ); ?></span>
+                                    </a>
+                                </li>
+                                <?php endforeach; ?>
+                            </ol>
+                            <?php endif; ?>
+                        </li>
+                        <?php endforeach; ?>
+                    </ol>
+                </nav>
                 <?php endif; ?>
 
-                <!-- 2. Trip details -->
-                <?php
-                $details = array_filter( array(
-                    array( '<i class="fa-solid fa-route"></i>',         'Route',       $route_sum ),
-                    array( '<i class="fa-solid fa-sun"></i>',           'Best Time',    $best_time ),
-                    array( '<i class="fa-regular fa-clock"></i>',       'Duration',     $duration ),
-                    array( '<i class="fa-solid fa-location-dot"></i>',  'Destination',  $dest_name ),
-                ), function( $d ) { return ! empty( $d[2] ); } );
-                if ( $details ) : ?>
-                <div class="ev-trip-details">
-                    <h3 class="ev-trip-details-title">Itinerary Details</h3>
-                    <div class="ev-trip-details-grid">
-                        <?php foreach ( $details as $d ) : ?>
-                        <div class="ev-trip-detail-item">
-                            <span class="ev-trip-detail-icon"><?php echo $d[0]; ?></span>
-                            <div>
-                                <span class="ev-trip-detail-label"><?php echo esc_html( $d[1] ); ?></span>
-                                <span class="ev-trip-detail-val"><?php echo esc_html( $d[2] ); ?></span>
-                            </div>
+                <div class="dest-rail-card">
+                    <?php if ( $price ) : ?>
+                    <div class="dest-rail-price">
+                        <span><?php esc_html_e( 'Starts from', 'mytheme' ); ?></span>
+                        <strong><?php echo esc_html( function_exists('mytheme_format_rupee_amount') ? mytheme_format_rupee_amount( $price ) : '₹' . $price ); ?></strong>
+                        <small><?php esc_html_e( 'per person', 'mytheme' ); ?></small>
+                    </div>
+                    <?php endif; ?>
+                    <?php
+                    $rail_rows = array_filter( array(
+                        __( 'Duration', 'mytheme' )    => $duration,
+                        __( 'Best Time', 'mytheme' )   => $best_time,
+                        __( 'Destination', 'mytheme' ) => $dest_name,
+                    ) );
+                    if ( $rail_rows ) : ?>
+                    <dl class="dest-rail-facts">
+                        <?php foreach ( $rail_rows as $label => $val ) : ?>
+                        <div class="dest-rail-fact">
+                            <dt><?php echo esc_html( $label ); ?></dt>
+                            <dd><?php echo esc_html( $val ); ?></dd>
                         </div>
                         <?php endforeach; ?>
-                    </div>
+                    </dl>
+                    <?php endif; ?>
+                    <a class="dest-rail-btn" href="<?php echo esc_url( $book_url ); ?>"><?php esc_html_e( 'Book Now', 'mytheme' ); ?></a>
+                    <a class="dest-rail-btn dest-rail-btn--ghost" href="<?php echo esc_url( mytheme_get_plan_trip_url() ); ?>"><?php esc_html_e( 'Customise Route', 'mytheme' ); ?></a>
                 </div>
-                <?php endif; ?>
+            </aside>
 
-                <!-- 3. Day-wise plan (accordion) -->
-                <?php if ( function_exists('have_rows') && have_rows('itinerary_days') ) : ?>
-                <section class="itinerary-days itinerary-timeline" style="margin-top:28px;">
-                    <div class="itinerary-days-heading">
-                        <span>Route timeline</span>
-                        <h2>Day Wise Plan</h2>
-                    </div>
-                    <?php $day_number = 1; ?>
-                    <?php while ( have_rows('itinerary_days') ) : the_row();
-                        $day_title      = get_sub_field('day_title');
-                        $day_details    = get_sub_field('day_details');
-                        $day_route      = get_sub_field('day_route');
-                        $day_stay       = get_sub_field('day_stay');
-                        $day_meals      = get_sub_field('day_meals');
-                        $day_transfer   = get_sub_field('day_transfer');
-                        $day_highlights = get_sub_field('day_highlights');
-                        $preview_text   = wp_trim_words( wp_strip_all_tags( $day_details ), 18, '...' );
-                    ?>
-                    <details class="itinerary-day" <?php echo $day_number === 1 ? 'open' : ''; ?>>
-                        <summary>
-                            <span class="itinerary-day-marker"><?php echo esc_html( $day_number ); ?></span>
-                            <span class="itinerary-day-summary">
-                                <strong><?php echo esc_html( $day_title ?: sprintf( __('Day %d','mytheme'), $day_number ) ); ?></strong>
-                                <?php if ( $day_route ) : ?><em><?php echo esc_html( $day_route ); ?></em><?php elseif ( $preview_text ) : ?><em><?php echo esc_html( $preview_text ); ?></em><?php endif; ?>
-                            </span>
-                            <span class="itinerary-day-toggle" aria-hidden="true"></span>
-                        </summary>
-                        <div class="itinerary-day-panel">
-                            <?php if ( $day_stay || $day_meals || $day_transfer || $day_highlights ) : ?>
-                            <div class="itinerary-day-chips">
-                                <?php if ( $day_stay )       : ?><span><i class="fa-solid fa-bed"></i><?php echo esc_html( $day_stay ); ?></span><?php endif; ?>
-                                <?php if ( $day_meals )      : ?><span><i class="fa-solid fa-utensils"></i><?php echo esc_html( $day_meals ); ?></span><?php endif; ?>
-                                <?php if ( $day_transfer )   : ?><span><i class="fa-solid fa-route"></i><?php echo esc_html( $day_transfer ); ?></span><?php endif; ?>
-                                <?php if ( $day_highlights ) : ?><span><i class="fa-solid fa-star"></i><?php echo esc_html( $day_highlights ); ?></span><?php endif; ?>
-                            </div>
-                            <?php endif; ?>
-                            <div class="itinerary-day-copy ev-content-styled"><?php echo wp_kses_post( wpautop( $day_details ) ); ?></div>
-                        </div>
-                    </details>
-                    <?php $day_number++; endwhile; ?>
+            <!-- One continuous article — no per-section boxes -->
+            <article class="dest-article ev-content-styled">
+
+                <?php if ( $excerpt ) : ?>
+                <section id="itin-overview" class="dest-article-section">
+                    <h2><?php esc_html_e( 'Overview', 'mytheme' ); ?></h2>
+                    <div class="dest-lede"><p><?php echo esc_html( $excerpt ); ?></p></div>
                 </section>
                 <?php endif; ?>
 
-                <!-- 4. Post editor content (if any additional content) -->
-                <?php if ( get_the_content() ) : ?>
-                <div class="ev-single-content ev-content-styled" style="margin-top:24px;">
-                    <?php the_content(); ?>
-                </div>
+                <?php if ( $route_sum ) : ?>
+                <section id="itin-route" class="dest-article-section">
+                    <h2><?php esc_html_e( 'Route', 'mytheme' ); ?></h2>
+                    <?php echo wp_kses_post( wpautop( $route_sum ) ); ?>
+                </section>
                 <?php endif; ?>
 
-                <?php mytheme_render_faq_section( $id, 'Itinerary FAQs' ); ?>
+                <?php if ( $days ) : ?>
+                <section id="itin-days" class="dest-article-section">
+                    <h2><?php esc_html_e( 'Day Wise Plan', 'mytheme' ); ?></h2>
+                    <div class="itinerary-days itinerary-timeline dest-itin-days">
+                        <?php foreach ( $days as $d_i => $d ) : $day_number = $d_i + 1; ?>
+                        <details class="itinerary-day" id="itin-day-<?php echo esc_attr( $day_number ); ?>" <?php echo $day_number === 1 ? 'open' : ''; ?>>
+                            <summary>
+                                <span class="itinerary-day-marker"><?php echo esc_html( $day_number ); ?></span>
+                                <span class="itinerary-day-summary">
+                                    <strong><?php echo esc_html( $d['title'] ?: sprintf( __('Day %d','mytheme'), $day_number ) ); ?></strong>
+                                    <?php
+                                    $preview_text = wp_trim_words( wp_strip_all_tags( $d['details'] ), 18, '...' );
+                                    if ( $d['route'] ) : ?><em><?php echo esc_html( $d['route'] ); ?></em>
+                                    <?php elseif ( $preview_text ) : ?><em><?php echo esc_html( $preview_text ); ?></em><?php endif; ?>
+                                </span>
+                                <span class="itinerary-day-toggle" aria-hidden="true"></span>
+                            </summary>
+                            <div class="itinerary-day-panel">
+                                <?php if ( $d['stay'] || $d['meals'] || $d['transfer'] || $d['highlights'] ) : ?>
+                                <div class="itinerary-day-chips">
+                                    <?php if ( $d['stay'] )       : ?><span><i class="fa-solid fa-bed"></i><?php echo esc_html( $d['stay'] ); ?></span><?php endif; ?>
+                                    <?php if ( $d['meals'] )      : ?><span><i class="fa-solid fa-utensils"></i><?php echo esc_html( $d['meals'] ); ?></span><?php endif; ?>
+                                    <?php if ( $d['transfer'] )   : ?><span><i class="fa-solid fa-route"></i><?php echo esc_html( $d['transfer'] ); ?></span><?php endif; ?>
+                                    <?php if ( $d['highlights'] ) : ?><span><i class="fa-solid fa-star"></i><?php echo esc_html( $d['highlights'] ); ?></span><?php endif; ?>
+                                </div>
+                                <?php endif; ?>
+                                <div class="itinerary-day-copy"><?php echo wp_kses_post( wpautop( $d['details'] ) ); ?></div>
+                            </div>
+                        </details>
+                        <?php endforeach; ?>
+                    </div>
+                </section>
+                <?php endif; ?>
 
-                <footer class="post-footer travel-cta" style="margin-top:28px;">
-                    <?php mytheme_render_trip_pdf_button( $id, 'Download PDF' ); ?>
-                    <a href="<?php echo esc_url( $archive ); ?>" class="btn-secondary">All Itineraries</a>
+                <?php if ( $body_content ) : ?>
+                <section id="itin-more" class="dest-article-section">
+                    <h2><?php esc_html_e( 'Good to Know', 'mytheme' ); ?></h2>
+                    <?php the_content(); ?>
+                </section>
+                <?php endif; ?>
+
+                <?php if ( $has_faqs ) : ?>
+                <section id="itin-faqs" class="dest-article-section dest-article-faqs">
+                    <?php mytheme_render_faq_section( $id, __( 'Itinerary FAQs', 'mytheme' ) ); ?>
+                </section>
+                <?php endif; ?>
+
+                <footer class="dest-article-cta">
+                    <?php mytheme_render_trip_pdf_button( $id, __( 'Download PDF', 'mytheme' ) ); ?>
+                    <a href="<?php echo esc_url( $archive ); ?>" class="btn-secondary"><?php esc_html_e( 'All Itineraries', 'mytheme' ); ?></a>
                 </footer>
 
-            </div><!-- /.ev-single-body -->
+                <a class="tribe-back-link" href="<?php echo esc_url( $archive ); ?>">← <?php esc_html_e( 'All Itineraries', 'mytheme' ); ?></a>
+            </article>
 
-            <!-- Booking sidebar -->
-            <aside class="ev-single-book">
-                <?php if ( $price ) : ?>
-                <div class="ev-single-price">
-                    <span>Starts from</span>
-                    <strong><?php echo esc_html( function_exists('mytheme_format_rupee_amount') ? mytheme_format_rupee_amount( $price ) : '₹' . $price ); ?></strong>
-                    <small>per person</small>
-                </div>
-                <?php endif; ?>
-                <?php
-                $sidebar_rows = array_filter( array(
-                    'Duration'    => $duration,
-                    'Best Time'   => $best_time,
-                    'Destination' => $dest_name,
-                ) );
-                if ( $sidebar_rows ) : ?>
-                <div class="ev-single-detail-list">
-                    <?php foreach ( $sidebar_rows as $label => $val ) : ?>
-                    <div class="ev-single-detail-row">
-                        <span class="ev-detail-label"><?php echo esc_html( $label ); ?></span>
-                        <span class="ev-detail-val"><?php echo esc_html( $val ); ?></span>
-                    </div>
-                    <?php endforeach; ?>
-                </div>
-                <?php endif; ?>
-                <a class="ev-single-btn" href="<?php echo esc_url( $book_url ); ?>">Book Now</a>
-                <a class="ev-single-btn ev-single-btn--ghost" href="<?php echo esc_url( mytheme_get_plan_trip_url() ); ?>">Customise Route</a>
-            </aside>
-
-        </article>
-        <a class="tribe-back-link" href="<?php echo esc_url( $archive ); ?>">← All Itineraries</a>
+        </div>
     </div>
 
 </main>
+
+<?php if ( $toc ) : ?>
+<script>
+/* Highlight the contents entry for whichever section is currently in view. */
+(function () {
+    var links = document.querySelectorAll('[data-dest-toc]');
+    if (!links.length) { return; }
+
+    var targets = [];
+    links.forEach(function (link) {
+        var el = document.getElementById(link.getAttribute('data-dest-toc'));
+        if (el) { targets.push({ link: link, el: el }); }
+    });
+    if (!targets.length) { return; }
+
+    function sync() {
+        /* Measure against the viewport — offsetTop is relative to the nearest
+           positioned ancestor, which is wrong inside this grid layout. */
+        var current = targets[0];
+        targets.forEach(function (t) {
+            if (t.el.getBoundingClientRect().top <= 140) { current = t; }
+        });
+        targets.forEach(function (t) {
+            t.link.classList.toggle('is-current', t === current);
+        });
+    }
+
+    var ticking = false;
+    window.addEventListener('scroll', function () {
+        if (ticking) { return; }
+        ticking = true;
+        window.requestAnimationFrame(function () { sync(); ticking = false; });
+    }, { passive: true });
+    sync();
+
+    /* Clicking a day in the contents should open that accordion panel. */
+    document.querySelectorAll('[data-dest-toc^="itin-day-"]').forEach(function (link) {
+        link.addEventListener('click', function () {
+            var panel = document.getElementById(link.getAttribute('data-dest-toc'));
+            if (panel && panel.tagName === 'DETAILS') { panel.open = true; }
+        });
+    });
+}());
+</script>
+<?php endif; ?>
 
 <?php
 endwhile;

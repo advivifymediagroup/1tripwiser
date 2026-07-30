@@ -1849,6 +1849,16 @@ main.dest-single { overflow-x: clip !important; }
 .dest-toc-list a.is-current { background: rgba(37,215,242,0.12); color: var(--tw-navy); }
 .dest-toc-list a.is-current .dest-toc-num { background: var(--tw-blue); border-color: var(--tw-blue); color: #fff; }
 
+/* Nested contents entries (itinerary days) */
+.dest-toc-sublist { list-style: none; margin: 2px 0 4px; padding: 0 0 0 12px; }
+.dest-toc-sublist a {
+    grid-template-columns: 30px minmax(0, 1fr);
+    font-size: 0.82rem; font-weight: 600; color: #64748b; padding: 6px 8px;
+}
+.dest-toc-subnum { font-size: 0.72rem; font-weight: 800; color: #94a3b8; }
+.dest-toc-sublist a.is-current { background: rgba(37,215,242,0.1); color: var(--tw-navy); }
+.dest-toc-sublist a.is-current .dest-toc-subnum { color: var(--tw-blue); }
+
 .dest-rail-card { background: #fff; border: 1px solid #e6edf3; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 14px; }
 .dest-rail-price { display: flex; flex-direction: column; gap: 2px; padding-bottom: 14px; border-bottom: 1px solid #eef2f6; }
 .dest-rail-price span { font-size: 0.72rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(13,21,38,0.45); }
@@ -1911,6 +1921,14 @@ main.dest-single { overflow-x: clip !important; }
     font-size: clamp(1.6rem, 2.4vw, 2.1rem); color: var(--tw-navy); margin: 0 0 16px;
     background: none; border-left: none; border-radius: 0; padding: 0;
 }
+
+/* Day accordion sits inside the article flow — give it breathing room and let
+   each day be a scroll target for the nested contents links. */
+.dest-itin-days { margin-top: 4px; }
+.dest-itin-days .itinerary-day { scroll-margin-top: 130px; }
+.dest-article.ev-content-styled .itinerary-day-copy p { font-size: 0.96rem; line-height: 1.75; }
+.dest-article.ev-content-styled .itinerary-day-copy ul li { font-size: 0.96rem; }
+.dest-article.ev-content-styled .itinerary-day summary strong { font-family: 'Nunito', sans-serif; }
 
 .dest-article-cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 48px; padding-top: 28px; border-top: 1px solid #e6edf3; }
 .dest-article .tribe-back-link { display: inline-block; margin-top: 26px; }
