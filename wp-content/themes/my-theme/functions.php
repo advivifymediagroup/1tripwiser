@@ -1454,7 +1454,10 @@ function mytheme_render_faq_section($post_id = null, $heading = 'Frequently Aske
                 }
                 ?>
                 <details class="tw-faq-item">
-                    <summary><?php echo esc_html($question); ?></summary>
+                    <summary>
+                        <span class="tw-faq-question"><?php echo esc_html($question); ?></span>
+                        <i class="fi-rr-angle-small-right tw-faq-toggle" aria-hidden="true"></i>
+                    </summary>
                     <div class="tw-faq-answer">
                         <?php echo wp_kses_post(wpautop($answer)); ?>
                     </div>
