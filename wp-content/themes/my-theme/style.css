@@ -2056,7 +2056,7 @@ main.dest-single { overflow-x: clip !important; }
 }
 
 .tw-package-enquiry-form button {
-  background: #ffffff00;
+  background: var(--tw-red);
   border: 0;
   border-radius: 6px;
   color: #ffffff;
@@ -2064,10 +2064,13 @@ main.dest-single { overflow-x: clip !important; }
   font-weight: 800;
   margin-top: 16px;
   padding: 12px 18px;
+  box-shadow: 0 6px 18px rgba(229,18,125,0.32);
+  transition: filter 0.2s ease, transform 0.2s ease;
 }
 
 .tw-package-enquiry-form button:hover {
-  background: #095654;
+  filter: brightness(1.06);
+  transform: translateY(-2px);
 }
 
 .tw-form-notice {
