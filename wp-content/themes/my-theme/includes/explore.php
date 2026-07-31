@@ -227,6 +227,121 @@ function tw_group_trip_register_acf_fields() {
 }
 add_action( 'acf/init', 'tw_group_trip_register_acf_fields' );
 
+/**
+ * Day-wise itinerary — one shared repeater for every trip type.
+ *
+ * Only the `itinerary` post type shipped with a day-wise repeater (its own
+ * "Itinerary Details" group in the DB). Packages, group trips, women's trips
+ * and events render day-wise plans on the front end but had no fields to fill
+ * them in, so the section never appeared. This registers the same repeater —
+ * same field name and sub-field names the single templates already read — on
+ * the post types that were missing it.
+ */
+function tw_register_daywise_acf_fields() {
+    if ( ! function_exists( 'acf_add_local_field_group' ) ) { return; }
+
+    acf_add_local_field_group( array(
+        'key'    => 'group_tw_daywise',
+        'title'  => 'Day Wise Itinerary',
+        'fields' => array(
+            array(
+                'key'          => 'field_twday_rep',
+                'label'        => 'Day Wise Plan',
+                'name'         => 'itinerary_days',
+                'type'         => 'repeater',
+                'instructions' => 'Add one row per day. Rows are numbered automatically — leave a field blank to hide it on the page.',
+                'layout'       => 'block',
+                'button_label' => 'Add Day',
+                'sub_fields'   => array(
+                    array( 'key' => 'field_twday_title',  'label' => 'Day Title',      'name' => 'day_title',       'type' => 'text',     'instructions' => 'e.g. Arrival in Leh & Acclimatisation', 'wrapper' => array( 'width' => '50' ) ),
+                    array( 'key' => 'field_twday_route',  'label' => 'Route',          'name' => 'day_route',       'type' => 'text',     'instructions' => 'e.g. Delhi → Leh',                      'wrapper' => array( 'width' => '50' ) ),
+                    array( 'key' => 'field_twday_det',    'label' => 'Day Details',    'name' => 'day_details',     'type' => 'wysiwyg',  'tabs' => 'all', 'toolbar' => 'full', 'media_upload' => 1 ),
+                    array( 'key' => 'field_twday_stay',   'label' => 'Stay',           'name' => 'day_stay',        'type' => 'text',     'instructions' => 'e.g. Hotel Grand Dragon',               'wrapper' => array( 'width' => '33' ) ),
+                    array( 'key' => 'field_twday_meals',  'label' => 'Meals',          'name' => 'day_meals',       'type' => 'text',     'instructions' => 'e.g. Breakfast, Dinner',                'wrapper' => array( 'width' => '33' ) ),
+                    array( 'key' => 'field_twday_trans',  'label' => 'Transfer',       'name' => 'day_transfer',    'type' => 'text',     'instructions' => 'e.g. Private SUV',                      'wrapper' => array( 'width' => '34' ) ),
+                    array( 'key' => 'field_twday_high',   'label' => 'Highlights',     'name' => 'day_highlights',  'type' => 'text',     'instructions' => 'Comma separated — e.g. Shanti Stupa, Leh Market' ),
+                ),
+            ),
+        ),
+        'location' => array(
+            array( array( 'param' => 'post_type', 'operator' => '==', 'value' => 'travel_package' ) ),
+            array( array( 'param' => 'post_type', 'operator' => '==', 'value' => 'group_trip' ) ),
+            array( array( 'param' => 'post_type', 'operator' => '==', 'value' => 'tw_event' ) ),
+        ),
+        'menu_order' => 5, 'position' => 'normal', 'style' => 'default', 'label_placement' => 'top', 'active' => true,
+    ) );
+}
+add_action( 'acf/init', 'tw_register_daywise_acf_fields' );
+
+/**
+ * The "FAQs" field group lives in the DB and was only attached to packages,
+ * itineraries, destinations and pages — so the FAQ blocks on single group trips
+ * and single events had no way to be filled in. Extend its location rules in
+ * code so this holds on every environment without a manual DB edit.
+ */
+function tw_extend_faq_field_group_locations( $group ) {
+    if ( empty( $group['key'] ) || 'group_6a0703b78ef04' !== $group['key'] ) { return $group; }
+
+    $existing = array();
+    foreach ( (array) $group['location'] as $rule_group ) {
+        foreach ( (array) $rule_group as $rule ) {
+            if ( isset( $rule['param'], $rule['value'] ) && 'post_type' === $rule['param'] ) {
+                $existing[] = $rule['value'];
+            }
+        }
+    }
+    foreach ( array( 'group_trip', 'tw_event' ) as $pt ) {
+        if ( ! in_array( $pt, $existing, true ) ) {
+            $group['location'][] = array( array( 'param' => 'post_type', 'operator' => '==', 'value' => $pt ) );
+        }
+    }
+    return $group;
+}
+add_filter( 'acf/load_field_group', 'tw_extend_faq_field_group_locations' );
+
+/**
+ * Itineraries have their own day-wise repeater (DB-stored "Itinerary Details"),
+ * but it only carries Day Title and Day Details — while single-itinerary.php
+ * renders route/stay/meals/transfer/highlights too. Add the missing sub-fields
+ * once, as real rows in the same DB-stored group, so itineraries edit day-wise
+ * plans the same way packages/group-trips/events now do.
+ *
+ * This is a one-time migration, not a local-field overlay: registering local
+ * fields with `parent` set to a DB-stored repeater's key replaces that
+ * repeater's DB sub-fields at runtime instead of merging with them — it was
+ * tried and silently dropped Day Title/Day Details, so acf_update_field()
+ * (ACF's own persistence API) is used instead to add real DB rows.
+ */
+function tw_extend_itinerary_daywise_subfields() {
+    if ( get_option( 'tw_itinerary_daywise_extended' ) ) { return; }
+    if ( ! function_exists( 'acf_update_field' ) || ! function_exists( 'acf_get_fields' ) ) { return; }
+
+    global $wpdb;
+    $key = $wpdb->get_var( $wpdb->prepare(
+        "SELECT f.post_name FROM {$wpdb->posts} f
+         INNER JOIN {$wpdb->posts} g ON g.ID = f.post_parent AND g.post_type = 'acf-field-group'
+         WHERE f.post_type = 'acf-field' AND f.post_excerpt = %s LIMIT 1",
+        'itinerary_days'
+    ) );
+    if ( ! $key ) { return; } // Field group not installed yet — try again next load.
+
+    $have = wp_list_pluck( (array) acf_get_fields( $key ), 'name' );
+    $extra = array(
+        array( 'key' => 'field_twitin_route', 'label' => 'Route',      'name' => 'day_route',      'type' => 'text', 'instructions' => 'e.g. Delhi → Leh', 'wrapper' => array( 'width' => '50' ), 'menu_order' => 1 ),
+        array( 'key' => 'field_twitin_stay',  'label' => 'Stay',       'name' => 'day_stay',       'type' => 'text', 'wrapper' => array( 'width' => '33' ), 'menu_order' => 3 ),
+        array( 'key' => 'field_twitin_meals', 'label' => 'Meals',      'name' => 'day_meals',      'type' => 'text', 'wrapper' => array( 'width' => '33' ), 'menu_order' => 4 ),
+        array( 'key' => 'field_twitin_trans', 'label' => 'Transfer',   'name' => 'day_transfer',   'type' => 'text', 'wrapper' => array( 'width' => '34' ), 'menu_order' => 5 ),
+        array( 'key' => 'field_twitin_high',  'label' => 'Highlights', 'name' => 'day_highlights', 'type' => 'text', 'instructions' => 'Comma separated', 'menu_order' => 6 ),
+    );
+    foreach ( $extra as $field ) {
+        if ( in_array( $field['name'], $have, true ) ) { continue; }
+        $field['parent'] = $key;
+        acf_update_field( $field );
+    }
+    update_option( 'tw_itinerary_daywise_extended', 1, false );
+}
+add_action( 'acf/init', 'tw_extend_itinerary_daywise_subfields', 20 );
+
 /* =============================================================
  * 1b. GROUP TRIPS — dedicated CPT with its own admin section
  * ============================================================= */

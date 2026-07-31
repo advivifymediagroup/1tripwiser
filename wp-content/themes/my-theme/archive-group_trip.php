@@ -35,13 +35,16 @@ if ( ! function_exists( 'tw_explore_card' ) ) {
     <section class="explore-hero">
         <div class="explore-hero-overlay" aria-hidden="true"></div>
         <div class="container explore-hero-inner">
+            <nav class="explore-crumbs" aria-label="Breadcrumb">
+                <a href="<?php echo esc_url( home_url('/') ); ?>">Home</a><span>›</span><span>Group Trips</span>
+            </nav>
             <span class="explore-hero-kicker">Travel together</span>
             <h1 class="explore-hero-title">Group <span style="color:#D83550">Trips</span></h1>
             <p class="explore-hero-sub">
                 <?php
                 echo $tw_region_term
-                    ? 'Group departures in ' . esc_html( $tw_region_term->name )
-                    : 'Join a like-minded crew on fixed-departure group adventures across India and beyond.';
+                    ? 'Fixed-departure group adventures in ' . esc_html( $tw_region_term->name ) . ', with a like-minded crew and everything planned for you.'
+                    : 'Join a like-minded crew of fellow travellers on fixed-departure group adventures across India and beyond, with everything planned for you.';
                 ?>
             </p>
         </div>

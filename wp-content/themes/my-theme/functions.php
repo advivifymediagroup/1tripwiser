@@ -3132,18 +3132,28 @@ function tw_whatsapp_widget() {
         var iconC  = btn ? btn.querySelector('.tw-wa-btn-close') : null;
         if (!btn || !popup) return;
 
+        // The open chat popup is tall enough to sit over the Instagram
+        // button, which shares the same bottom-right corner — hide it
+        // while the popup is up so the two never visually overlap. Looked
+        // up fresh on each call rather than cached at parse time — this
+        // script runs before the Instagram widget's markup (output later
+        // in wp_footer) exists in the DOM yet.
         function openPopup() {
             popup.hidden = false;
             btn.setAttribute('aria-expanded','true');
             if (badge)  badge.style.display  = 'none';
             if (iconO)  iconO.style.display  = 'none';
             if (iconC)  iconC.style.display  = '';
+            var igWidget = document.getElementById('tw-ig-widget');
+            if (igWidget) igWidget.classList.add('tw-ig-hidden');
         }
         function closePopup() {
             popup.hidden = true;
             btn.setAttribute('aria-expanded','false');
             if (iconO) iconO.style.display = '';
             if (iconC) iconC.style.display = 'none';
+            var igWidget = document.getElementById('tw-ig-widget');
+            if (igWidget) igWidget.classList.remove('tw-ig-hidden');
         }
 
         btn.addEventListener('click', function(e){
@@ -3164,6 +3174,29 @@ function tw_whatsapp_widget() {
     <?php
 }
 add_action('wp_footer', 'tw_whatsapp_widget');
+
+// ============================================================
+// FLOATING INSTAGRAM FOLLOW BUTTON
+// Sits just above the WhatsApp widget in the bottom-right corner.
+// ============================================================
+function tw_instagram_float_button() {
+    if ( is_admin() ) { return; }
+    $ig_url = get_option( 'tw_instagram_url', 'https://www.instagram.com/1tripwiser/' );
+    if ( ! $ig_url ) { return; }
+    /* Nudge up only when the WhatsApp widget is actually rendered, so the
+       button doesn't float in mid-air when no number is configured. */
+    $wa_active = (bool) get_option( 'tw_wa_widget_number', get_option( 'tw_pat_whatsapp', '' ) );
+    ?>
+    <div id="tw-ig-widget" class="<?php echo $wa_active ? 'has-wa' : ''; ?>">
+        <a class="tw-ig-btn" href="<?php echo esc_url( $ig_url ); ?>" target="_blank" rel="noopener"
+           aria-label="<?php esc_attr_e( 'Follow us on Instagram', 'mytheme' ); ?>">
+            <i class="fab fa-instagram" aria-hidden="true"></i>
+            <span class="tw-ig-btn-label"><?php esc_html_e( 'Follow us', 'mytheme' ); ?></span>
+        </a>
+    </div>
+    <?php
+}
+add_action('wp_footer', 'tw_instagram_float_button');
 
 // ============================================================
 // WHATSAPP CLOUD API — send message when inquiry submitted

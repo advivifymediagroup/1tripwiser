@@ -38,16 +38,6 @@ $has_trips = $trips_query->have_posts();
             <span class="explore-hero-kicker" style="background:rgba(216,53,80,0.1);border-color:rgba(216,53,80,0.3);color:#D83550;"><i class="fi-rr-sparkles" aria-hidden="true"></i> Travel Together · Grow Together</span>
             <h1 class="explore-hero-title">Women's <span style="color:#D83550">Group Trips</span></h1>
             <p class="explore-hero-sub">Safe, curated and empowering travel experiences designed exclusively for women. Join your tribe, explore the world.</p>
-
-            <div class="tw-womens-hero-stats">
-                <div class="tw-wstat"><strong>500+</strong><span>Women travelled</span></div>
-                <div class="tw-wstat-div"></div>
-                <div class="tw-wstat"><strong>25+</strong><span>Destinations</span></div>
-                <div class="tw-wstat-div"></div>
-                <div class="tw-wstat"><strong>100%</strong><span>Women-only groups</span></div>
-                <div class="tw-wstat-div"></div>
-                <div class="tw-wstat"><strong>Female</strong><span>Trip leaders</span></div>
-            </div>
         </div>
     </section>
 

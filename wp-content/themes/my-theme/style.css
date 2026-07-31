@@ -1807,25 +1807,28 @@ h5, h6 {
    create a scroll container, so the rail can actually stick. */
 main.dest-single { overflow-x: clip !important; }
 
-.dest-single-wrap { max-width: 1320px; padding-top: 40px; padding-bottom: 72px; }
+.dest-single-wrap { max-width: 1400px; padding-top: 40px; padding-bottom: 72px; }
+/* Three columns: contents on the left, article in the middle, booking card on
+   the right. Both rails stick; the article scrolls between them. */
 .dest-single-layout {
     display: grid;
-    grid-template-columns: 288px minmax(0, 1fr);
-    gap: 56px;
+    grid-template-columns: 264px minmax(0, 1fr) 304px;
+    gap: 44px;
     align-items: start;
 }
 
-/* ── Sticky rail ──
+/* ── Sticky rails ──
    max-height + internal scroll so a long contents list can never grow taller
    than the viewport (which would push its lower half permanently off-screen). */
-.dest-rail {
+.dest-rail, .dest-booking {
     position: sticky; top: 100px;
     display: flex; flex-direction: column; gap: 18px;
     max-height: calc(100vh - 120px); overflow-y: auto;
     scrollbar-width: thin;
 }
-.dest-rail::-webkit-scrollbar { width: 6px; }
-.dest-rail::-webkit-scrollbar-thumb { background: rgba(13,21,38,0.18); border-radius: 3px; }
+.dest-rail::-webkit-scrollbar, .dest-booking::-webkit-scrollbar { width: 6px; }
+.dest-rail::-webkit-scrollbar-thumb,
+.dest-booking::-webkit-scrollbar-thumb { background: rgba(13,21,38,0.18); border-radius: 3px; }
 .dest-toc { background: #fff; border: 1px solid #e6edf3; border-radius: 10px; padding: 18px 16px; }
 .dest-toc-title {
     font-family: 'Nunito', sans-serif; font-size: 0.72rem; font-weight: 800;
@@ -1878,7 +1881,7 @@ main.dest-single { overflow-x: clip !important; }
 .dest-rail-btn--ghost:hover { border-color: var(--tw-blue); color: var(--tw-blue); }
 
 /* ── Article column — one continuous read ── */
-.dest-article { max-width: 860px; margin-top: 0; }
+.dest-article { max-width: none; margin-top: 0; min-width: 0; }
 .dest-article-section { scroll-margin-top: 130px; }
 .dest-article-section + .dest-article-section { margin-top: 44px; }
 /* Reset the boxed heading treatment inherited from .ev-content-styled —
@@ -1933,9 +1936,15 @@ main.dest-single { overflow-x: clip !important; }
 .dest-article-cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 48px; padding-top: 28px; border-top: 1px solid #e6edf3; }
 .dest-article .tribe-back-link { display: inline-block; margin-top: 26px; }
 
+/* Tighten both rails before giving up on the three-column read. */
+@media (max-width: 1280px) {
+    .dest-single-layout { grid-template-columns: 228px minmax(0, 1fr) 264px; gap: 30px; }
+    .dest-toc { padding: 14px 12px; }
+    .dest-rail-card { padding: 16px; }
+}
 @media (max-width: 1080px) {
     .dest-single-layout { grid-template-columns: 1fr; gap: 28px; }
-    .dest-rail { position: static; }
+    .dest-rail, .dest-booking { position: static; max-height: none; overflow: visible; }
     .dest-toc { padding: 14px; }
     .dest-article { max-width: none; }
 }
@@ -1952,8 +1961,25 @@ main.dest-single { overflow-x: clip !important; }
 }
 
 .tw-package-enquiry {
-  background: #f8fbfc;
+  position: relative;
+  overflow: hidden;
+  background: #fff;
   border-top: 1px solid #e7eaf0;
+}
+/* Pink + blue glow overlay — same two-tone corner-glow pattern as the CTA
+   and Events sections (pink top-right, blue bottom-left), toned down so the
+   white form card stays legible on top. */
+.tw-package-enquiry::before {
+  content: ''; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(circle 520px at 100% 0%, rgba(229,18,125,0.16) 0%, rgba(229,18,125,0.07) 45%, transparent 75%),
+    radial-gradient(circle 520px at 0% 100%, rgba(37,215,242,0.14) 0%, rgba(37,215,242,0.05) 45%, transparent 70%);
+}
+.tw-package-enquiry-copy,
+.tw-package-enquiry-form,
+.tw-package-enquiry .tw-form-notice {
+  position: relative;
+  z-index: 1;
 }
 
 .tw-package-enquiry-copy {
@@ -1983,7 +2009,7 @@ main.dest-single { overflow-x: clip !important; }
 }
 
 .tw-package-enquiry-form {
-  background: #ffffff;
+  background: #ffffff00;
   border: 1px solid #e7eaf0;
   border-radius: 8px;
   padding: 20px;
@@ -2030,7 +2056,7 @@ main.dest-single { overflow-x: clip !important; }
 }
 
 .tw-package-enquiry-form button {
-  background: #0d6b68;
+  background: #ffffff00;
   border: 0;
   border-radius: 6px;
   color: #ffffff;
@@ -2116,7 +2142,7 @@ main.dest-single { overflow-x: clip !important; }
 }
 
 .itinerary-days {
-  padding: 0 30px 30px;
+ 
 }
 
 .itinerary-days-heading {
@@ -2142,16 +2168,6 @@ main.dest-single { overflow-x: clip !important; }
 
 .itinerary-timeline {
   position: relative;
-}
-
-.itinerary-timeline::before {
-  background: #d9edf3;
-  bottom: 36px;
-  content: "";
-  left: 50px;
-  position: absolute;
-  top: 96px;
-  width: 2px;
 }
 
 .itinerary-day {
@@ -3382,11 +3398,6 @@ body.page-template-page-plan-a-trip-php { padding-top: 0; }
 .tw-womens-hero-overlay { position:absolute; inset:0; pointer-events:none; z-index:0;
     background:radial-gradient(ellipse at 50% 0%,rgba(216,53,80,0.14) 0%,transparent 60%),
                radial-gradient(ellipse at 85% 80%,rgba(216,53,80,0.06) 0%,transparent 50%); }
-.tw-womens-hero-stats { display:flex; align-items:center; justify-content:center; gap:0; flex-wrap:wrap; margin-top:24px; background:#fff; border:1px solid rgba(13,21,38,0.08); border-radius:6px; padding:16px 24px; max-width:640px; margin-left:auto; margin-right:auto; box-shadow:0 8px 24px rgba(13,21,38,0.05); }
-.tw-wstat { text-align:center; padding:8px 20px; }
-.tw-wstat strong { display:block; font-family:'Fraunces',serif; font-size:1.6rem; color:var(--tw-red); letter-spacing:0.04em; line-height:1; }
-.tw-wstat span { font-size:0.7rem; font-weight:700; color:rgba(13,21,38,0.5); text-transform:uppercase; letter-spacing:0.1em; }
-.tw-wstat-div { width:1px; background:rgba(13,21,38,0.1); align-self:stretch; margin:8px 0; }
 
 /* Why cards */
 .tw-womens-why { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin:40px 0; }
@@ -3824,7 +3835,7 @@ body.page-template-page-plan-a-trip-php { padding-top: 0; }
 
 /* Responsive */
 @media(max-width:900px){ .tw-womens-grid{grid-template-columns:repeat(2,1fr)} .tw-womens-trips-grid{grid-template-columns:repeat(2,1fr)} .tw-womens-why{grid-template-columns:repeat(2,1fr)} }
-@media(max-width:600px){ .tw-womens-grid{grid-template-columns:1fr} .tw-womens-trips-grid{grid-template-columns:1fr} .tw-womens-why{grid-template-columns:1fr} .tw-wstat-div{display:none} .tw-womens-trust{flex-direction:column;align-items:stretch} }
+@media(max-width:600px){ .tw-womens-grid{grid-template-columns:1fr} .tw-womens-trips-grid{grid-template-columns:1fr} .tw-womens-why{grid-template-columns:1fr} .tw-womens-trust{flex-direction:column;align-items:stretch} }
 
 /* ── Content image carousel (auto-built by tw-carousel.js for 2+ images) ── */
 .tw-img-carousel { position:relative; overflow:hidden; border-radius:6px; margin:28px 0; background:var(--tw-navy); aspect-ratio:16/9; }
@@ -3867,13 +3878,12 @@ body.page-template-page-plan-a-trip-php { padding-top: 0; }
 /* ══════════════════════════════════════════════════════════════
    DESTINATION LANDING PAGE  (taxonomy-destination_region.php)
    ══════════════════════════════════════════════════════════════ */
-.dest-hero{position:relative;min-height:632px;margin-top:-162px;display:flex;align-items:flex-end;background:#eef3f6;overflow:hidden;}
-.dest-hero.has-hero-img{min-height:60vh;}
+.dest-hero{position:relative;background:#eef3f6;overflow:hidden;}
 /* Parallax background — translated by JS scroll handler */
 .dest-hero-bg{position:absolute;inset:-80px 0;background-size:cover;background-position:center;will-change:transform;z-index:0;}
 .dest-hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(7,12,26,0.96) 0%,rgba(7,12,26,0.52) 40%,rgba(7,12,26,0.15) 100%);pointer-events:none;z-index:1;}
 .dest-hero:not(.has-hero-img) .dest-hero-overlay{background:radial-gradient(ellipse at 50% 0%,rgba(27,147,176,0.14) 0%,transparent 60%);}
-.dest-hero-inner{position:relative;z-index:2;padding-bottom:52px;width:100%;}
+.dest-hero-inner{position:relative;z-index:2;width:100%;}
 /* Left-aligned breadcrumbs — overrides explore-crumbs justify-content:center */
 .dest-crumbs{display:flex !important;gap:8px;flex-wrap:wrap;justify-content:flex-start !important;font-size:0.82rem;color:rgba(13,21,38,0.5);margin-bottom:18px;}
 .dest-crumbs a{color:var(--tw-blue);text-decoration:none;font-weight:700;}
@@ -4562,6 +4572,31 @@ select.fi { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w
 .tw-wa-popup-cta:hover { background:#1ebe5d; color:#fff; }
 @media(max-width:400px) { .tw-wa-popup{width:calc(100vw - 32px);right:-8px} #tw-wa-widget{bottom:16px;right:16px} }
 
+/* ── Floating "Follow us on Instagram" button ──
+   Mirrors the WhatsApp widget; stacks above it when that one is present. */
+#tw-ig-widget { position:fixed; bottom:24px; right:24px; z-index:9998; font-family:'Nunito',sans-serif; transition:opacity 0.2s ease, transform 0.2s ease; }
+#tw-ig-widget.has-wa { bottom:98px; }
+/* Hidden while the WhatsApp chat popup is open — that popup is tall enough
+   to sit over this button's spot, so avoid the overlap instead of fighting
+   z-index against it. */
+#tw-ig-widget.tw-ig-hidden { opacity:0; transform:translateY(8px); pointer-events:none; }
+.tw-ig-btn {
+    display:flex; align-items:center; justify-content:center; gap:0; overflow:hidden;
+    height:60px; width:60px; padding:0 16px; border-radius:30px;
+    background:linear-gradient(45deg,#f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);
+    color:#fff; text-decoration:none; font-weight:800; font-size:0.9rem; white-space:nowrap;
+    box-shadow:0 8px 28px rgba(220,39,67,0.45);
+    transition:width 0.28s ease, gap 0.28s ease, box-shadow 0.25s, transform 0.25s;
+}
+.tw-ig-btn i { font-size:1.6rem; line-height:1; flex-shrink:0; }
+.tw-ig-btn-label { max-width:0; opacity:0; transition:max-width 0.28s ease, opacity 0.2s ease; }
+.tw-ig-btn:hover { width:172px; gap:10px; color:#fff; box-shadow:0 12px 36px rgba(220,39,67,0.55); transform:translateY(-2px); }
+.tw-ig-btn:hover .tw-ig-btn-label { max-width:120px; opacity:1; }
+@media(max-width:400px) {
+    #tw-ig-widget { bottom:16px; right:16px; }
+    #tw-ig-widget.has-wa { bottom:88px; }
+}
+
 /* ================================================================
    SCROLL REVEAL — data-reveal attribute system
    ================================================================ */
@@ -5143,12 +5178,10 @@ img, video, iframe, embed, object { max-width: 100%; height: auto; }
 .tribe-hero {
     position: relative;
     background: #eef3f6;
-    margin-top: -132px;
-    padding-top: 132px;
-    padding-bottom: 56px;
     overflow: hidden;
     text-align: center;
 }
+.tribe-hero > .container { width: 100%; }
 .tribe-hero-overlay {
     position: absolute; inset: 0;
     background: radial-gradient(ellipse at 50% 0%, rgba(27,147,176,0.16) 0%, transparent 60%),
@@ -5543,14 +5576,37 @@ img, video, iframe, embed, object { max-width: 100%; height: auto; }
    EXPLORE ARCHIVE — region / event term pages
    ================================================================ */
 .explore-page { background: #f5f8fa; }
+/* ── Shared sub-page hero metrics ──
+   Group Trips, Events, Women's Trips, Destination Regions, Destinations,
+   Packages, Itineraries, Blog and Tribe all use the same hero height and
+   header offset so the pages line up with each other. The height itself is
+   the Group Trips archive's original natural height (352px desktop /
+   305px mobile, measured pre-redesign) — not an arbitrary new value — so
+   this page looks exactly as it did before. The LUXE / LUXURY pages use
+   .tw-luxe-hero / .tw-luxury-hero and are deliberately excluded. */
+.explore-hero,
+.tribe-hero,
+.dest-hero {
+    min-height: var(--tw-subhero-h, 352px);
+    margin-top: -162px;
+    padding-top: 162px;
+    padding-bottom: 44px;
+    display: flex;
+    align-items: center;
+}
+/* Photo-backed heroes anchor their copy to the bottom of the image. */
+.explore-hero.has-hero-img,
+.dest-hero.has-hero-img { align-items: flex-end; }
+
 .explore-hero {
     position: relative;
     background: #eef3f6;
-    margin-top: -162px;
-    padding-top: 162px;
-    padding-bottom: 44px; overflow: hidden; text-align: center;
+    overflow: hidden; text-align: center;
 }
-@media (max-width: 600px) { .explore-hero:not(.has-hero-img) { margin-top: -112px; padding-top: 112px; } }
+.explore-hero > .container { width: 100%; }
+@media (max-width: 600px) {
+    .explore-hero, .tribe-hero, .dest-hero { margin-top: -112px; padding-top: 112px; min-height: 305px; }
+}
 .explore-hero-overlay {
     position: absolute; inset: 0; pointer-events: none;
     background: radial-gradient(ellipse at 50% 0%, rgba(27,147,176,0.16) 0%, transparent 60%),
@@ -5561,7 +5617,6 @@ img, video, iframe, embed, object { max-width: 100%; height: auto; }
    flat fill, unlike the plain .explore-hero case above. */
 .explore-hero.ev-hero-cinematic.has-hero-img {
     background-size: cover; background-position: center; background-repeat: no-repeat;
-    margin-top: -162px; padding-top: 162px; padding-bottom: 72px; min-height: 520px; display: flex; align-items: flex-end;
 }
 .explore-hero.ev-hero-cinematic.has-hero-img .explore-hero-inner { width: 100%; }
 .ev-hero-overlay {
@@ -5577,6 +5632,18 @@ img, video, iframe, embed, object { max-width: 100%; height: auto; }
 .ev-hero-fact a { color: inherit; text-decoration: none; }
 .ev-hero-fact--price { background: rgba(216,53,80,0.18); border-color: rgba(216,53,80,0.4); color: var(--tw-red); }
 .ev-hero-fact--price small { font-size: 0.72rem; opacity: 0.75; font-weight: 600; }
+/* Post-type kicker ("Group Trip · Bestseller") — sits in the fact row rather
+   than above the title, so the hero leads with the trip name. */
+.ev-hero-fact--kicker {
+    font-size: 0.72rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase;
+    background: rgba(255,255,255,0.16); border-color: rgba(255,255,255,0.28); color: #fff;
+}
+.ev-hero-fact-tag { color: #ffc7d1; }
+/* Light heroes (no background image) need dark-on-light instead. */
+.explore-hero:not(.has-hero-img) .ev-hero-fact { background: rgba(13,21,38,0.05); border-color: rgba(13,21,38,0.12); color: rgba(13,21,38,0.7); }
+.explore-hero:not(.has-hero-img) .ev-hero-fact--kicker { background: rgba(27,147,176,0.12); border-color: rgba(27,147,176,0.3); color: var(--tw-blue); }
+.explore-hero:not(.has-hero-img) .ev-hero-fact-tag { color: var(--tw-red); }
+.explore-hero:not(.has-hero-img) .ev-hero-fact--price { background: rgba(216,53,80,0.1); border-color: rgba(216,53,80,0.28); color: var(--tw-red); }
 .explore-hero-inner { position: relative; z-index: 1; }
 .explore-crumbs { font-size: 0.82rem; color: rgba(13,21,38,0.5); margin-bottom: 14px; display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
 .explore-crumbs a { color: var(--tw-blue); text-decoration: none; font-weight: 700; }

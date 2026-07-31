@@ -58,8 +58,19 @@ while ( have_posts() ) :
     $region  = ( $regions && ! is_wp_error( $regions ) ) ? $regions[0] : null;
     $thumb   = get_the_post_thumbnail_url( $id, 'full' );
 
-    /* archive URL */
-    $archive_url = get_post_type_archive_link( 'group_trip' ) ?: home_url( '/group-trips/' );
+    /* Archive URL + label. Women's trips are group_trip posts flagged via
+       package_trip_type, so they must point back at the Women's Trips page
+       rather than the generic Group Trips archive. */
+    $is_womens     = ( 'Women Trip' === $trip_type ) || ( $trip_type && false !== stripos( $trip_type, 'women' ) );
+    $archive_url   = get_post_type_archive_link( 'group_trip' ) ?: home_url( '/group-trips/' );
+    $archive_label = __( 'Group Trips', 'mytheme' );
+    if ( $is_womens && function_exists( 'tw_womens_trips_page_url' ) ) {
+        $womens_url = tw_womens_trips_page_url();
+        if ( $womens_url ) {
+            $archive_url   = $womens_url;
+            $archive_label = __( "Women's Trips", 'mytheme' );
+        }
+    }
 
     /* Day-wise plan — the repeater has gone by several names over time, so
        probe each, then collect the rows once so the contents list and the
@@ -118,14 +129,9 @@ while ( have_posts() ) :
 
             <nav class="explore-crumbs" aria-label="Breadcrumb">
                 <a href="<?php echo esc_url( home_url('/') ); ?>">Home</a><span>›</span>
-                <a href="<?php echo esc_url( $archive_url ); ?>">Group Trips</a><span>›</span>
+                <a href="<?php echo esc_url( $archive_url ); ?>"><?php echo esc_html( $archive_label ); ?></a><span>›</span>
                 <span><?php the_title(); ?></span>
             </nav>
-
-            <span class="explore-hero-kicker">
-                <?php echo esc_html( $trip_type ?: 'Group Trip' ); ?>
-                <?php if ( $tag ) : ?> &nbsp;·&nbsp; <span style="color:#D83550;"><?php echo esc_html( ucfirst( $tag ) ); ?></span><?php endif; ?>
-            </span>
 
             <h1 class="explore-hero-title"><?php the_title(); ?></h1>
 
@@ -138,6 +144,10 @@ while ( have_posts() ) :
 
             <!-- Quick-fact pills in hero -->
             <div class="ev-hero-facts">
+                <span class="ev-hero-fact ev-hero-fact--kicker">
+                    <?php echo esc_html( $is_womens ? __( "Women's Trip", 'mytheme' ) : ( $trip_type ?: __( 'Group Trip', 'mytheme' ) ) ); ?>
+                    <?php if ( $tag ) : ?>&nbsp;·&nbsp;<span class="ev-hero-fact-tag"><?php echo esc_html( ucfirst( $tag ) ); ?></span><?php endif; ?>
+                </span>
                 <?php if ( $dur ) : ?>
                     <span class="ev-hero-fact"><i class="fa-regular fa-clock ev-fact-icon"></i><?php echo esc_html( $dur ); ?></span>
                 <?php endif; ?>
@@ -167,7 +177,7 @@ while ( have_posts() ) :
     <div class="container dest-single-wrap">
         <div class="dest-single-layout">
 
-            <!-- Sticky rail: contents + at-a-glance facts + CTAs -->
+            <!-- Sticky contents rail -->
             <aside class="dest-rail">
                 <?php if ( $toc ) : ?>
                 <nav class="dest-toc" aria-label="<?php esc_attr_e( 'On this page', 'mytheme' ); ?>">
@@ -197,36 +207,6 @@ while ( have_posts() ) :
                 </nav>
                 <?php endif; ?>
 
-                <div class="dest-rail-card">
-                    <?php if ( $price ) : ?>
-                    <div class="dest-rail-price">
-                        <span><?php esc_html_e( 'Price per person', 'mytheme' ); ?></span>
-                        <strong><?php echo esc_html( function_exists('mytheme_format_rupee_amount') ? mytheme_format_rupee_amount( $price ) : $price ); ?></strong>
-                        <?php if ( $emi ) : ?><small><?php echo esc_html( $emi ); ?>/mo</small><?php endif; ?>
-                    </div>
-                    <?php endif; ?>
-                    <?php
-                    $rail_rows = array_filter( array(
-                        __( 'Duration', 'mytheme' )    => $dur,
-                        __( 'Departure', 'mytheme' )   => $departure,
-                        __( 'Group Size', 'mytheme' )  => $grp_size,
-                        __( 'Destination', 'mytheme' ) => $location,
-                        __( 'Trip Type', 'mytheme' )   => $trip_type,
-                        __( 'Best Time', 'mytheme' )   => $best_time,
-                    ) );
-                    if ( $rail_rows ) : ?>
-                    <dl class="dest-rail-facts">
-                        <?php foreach ( $rail_rows as $label => $val ) : ?>
-                        <div class="dest-rail-fact">
-                            <dt><?php echo esc_html( $label ); ?></dt>
-                            <dd><?php echo esc_html( $val ); ?></dd>
-                        </div>
-                        <?php endforeach; ?>
-                    </dl>
-                    <?php endif; ?>
-                    <a class="dest-rail-btn" href="<?php echo esc_url( $book_url ); ?>"><?php esc_html_e( 'Book Now', 'mytheme' ); ?></a>
-                    <a class="dest-rail-btn dest-rail-btn--ghost" href="<?php echo esc_url( mytheme_get_plan_trip_url() ); ?>"><?php esc_html_e( 'Customise this trip', 'mytheme' ); ?></a>
-                </div>
             </aside>
 
             <!-- One continuous article — no per-section boxes -->
@@ -295,11 +275,45 @@ while ( have_posts() ) :
 
                 <footer class="dest-article-cta">
                     <a href="<?php echo esc_url( $book_url ); ?>" class="btn-primary"><?php esc_html_e( 'Book Now', 'mytheme' ); ?></a>
-                    <a href="<?php echo esc_url( $archive_url ); ?>" class="btn-secondary"><?php esc_html_e( 'All Group Trips', 'mytheme' ); ?></a>
+                    <a href="<?php echo esc_url( $archive_url ); ?>" class="btn-secondary"><?php printf( esc_html__( 'All %s', 'mytheme' ), esc_html( $archive_label ) ); ?></a>
                 </footer>
 
-                <a class="tribe-back-link" href="<?php echo esc_url( $archive_url ); ?>">← <?php esc_html_e( 'All group trips', 'mytheme' ); ?></a>
+                <a class="tribe-back-link" href="<?php echo esc_url( $archive_url ); ?>">← <?php printf( esc_html__( 'All %s', 'mytheme' ), esc_html( strtolower( $archive_label ) ) ); ?></a>
             </article>
+
+            <!-- Sticky booking rail: price + at-a-glance facts + CTAs -->
+            <aside class="dest-booking">
+                <div class="dest-rail-card">
+                    <?php if ( $price ) : ?>
+                    <div class="dest-rail-price">
+                        <span><?php esc_html_e( 'Price per person', 'mytheme' ); ?></span>
+                        <strong><?php echo esc_html( function_exists('mytheme_format_rupee_amount') ? mytheme_format_rupee_amount( $price ) : $price ); ?></strong>
+                        <?php if ( $emi ) : ?><small><?php echo esc_html( $emi ); ?>/mo</small><?php endif; ?>
+                    </div>
+                    <?php endif; ?>
+                    <?php
+                    $rail_rows = array_filter( array(
+                        __( 'Duration', 'mytheme' )    => $dur,
+                        __( 'Departure', 'mytheme' )   => $departure,
+                        __( 'Group Size', 'mytheme' )  => $grp_size,
+                        __( 'Destination', 'mytheme' ) => $location,
+                        __( 'Trip Type', 'mytheme' )   => $trip_type,
+                        __( 'Best Time', 'mytheme' )   => $best_time,
+                    ) );
+                    if ( $rail_rows ) : ?>
+                    <dl class="dest-rail-facts">
+                        <?php foreach ( $rail_rows as $label => $val ) : ?>
+                        <div class="dest-rail-fact">
+                            <dt><?php echo esc_html( $label ); ?></dt>
+                            <dd><?php echo esc_html( $val ); ?></dd>
+                        </div>
+                        <?php endforeach; ?>
+                    </dl>
+                    <?php endif; ?>
+                    <a class="dest-rail-btn" href="<?php echo esc_url( $book_url ); ?>"><?php esc_html_e( 'Book Now', 'mytheme' ); ?></a>
+                    <a class="dest-rail-btn dest-rail-btn--ghost" href="<?php echo esc_url( mytheme_get_plan_trip_url() ); ?>"><?php esc_html_e( 'Customise this trip', 'mytheme' ); ?></a>
+                </div>
+            </aside>
 
         </div>
     </div>

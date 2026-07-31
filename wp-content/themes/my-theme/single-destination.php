@@ -58,12 +58,12 @@ while ( have_posts() ) :
                 <a href="<?php echo esc_url( $archive ); ?>">Destinations</a><span>›</span>
                 <span><?php the_title(); ?></span>
             </nav>
-            <span class="explore-hero-kicker">Destination</span>
             <h1 class="explore-hero-title"><?php the_title(); ?></h1>
             <?php if ( $destination['country'] ) : ?>
             <p class="explore-hero-sub"><?php echo esc_html( $destination['country'] ); ?></p>
             <?php endif; ?>
             <div class="ev-hero-facts">
+                <span class="ev-hero-fact ev-hero-fact--kicker"><?php esc_html_e( 'Destination', 'mytheme' ); ?></span>
                 <?php if ( $destination['country'] )        : ?><span class="ev-hero-fact"><i class="fa-solid fa-location-dot ev-fact-icon"></i><?php echo esc_html( $destination['country'] ); ?></span><?php endif; ?>
                 <?php if ( $destination['best_time'] )      : ?><span class="ev-hero-fact"><i class="fa-solid fa-sun ev-fact-icon"></i><?php echo esc_html( $destination['best_time'] ); ?></span><?php endif; ?>
                 <?php if ( $destination['ideal_duration'] ) : ?><span class="ev-hero-fact"><i class="fa-regular fa-clock ev-fact-icon"></i><?php echo esc_html( $destination['ideal_duration'] ); ?></span><?php endif; ?>
@@ -75,7 +75,7 @@ while ( have_posts() ) :
     <div class="container dest-single-wrap">
         <div class="dest-single-layout">
 
-            <!-- Sticky rail: contents + at-a-glance facts + CTAs -->
+            <!-- Sticky contents rail -->
             <aside class="dest-rail">
                 <?php if ( $toc ) : ?>
                 <nav class="dest-toc" aria-label="<?php esc_attr_e( 'On this page', 'mytheme' ); ?>">
@@ -93,33 +93,6 @@ while ( have_posts() ) :
                 </nav>
                 <?php endif; ?>
 
-                <div class="dest-rail-card">
-                    <?php if ( $destination['starting_price'] ) : ?>
-                    <div class="dest-rail-price">
-                        <span><?php esc_html_e( 'Packages from', 'mytheme' ); ?></span>
-                        <strong><?php echo esc_html( $destination['starting_price'] ); ?></strong>
-                        <small><?php esc_html_e( 'per person', 'mytheme' ); ?></small>
-                    </div>
-                    <?php endif; ?>
-                    <?php
-                    $rail_rows = array_filter( array(
-                        __( 'Country', 'mytheme' )        => $destination['country'],
-                        __( 'Best Time', 'mytheme' )      => $destination['best_time'],
-                        __( 'Ideal Duration', 'mytheme' ) => $destination['ideal_duration'],
-                    ) );
-                    if ( $rail_rows ) : ?>
-                    <dl class="dest-rail-facts">
-                        <?php foreach ( $rail_rows as $label => $val ) : ?>
-                        <div class="dest-rail-fact">
-                            <dt><?php echo esc_html( $label ); ?></dt>
-                            <dd><?php echo esc_html( $val ); ?></dd>
-                        </div>
-                        <?php endforeach; ?>
-                    </dl>
-                    <?php endif; ?>
-                    <a class="dest-rail-btn" href="<?php echo esc_url( get_post_type_archive_link('travel_package') ); ?>"><?php esc_html_e( 'View Packages', 'mytheme' ); ?></a>
-                    <a class="dest-rail-btn dest-rail-btn--ghost" href="<?php echo esc_url( mytheme_get_plan_trip_url() ); ?>"><?php esc_html_e( 'Plan a Trip', 'mytheme' ); ?></a>
-                </div>
             </aside>
 
             <!-- One continuous article — no per-section boxes -->
@@ -157,6 +130,37 @@ while ( have_posts() ) :
 
                 <a class="tribe-back-link" href="<?php echo esc_url( $archive ); ?>">← <?php esc_html_e( 'All Destinations', 'mytheme' ); ?></a>
             </article>
+
+            <!-- Sticky booking rail: price + at-a-glance facts + CTAs -->
+            <aside class="dest-booking">
+                <div class="dest-rail-card">
+                    <?php if ( $destination['starting_price'] ) : ?>
+                    <div class="dest-rail-price">
+                        <span><?php esc_html_e( 'Packages from', 'mytheme' ); ?></span>
+                        <strong><?php echo esc_html( $destination['starting_price'] ); ?></strong>
+                        <small><?php esc_html_e( 'per person', 'mytheme' ); ?></small>
+                    </div>
+                    <?php endif; ?>
+                    <?php
+                    $rail_rows = array_filter( array(
+                        __( 'Country', 'mytheme' )        => $destination['country'],
+                        __( 'Best Time', 'mytheme' )      => $destination['best_time'],
+                        __( 'Ideal Duration', 'mytheme' ) => $destination['ideal_duration'],
+                    ) );
+                    if ( $rail_rows ) : ?>
+                    <dl class="dest-rail-facts">
+                        <?php foreach ( $rail_rows as $label => $val ) : ?>
+                        <div class="dest-rail-fact">
+                            <dt><?php echo esc_html( $label ); ?></dt>
+                            <dd><?php echo esc_html( $val ); ?></dd>
+                        </div>
+                        <?php endforeach; ?>
+                    </dl>
+                    <?php endif; ?>
+                    <a class="dest-rail-btn" href="<?php echo esc_url( get_post_type_archive_link('travel_package') ); ?>"><?php esc_html_e( 'View Packages', 'mytheme' ); ?></a>
+                    <a class="dest-rail-btn dest-rail-btn--ghost" href="<?php echo esc_url( mytheme_get_plan_trip_url() ); ?>"><?php esc_html_e( 'Plan a Trip', 'mytheme' ); ?></a>
+                </div>
+            </aside>
 
         </div>
     </div>
