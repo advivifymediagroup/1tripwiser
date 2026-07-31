@@ -146,7 +146,7 @@ if ($sp_show_comments) {
                 <?php echo $sp_content_html; ?>
 
                 <?php if ($sp_tags) : ?>
-                <div class="sp-tags">
+                <div class="sp-tags dest-article-section">
                     <span class="sp-tags-label">Tags:&nbsp;</span>
                     <?php foreach ($sp_tags as $tag) : ?>
                     <a href="<?php echo esc_url(get_tag_link($tag->term_id)); ?>" class="sp-tag">#<?php echo esc_html($tag->name); ?></a>
@@ -217,6 +217,22 @@ if ($sp_show_comments) {
         </div>
     </div>
 </main>
+
+<script>
+/* A missing/deleted media file leaves an empty gap the size of the image
+   (or the browser's broken-image icon) right in the middle of the article.
+   Collapse it instead — hide the image (and its figure wrapper, if any) the
+   moment it fails to load. */
+(function () {
+    document.querySelectorAll('.sp-content img').forEach(function (img) {
+        function hide() { (img.closest('figure, p') || img).style.display = 'none'; }
+        img.addEventListener('error', hide);
+        /* Images fetched before this script ran may have already failed —
+           the error event only fires once, at the moment of failure. */
+        if (img.complete && img.naturalWidth === 0) { hide(); }
+    });
+}());
+</script>
 
 <?php if ($sp_toc) : ?>
 <script>
