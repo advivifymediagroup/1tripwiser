@@ -4156,7 +4156,7 @@ body.page-template-page-plan-a-trip-php { padding-top: 0; }
 .ba-hero > * { position: relative; z-index: 1; }
 .ba-hero-kicker { display: inline-block; font-size: 0.72rem; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; color: var(--tw-blue); background: rgba(27,147,176,0.14); border: 1px solid rgba(27,147,176,0.35); border-radius: 4px; padding: 5px 18px; margin-bottom: 18px; }
 .ba-hero-title { font-family: 'Fraunces', serif; font-weight: 400; font-size: clamp(2.4rem,6vw,4rem); color: var(--tw-navy); letter-spacing: -0.01em; line-height: 1.05; margin-bottom: 16px; }
-.ba-hero-title span { background: linear-gradient(135deg, var(--tw-red) 0%, var(--tw-blue) 60%, var(--tw-red) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.ba-hero-title span { color: var(--tw-red); }
 .ba-hero-sub { font-size: 1rem; color: rgba(13,21,38,0.62); max-width: 580px; margin: 0 auto; line-height: 1.7; }
 
 /* Affiliate banner — floating white card overlapping the hero bottom */
@@ -4275,9 +4275,11 @@ table.ba-table tr:hover td { background: rgba(27,147,176,0.12); }
 .sp-hero-avatar { width: 34px; height: 34px; border-radius: 50%; border: 2px solid rgba(216,53,80,0.55); overflow: hidden; display: flex; align-items: center; justify-content: center; background: rgba(216,53,80,0.12); font-size: 1rem; flex-shrink: 0; }
 .sp-hero-avatar img { width: 100%; height: 100%; object-fit: cover; }
 .sp-hero-divider { color: rgba(255,255,255,0.2); }
-.sp-wrap { max-width: 880px; margin: 0 auto; padding: 48px 24px 88px; }
-.sp-content { background: #fff; border-radius: 6px; border: 1px solid #e0e8f0; padding: 52px 56px; box-shadow: 0 6px 24px rgba(0,0,0,0.07); margin-bottom: 36px; font-size: 1.06rem; line-height: 1.88; color: #1a2535; }
-.sp-content h2 { font-family: 'Fraunces', serif; font-size: 2rem; color: var(--tw-navy); letter-spacing: 0.03em; margin: 2em 0 0.6em; padding-top: 0.4em; border-top: 2px solid #e0e8f0; }
+/* Article column — continuous read, same treatment as the other single
+   templates use for .dest-article. No boxed card here on purpose; that
+   "text in a container" look is exactly what this replaced. */
+.sp-content { font-size: 1.06rem; line-height: 1.88; color: #1a2535; }
+.sp-content h2 { font-family: 'Fraunces', serif; font-size: 2rem; color: var(--tw-navy); letter-spacing: 0.03em; margin: 1em 0 0.6em; }
 .sp-content h3 { font-family: 'Fraunces', serif; font-size: 1.55rem; color: var(--tw-navy); letter-spacing: 0.03em; margin: 1.6em 0 0.5em; }
 .sp-content h4 { font-size: 1.1rem; font-weight: 800; color: var(--tw-navy); margin: 1.4em 0 0.4em; }
 .sp-content p { margin-bottom: 1.5em; }
@@ -4294,20 +4296,25 @@ table.ba-table tr:hover td { background: rgba(27,147,176,0.12); }
 .sp-tags-label { font-size: 0.78rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #6b7a8f; line-height: 2.1; }
 .sp-tag { padding: 5px 14px; background: rgba(27,147,176,0.07); border: 1px solid rgba(27,147,176,0.18); border-radius: 4px; font-size: 0.78rem; font-weight: 700; color: var(--tw-blue); text-decoration: none; transition: background 0.2s, border-color 0.2s; }
 .sp-tag:hover { background: rgba(27,147,176,0.16); border-color: rgba(27,147,176,0.4); }
-.sp-author { display: flex; align-items: flex-start; gap: 22px; background: #fff; border: 1px solid #e0e8f0; border-radius: 6px; padding: 28px 32px; box-shadow: 0 6px 24px rgba(0,0,0,0.07); margin-bottom: 36px; }
-.sp-author-avatar { width: 64px; height: 64px; border-radius: 50%; border: 2px solid var(--tw-red); overflow: hidden; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: rgba(216,53,80,0.1); font-size: 1.6rem; }
+
+/* Author + share — now live in the sticky right rail instead of stacked
+   full-width boxes, alongside the trip pages' price/facts card. */
+.sp-author-rail-who { display: flex; align-items: center; gap: 12px; margin: 8px 0 12px; }
+.sp-author-avatar { width: 48px; height: 48px; border-radius: 50%; border: 2px solid var(--tw-red); overflow: hidden; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: rgba(216,53,80,0.1); font-size: 1.3rem; }
 .sp-author-avatar img { width: 100%; height: 100%; object-fit: cover; }
-.sp-author-label { font-size: 0.72rem; font-weight: 800; letter-spacing: 0.1em; color: var(--tw-blue); text-transform: uppercase; margin-bottom: 4px; }
-.sp-author-name { font-size: 1.08rem; font-weight: 800; color: var(--tw-navy); margin-bottom: 6px; }
-.sp-author-bio { font-size: 0.87rem; color: #6b7a8f; line-height: 1.65; margin: 0; }
-.sp-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 44px; }
+.sp-author-label { font-size: 0.72rem; font-weight: 800; letter-spacing: 0.1em; color: var(--tw-blue); text-transform: uppercase; }
+.sp-author-name { font-size: 0.98rem; font-weight: 800; color: var(--tw-navy); }
+.sp-author-bio { font-size: 0.85rem; color: #6b7a8f; line-height: 1.6; margin: 0; }
+.sp-share-rail-btns { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+.sp-share-rail-btns .sp-share-btn { justify-content: center; }
+
+.sp-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 .sp-nav-link { padding: 20px 24px; background: #fff; border: 1px solid #e0e8f0; border-radius: 6px; text-decoration: none; transition: border-color 0.2s, transform 0.18s, box-shadow 0.2s; display: block; }
 .sp-nav-link:hover { border-color: var(--tw-red); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0,0,0,0.1); }
 .sp-nav-link.sp-nav-prev { text-align: left; }
 .sp-nav-link.sp-nav-next { text-align: right; }
 .sp-nav-dir { font-size: 0.72rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: #6b7a8f; margin-bottom: 5px; }
 .sp-nav-title { font-size: 0.9rem; font-weight: 800; color: var(--tw-navy); line-height: 1.4; }
-.sp-share { background: #fff; border: 1px solid #e0e8f0; border-radius: 6px; padding: 20px 28px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 36px; box-shadow: 0 6px 24px rgba(0,0,0,0.07); }
 .sp-share-label { font-size: 0.82rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #6b7a8f; }
 .sp-share-btn { display: inline-flex; align-items: center; gap: 6px; padding: 7px 16px; border-radius: 8px; font-size: 0.82rem; font-weight: 800; text-decoration: none; transition: opacity 0.2s, transform 0.15s; color: #fff; }
 .sp-share-btn:hover { opacity: 0.87; transform: translateY(-1px); }
@@ -4316,7 +4323,8 @@ table.ba-table tr:hover td { background: rgba(27,147,176,0.12); }
 .sp-share-whatsapp { background: #25D366; }
 .sp-share-copy { background: #f5f8fa; border: 1px solid #e0e8f0; color: #1a2535 !important; cursor: pointer; font-family: 'Nunito', sans-serif; }
 .sp-share-copy:hover { border-color: var(--tw-blue); }
-.sp-comments { background: #fff; border: 1px solid #e0e8f0; border-radius: 6px; padding: 40px 48px; box-shadow: 0 6px 24px rgba(0,0,0,0.07); }
+/* No outer card — comments flow as part of the continuous article, same as
+   every other dest-article-section, instead of sitting in their own box. */
 .sp-comments .comments-title { font-family: 'Fraunces', serif; font-size: 1.6rem; color: var(--tw-navy); letter-spacing: 0.04em; margin-bottom: 28px; padding-bottom: 16px; border-bottom: 1px solid #e0e8f0; }
 .sp-comments .comment-list { list-style: none; padding: 0; margin: 0 0 32px; }
 .sp-comments .comment-list .comment { padding: 20px 0; border-bottom: 1px solid #e0e8f0; }
@@ -4327,20 +4335,37 @@ table.ba-table tr:hover td { background: rgba(27,147,176,0.12); }
 .sp-comments .comment-body p { font-size: 0.92rem; line-height: 1.7; color: #1a2535; margin: 0; }
 .sp-comments .reply a { font-size: 0.78rem; font-weight: 700; color: var(--tw-blue); text-decoration: none; margin-top: 8px; display: inline-block; }
 .sp-comments #respond h3 { font-family: 'Fraunces', serif; font-size: 1.4rem; color: var(--tw-navy); letter-spacing: 0.04em; margin-bottom: 20px; }
-.sp-comments .comment-form p { margin-bottom: 0; }
-.sp-comments .comment-form label { display: block; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; color: #6b7a8f; margin-bottom: 6px; }
-.sp-comments .comment-form input[type="text"], .sp-comments .comment-form input[type="email"], .sp-comments .comment-form input[type="url"], .sp-comments .comment-form textarea { width: 100%; padding: 12px 16px; border: 1.5px solid #e0e8f0; border-radius: 9px; font-family: 'Nunito', sans-serif; font-size: 0.93rem; color: #1a2535; background: #f5f8fa; transition: border-color 0.2s, background 0.2s; box-sizing: border-box; margin-bottom: 16px; }
-.sp-comments .comment-form input:focus, .sp-comments .comment-form textarea:focus { outline: none; border-color: var(--tw-blue); background: #fff; }
-.sp-comments .comment-form .form-submit { margin: 0; }
-.sp-comments .comment-form input[type="submit"] { padding: 12px 32px; background: var(--tw-red); color: #fff; font-family: 'Nunito', sans-serif; font-size: 0.92rem; font-weight: 800; border: none; border-radius: 9px; cursor: pointer; transition: opacity 0.2s, transform 0.15s; letter-spacing: 0.02em; }
-.sp-comments .comment-form input[type="submit"]:hover { opacity: 0.88; transform: translateY(-1px); }
-.sp-comments .logged-in-as { font-size: 0.84rem; color: #6b7a8f; margin-bottom: 14px !important; }
+
+/* Comment form — same 2-column grid + labeled-field + pink-button treatment
+   as the package/itinerary enquiry form (.tw-form-grid / .tw-package-enquiry-form). */
+.sp-comments .comment-form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.sp-comments .comment-form p { margin: 0; }
+.sp-comments .comment-form-url,
+.sp-comments .comment-form-comment,
+.sp-comments .comment-form .form-submit,
+.sp-comments .must-log-in,
+.sp-comments .logged-in-as,
+.sp-comments .comment-notes { grid-column: 1 / -1; }
+.sp-comments .comment-form label { display: block; font-size: 0.86rem; font-weight: 800; color: var(--tw-navy); margin-bottom: 6px; }
+.sp-comments .comment-form input[type="text"], .sp-comments .comment-form input[type="email"], .sp-comments .comment-form input[type="url"], .sp-comments .comment-form textarea { width: 100%; padding: 11px 12px; border: 1px solid #d9e2ec; border-radius: 6px; font: inherit; color: #1a2535; box-sizing: border-box; }
+.sp-comments .comment-form input:focus, .sp-comments .comment-form textarea:focus { outline: none; border-color: var(--tw-blue); }
+.sp-comments .comment-form textarea { resize: vertical; min-height: 130px; }
+.sp-comments .comment-form input[type="submit"] { background: var(--tw-red); border: 0; border-radius: 6px; color: #fff; cursor: pointer; font-weight: 800; padding: 12px 18px; box-shadow: 0 6px 18px rgba(229,18,125,0.32); transition: filter 0.2s ease, transform 0.2s ease; }
+.sp-comments .comment-form input[type="submit"]:hover { filter: brightness(1.06); transform: translateY(-2px); }
+.sp-comments .logged-in-as { font-size: 0.84rem; color: #6b7a8f; }
 .sp-comments .logged-in-as a { color: var(--tw-blue); font-weight: 700; text-decoration: none; }
-.sp-comments .comment-notes { font-size: 0.82rem; color: #6b7a8f; margin-bottom: 14px !important; }
+.sp-comments .comment-notes { font-size: 0.82rem; color: #6b7a8f; }
+@media (max-width: 600px) {
+    .sp-comments .comment-form { grid-template-columns: 1fr; }
+}
 /* No featured image: nothing but a flat navy fill behind the text, unlike
    the photo+scrim case above — that's the leftover-dark-theme case, so
    flip it light instead of inventing a fake photo mood. */
-.sp-hero.sp-hero-no-img { min-height: 432px; background: #eef3f6; }
+/* Content is bottom-anchored (align-items:flex-end), so at this shorter
+   height the breadcrumb — the first line of content — lands underneath the
+   fixed subheader bar (nav + category subheader ≈133px tall). Extra height
+   pushes the whole content block down clear of it. */
+.sp-hero.sp-hero-no-img { min-height: 462px; background: #eef3f6; }
 .sp-hero-no-img .sp-hero-overlay { display: none; }
 .sp-hero-no-img .sp-breadcrumb,
 .sp-hero-no-img .sp-breadcrumb a { color: rgba(13,21,38,0.55); }
@@ -4348,7 +4373,13 @@ table.ba-table tr:hover td { background: rgba(27,147,176,0.12); }
 .sp-hero-no-img .sp-hero-title { color: var(--tw-navy); }
 .sp-hero-no-img .sp-hero-meta { color: rgba(13,21,38,0.6); }
 .sp-hero-no-img .sp-hero-divider { color: rgba(13,21,38,0.2); }
-@media (max-width: 820px) { .sp-content { padding: 28px 22px; font-size: 0.98rem; } .sp-nav { grid-template-columns: 1fr; } .sp-author { flex-direction: column; gap: 14px; padding: 22px 20px; } .sp-comments { padding: 28px 20px; } .sp-share { gap: 10px; } }
+@media (max-width: 820px) { .sp-content { font-size: 0.98rem; } .sp-nav { grid-template-columns: 1fr; } }
+@media (max-width: 600px) {
+    /* Matches body's mobile padding-top (112px, vs 132px on desktop) — same
+       fix as above, just for the mobile subheader height. */
+    .sp-hero { margin-top: -112px; }
+    .sp-hero.sp-hero-no-img { min-height: 490px; }
+}
 
 /* ================================================================
    SUBMIT BLOG PAGE (moved from page-submit-blog.php)
@@ -4856,9 +4887,8 @@ img, video, iframe, embed, object { max-width: 100%; height: auto; }
    SINGLE POST PAGE — mobile
    ================================================================ */
 @media (max-width: 480px) {
-    .sp-content { padding: 22px 16px; font-size: 0.96rem; }
+    .sp-content { font-size: 0.96rem; }
     .sp-nav { grid-template-columns: 1fr; }
-    .sp-comments { padding: 22px 16px; }
 }
 
 /* ================================================================
@@ -5791,6 +5821,8 @@ img, video, iframe, embed, object { max-width: 100%; height: auto; }
 .tw-search-toggle:hover { background: #eef3f6; border-color: rgba(27,147,176,0.4); }
 .tw-search-toggle i { color: var(--tw-blue); font-size: 0.82rem; }
 .tw-search-toggle-label { white-space: nowrap; }
+.tw-search-rotate { display: inline-block; transition: opacity 0.25s ease; }
+.tw-search-rotate.tw-search-rotate--fade { opacity: 0; }
 @media (max-width: 1100px) {
     .tw-search-toggle-label { display: none; }
     .tw-search-toggle { padding: 9px; }

@@ -39,7 +39,7 @@ if ( ! function_exists( 'tw_explore_card' ) ) {
                 <a href="<?php echo esc_url( home_url('/') ); ?>">Home</a><span>›</span><span>Group Trips</span>
             </nav>
             <span class="explore-hero-kicker">Travel together</span>
-            <h1 class="explore-hero-title">Group <span style="color:#D83550">Trips</span></h1>
+            <h1 class="explore-hero-title">Group <span style="color:var(--tw-red)">Trips</span></h1>
             <p class="explore-hero-sub">
                 <?php
                 echo $tw_region_term

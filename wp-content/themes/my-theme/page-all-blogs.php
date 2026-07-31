@@ -33,7 +33,7 @@ $total_posts = (int) $blog_q->found_posts;
                 <span>All Stories</span>
             </nav>
             <span class="explore-hero-kicker">From the Blog</span>
-            <h1 class="explore-hero-title">All <span style="color:#D83550">Stories</span></h1>
+            <h1 class="explore-hero-title">All <span style="color:var(--tw-red)">Stories</span></h1>
             <p class="explore-hero-sub">Every travel guide, honest review and trip story from the 1TRIPWISER team — in one place.</p>
             <?php if ( $total_posts ) : ?>
             <p class="explore-hero-count"><?php echo esc_html( $total_posts ); ?> <?php echo ( 1 === $total_posts ) ? 'story' : 'stories'; ?></p>

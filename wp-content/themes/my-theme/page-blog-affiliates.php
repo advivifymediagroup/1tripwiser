@@ -10,7 +10,7 @@ get_header();
 
 // Pull editable content from WP Options (set in Admin → Trip Inquiries → Page Settings)
 $hero_kicker   = get_option('tw_blog_kicker',      'TRAVEL GUIDES & AFFILIATE PICKS');
-$hero_title    = get_option('tw_blog_title',       'BLOGS + AFFILIATES');
+$hero_title    = get_option('tw_blog_title',       'Blogs + Affiliates');
 $hero_subtitle = get_option('tw_blog_subtitle',    'Honest travel guides. Trusted tools. Every link we share is something we actually use and believe in.');
 $aff_heading   = get_option('tw_blog_aff_heading', 'Our Trusted Travel Partners');
 $aff_text      = get_option('tw_blog_aff_text',    "We partner with travel platforms we personally trust. When you book through our links, you support our free content at no extra cost to you.");

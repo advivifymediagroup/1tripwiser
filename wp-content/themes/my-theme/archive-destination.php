@@ -10,7 +10,7 @@
                 <a href="<?php echo esc_url( home_url('/') ); ?>">Home</a><span>›</span><span>Destinations</span>
             </nav>
             <span class="explore-hero-kicker">Explore by Place</span>
-            <h1 class="explore-hero-title">Dest<span style="color:#D83550">inations</span></h1>
+            <h1 class="explore-hero-title">Dest<span style="color:var(--tw-red)">inations</span></h1>
             <p class="explore-hero-sub">Browse destinations, best seasons, ideal trip lengths and package starting prices.</p>
         </div>
     </section>

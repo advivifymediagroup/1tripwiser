@@ -3374,7 +3374,7 @@ function tw_render_overview_page() {
                     <tr><td style="font-weight:700">Plan A Trip WhatsApp</td><td><?php echo esc_html(get_option('tw_pat_whatsapp','Not set')); ?></td><td><a href="<?php echo esc_url(admin_url('admin.php?page=tw-plan-trip-settings')); ?>">Edit →</a></td></tr>
                     <tr><td style="font-weight:700">WhatsApp Widget Number</td><td><?php $n=get_option('tw_wa_widget_number',get_option('tw_pat_whatsapp','')); echo $n ? esc_html($n) : '<span style="color:#999">Not set</span>'; ?></td><td><a href="<?php echo esc_url(admin_url('admin.php?page=tw-wa-widget-settings')); ?>">Edit →</a></td></tr>
                     <tr><td style="font-weight:700">WhatsApp Cloud API</td><td><?php echo get_option('tw_wa_api_token','') ? '<span style="color:green"><i class="fi-rr-check" aria-hidden="true"></i> Configured</span>' : '<span style="color:#999">Not configured</span>'; ?></td><td><a href="<?php echo esc_url(admin_url('admin.php?page=tw-wa-api-settings')); ?>">Edit →</a></td></tr>
-                    <tr><td style="font-weight:700">Blog Page Title</td><td><?php echo esc_html(get_option('tw_blog_title','BLOGS + AFFILIATES')); ?></td><td><a href="<?php echo esc_url(admin_url('admin.php?page=tw-blog-settings')); ?>">Edit →</a></td></tr>
+                    <tr><td style="font-weight:700">Blog Page Title</td><td><?php echo esc_html(get_option('tw_blog_title','Blogs + Affiliates')); ?></td><td><a href="<?php echo esc_url(admin_url('admin.php?page=tw-blog-settings')); ?>">Edit →</a></td></tr>
                 </tbody>
             </table>
         </div>
@@ -3712,7 +3712,7 @@ function tw_render_blog_settings_page() {
                     </tr>
                     <tr>
                         <th><label for="tw_blog_title">Main Heading</label></th>
-                        <td><input type="text" id="tw_blog_title" name="tw_blog_title" value="<?php echo esc_attr(get_option('tw_blog_title','BLOGS + AFFILIATES')); ?>" class="large-text"></td>
+                        <td><input type="text" id="tw_blog_title" name="tw_blog_title" value="<?php echo esc_attr(get_option('tw_blog_title','Blogs + Affiliates')); ?>" class="large-text"></td>
                     </tr>
                     <tr>
                         <th><label for="tw_blog_subtitle">Subheading / Description</label></th>
