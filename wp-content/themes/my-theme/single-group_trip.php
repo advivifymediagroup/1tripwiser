@@ -1,6 +1,10 @@
 <?php
 /**
- * Single Group Trip — package-style layout matching Events & Festivals.
+ * Single Group Trip — wide editorial layout: one continuous article column
+ * with a sticky table of contents alongside it, rather than a stack of
+ * separate boxed sections. Shares the .dest-* layout classes with
+ * single-destination.php / single-itinerary.php / single-travel_package.php
+ * (see style.css → "single-page editorial layout").
  *
  * Reads fields from the "Group Trip Details" ACF group:
  *   package_amount, total_nights, total_days, package_location,
@@ -56,9 +60,53 @@ while ( have_posts() ) :
 
     /* archive URL */
     $archive_url = get_post_type_archive_link( 'group_trip' ) ?: home_url( '/group-trips/' );
+
+    /* Day-wise plan — the repeater has gone by several names over time, so
+       probe each, then collect the rows once so the contents list and the
+       accordion stay in sync without looping the repeater twice. */
+    $tw_days_field = '';
+    if ( function_exists( 'get_field' ) ) {
+        foreach ( array( 'itinerary_days', 'package_days', 'day_wise_plan', 'days', 'trip_days' ) as $_fn ) {
+            $_v = get_field( $_fn );
+            if ( is_array( $_v ) && ! empty( $_v ) ) { $tw_days_field = $_fn; break; }
+        }
+    }
+    $day_rows = array();
+    if ( $tw_days_field && have_rows( $tw_days_field ) ) {
+        while ( have_rows( $tw_days_field ) ) {
+            the_row();
+            $day_rows[] = array(
+                'title'      => get_sub_field( 'day_title' ),
+                'details'    => get_sub_field( 'day_details' ),
+                'route'      => get_sub_field( 'day_route' ),
+                'stay'       => get_sub_field( 'day_stay' ),
+                'meals'      => get_sub_field( 'day_meals' ),
+                'transfer'   => get_sub_field( 'day_transfer' ),
+                'highlights' => get_sub_field( 'day_highlights' ),
+            );
+        }
+    }
+
+    $body_content = trim( get_the_content() );
+
+    /* Single contents list covering the whole page, in render order. */
+    $toc = array();
+    if ( $overview ) { $toc[] = array( 'id' => 'gt-overview', 'label' => __( 'Overview', 'mytheme' ) ); }
+    if ( $route )    { $toc[] = array( 'id' => 'gt-route',    'label' => __( 'Route', 'mytheme' ) ); }
+    if ( $day_rows ) {
+        $day_children = array();
+        foreach ( $day_rows as $d_i => $d ) {
+            $day_children[] = array(
+                'id'    => 'gt-day-' . ( $d_i + 1 ),
+                'label' => $d['title'] ?: sprintf( __( 'Day %d', 'mytheme' ), $d_i + 1 ),
+            );
+        }
+        $toc[] = array( 'id' => 'gt-days', 'label' => __( 'Itinerary', 'mytheme' ), 'children' => $day_children );
+    }
+    if ( $body_content ) { $toc[] = array( 'id' => 'gt-more', 'label' => __( 'Good to Know', 'mytheme' ) ); }
     ?>
 
-<main class="main-content explore-page ev-single">
+<main class="main-content explore-page dest-single">
 
     <!-- CINEMATIC HERO — featured image as full-bleed background -->
     <section class="explore-hero ev-hero-cinematic<?php echo $thumb ? ' has-hero-img' : ''; ?>"
@@ -114,141 +162,186 @@ while ( have_posts() ) :
         </div>
     </section>
 
-    <!-- MAIN CONTENT + BOOKING SIDEBAR -->
-    <div class="container ev-single-wrap">
-        <article class="ev-single-card">
+    <div class="container dest-single-wrap">
+        <div class="dest-single-layout">
 
-            <div class="ev-single-body">
+            <!-- Sticky rail: contents + at-a-glance facts + CTAs -->
+            <aside class="dest-rail">
+                <?php if ( $toc ) : ?>
+                <nav class="dest-toc" aria-label="<?php esc_attr_e( 'On this page', 'mytheme' ); ?>">
+                    <div class="dest-toc-title"><?php esc_html_e( 'Table of Contents', 'mytheme' ); ?></div>
+                    <ol class="dest-toc-list">
+                        <?php foreach ( $toc as $t_i => $t ) : ?>
+                        <li>
+                            <a href="#<?php echo esc_attr( $t['id'] ); ?>" data-dest-toc="<?php echo esc_attr( $t['id'] ); ?>">
+                                <span class="dest-toc-num"><?php echo esc_html( $t_i + 1 ); ?></span>
+                                <span class="dest-toc-label"><?php echo esc_html( $t['label'] ); ?></span>
+                            </a>
+                            <?php if ( ! empty( $t['children'] ) ) : ?>
+                            <ol class="dest-toc-sublist">
+                                <?php foreach ( $t['children'] as $c_i => $c ) : ?>
+                                <li>
+                                    <a href="#<?php echo esc_attr( $c['id'] ); ?>" data-dest-toc="<?php echo esc_attr( $c['id'] ); ?>">
+                                        <span class="dest-toc-subnum"><?php echo esc_html( ( $t_i + 1 ) . '.' . ( $c_i + 1 ) ); ?></span>
+                                        <span class="dest-toc-label"><?php echo esc_html( $c['label'] ); ?></span>
+                                    </a>
+                                </li>
+                                <?php endforeach; ?>
+                            </ol>
+                            <?php endif; ?>
+                        </li>
+                        <?php endforeach; ?>
+                    </ol>
+                </nav>
+                <?php endif; ?>
 
-                <!-- Trip details panel — shown FIRST -->
-                <?php
-                $details = array(
-                    array( '<i class="fa-solid fa-route"></i>',         'Route',          $route ),
-                    array( '<i class="fa-solid fa-sun"></i>',           'Best Time',       $best_time ),
-                    array( '<i class="fa-solid fa-user-group"></i>',    'Group Size',      $grp_size ),
-                    array( '<i class="fa-solid fa-tag"></i>',           'Trip Type',       $trip_type ),
-                    array( '<i class="fa-regular fa-calendar"></i>',    'Departure',       $departure ),
-                    array( '<i class="fa-solid fa-location-dot"></i>',  'Destination',     $location ),
-                );
-                $details = array_filter( $details, function( $d ) { return ! empty( $d[2] ); } );
-                if ( $details ) : ?>
-                <div class="ev-trip-details">
-                    <h3 class="ev-trip-details-title">Trip Details</h3>
-                    <div class="ev-trip-details-grid">
-                        <?php foreach ( $details as $d ) : ?>
-                        <div class="ev-trip-detail-item">
-                            <span class="ev-trip-detail-icon"><?php echo $d[0]; ?></span>
-                            <div>
-                                <span class="ev-trip-detail-label"><?php echo esc_html( $d[1] ); ?></span>
-                                <span class="ev-trip-detail-val"><?php echo esc_html( $d[2] ); ?></span>
-                            </div>
+                <div class="dest-rail-card">
+                    <?php if ( $price ) : ?>
+                    <div class="dest-rail-price">
+                        <span><?php esc_html_e( 'Price per person', 'mytheme' ); ?></span>
+                        <strong><?php echo esc_html( function_exists('mytheme_format_rupee_amount') ? mytheme_format_rupee_amount( $price ) : $price ); ?></strong>
+                        <?php if ( $emi ) : ?><small><?php echo esc_html( $emi ); ?>/mo</small><?php endif; ?>
+                    </div>
+                    <?php endif; ?>
+                    <?php
+                    $rail_rows = array_filter( array(
+                        __( 'Duration', 'mytheme' )    => $dur,
+                        __( 'Departure', 'mytheme' )   => $departure,
+                        __( 'Group Size', 'mytheme' )  => $grp_size,
+                        __( 'Destination', 'mytheme' ) => $location,
+                        __( 'Trip Type', 'mytheme' )   => $trip_type,
+                        __( 'Best Time', 'mytheme' )   => $best_time,
+                    ) );
+                    if ( $rail_rows ) : ?>
+                    <dl class="dest-rail-facts">
+                        <?php foreach ( $rail_rows as $label => $val ) : ?>
+                        <div class="dest-rail-fact">
+                            <dt><?php echo esc_html( $label ); ?></dt>
+                            <dd><?php echo esc_html( $val ); ?></dd>
                         </div>
                         <?php endforeach; ?>
-                    </div>
+                    </dl>
+                    <?php endif; ?>
+                    <a class="dest-rail-btn" href="<?php echo esc_url( $book_url ); ?>"><?php esc_html_e( 'Book Now', 'mytheme' ); ?></a>
+                    <a class="dest-rail-btn dest-rail-btn--ghost" href="<?php echo esc_url( mytheme_get_plan_trip_url() ); ?>"><?php esc_html_e( 'Customise this trip', 'mytheme' ); ?></a>
                 </div>
-                <?php endif; ?>
+            </aside>
 
-                <!-- Overview / itinerary content -->
-                <?php if ( $overview || get_the_content() ) : ?>
-                <div class="ev-single-content ev-content-styled ev-overview-card">
-                    <?php if ( $overview ) { echo wp_kses_post( wpautop( $overview ) ); } ?>
-                    <?php the_content(); ?>
-                </div>
-                <?php endif; ?>
+            <!-- One continuous article — no per-section boxes -->
+            <article class="dest-article ev-content-styled">
 
-                <!-- Day-wise plan (from ACF repeater — try multiple field names) -->
-                <?php
-                $tw_days_field = '';
-                if ( function_exists('get_field') ) {
-                    foreach ( array( 'itinerary_days', 'package_days', 'day_wise_plan', 'days', 'trip_days' ) as $_fn ) {
-                        $_v = get_field( $_fn );
-                        if ( is_array( $_v ) && ! empty( $_v ) ) { $tw_days_field = $_fn; break; }
-                    }
-                }
-                ?>
-                <?php if ( $tw_days_field ) : ?>
-                <section class="itinerary-days itinerary-timeline" style="margin-top:28px;">
-                    <div class="itinerary-days-heading">
-                        <span>Day-by-day</span>
-                        <h2>Itinerary</h2>
-                    </div>
-                    <?php $day_number = 1; ?>
-                    <?php while ( have_rows( $tw_days_field ) ) : the_row();
-                        $day_title      = get_sub_field('day_title');
-                        $day_details    = get_sub_field('day_details');
-                        $day_route      = get_sub_field('day_route');
-                        $day_stay       = get_sub_field('day_stay');
-                        $day_meals      = get_sub_field('day_meals');
-                        $day_transfer   = get_sub_field('day_transfer');
-                        $day_highlights = get_sub_field('day_highlights');
-                        $preview_text   = wp_trim_words( wp_strip_all_tags( $day_details ), 18, '...' );
-                    ?>
-                    <details class="itinerary-day" <?php echo $day_number === 1 ? 'open' : ''; ?>>
-                        <summary>
-                            <span class="itinerary-day-marker"><?php echo esc_html( $day_number ); ?></span>
-                            <span class="itinerary-day-summary">
-                                <strong><?php echo esc_html( $day_title ?: sprintf( __('Day %d','mytheme'), $day_number ) ); ?></strong>
-                                <?php if ( $day_route ) : ?><em><?php echo esc_html( $day_route ); ?></em><?php elseif ( $preview_text ) : ?><em><?php echo esc_html( $preview_text ); ?></em><?php endif; ?>
-                            </span>
-                            <span class="itinerary-day-toggle" aria-hidden="true"></span>
-                        </summary>
-                        <div class="itinerary-day-panel">
-                            <?php if ( $day_stay || $day_meals || $day_transfer || $day_highlights ) : ?>
-                            <div class="itinerary-day-chips">
-                                <?php if ( $day_stay )       : ?><span><i class="fa-solid fa-bed"></i><?php echo esc_html( $day_stay ); ?></span><?php endif; ?>
-                                <?php if ( $day_meals )      : ?><span><i class="fa-solid fa-utensils"></i><?php echo esc_html( $day_meals ); ?></span><?php endif; ?>
-                                <?php if ( $day_transfer )   : ?><span><i class="fa-solid fa-route"></i><?php echo esc_html( $day_transfer ); ?></span><?php endif; ?>
-                                <?php if ( $day_highlights ) : ?><span><i class="fa-solid fa-star"></i><?php echo esc_html( $day_highlights ); ?></span><?php endif; ?>
-                            </div>
-                            <?php endif; ?>
-                            <div class="itinerary-day-copy ev-content-styled"><?php echo wp_kses_post( wpautop( $day_details ) ); ?></div>
-                        </div>
-                    </details>
-                    <?php $day_number++; endwhile; ?>
+                <?php if ( $overview ) : ?>
+                <section id="gt-overview" class="dest-article-section">
+                    <h2><?php esc_html_e( 'Overview', 'mytheme' ); ?></h2>
+                    <?php echo wp_kses_post( wpautop( $overview ) ); ?>
                 </section>
                 <?php endif; ?>
 
-            </div>
-
-            <!-- Sticky booking panel -->
-            <aside class="ev-single-book">
-                <?php if ( $price ) : ?>
-                <div class="ev-single-price">
-                    <span>Price per person</span>
-                    <strong><?php echo esc_html( function_exists('mytheme_format_rupee_amount') ? mytheme_format_rupee_amount( $price ) : $price ); ?></strong>
-                    <?php if ( $emi ) : ?><small><?php echo esc_html( $emi ); ?>/mo</small><?php endif; ?>
-                </div>
+                <?php if ( $route ) : ?>
+                <section id="gt-route" class="dest-article-section">
+                    <h2><?php esc_html_e( 'Route', 'mytheme' ); ?></h2>
+                    <?php echo wp_kses_post( wpautop( $route ) ); ?>
+                </section>
                 <?php endif; ?>
 
-                <?php
-                $sidebar_rows = array_filter( array(
-                    'Duration'    => $dur,
-                    'Departure'   => $departure,
-                    'Group Size'  => $grp_size,
-                    'Destination' => $location,
-                    'Trip Type'   => $trip_type,
-                ) );
-                if ( $sidebar_rows ) : ?>
-                <div class="ev-single-detail-list">
-                    <?php foreach ( $sidebar_rows as $label => $val ) : ?>
-                    <div class="ev-single-detail-row">
-                        <span class="ev-detail-label"><?php echo esc_html( $label ); ?></span>
-                        <span class="ev-detail-val"><?php echo esc_html( $val ); ?></span>
+                <?php if ( $day_rows ) : ?>
+                <section id="gt-days" class="dest-article-section">
+                    <h2><?php esc_html_e( 'Itinerary', 'mytheme' ); ?></h2>
+                    <div class="itinerary-days itinerary-timeline dest-itin-days">
+                        <?php foreach ( $day_rows as $d_i => $d ) : $day_number = $d_i + 1; ?>
+                        <details class="itinerary-day" id="gt-day-<?php echo esc_attr( $day_number ); ?>" <?php echo $day_number === 1 ? 'open' : ''; ?>>
+                            <summary>
+                                <span class="itinerary-day-marker"><?php echo esc_html( $day_number ); ?></span>
+                                <span class="itinerary-day-summary">
+                                    <strong><?php echo esc_html( $d['title'] ?: sprintf( __('Day %d','mytheme'), $day_number ) ); ?></strong>
+                                    <?php
+                                    $preview_text = wp_trim_words( wp_strip_all_tags( $d['details'] ), 18, '...' );
+                                    if ( $d['route'] ) : ?><em><?php echo esc_html( $d['route'] ); ?></em>
+                                    <?php elseif ( $preview_text ) : ?><em><?php echo esc_html( $preview_text ); ?></em><?php endif; ?>
+                                </span>
+                                <span class="itinerary-day-toggle" aria-hidden="true"></span>
+                            </summary>
+                            <div class="itinerary-day-panel">
+                                <?php if ( $d['stay'] || $d['meals'] || $d['transfer'] || $d['highlights'] ) : ?>
+                                <div class="itinerary-day-chips">
+                                    <?php if ( $d['stay'] )       : ?><span><i class="fa-solid fa-bed"></i><?php echo esc_html( $d['stay'] ); ?></span><?php endif; ?>
+                                    <?php if ( $d['meals'] )      : ?><span><i class="fa-solid fa-utensils"></i><?php echo esc_html( $d['meals'] ); ?></span><?php endif; ?>
+                                    <?php if ( $d['transfer'] )   : ?><span><i class="fa-solid fa-route"></i><?php echo esc_html( $d['transfer'] ); ?></span><?php endif; ?>
+                                    <?php if ( $d['highlights'] ) : ?><span><i class="fa-solid fa-star"></i><?php echo esc_html( $d['highlights'] ); ?></span><?php endif; ?>
+                                </div>
+                                <?php endif; ?>
+                                <div class="itinerary-day-copy"><?php echo wp_kses_post( wpautop( $d['details'] ) ); ?></div>
+                            </div>
+                        </details>
+                        <?php endforeach; ?>
                     </div>
-                    <?php endforeach; ?>
-                </div>
+                </section>
                 <?php endif; ?>
 
-                <a class="ev-single-btn" href="<?php echo esc_url( $book_url ); ?>">Book Now</a>
-                <a class="ev-single-btn ev-single-btn--ghost" href="<?php echo esc_url( mytheme_get_plan_trip_url() ); ?>">Customise this trip</a>
-            </aside>
+                <?php if ( $body_content ) : ?>
+                <section id="gt-more" class="dest-article-section">
+                    <h2><?php esc_html_e( 'Good to Know', 'mytheme' ); ?></h2>
+                    <?php the_content(); ?>
+                </section>
+                <?php endif; ?>
 
-        </article>
+                <footer class="dest-article-cta">
+                    <a href="<?php echo esc_url( $book_url ); ?>" class="btn-primary"><?php esc_html_e( 'Book Now', 'mytheme' ); ?></a>
+                    <a href="<?php echo esc_url( $archive_url ); ?>" class="btn-secondary"><?php esc_html_e( 'All Group Trips', 'mytheme' ); ?></a>
+                </footer>
 
-        <a class="tribe-back-link" href="<?php echo esc_url( $archive_url ); ?>">← All group trips</a>
+                <a class="tribe-back-link" href="<?php echo esc_url( $archive_url ); ?>">← <?php esc_html_e( 'All group trips', 'mytheme' ); ?></a>
+            </article>
+
+        </div>
     </div>
 
 </main>
+
+<?php if ( $toc ) : ?>
+<script>
+/* Highlight the contents entry for whichever section is currently in view. */
+(function () {
+    var links = document.querySelectorAll('[data-dest-toc]');
+    if (!links.length) { return; }
+
+    var targets = [];
+    links.forEach(function (link) {
+        var el = document.getElementById(link.getAttribute('data-dest-toc'));
+        if (el) { targets.push({ link: link, el: el }); }
+    });
+    if (!targets.length) { return; }
+
+    function sync() {
+        /* Measure against the viewport — offsetTop is relative to the nearest
+           positioned ancestor, which is wrong inside this grid layout. */
+        var current = targets[0];
+        targets.forEach(function (t) {
+            if (t.el.getBoundingClientRect().top <= 140) { current = t; }
+        });
+        targets.forEach(function (t) {
+            t.link.classList.toggle('is-current', t === current);
+        });
+    }
+
+    var ticking = false;
+    window.addEventListener('scroll', function () {
+        if (ticking) { return; }
+        ticking = true;
+        window.requestAnimationFrame(function () { sync(); ticking = false; });
+    }, { passive: true });
+    sync();
+
+    /* Clicking a day in the contents should open that accordion panel. */
+    document.querySelectorAll('[data-dest-toc^="gt-day-"]').forEach(function (link) {
+        link.addEventListener('click', function () {
+            var panel = document.getElementById(link.getAttribute('data-dest-toc'));
+            if (panel && panel.tagName === 'DETAILS') { panel.open = true; }
+        });
+    });
+}());
+</script>
+<?php endif; ?>
 
 <?php
 endwhile;
