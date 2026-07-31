@@ -88,6 +88,7 @@ while ( have_posts() ) :
     }
 
     $body_content = trim( get_the_content() );
+    $has_faqs     = function_exists( 'have_rows' ) && have_rows( 'faqs', $id );
 
     /* Single contents list covering the whole page, in render order. */
     $toc = array();
@@ -104,6 +105,7 @@ while ( have_posts() ) :
         $toc[] = array( 'id' => 'gt-days', 'label' => __( 'Itinerary', 'mytheme' ), 'children' => $day_children );
     }
     if ( $body_content ) { $toc[] = array( 'id' => 'gt-more', 'label' => __( 'Good to Know', 'mytheme' ) ); }
+    if ( $has_faqs )     { $toc[] = array( 'id' => 'gt-faqs', 'label' => __( 'FAQs', 'mytheme' ) ); }
     ?>
 
 <main class="main-content explore-page dest-single">
@@ -282,6 +284,12 @@ while ( have_posts() ) :
                 <section id="gt-more" class="dest-article-section">
                     <h2><?php esc_html_e( 'Good to Know', 'mytheme' ); ?></h2>
                     <?php the_content(); ?>
+                </section>
+                <?php endif; ?>
+
+                <?php if ( $has_faqs ) : ?>
+                <section id="gt-faqs" class="dest-article-section dest-article-faqs">
+                    <?php mytheme_render_faq_section( $id, __( 'Group Trip FAQs', 'mytheme' ) ); ?>
                 </section>
                 <?php endif; ?>
 
