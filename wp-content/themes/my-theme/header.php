@@ -154,8 +154,8 @@
                     <circle cx="18" cy="18" r="16" fill="none" stroke="#1B93B0" stroke-width="2"/>
                     <circle cx="18" cy="10" r="7" fill="#D5374F" opacity="0.9"/>
                     <circle cx="18" cy="26" r="7" fill="#1B93B0" opacity="0.9"/>
-                    <polygon points="18,3 15,15 18,13 21,15" fill="#D83550"/>
-                    <polygon points="18,33 15,21 18,23 21,21" fill="#D83550" opacity="0.7"/>
+                    <polygon points="18,3 15,15 18,13 21,15" fill="var(--tw-red)"/>
+                    <polygon points="18,33 15,21 18,23 21,21" fill="var(--tw-red)" opacity="0.7"/>
                     <line x1="2" y1="18" x2="34" y2="18" stroke="#1B93B0" stroke-width="1.5"/>
                 </svg>
             </div>
@@ -170,7 +170,7 @@
         <nav class="tw-links" aria-label="Primary navigation">
             <button type="button" class="tw-search-toggle" id="tw-search-open" aria-label="Search the site">
                 <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
-                <span class="tw-search-toggle-label">Search destinations&hellip;</span>
+                <span class="tw-search-toggle-label">Search <span class="tw-search-rotate" id="tw-search-rotate">destinations</span>&hellip;</span>
             </button>
             <?php
             $walker_args = array(
@@ -350,6 +350,22 @@ function tw_default_mobile_nav() {
             }
         });
     }
+
+    /* Rotating word in the "Search ...” toggle label — "Search" itself
+       never changes, only the word after it cross-fades on an interval. */
+    var sRotate = document.getElementById('tw-search-rotate');
+    if (sRotate && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        var sWords = ['destinations', 'itineraries', 'packages', 'group trips', "women's trips", 'Luxe experience'];
+        var sIndex = 0;
+        setInterval(function () {
+            sRotate.classList.add('tw-search-rotate--fade');
+            setTimeout(function () {
+                sIndex = (sIndex + 1) % sWords.length;
+                sRotate.textContent = sWords[sIndex];
+                sRotate.classList.remove('tw-search-rotate--fade');
+            }, 250);
+        }, 2600);
+    }
 })();
 
 /* ============================================================
@@ -388,8 +404,8 @@ function tw_default_mobile_nav() {
     ].join(';');
 
     var LOAD_STYLE = BTN_BASE + ';' + [
-        'background:#D83550',
-        'background-color:#D83550',
+        'background:var(--tw-red)',
+        'background-color:var(--tw-red)',
         'color:#0d1526',
         'box-shadow:0 4px 14px rgba(216,53,80,0.32)'
     ].join(';');
