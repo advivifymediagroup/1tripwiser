@@ -91,12 +91,12 @@ while ( have_posts() ) :
                 <a href="<?php echo esc_url( $archive ); ?>">Itineraries</a><span>›</span>
                 <span><?php the_title(); ?></span>
             </nav>
-            <span class="explore-hero-kicker">Ready-made Itinerary</span>
             <h1 class="explore-hero-title"><?php the_title(); ?></h1>
             <?php if ( $dest_name || $region ) : ?>
             <p class="explore-hero-sub"><?php echo esc_html( $dest_name ?: '' ); ?><?php if ( $region && $dest_name ) { echo ' · '; } ?><?php if ( $region ) { echo esc_html( $region->name ); } ?></p>
             <?php endif; ?>
             <div class="ev-hero-facts">
+                <span class="ev-hero-fact ev-hero-fact--kicker"><?php esc_html_e( 'Ready-made Itinerary', 'mytheme' ); ?></span>
                 <?php if ( $duration )  : ?><span class="ev-hero-fact"><i class="fa-regular fa-clock ev-fact-icon"></i><?php echo esc_html( $duration ); ?></span><?php endif; ?>
                 <?php if ( $best_time ) : ?><span class="ev-hero-fact"><i class="fa-solid fa-sun ev-fact-icon"></i><?php echo esc_html( $best_time ); ?></span><?php endif; ?>
                 <?php if ( $region )    : ?><span class="ev-hero-fact"><i class="fa-solid fa-location-dot ev-fact-icon"></i><a href="<?php echo esc_url( get_term_link( $region ) ); ?>"><?php echo esc_html( $region->name ); ?></a></span><?php endif; ?>
@@ -108,7 +108,7 @@ while ( have_posts() ) :
     <div class="container dest-single-wrap">
         <div class="dest-single-layout">
 
-            <!-- Sticky rail: contents + at-a-glance facts + CTAs -->
+            <!-- Sticky contents rail -->
             <aside class="dest-rail">
                 <?php if ( $toc ) : ?>
                 <nav class="dest-toc" aria-label="<?php esc_attr_e( 'On this page', 'mytheme' ); ?>">
@@ -138,33 +138,6 @@ while ( have_posts() ) :
                 </nav>
                 <?php endif; ?>
 
-                <div class="dest-rail-card">
-                    <?php if ( $price ) : ?>
-                    <div class="dest-rail-price">
-                        <span><?php esc_html_e( 'Starts from', 'mytheme' ); ?></span>
-                        <strong><?php echo esc_html( function_exists('mytheme_format_rupee_amount') ? mytheme_format_rupee_amount( $price ) : '₹' . $price ); ?></strong>
-                        <small><?php esc_html_e( 'per person', 'mytheme' ); ?></small>
-                    </div>
-                    <?php endif; ?>
-                    <?php
-                    $rail_rows = array_filter( array(
-                        __( 'Duration', 'mytheme' )    => $duration,
-                        __( 'Best Time', 'mytheme' )   => $best_time,
-                        __( 'Destination', 'mytheme' ) => $dest_name,
-                    ) );
-                    if ( $rail_rows ) : ?>
-                    <dl class="dest-rail-facts">
-                        <?php foreach ( $rail_rows as $label => $val ) : ?>
-                        <div class="dest-rail-fact">
-                            <dt><?php echo esc_html( $label ); ?></dt>
-                            <dd><?php echo esc_html( $val ); ?></dd>
-                        </div>
-                        <?php endforeach; ?>
-                    </dl>
-                    <?php endif; ?>
-                    <a class="dest-rail-btn" href="<?php echo esc_url( $book_url ); ?>"><?php esc_html_e( 'Book Now', 'mytheme' ); ?></a>
-                    <a class="dest-rail-btn dest-rail-btn--ghost" href="<?php echo esc_url( mytheme_get_plan_trip_url() ); ?>"><?php esc_html_e( 'Customise Route', 'mytheme' ); ?></a>
-                </div>
             </aside>
 
             <!-- One continuous article — no per-section boxes -->
@@ -238,6 +211,37 @@ while ( have_posts() ) :
 
                 <a class="tribe-back-link" href="<?php echo esc_url( $archive ); ?>">← <?php esc_html_e( 'All Itineraries', 'mytheme' ); ?></a>
             </article>
+
+            <!-- Sticky booking rail: price + at-a-glance facts + CTAs -->
+            <aside class="dest-booking">
+                <div class="dest-rail-card">
+                    <?php if ( $price ) : ?>
+                    <div class="dest-rail-price">
+                        <span><?php esc_html_e( 'Starts from', 'mytheme' ); ?></span>
+                        <strong><?php echo esc_html( function_exists('mytheme_format_rupee_amount') ? mytheme_format_rupee_amount( $price ) : '₹' . $price ); ?></strong>
+                        <small><?php esc_html_e( 'per person', 'mytheme' ); ?></small>
+                    </div>
+                    <?php endif; ?>
+                    <?php
+                    $rail_rows = array_filter( array(
+                        __( 'Duration', 'mytheme' )    => $duration,
+                        __( 'Best Time', 'mytheme' )   => $best_time,
+                        __( 'Destination', 'mytheme' ) => $dest_name,
+                    ) );
+                    if ( $rail_rows ) : ?>
+                    <dl class="dest-rail-facts">
+                        <?php foreach ( $rail_rows as $label => $val ) : ?>
+                        <div class="dest-rail-fact">
+                            <dt><?php echo esc_html( $label ); ?></dt>
+                            <dd><?php echo esc_html( $val ); ?></dd>
+                        </div>
+                        <?php endforeach; ?>
+                    </dl>
+                    <?php endif; ?>
+                    <a class="dest-rail-btn" href="<?php echo esc_url( $book_url ); ?>"><?php esc_html_e( 'Book Now', 'mytheme' ); ?></a>
+                    <a class="dest-rail-btn dest-rail-btn--ghost" href="<?php echo esc_url( mytheme_get_plan_trip_url() ); ?>"><?php esc_html_e( 'Customise Route', 'mytheme' ); ?></a>
+                </div>
+            </aside>
 
         </div>
     </div>

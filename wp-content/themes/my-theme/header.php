@@ -184,9 +184,7 @@
             }
             wp_nav_menu($walker_args);
             ?>
-            <a class="tw-cta" href="<?php echo esc_url(mytheme_get_plan_trip_url()); ?>">
-                <i class="fa-solid fa-paper-plane" aria-hidden="true"></i> Plan My Trip
-            </a>
+            <a class="tw-cta" href="<?php echo esc_url(mytheme_get_plan_trip_url()); ?>">Plan My Trip</a>
 
             <!-- User account nav -->
             <div class="tw-user-nav">
@@ -213,9 +211,6 @@
                 <a class="tw-auth-link" href="<?php echo esc_url(home_url('/login/')); ?>">Log In</a>
                 <a class="tw-auth-btn" href="<?php echo esc_url(home_url('/register/')); ?>">Sign Up</a>
             <?php endif; ?>
-            </div>
-            <div class="instagram-follow tw-f-social">
-                <a href="https://www.instagram.com/1tripwiser/" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
             </div>
         </nav>
 
@@ -256,11 +251,13 @@
 <?php
 function tw_default_nav() {
     $dest_url  = esc_url(get_post_type_archive_link('destination'));
+    $itin_url  = esc_url(get_post_type_archive_link('itinerary'));
     $pkg_url   = esc_url(get_post_type_archive_link('travel_package'));
     $blog_url  = esc_url(home_url('/blog-affiliates/'));
     $tribe_url = post_type_exists('forum_topic') ? esc_url(get_post_type_archive_link('forum_topic')) : '';
     echo '<ul class="tw-menu">';
     echo '<li class="tw-menu-item"><a href="' . $dest_url . '" class="tw-nav-link">Destinations</a></li>';
+    echo '<li class="tw-menu-item"><a href="' . $itin_url . '" class="tw-nav-link">Itineraries</a></li>';
     echo '<li class="tw-menu-item"><a href="' . $pkg_url . '" class="tw-nav-link">Packages</a></li>';
     echo '<li class="tw-menu-item"><a href="' . $blog_url . '" class="tw-nav-link">Blog</a></li>';
     if ( $tribe_url ) { echo '<li class="tw-menu-item"><a href="' . $tribe_url . '" class="tw-nav-link">Tribe</a></li>'; }
@@ -269,11 +266,13 @@ function tw_default_nav() {
 
 function tw_default_mobile_nav() {
     $dest_url  = esc_url(get_post_type_archive_link('destination'));
+    $itin_url  = esc_url(get_post_type_archive_link('itinerary'));
     $pkg_url   = esc_url(get_post_type_archive_link('travel_package'));
     $blog_url  = esc_url(home_url('/blog-affiliates/'));
     $tribe_url = post_type_exists('forum_topic') ? esc_url(get_post_type_archive_link('forum_topic')) : '';
     echo '<ul class="tw-mobile-list">';
     echo '<li><a href="' . $dest_url . '">Destinations</a></li>';
+    echo '<li><a href="' . $itin_url . '">Itineraries</a></li>';
     echo '<li><a href="' . $pkg_url . '">Packages</a></li>';
     echo '<li><a href="' . $blog_url . '">Blog</a></li>';
     if ( $tribe_url ) { echo '<li><a href="' . $tribe_url . '">Tribe</a></li>'; }
