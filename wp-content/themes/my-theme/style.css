@@ -5821,7 +5821,7 @@ img, video, iframe, embed, object { max-width: 100%; height: auto; }
 .tw-search-toggle:hover { background: #eef3f6; border-color: rgba(27,147,176,0.4); }
 .tw-search-toggle i { color: var(--tw-blue); font-size: 0.82rem; }
 .tw-search-toggle-label { white-space: nowrap; }
-.tw-search-rotate { display: inline-block; transition: opacity 0.25s ease; }
+.tw-search-rotate { display: inline-block; text-align: left; transition: opacity 0.25s ease; }
 .tw-search-rotate.tw-search-rotate--fade { opacity: 0; }
 @media (max-width: 1100px) {
     .tw-search-toggle-label { display: none; }

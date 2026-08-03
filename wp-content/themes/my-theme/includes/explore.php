@@ -943,6 +943,32 @@ function tw_explore_subheader() {
                 </div>
             </div>
 
+            <?php $tw_sub_active_ev = is_page_template( 'page-events-festivals.php' ) || is_singular( 'tw_event' ) || is_tax( 'event_festival' ); ?>
+            <div class="tw-sub-item has-mega">
+                <a class="tw-sub-link<?php echo $tw_sub_active_ev ? ' is-active' : ''; ?>" href="<?php echo esc_url( tw_events_page_url() ); ?>">
+                    Events &amp; Festivals
+                    <i class="fa-solid fa-chevron-down tw-sub-caret" aria-hidden="true"></i>
+                </a>
+                <div class="tw-mega tw-mega-events" role="menu">
+                    <?php if ( $events ) : ?>
+                    <div class="tw-mega-events-grid">
+                        <?php foreach ( $events as $ev ) :
+                            $cur = get_queried_object_id() === $ev->ID; ?>
+                            <a class="tw-mega-event <?php echo $cur ? 'active' : ''; ?>" href="<?php echo esc_url( get_permalink( $ev->ID ) ); ?>">
+                                <i class="fa-solid fa-ticket tw-mega-event-icon"></i>
+                                <span class="tw-mega-event-name"><?php echo esc_html( get_the_title( $ev->ID ) ); ?></span>
+                            </a>
+                        <?php endforeach; ?>
+                    </div>
+                    <?php else : ?>
+                        <div class="tw-mega-empty">
+                            <p>No events yet.</p>
+                            <a class="tw-mega-allcta" href="<?php echo esc_url( tw_events_page_url() ); ?>">View Events &amp; Festivals →</a>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+
             <?php
             $womens_trips       = tw_recent_womens_trips( 8 );
             $tw_sub_active_wmns = is_page_template( 'page-womens-trips.php' );
@@ -1006,32 +1032,6 @@ function tw_explore_subheader() {
                         <div class="tw-mega-empty"><p>The next collection is being composed.</p></div>
                     <?php endif; ?>
                     <a class="tw-mega-allcta" href="<?php echo esc_url( tw_luxe_page_url() ); ?>">Explore the Collection <i class="fa-solid fa-arrow-right"></i></a>
-                </div>
-            </div>
-
-            <?php $tw_sub_active_ev = is_page_template( 'page-events-festivals.php' ) || is_singular( 'tw_event' ) || is_tax( 'event_festival' ); ?>
-            <div class="tw-sub-item has-mega">
-                <a class="tw-sub-link<?php echo $tw_sub_active_ev ? ' is-active' : ''; ?>" href="<?php echo esc_url( tw_events_page_url() ); ?>">
-                    Events &amp; Festivals
-                    <i class="fa-solid fa-chevron-down tw-sub-caret" aria-hidden="true"></i>
-                </a>
-                <div class="tw-mega tw-mega-events" role="menu">
-                    <?php if ( $events ) : ?>
-                    <div class="tw-mega-events-grid">
-                        <?php foreach ( $events as $ev ) :
-                            $cur = get_queried_object_id() === $ev->ID; ?>
-                            <a class="tw-mega-event <?php echo $cur ? 'active' : ''; ?>" href="<?php echo esc_url( get_permalink( $ev->ID ) ); ?>">
-                                <i class="fa-solid fa-ticket tw-mega-event-icon"></i>
-                                <span class="tw-mega-event-name"><?php echo esc_html( get_the_title( $ev->ID ) ); ?></span>
-                            </a>
-                        <?php endforeach; ?>
-                    </div>
-                    <?php else : ?>
-                        <div class="tw-mega-empty">
-                            <p>No events yet.</p>
-                            <a class="tw-mega-allcta" href="<?php echo esc_url( tw_events_page_url() ); ?>">View Events &amp; Festivals →</a>
-                        </div>
-                    <?php endif; ?>
                 </div>
             </div>
 

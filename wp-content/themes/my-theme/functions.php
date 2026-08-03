@@ -3650,7 +3650,7 @@ function tw_render_plan_trip_settings_page() {
                         <th><label for="tw_pat_title">Main Heading</label></th>
                         <td>
                             <input type="text" id="tw_pat_title" name="tw_pat_title"
-                                   value="<?php echo esc_attr(get_option('tw_pat_title','PLAN YOUR DREAM TRIP')); ?>"
+                                   value="<?php echo esc_attr(get_option('tw_pat_title','Plan Your Dream Trip')); ?>"
                                    class="large-text">
                         </td>
                     </tr>
