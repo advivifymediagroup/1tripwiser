@@ -170,7 +170,7 @@
         <nav class="tw-links" aria-label="Primary navigation">
             <button type="button" class="tw-search-toggle" id="tw-search-open" aria-label="Search the site">
                 <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
-                <span class="tw-search-toggle-label">Search <span class="tw-search-rotate" id="tw-search-rotate">destinations</span>&hellip;</span>
+                <span class="tw-search-toggle-label">Search <span class="tw-search-rotate" id="tw-search-rotate">destinations&hellip;</span></span>
             </button>
             <?php
             $walker_args = array(
@@ -357,11 +357,34 @@ function tw_default_mobile_nav() {
     if (sRotate && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
         var sWords = ['destinations', 'itineraries', 'packages', 'group trips', "women's trips", 'Luxe experience'];
         var sIndex = 0;
+        /* The "…" travels with each word (instead of sitting fixed after a
+           fixed-width box) so it always hugs the actual text, whatever its
+           length, rather than floating in empty space after short words. */
+        function sLabel(w) { return w + '…'; }
+
+        /* Lock the rotating word to the width of the longest option, so the
+           toggle button doesn't resize/jump as the text changes. Measured
+           against the actual webfont — measuring too early (before it's
+           loaded) would lock in a too-narrow fallback-font width. */
+        function sMeasure() {
+            var maxWidth = 0;
+            sWords.forEach(function (w) {
+                sRotate.textContent = sLabel(w);
+                maxWidth = Math.max(maxWidth, sRotate.getBoundingClientRect().width);
+            });
+            sRotate.style.width = Math.ceil(maxWidth) + 'px';
+            sRotate.textContent = sLabel(sWords[sIndex]);
+        }
+        sMeasure();
+        if (document.fonts && document.fonts.ready) {
+            document.fonts.ready.then(sMeasure);
+        }
+
         setInterval(function () {
             sRotate.classList.add('tw-search-rotate--fade');
             setTimeout(function () {
                 sIndex = (sIndex + 1) % sWords.length;
-                sRotate.textContent = sWords[sIndex];
+                sRotate.textContent = sLabel(sWords[sIndex]);
                 sRotate.classList.remove('tw-search-rotate--fade');
             }, 250);
         }, 2600);

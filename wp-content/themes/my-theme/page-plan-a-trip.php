@@ -7,7 +7,7 @@ get_header();
 
 // Pull editable content from WP Options (Admin → Trip Inquiries → Page Settings)
 $pat_kicker    = get_option('tw_pat_kicker',   'YOUR PERSONALISED TRIP PLANNER');
-$pat_title     = get_option('tw_pat_title',    'PLAN YOUR DREAM TRIP');
+$pat_title     = get_option('tw_pat_title',    'Plan Your Dream Trip');
 $pat_subtitle  = get_option('tw_pat_subtitle', "Tell us your dream destination, travel dates, and budget — we'll craft a personalised itinerary just for you.");
 $pat_whatsapp  = get_option('tw_pat_whatsapp', '919999999999');
 ?>

@@ -115,7 +115,7 @@ $tw_pinned_ids = wp_list_pluck( $tw_pinned, 'ID' );
         <div class="tribe-hero-overlay" aria-hidden="true"></div>
         <div class="container tribe-hero-inner">
             <span class="tribe-hero-kicker">Join the conversation</span>
-            <h1 class="tribe-hero-title">1TRIPWISER <span>TRIBE</span></h1>
+            <h1 class="tribe-hero-title">1TripWiser <span>Tribe</span></h1>
             <p class="tribe-hero-sub">
                 <?php
                 if ( $tw_is_cat && $tw_cat_term ) {
