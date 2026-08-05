@@ -44,9 +44,7 @@
 
       /* Mobile menu & nav */
       .tw-mobile-menu{max-width:100vw!important;overflow:hidden!important;width:100%!important}
-      /* Only constrain .tw-nav itself — NOT .tw-nav-inner.
-         .tw-nav-inner has its own max-width:1280px that creates breathing room on wide screens. */
-      .tw-nav{max-width:100%!important;box-sizing:border-box!important}
+ 
 
       /* Posts grid — column width can never exceed 100% */
       .posts-grid{grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr))!important}
