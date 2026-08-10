@@ -1,1 +1,450 @@
-/* All animation, loader, and auth styles have been consolidated into style.css */
+/* ///////////////////////////////
+ Unused and Redundant CSS from the Main stylesheet. Put here for referance purpose. Will be removed after verifying 
+ /////////////////////////////////
+ */
+
+
+/* ====================
+ Old site-header hidden — replaced by .tw-nav in header.php
+======================= */
+/* .site-header {
+  display: none;
+}
+.header-main {
+  padding: 20px 0;
+}
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}*/
+  
+
+/* ================= 
+Search Form and Search Results 
+========================*/
+
+/* .header-search {
+  margin-left: auto;
+}
+.header-meta span {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.28);
+  color: var(--white);
+}
+.header-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+}
+.header-top {
+  background: rgba(0, 0, 0, 0.1);
+  padding: 10px 0;
+} 
+
+.search-header {
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+.search-header h1 {
+  margin-bottom: 10px;
+} */
+
+/* =========================
+ Old site-footer — replaced by .tw-footer in footer.php 
+ ========================= */
+
+/* .site-footer {
+  display: none;
+}
+
+.footer-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin-bottom: 1rem;
+}
+
+.footer-section ul {
+  color: #ffffff80;
+  list-style: none;
+}
+
+.footer-section ul li {
+  margin-bottom: 10px;
+}
+
+.footer-section a {
+  color: #bdc3c7;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.footer-section a:hover {
+  color: #ffd700;
+}
+
+.footer-section.sub-title {
+  font-size: 12px;
+  color: #f1af1a;
+  font-weight: 700;
+}
+
+.footer-section.description {
+  font-size: 12px;
+}
+.footer-bottom {
+  border-top: 1px solid #34495e;
+  padding-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+} */
+
+/* ========================= 
+Free Itinerary 
+==================== */
+
+/* .footer-nav {
+  display: flex;
+  list-style: none;
+}
+
+.footer-nav li {
+  margin-left: 20px;
+}
+
+.footer-nav a {
+  color: #bdc3c7;
+  text-decoration: none;
+}
+
+.footer-nav a:hover {
+  color: #ffd700;
+}
+
+.destination-guide-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.plan-trip-grid {
+  display: grid;
+  gap: 28px;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.85fr);
+  margin-top: 30px;
+}
+
+.itinerary-days {
+}
+
+.itinerary-days-heading {
+  margin-bottom: 20px;
+}
+
+.itinerary-days-heading span {
+  color: var(--tw-blue);
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.itinerary-days h2,
+.itinerary-days-heading h2 {
+  color: var(--tw-navy);
+  font-size: 1.5rem;
+  margin: 0;
+}
+.free-itinerary-content {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.free-itinerary-section {
+  background: var(--tw-blue) 1a;
+  padding: 58px 0;
+}
+
+.section-kicker {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+/* =================
+Free Itinerary Form 
+==================== */
+
+/* .free-itinerary-form {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 8px;
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+}
+
+.free-itinerary-form input {
+  min-width: 0;
+}
+
+.free-itinerary-form input {
+  background: var(--white);
+  border: 1px solid transparent;
+  border-radius: 6px;
+  color: var(--tw-navy);
+  flex: 1;
+  font-size: 0.96rem;
+  min-width: 15rem;
+  padding: 13px 14px;
+}
+
+.free-itinerary-form input:focus {
+  border-color: #f1af1a;
+  outline: none;
+}
+
+.free-itinerary-form button {
+  background: #f1af1a;
+  border: none;
+  font-size: 12px;
+  border-radius: 8px;
+  color: var(--tw-navy);
+  cursor: pointer;
+  flex: 0 0 auto;
+  font-family: var(--body-font);
+  font-weight: 800;
+  padding: 13px 18px;
+}
+
+.free-itinerary-form button:hover {
+  background: var(--tw-blue);
+}
+
+.free-itinerary-form button {
+  background: var(--tw-pink) !important;
+  color: var(--white) !important;
+  box-shadow: 0 4px 14px rgba(216, 53, 80, 0.28) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease !important;
+}
+.free-itinerary-form button:hover {
+  background: var(--tw-pink) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 22px rgba(216, 53, 80, 0.4) !important;
+  filter: brightness(1.05) !important;
+}  */
+
+/* ================
+ Social Icons, Stats section, hero-actions 
+ ========== */
+/* .social-icons a {
+  color: var(--white);
+  margin-left: 15px;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.social-icons a:hover {
+  color: var(--tw-yellow);
+}
+
+.stats-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid #e0e8f0;
+  border-top: 1px solid #e0e8f0;
+  padding: 40px 20px;
+ background: #0f172a;
+  flex-wrap: wrap; 
+}
+.hero-actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+}
+.hero-content {
+  margin-bottom: 2rem;
+}
+.hero-content h1 {
+
+  font-family: var(--heading-font);
+
+  font-size: 4rem;
+  font-weight: bold;
+  line-height: 1;
+  letter-spacing: 3px;
+  color: var(--tw-blue);
+  margin-bottom: 8px;
+  animation: fadeUp 1s ease 0.4s both;
+}
+
+.hero-content p {
+  max-width: 680px;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 1.2em;
+  margin-bottom: 30px;
+}
+
+.hero-content .pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(27, 147, 176, 0.1);
+  border: 1px solid rgba(27, 147, 176, 0.25);
+  color: var(--tw-blue);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 7px 18px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  animation: fadeDown 0.8s ease;
+  margin-bottom: 10rem;
+}
+.hero-content .pill p {
+  margin: 0;
+}
+
+.hero-content .tag-pills {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+.hero-kicker{
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--tw-blue);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  animation: fadeUp 1s ease 0.5s both;
+}
+.hero-secondary {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: var(--tw-blue);
+  color: var(--tw-blue);
+} */
+
+/* ==============
+ Explore 
+ ============ */
+/* .explore-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 26px;
+}
+.explore-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: var(--white);
+  border: 1px solid #e0e8f0;
+  color: var(--tw-bodyColor);
+  font-size: 0.84rem;
+  font-weight: 700;
+  padding: 8px 15px;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: border-color 0.2s, color 0.2s;
+}
+.explore-chip:hover {
+  border-color: var(--tw-blue);
+  color: var(--tw-blue);
+}
+
+.pf-section-label {
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--tw-blue);
+  padding: 16px 0 12px;
+  border-bottom: 1px solid #dde5ef;
+  margin-bottom: 20px;
+}
+.logo-description {
+  font-size: 0.5rem;
+  color: var(--tw-blue);
+  font-weight: 300;
+}
+
+.tw-hero-tags-prompt {
+  display: none;
+} */
+
+/* =====================
+       Responsive 
+ ====================== */
+
+/* @media (max-width: 768px) {
+  .free-itinerary-content {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+.plan-trip-grid {
+    grid-template-columns: 1fr;
+  }
+
+.hero-content h1 {
+    font-size: 2em;
+  }
+ .header-container {
+    flex-direction: column;
+    text-align: center;
+  }
+  .footer-bottom {
+    flex-direction: column;
+    text-align: center;
+  }
+   .footer-nav {
+    margin-top: 15px;
+  }
+
+  .footer-nav li {
+    margin: 0 10px;
+  }
+}
+
+@media (max-width: 480px) {
+
+  .footer-content {
+    grid-template-columns: 1fr;
+  }
+    .social-icons {
+    order: -1;
+  }
+    .free-itinerary-form {
+    flex-direction: column;
+  }
+
+  .free-itinerary-form button {
+    width: 100%;
+  }
+    .free-itinerary-form {
+    flex-direction: column;
+  }
+  .free-itinerary-form button {
+    width: 100%;
+  }
+ .header-info {
+    flex-direction: column;
+    gap: 10px;
+  }
+} */

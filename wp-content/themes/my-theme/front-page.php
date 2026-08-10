@@ -41,8 +41,8 @@ if ( $tw_hero_video ) {
             <p class="tw-hero-desc">Handcrafted itineraries, priced fairly, ready in 24 hours.</p>
 
             <div class="tw-hero-actions">
-                <a href="<?php echo esc_url(mytheme_get_plan_trip_url()); ?>" class="tw-hero-btn tw-hero-btn--primary">Plan a Trip &mdash; Free</a>
-                <a href="#featured-packages" class="tw-hero-btn tw-hero-btn--outline">Explore Packages</a>
+                <a href="<?php echo esc_url(mytheme_get_plan_trip_url()); ?>" class="tw-cta-btn tw-cta-btn--primary">Plan a Trip &mdash; Free</a>
+                <a href="#featured-packages" class="tw-cta-btn tw-cta-btn--outline">Explore Packages</a>
             </div>
 
             <?php
