@@ -3158,7 +3158,7 @@ body.page-template-page-plan-a-trip-php {
 }
 /* Logo-only header: hide the wordmark, let the mark itself do the work. */
 .tw-custom-logo {
-  max-height: 95px;
+  max-height: 85px;
   width: auto;
   display: block;
   object-fit: contain;
@@ -13008,7 +13008,7 @@ object {
   left: 0;
   right: 0;
   margin: 0 auto;
-  z-index: 999;
+  z-index: 998;
   font-family: var(--body-font);
 }
 @media (max-width: 600px) {
@@ -13063,8 +13063,8 @@ object {
 }
 .tw-sub-item:hover .tw-sub-link,
 .tw-sub-link:focus {
-  color: inherit;
-  border-top-color: rgba(13, 21, 38, 0.04);
+  color: var(--pastel-pink);
+  border-top-color: var(--pastel-pink);
 }
 .tw-sub-item.is-open .tw-sub-link {
   color: var(--tw-bodyBg);
