@@ -279,7 +279,6 @@ h6 {
 .main-content {
   /* padding: 50px 0; */
   min-height: 60vh;
-  padding-top: 3.5%;
   /* margin-top: -132px; */
 }
 
@@ -978,7 +977,7 @@ h6 {
   color: rgba(13, 21, 38, 0.55);
   line-height: 1.4;
   margin: 0 0 10px;
-  max-width: 620px;
+  max-width: 100%;
 }
 .tw-itin-actions {
   display: flex;
@@ -989,18 +988,19 @@ h6 {
   display: inline-flex;
   align-items: center;
   line-height: 1;
-  padding: 6px 16px;
-  border: 1.5px solid rgba(13, 21, 38, 0.2);
-  border-radius: 4px;
+  padding: 8px 16px;
+  border-radius: 24px;
   color: var(--tw-navy);
   font-size: 0.78rem;
-  font-weight: 700;
+  font-weight: 600;
   text-decoration: none;
+  background: var(--tw-blue);
   transition: border-color 0.2s, background 0.2s;
 }
 .tw-itin-open:hover {
-  border-color: var(--tw-blue);
-  background: rgba(27, 147, 176, 0.06);
+  color: #fff;
+  border-color: var(--tw-navy);
+  background: var(--tw-navy);
 }
 .tw-itin-book {
   display: inline-flex;
@@ -3254,7 +3254,7 @@ body.page-template-page-plan-a-trip-php {
   border-color: var(--tw-blue);
 }
 .tw-nav-link {
-  color: rgba(13, 21, 38, 0.7);
+  color: rgba(13, 21, 38, 0.9);
   text-decoration: none;
   font-size: 0.86rem;
   font-weight: 400;
@@ -3279,7 +3279,7 @@ body.page-template-page-plan-a-trip-php {
   color: var(--white) !important;
   font-size: 0.84rem;
   font-weight: 500;
-  border-radius: 6px;
+  border-radius: 24px;
   text-decoration: none;
   letter-spacing: 0;
   transition: background 0.18s;
@@ -3300,9 +3300,9 @@ body.page-template-page-plan-a-trip-php {
   color: rgba(13, 21, 38, 0.7);
   text-decoration: none;
   font-size: 0.84rem;
-  font-weight: 700;
+  font-weight: 500;
   padding: 6px 11px;
-  border-radius: 7px;
+  border-radius: 24px;
   transition: background 0.2s, color 0.2s;
   white-space: nowrap;
 }
@@ -3315,10 +3315,10 @@ body.page-template-page-plan-a-trip-php {
   align-items: center;
   padding: 7px 14px;
   border: 1.5px solid rgba(216, 53, 80, 0.6);
-  border-radius: 8px;
+  border-radius: 24px;
   color: var(--tw-pink);
   font-size: 0.84rem;
-  font-weight: 800;
+  font-weight: 500;
   text-decoration: none;
   transition: background 0.2s, color 0.2s, border-color 0.2s;
   white-space: nowrap;
@@ -4118,8 +4118,10 @@ body.page-template-page-plan-a-trip-php {
    image/gradient: flat white, per brand simplification to red + blue only. */
 .tw-hero {
   position: relative;
-  background: var(--white);
-  padding: 40px 0 36px;
+  background-image: url('assets/images/1tripwiser-hero.png');
+  background-color: var(--white);
+  padding: 60px 0 36px;
+  background-size: cover;
   overflow: hidden;
 }
 .tw-hero-split {
@@ -4143,8 +4145,10 @@ body.page-template-page-plan-a-trip-php {
   position: relative;
   width: 100%;
   aspect-ratio: 5/4;
-  border-radius: 8px;
+  border-radius: 12px;
   overflow: hidden;
+  border:5px solid #fff;
+  transform: skew(4deg, 0);
   background: var(--tw-navy);
   box-shadow: 0 24px 64px rgba(13, 21, 38, 0.16);
 }
@@ -4360,24 +4364,24 @@ body.page-template-page-plan-a-trip-php {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  background: rgba(27, 147, 176, 0.07);
-  border: 1px solid rgba(27, 147, 176, 0.22);
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(229, 18, 125, 0.07);
   color: var(--tw-navy);
   font-size: 0.74rem;
-  font-weight: 700;
+  font-weight: 500;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   padding: 7px 16px;
-  border-radius: 4px;
+  border-radius: 16px;
   margin-bottom: 18px;
 }
 .tw-hero-pill-dot {
   width: 7px;
   height: 7px;
-  background: var(--tw-blue);
+  background: var(--tw-pink);
   border-radius: 50%;
   flex-shrink: 0;
-  box-shadow: 0 0 0 3px rgba(27, 147, 176, 0.25);
+  box-shadow: 0 0 0 3px rgba(229, 18, 125, 0.25);
   animation: tw-pulse 2s ease infinite;
 }
 .tw-hero-tags-prompt {
@@ -4386,16 +4390,16 @@ body.page-template-page-plan-a-trip-php {
 @keyframes tw-pulse {
   0%,
   100% {
-    box-shadow: 0 0 0 3px rgba(27, 147, 176, 0.25);
+    box-shadow: 0 0 0 3px rgba(229, 18, 125, 0.25);
   }
   50% {
-    box-shadow: 0 0 0 7px rgba(27, 147, 176, 0.08);
+    box-shadow: 0 0 0 7px rgba(229, 18, 125, 0.08);
   }
 }
 .tw-hero-title {
   font-family: var(--heading-font);
-  font-weight: 400;
-  font-size: clamp(2.1rem, 3.8vw, 3rem);
+  font-weight: 600;
+  font-size: clamp(2.1rem, 3.8vw, 3.1rem);
   color: var(--tw-navy);
   letter-spacing: -0.01em;
   line-height: 1.2;
@@ -4408,7 +4412,7 @@ body.page-template-page-plan-a-trip-php {
   color: var(--tw-pink);
 }
 .tw-hero-title-quiet {
-  color: rgba(13, 21, 38, 0.55);
+  color: rgba(13, 21, 38, 0.75);
   font-weight: 400;
   font-style: italic;
 }
@@ -4419,7 +4423,7 @@ body.page-template-page-plan-a-trip-php {
   font-family: var(--heading-font);
   font-style: italic;
   font-size: 1.08rem;
-  color: rgba(13, 21, 38, 0.65);
+  color: var(--tw-navy);
   line-height: 1.6;
   max-width: 480px;
   margin: 0 0 20px;
@@ -4436,7 +4440,7 @@ body.page-template-page-plan-a-trip-php {
   align-items: center;
   gap: 8px;
   padding: 13px 26px;
-  border-radius: 4px;
+  border-radius: 24px;
   font-size: 0.95rem;
   font-weight: 500;
   text-decoration: none;
@@ -5153,7 +5157,7 @@ body.page-template-page-plan-a-trip-php {
 
 /* Subheader womens accent */
 .tw-sub-link--womens {
-  color: var(--tw-pink) !important;
+  color: color-mix(in oklab, var(--tw-pink), #fff 20%)!important;
 }
 
 /* ══════════════════════════════════════════════════════════════
@@ -11551,7 +11555,7 @@ object {
   font-family: var(--heading-font);
   font-size: clamp(2rem, 4vw, 3rem);
   letter-spacing: 0.04em;
-  line-height: 1;
+  line-height: 1.35;
   margin: 0 0 14px;
   background: linear-gradient(
     135deg,
@@ -14734,18 +14738,16 @@ object {
   justify-content: center;
   background: var(--tw-pink);
   color: var(--white);
-  font-weight: 800;
+  font-weight: 600;
   font-size: 0.86rem;
   letter-spacing: 0.03em;
   padding: 10px 22px;
-  border-radius: 4px;
+  border-radius: 24px;
   text-decoration: none;
   box-shadow: 0 4px 14px rgba(216, 53, 80, 0.3);
   transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
 }
 .book-now-gold:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(216, 53, 80, 0.45);
   filter: brightness(1.05);
   color: var(--white);
 }

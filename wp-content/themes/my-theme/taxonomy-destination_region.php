@@ -150,9 +150,9 @@ $total = array_sum( $counts );
 
                 /* type badge */
                 $badges = array(
-                    'travel_package' => array( 'Package',    'var(--tw-red)', '#0d1526' ),
+                    'travel_package' => array( 'Package',    'var(--tw-pink)', '#0d1526' ),
                     'group_trip'     => array( 'Group Trip',  '#1B93B0', '#fff'    ),
-                    'tw_event'       => array( 'Event',       'var(--tw-red)', '#fff'    ),
+                    'tw_event'       => array( 'Event',       'var(--tw-pink)', '#fff'    ),
                     'itinerary'      => array( 'Itinerary',  '#10b981', '#fff'    ),
                 );
                 $badge     = isset( $badges[$pt] ) ? $badges[$pt] : array( '<i class="fi-rr-plane" aria-hidden="true"></i> Trip', '#6b7a8f', '#fff' );

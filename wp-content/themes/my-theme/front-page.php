@@ -30,8 +30,8 @@ if ( $tw_hero_video ) {
         <div class="tw-hero-copy">
 
             <div class="tw-hero-pill">
-                <span class="tw-hero-pill-dot"></span>
-                India's Most Trusted Travel Community &nbsp;·&nbsp; 300K+ on Instagram
+              
+                India's Most Trusted Travel Community <span class="tw-hero-pill-dot"></span> 300K+ on Instagram
             </div>
 
             <h1 class="tw-hero-title">
