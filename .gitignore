@@ -1,1 +1,5 @@
 /wp-content/plugins
+node_modules/
+assets/css/style.compiled.css
+assets/css/style.compiled.css.map
+.DS_Store

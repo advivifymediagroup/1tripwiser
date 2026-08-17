@@ -209,7 +209,7 @@
     var RIPPLE_SEL = [
         '.tw-cta', '.ba-write-btn', '.sb-submit-btn', '.ba-table-book-btn',
         '.tw-auth-btn', '.auth-submit-btn', '.ba-filter-pill',
-        '.tw-hero-btn', '.tw-community-btn', '.free-itinerary-link'
+        '.tw-cta-btn', '.tw-community-btn', '.free-itinerary-link'
     ].join(',');
 
     document.addEventListener('click', function (e) {

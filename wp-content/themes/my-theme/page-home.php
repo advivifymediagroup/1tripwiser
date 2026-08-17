@@ -69,8 +69,8 @@ if ( $tw_hero_video ) {
         <p class="tw-hero-desc"><?php bloginfo('description'); ?></p>
 
         <div class="tw-hero-actions">
-            <a href="#featured-packages" class="tw-hero-btn tw-hero-btn--primary"><i class="fi-rr-map" aria-hidden="true"></i> Explore Packages</a>
-            <a href="<?php echo esc_url(mytheme_get_plan_trip_url()); ?>" class="tw-hero-btn tw-hero-btn--outline"><i class="fi-rr-plane" aria-hidden="true"></i> Plan a Trip — Free</a>
+            <a href="#featured-packages" class="tw-cta-btn tw-cta-btn--primary"><i class="fi-rr-map" aria-hidden="true"></i> Explore Packages</a>
+            <a href="<?php echo esc_url(mytheme_get_plan_trip_url()); ?>" class="tw-cta-btn tw-cta-btn--outline"><i class="fi-rr-plane" aria-hidden="true"></i> Plan a Trip — Free</a>
         </div>
 
         <div class="tw-hero-tags">
