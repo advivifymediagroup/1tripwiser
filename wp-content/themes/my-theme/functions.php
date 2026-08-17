@@ -3050,17 +3050,25 @@ function mytheme_render_inquiries_page() {
 // SETTINGS: Register options for Plan A Trip + Blog pages + Hero + WhatsApp
 // ============================================================
 function mytheme_register_page_settings() {
-    // Plan A Trip
-    foreach (array('tw_pat_kicker', 'tw_pat_title', 'tw_pat_subtitle', 'tw_pat_whatsapp') as $key) {
-        register_setting('tripwiser_plan_trip_settings', $key, array('sanitize_callback' => 'sanitize_text_field'));
+    // Plan A Trip — one group per <form> on the page. WordPress's options.php
+    // blanks out every option registered under a group that wasn't present in
+    // whichever single form got submitted, so options split across multiple
+    // forms must never share a group (see mytheme_register_page_settings()
+    // usage below — every group here corresponds to exactly one <form>).
+    foreach (array('tw_pat_kicker', 'tw_pat_title', 'tw_pat_subtitle') as $key) {
+        register_setting('tw_pat_hero_group', $key, array('sanitize_callback' => 'sanitize_text_field'));
     }
-    // Blog & Affiliates
-    register_setting('tripwiser_blog_settings', 'tw_blog_kicker',      array('sanitize_callback' => 'sanitize_text_field'));
-    register_setting('tripwiser_blog_settings', 'tw_blog_title',       array('sanitize_callback' => 'sanitize_text_field'));
-    register_setting('tripwiser_blog_settings', 'tw_blog_subtitle',    array('sanitize_callback' => 'sanitize_text_field'));
-    register_setting('tripwiser_blog_settings', 'tw_blog_aff_heading', array('sanitize_callback' => 'sanitize_text_field'));
-    register_setting('tripwiser_blog_settings', 'tw_blog_aff_text',    array('sanitize_callback' => 'wp_kses_post'));
-    // Hero background
+    register_setting('tw_pat_whatsapp_group', 'tw_pat_whatsapp', array('sanitize_callback' => 'sanitize_text_field'));
+    register_setting('tw_pat_sheet_group', 'tw_pat_sheet_webhook_url', array('sanitize_callback' => 'esc_url_raw'));
+
+    // Blog & Affiliates — two forms, two groups.
+    register_setting('tw_blog_hero_group', 'tw_blog_kicker',   array('sanitize_callback' => 'sanitize_text_field'));
+    register_setting('tw_blog_hero_group', 'tw_blog_title',    array('sanitize_callback' => 'sanitize_text_field'));
+    register_setting('tw_blog_hero_group', 'tw_blog_subtitle', array('sanitize_callback' => 'sanitize_text_field'));
+    register_setting('tw_blog_aff_group', 'tw_blog_aff_heading', array('sanitize_callback' => 'sanitize_text_field'));
+    register_setting('tw_blog_aff_group', 'tw_blog_aff_text',    array('sanitize_callback' => 'wp_kses_post'));
+
+    // Hero background — single form, one group is fine.
     register_setting('tripwiser_hero_settings', 'tw_hero_video_url',        array('sanitize_callback' => 'esc_url_raw'));
     register_setting('tripwiser_hero_settings', 'tw_hero_image_url',        array('sanitize_callback' => 'esc_url_raw'));
     register_setting('tripwiser_hero_settings', 'tw_hero_mobile_image_url', array('sanitize_callback' => 'esc_url_raw'));
@@ -3069,16 +3077,18 @@ function mytheme_register_page_settings() {
     register_setting('tripwiser_hero_settings', 'tw_hero_float_img_tr', array('sanitize_callback' => 'esc_url_raw'));
     register_setting('tripwiser_hero_settings', 'tw_hero_float_img_ml', array('sanitize_callback' => 'esc_url_raw'));
     register_setting('tripwiser_hero_settings', 'tw_hero_float_img_br', array('sanitize_callback' => 'esc_url_raw'));
-    // LUXURY page scroll-scrubbed hero video
+    // LUXURY page scroll-scrubbed hero video — single form.
     register_setting('tripwiser_luxury_settings', 'tw_luxury_hero_video_url', array('sanitize_callback' => 'esc_url_raw'));
-    // WhatsApp widget + Cloud API
-    register_setting('tripwiser_wa_settings', 'tw_wa_widget_number',  array('sanitize_callback' => 'sanitize_text_field'));
-    register_setting('tripwiser_wa_settings', 'tw_wa_widget_message', array('sanitize_callback' => 'sanitize_text_field'));
-    register_setting('tripwiser_wa_settings', 'tw_wa_widget_greeting',array('sanitize_callback' => 'sanitize_text_field'));
-    register_setting('tripwiser_wa_settings', 'tw_wa_api_token',      array('sanitize_callback' => 'sanitize_text_field'));
-    register_setting('tripwiser_wa_settings', 'tw_wa_phone_id',       array('sanitize_callback' => 'sanitize_text_field'));
-    register_setting('tripwiser_wa_settings', 'tw_wa_template_name',  array('sanitize_callback' => 'sanitize_text_field'));
-    register_setting('tripwiser_wa_settings', 'tw_wa_template_lang',  array('sanitize_callback' => 'sanitize_text_field'));
+
+    // WhatsApp widget (its own page, one form) + Cloud API (a separate page
+    // with two forms of its own) — three forms total, three groups.
+    register_setting('tw_wa_widget_group', 'tw_wa_widget_number',   array('sanitize_callback' => 'sanitize_text_field'));
+    register_setting('tw_wa_widget_group', 'tw_wa_widget_message',  array('sanitize_callback' => 'sanitize_text_field'));
+    register_setting('tw_wa_widget_group', 'tw_wa_widget_greeting', array('sanitize_callback' => 'sanitize_text_field'));
+    register_setting('tw_wa_api_creds_group', 'tw_wa_api_token', array('sanitize_callback' => 'sanitize_text_field'));
+    register_setting('tw_wa_api_creds_group', 'tw_wa_phone_id',  array('sanitize_callback' => 'sanitize_text_field'));
+    register_setting('tw_wa_api_template_group', 'tw_wa_template_name', array('sanitize_callback' => 'sanitize_text_field'));
+    register_setting('tw_wa_api_template_group', 'tw_wa_template_lang', array('sanitize_callback' => 'sanitize_text_field'));
 }
 add_action('admin_init', 'mytheme_register_page_settings');
 
@@ -3277,6 +3287,50 @@ function tw_send_whatsapp_inquiry_notification( $post_id, $data ) {
 
 // Hook into the existing inquiry save
 add_action('tw_trip_inquiry_saved', 'tw_send_whatsapp_inquiry_notification', 10, 2);
+
+// ============================================================
+// GOOGLE SHEET SYNC — Plan My Trip submissions only.
+// Package-page enquiries (mytheme_handle_package_inquiry) never fire
+// tw_trip_inquiry_saved, so they're structurally excluded from this.
+//
+// Called synchronously (blocking) on the AJAX request itself. Two
+// alternatives were tried and rejected: a non-blocking wp_remote_post()
+// doesn't reliably finish its TLS handshake before the process moves on
+// (the request just never lands, with no error anywhere), and deferring
+// to WP-Cron is no better here — this environment's wp-cron.php doesn't
+// reliably execute pending events even when hit directly. A blocking
+// call costs the form a little latency (Apps Script typically responds
+// in under a second once warm), but it's the one approach that's
+// actually verifiable — it completes, or it reports why it didn't.
+// ============================================================
+function tw_push_trip_inquiry_to_sheet( $post_id, $data ) {
+    $webhook = get_option( 'tw_pat_sheet_webhook_url', '' );
+    if ( ! $webhook ) { return; }
+
+    $response = wp_remote_post( $webhook, array(
+        'body'     => wp_json_encode( $data ),
+        'headers'  => array( 'Content-Type' => 'application/json' ),
+        'timeout'  => 15,
+        'blocking' => true,
+    ) );
+
+    $log = array( 'time' => current_time( 'mysql' ), 'post_id' => $post_id );
+    if ( is_wp_error( $response ) ) {
+        $log['status']  = 'error';
+        $log['message'] = $response->get_error_message();
+    } else {
+        $code = wp_remote_retrieve_response_code( $response );
+        if ( $code >= 200 && $code < 300 ) {
+            $log['status']  = 'success';
+            $log['message'] = 'HTTP ' . $code;
+        } else {
+            $log['status']  = 'error';
+            $log['message'] = 'HTTP ' . $code . ' — ' . wp_trim_words( wp_remote_retrieve_body( $response ), 20 );
+        }
+    }
+    update_option( 'tw_pat_sheet_last_sync', $log, false );
+}
+add_action( 'tw_trip_inquiry_saved', 'tw_push_trip_inquiry_to_sheet', 10, 2 );
 
 // ============================================================
 // SHARED HELPER — settings page chrome (header + breadcrumb)
@@ -3635,7 +3689,7 @@ function tw_render_plan_trip_settings_page() {
         <div class="tw-admin-card-head"><h2>Hero Section Text</h2></div>
         <div class="tw-admin-card-body">
             <form method="post" action="options.php">
-                <?php settings_fields('tripwiser_plan_trip_settings'); ?>
+                <?php settings_fields('tw_pat_hero_group'); ?>
                 <table class="form-table">
                     <tr>
                         <th><label for="tw_pat_kicker">Kicker (small label above title)</label></th>
@@ -3672,7 +3726,7 @@ function tw_render_plan_trip_settings_page() {
         </div>
         <div class="tw-admin-card-body">
             <form method="post" action="options.php">
-                <?php settings_fields('tripwiser_plan_trip_settings'); ?>
+                <?php settings_fields('tw_pat_whatsapp_group'); ?>
                 <table class="form-table">
                     <tr>
                         <th><label for="tw_pat_whatsapp">WhatsApp Number</label></th>
@@ -3691,6 +3745,73 @@ function tw_render_plan_trip_settings_page() {
             </form>
         </div>
     </div>
+
+    <div class="tw-admin-card">
+        <div class="tw-admin-card-head">
+            <div><h2>Google Sheet Sync</h2><p>Every Plan My Trip submission gets appended as a new row. Package-page enquiries are saved separately and never sent here.</p></div>
+        </div>
+        <div class="tw-admin-card-body">
+            <?php $tw_sheet_log = get_option( 'tw_pat_sheet_last_sync' ); if ( $tw_sheet_log ) : ?>
+            <div class="tw-admin-note <?php echo 'success' === $tw_sheet_log['status'] ? 'success' : 'warn'; ?>">
+                <strong>Last sync attempt</strong> (<?php echo esc_html( $tw_sheet_log['time'] ); ?>, inquiry #<?php echo esc_html( $tw_sheet_log['post_id'] ); ?>):
+                <?php echo 'success' === $tw_sheet_log['status'] ? 'reached the sheet successfully.' : esc_html( $tw_sheet_log['message'] ); ?>
+            </div>
+            <?php endif; ?>
+            <div class="tw-admin-note info">
+                <strong>One-time setup</strong> (do this in the Google Sheet itself, not here):
+                <ol style="margin:8px 0 0 20px;">
+                    <li>Open your sheet → <strong>Extensions → Apps Script</strong>.</li>
+                    <li>Delete anything in the editor and paste the script below.</li>
+                    <li><strong>Deploy → New deployment</strong> → type <strong>Web app</strong> → Execute as "Me", Who has access "Anyone" → <strong>Deploy</strong>.</li>
+                    <li>Copy the Web app URL it gives you and paste it into the field below.</li>
+                </ol>
+            </div>
+            <p><strong>Apps Script to paste:</strong></p>
+            <textarea readonly onclick="this.select()" rows="18" class="large-text code" style="font-family:Consolas,Monaco,monospace;font-size:12px;">function doPost(e) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheets()[0];
+  var data = JSON.parse(e.postData.contents);
+
+  var headers = ['Timestamp', 'Name', 'Phone', 'Email', 'Destination', 'Travel Date', 'Duration', 'Time Preference', 'Trip Type', 'Adults', 'Children', 'Budget', 'Departing From', 'Notes'];
+  if (sheet.getLastRow() === 0) {
+    sheet.appendRow(headers);
+  }
+
+  sheet.appendRow([
+    new Date(),
+    data.name || '',
+    data.phone || '',
+    data.email || '',
+    data.destination || '',
+    data.date || '',
+    data.duration || '',
+    data.time_pref || '',
+    data.trip_type || '',
+    data.adults || '',
+    data.children || '',
+    data.budget || '',
+    data.departing || '',
+    data.notes || ''
+  ]);
+
+  return ContentService.createTextOutput(JSON.stringify({ status: 'ok' })).setMimeType(ContentService.MimeType.JSON);
+}</textarea>
+            <form method="post" action="options.php" style="margin-top:16px;">
+                <?php settings_fields('tw_pat_sheet_group'); ?>
+                <table class="form-table">
+                    <tr>
+                        <th><label for="tw_pat_sheet_webhook_url">Web App URL</label></th>
+                        <td>
+                            <input type="url" id="tw_pat_sheet_webhook_url" name="tw_pat_sheet_webhook_url"
+                                   value="<?php echo esc_attr(get_option('tw_pat_sheet_webhook_url','')); ?>"
+                                   class="large-text" placeholder="https://script.google.com/macros/s/.../exec">
+                            <p class="description">Leave blank to turn syncing off.</p>
+                        </td>
+                    </tr>
+                </table>
+                <?php submit_button('Save Web App URL'); ?>
+            </form>
+        </div>
+    </div>
     <?php tw_settings_page_footer();
 }
 
@@ -3704,7 +3825,7 @@ function tw_render_blog_settings_page() {
         <div class="tw-admin-card-head"><h2>Page Hero Text</h2></div>
         <div class="tw-admin-card-body">
             <form method="post" action="options.php">
-                <?php settings_fields('tripwiser_blog_settings'); ?>
+                <?php settings_fields('tw_blog_hero_group'); ?>
                 <table class="form-table">
                     <tr>
                         <th><label for="tw_blog_kicker">Kicker (small label above title)</label></th>
@@ -3728,7 +3849,7 @@ function tw_render_blog_settings_page() {
         <div class="tw-admin-card-head"><h2>Affiliate Partner Banner</h2></div>
         <div class="tw-admin-card-body">
             <form method="post" action="options.php">
-                <?php settings_fields('tripwiser_blog_settings'); ?>
+                <?php settings_fields('tw_blog_aff_group'); ?>
                 <table class="form-table">
                     <tr>
                         <th><label for="tw_blog_aff_heading">Banner Heading</label></th>
@@ -3764,7 +3885,7 @@ function tw_render_wa_widget_settings_page() {
         <div class="tw-admin-card-head"><h2>Widget Settings</h2></div>
         <div class="tw-admin-card-body">
             <form method="post" action="options.php">
-                <?php settings_fields('tripwiser_wa_settings'); ?>
+                <?php settings_fields('tw_wa_widget_group'); ?>
                 <table class="form-table">
                     <tr>
                         <th><label for="tw_wa_widget_number">Your WhatsApp Business Number</label></th>
@@ -3829,7 +3950,7 @@ function tw_render_wa_api_settings_page() {
         </div>
         <div class="tw-admin-card-body">
             <form method="post" action="options.php">
-                <?php settings_fields('tripwiser_wa_settings'); ?>
+                <?php settings_fields('tw_wa_api_creds_group'); ?>
                 <table class="form-table">
                     <tr>
                         <th><label for="tw_wa_phone_id">Phone Number ID</label></th>
@@ -3867,7 +3988,7 @@ function tw_render_wa_api_settings_page() {
         </div>
         <div class="tw-admin-card-body">
             <form method="post" action="options.php">
-                <?php settings_fields('tripwiser_wa_settings'); ?>
+                <?php settings_fields('tw_wa_api_template_group'); ?>
                 <table class="form-table">
                     <tr>
                         <th><label for="tw_wa_template_name">Template Name</label></th>
@@ -3984,17 +4105,24 @@ function mytheme_submit_trip_inquiry() {
         update_post_meta($post_id, $key, $value);
     }
 
-    // Fire WhatsApp notification hook
+    // Fire notification hooks (WhatsApp, Google Sheet, ...). Only the Plan
+    // My Trip form reaches this action — package-page enquiries are saved
+    // through a separate handler (mytheme_handle_package_inquiry) that
+    // never fires it, so downstream listeners naturally only see this source.
     do_action('tw_trip_inquiry_saved', $post_id, array(
         'name'        => $name,
         'phone'       => $phone,
         'email'       => $email,
         'destination' => $destination,
         'date'        => $date,
-        'budget'      => $budget,
+        'duration'    => $duration,
+        'time_pref'   => $time_pref,
+        'trip_type'   => $trip_type,
         'adults'      => $adults,
         'children'    => $children,
-        'trip_type'   => $trip_type,
+        'budget'      => $budget,
+        'departing'   => $departing,
+        'notes'       => $notes,
     ));
 
     wp_send_json_success(array('message' => 'Inquiry saved successfully.', 'id' => $post_id));
