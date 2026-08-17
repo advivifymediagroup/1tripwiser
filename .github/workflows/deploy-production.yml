@@ -63,5 +63,22 @@ jobs:
                fi
                echo '✅ WP configuration complete'"
 
+      - name: Purge LiteSpeed cache
+        run: |
+          ssh -i ~/.ssh/github_deploy \
+              -p ${{ secrets.SSH_PORT }} \
+              -o StrictHostKeyChecking=no \
+              ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} \
+              "WP_PATH=/home/${{ secrets.SSH_USERNAME }}/domains/1tripwiser.com/public_html
+               WP_CLI=\$(which wp 2>/dev/null || echo '')
+               if [ -n \"\$WP_CLI\" ]; then
+                 cd \$WP_PATH
+                 echo '→ Purging LiteSpeed cache via WP-CLI...'
+                 \$WP_CLI litespeed-purge all --allow-root 2>/dev/null || true
+               fi
+               echo '→ Clearing LiteSpeed static CSS/JS cache files...'
+               rm -rf \$WP_PATH/wp-content/litespeed/css/* \$WP_PATH/wp-content/litespeed/js/* \$WP_PATH/wp-content/cache/litespeed/* 2>/dev/null || true
+               echo '✅ Cache purge complete'"
+
       - name: Done
         run: echo "✅ Production deployment complete!"
