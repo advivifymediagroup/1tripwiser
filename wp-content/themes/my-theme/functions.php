@@ -2738,7 +2738,7 @@ function mytheme_export_trip_inquiries() {
         'order'          => 'DESC',
     ) );
 
-    $headers = array( '#', 'Name', 'Phone', 'Email', 'Destination', 'Travel Date', 'Budget', 'Adults', 'Children', 'Trip Type', 'Submitted' );
+    $headers = array( '#', 'Name', 'Phone', 'Email', 'Destination', 'Travel Date', 'Duration', 'Budget', 'Adults', 'Children', 'Trip Type', 'Submitted' );
     $rows    = array();
     $i       = 1;
     foreach ( $all as $p ) {
@@ -2749,6 +2749,7 @@ function mytheme_export_trip_inquiries() {
             get_post_meta( $p->ID, '_ti_email',       true ),
             get_post_meta( $p->ID, '_ti_destination', true ),
             get_post_meta( $p->ID, '_ti_date',        true ),
+            get_post_meta( $p->ID, '_ti_duration',    true ),
             get_post_meta( $p->ID, '_ti_budget',      true ),
             get_post_meta( $p->ID, '_ti_adults',      true ),
             get_post_meta( $p->ID, '_ti_children',    true ),
@@ -2986,6 +2987,7 @@ function mytheme_render_inquiries_page() {
                     <th><?php esc_html_e('Package', 'mytheme'); ?></th>
                     <th><?php esc_html_e('Destination', 'mytheme'); ?></th>
                     <th><?php esc_html_e('Travel Date', 'mytheme'); ?></th>
+                    <th><?php esc_html_e('Duration', 'mytheme'); ?></th>
                     <th><?php esc_html_e('Budget', 'mytheme'); ?></th>
                     <th><?php esc_html_e('Adults', 'mytheme'); ?></th>
                     <th><?php esc_html_e('Children', 'mytheme'); ?></th>
@@ -3018,6 +3020,7 @@ function mytheme_render_inquiries_page() {
                         </td>
                         <td><?php echo esc_html(get_post_meta($id, '_ti_destination', true)); ?></td>
                         <td><?php echo esc_html(get_post_meta($id, '_ti_date', true)); ?></td>
+                        <td><?php echo esc_html(get_post_meta($id, '_ti_duration', true)); ?></td>
                         <td><?php echo esc_html(get_post_meta($id, '_ti_budget', true)); ?></td>
                         <td><?php echo esc_html(get_post_meta($id, '_ti_adults', true)); ?></td>
                         <td><?php echo esc_html(get_post_meta($id, '_ti_children', true)); ?></td>
@@ -3027,7 +3030,7 @@ function mytheme_render_inquiries_page() {
                 <?php endwhile;
                 wp_reset_postdata();
             else : ?>
-                <tr><td colspan="12" style="text-align:center;padding:24px;color:#666;"><?php esc_html_e('No inquiries yet. Form submissions will appear here.', 'mytheme'); ?></td></tr>
+                <tr><td colspan="13" style="text-align:center;padding:24px;color:#666;"><?php esc_html_e('No inquiries yet. Form submissions will appear here.', 'mytheme'); ?></td></tr>
             <?php endif; ?>
             </tbody>
         </table>
@@ -3260,6 +3263,7 @@ function tw_send_whatsapp_inquiry_notification( $post_id, $data ) {
              . "Thanks for your trip inquiry with *1TripWiser*! Here's your summary:\n\n"
              . "*Destination:* " . ($data['destination'] ?? '-') . "\n"
              . "*Travel Date:* "  . ($data['date'] ?? '-') . "\n"
+             . "*Duration:* "     . ($data['duration'] ?? '-') . "\n"
              . "*Budget:* "        . ($data['budget'] ?? '-') . "\n"
              . "*Adults:* "        . ($data['adults'] ?? '1') . "  |  *Children:* " . ($data['children'] ?? '0') . "\n"
              . "*Trip Type:* "     . ($data['trip_type'] ?? '-') . "\n\n"
