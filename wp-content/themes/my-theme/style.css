@@ -7397,24 +7397,27 @@ body.page-template-page-plan-a-trip-php {
    ══════════════════════════════════════════════════════════════ */
 /* Layout: reserve left space so results don't slide under the nav */
 .tw-search-layout {
-  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 32px;
   padding-top: 36px;
-  padding-left: 272px;
 }
 .tw-search-results {
   min-width: 0;
+  flex: 1 1 auto;
 }
 .tw-search-results .tw-results-group {
   scroll-margin-top: 110px;
 }
 
-/* Nav — sits inside the layout grid by default (absolute at top-left).
-   JS adds .is-floating once user scrolls past the hero, which flips it to fixed. */
+/* Nav — sticky within its own flex column, so it stays correctly positioned
+   at any viewport width without hardcoded left-offset math. */
 .tw-search-nav {
-  position: absolute;
-  top: 36px;
-  left: 0;
+  position: sticky;
+  top: 110px;
+  flex: 0 0 240px;
   width: 240px;
+  align-self: flex-start;
   background: var(--white);
   border: 1px solid #e8edf5;
   border-radius: 6px;
@@ -7423,11 +7426,6 @@ body.page-template-page-plan-a-trip-php {
   max-height: calc(100vh - 140px);
   overflow-y: auto;
   z-index: 50;
-}
-.tw-search-nav.is-floating {
-  position: fixed;
-  top: 110px;
-  left: calc(50% - 600px + 20px);
 }
 .tw-search-nav-head {
   font-size: 0.68rem;
@@ -7504,23 +7502,15 @@ body.page-template-page-plan-a-trip-php {
   color: #055e72;
 }
 
-/* Mid-size screens: pin floating mode to left viewport edge */
-@media (max-width: 1280px) {
-  .tw-search-nav.is-floating {
-    left: 20px;
-  }
-}
-
-/* Tablet/mobile: nav becomes a regular block above the results (no float) */
+/* Tablet/mobile: nav becomes a regular block above the results (no sticky) */
 @media (max-width: 900px) {
   .tw-search-layout {
-    padding-left: 0;
+    flex-direction: column;
   }
-  .tw-search-nav,
-  .tw-search-nav.is-floating {
+  .tw-search-nav {
     position: relative;
     top: 0;
-    left: 0;
+    flex: 0 0 auto;
     width: auto;
     max-height: none;
     margin-bottom: 20px;

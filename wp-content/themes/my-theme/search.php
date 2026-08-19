@@ -142,23 +142,6 @@ endif;
         });
     }
 
-    /* Toggle floating mode based on scroll past the layout's top */
-    var layout = document.querySelector('.tw-search-layout');
-    if (layout) {
-        var floatThreshold = 0; /* will be computed on each scroll */
-        var onScroll = function () {
-            var rect = layout.getBoundingClientRect();
-            /* Nav starts floating once layout's top crosses header offset (~95px) */
-            if (rect.top <= 95) {
-                nav.classList.add('is-floating');
-            } else {
-                nav.classList.remove('is-floating');
-            }
-        };
-        window.addEventListener('scroll', onScroll, { passive: true });
-        onScroll();
-    }
-
     /* IntersectionObserver — auto-highlight active section as user scrolls */
     if ('IntersectionObserver' in window) {
         var sections = document.querySelectorAll('.tw-results-group[data-section]');
