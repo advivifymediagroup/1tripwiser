@@ -51,7 +51,7 @@ function tw_search_card( $post, $type_label ) {
 endif;
 ?>
 
-<main class="main-content explore-page">
+<main class="main-content explore-page tw-search-page">
 
     <header class="tw-results-head">
         <h1>Results for "<span><?php echo esc_html( $tw_q ); ?></span>"</h1>
@@ -140,23 +140,6 @@ endif;
             e.preventDefault();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
-    }
-
-    /* Toggle floating mode based on scroll past the layout's top */
-    var layout = document.querySelector('.tw-search-layout');
-    if (layout) {
-        var floatThreshold = 0; /* will be computed on each scroll */
-        var onScroll = function () {
-            var rect = layout.getBoundingClientRect();
-            /* Nav starts floating once layout's top crosses header offset (~95px) */
-            if (rect.top <= 95) {
-                nav.classList.add('is-floating');
-            } else {
-                nav.classList.remove('is-floating');
-            }
-        };
-        window.addEventListener('scroll', onScroll, { passive: true });
-        onScroll();
     }
 
     /* IntersectionObserver — auto-highlight active section as user scrolls */
