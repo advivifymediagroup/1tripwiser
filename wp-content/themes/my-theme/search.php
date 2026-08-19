@@ -51,7 +51,7 @@ function tw_search_card( $post, $type_label ) {
 endif;
 ?>
 
-<main class="main-content explore-page">
+<main class="main-content explore-page tw-search-page">
 
     <header class="tw-results-head">
         <h1>Results for "<span><?php echo esc_html( $tw_q ); ?></span>"</h1>

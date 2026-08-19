@@ -7396,6 +7396,15 @@ body.page-template-page-plan-a-trip-php {
    SEARCH RESULTS PAGE — floating category nav
    ══════════════════════════════════════════════════════════════ */
 /* Layout: reserve left space so results don't slide under the nav */
+/* header.php forces .main-content{overflow-x:hidden!important}, which makes the
+   element a scroll container and silently kills position:sticky for everything
+   inside it (same issue worked around for .dest-single above). `clip` contains
+   horizontal overflow the same way but does NOT create a scroll container, so
+   the nav can actually stick. */
+main.tw-search-page {
+  overflow-x: clip !important;
+}
+
 .tw-search-layout {
   display: flex;
   align-items: flex-start;
