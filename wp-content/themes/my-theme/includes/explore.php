@@ -121,6 +121,7 @@ function tw_luxe_register_acf_fields() {
         'key' => 'group_tw_luxe', 'title' => 'LUXE Journey Details', 'fields' => $f,
         'location' => array( array( array( 'param' => 'post_type', 'operator' => '==', 'value' => 'tw_luxe' ) ) ),
         'menu_order' => 0, 'position' => 'normal', 'style' => 'default', 'label_placement' => 'top', 'active' => true,
+        'show_in_rest' => true,
     ) );
 }
 add_action( 'acf/init', 'tw_luxe_register_acf_fields' );
@@ -175,6 +176,7 @@ function tw_event_register_acf_fields() {
         'key' => 'group_tw_event_local', 'title' => 'Event Details', 'fields' => $f,
         'location' => array( array( array( 'param' => 'post_type', 'operator' => '==', 'value' => 'tw_event' ) ) ),
         'menu_order' => 0, 'position' => 'normal', 'style' => 'default', 'label_placement' => 'top', 'active' => true,
+        'show_in_rest' => true,
     ) );
 }
 add_action( 'acf/init', 'tw_event_register_acf_fields' );
@@ -192,6 +194,7 @@ function tw_destination_region_acf_fields() {
         ),
         'location' => array( array( array( 'param' => 'taxonomy', 'operator' => '==', 'value' => 'destination_region' ) ) ),
         'menu_order' => 0, 'position' => 'normal', 'style' => 'default', 'label_placement' => 'top', 'active' => true,
+        'show_in_rest' => true,
     ) );
 }
 add_action( 'acf/init', 'tw_destination_region_acf_fields' );
@@ -223,6 +226,7 @@ function tw_group_trip_register_acf_fields() {
         'key' => 'group_tw_group_trip', 'title' => 'Group Trip Details', 'fields' => $f,
         'location' => array( array( array( 'param' => 'post_type', 'operator' => '==', 'value' => 'group_trip' ) ) ),
         'menu_order' => 0, 'position' => 'normal', 'style' => 'default', 'label_placement' => 'top', 'active' => true,
+        'show_in_rest' => true,
     ) );
 }
 add_action( 'acf/init', 'tw_group_trip_register_acf_fields' );
@@ -269,6 +273,7 @@ function tw_register_daywise_acf_fields() {
             array( array( 'param' => 'post_type', 'operator' => '==', 'value' => 'tw_event' ) ),
         ),
         'menu_order' => 5, 'position' => 'normal', 'style' => 'default', 'label_placement' => 'top', 'active' => true,
+        'show_in_rest' => true,
     ) );
 }
 add_action( 'acf/init', 'tw_register_daywise_acf_fields' );
