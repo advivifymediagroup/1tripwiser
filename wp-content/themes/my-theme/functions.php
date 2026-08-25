@@ -52,7 +52,10 @@ function mytheme_enqueue_styles() {
         wp_enqueue_script('custom-js');
     }
     // Global animations (canvas bubbles, scroll reveal, tilt, ripple)
-    wp_enqueue_script('tw-animations', get_template_directory_uri() . '/assets/js/tw-animations.js', array(), '1.1', true);
+    // filemtime()-based version so the browser/CDN cache busts every time this file changes.
+    $tw_anim_path = get_template_directory() . '/assets/js/tw-animations.js';
+    $tw_anim_ver  = file_exists( $tw_anim_path ) ? filemtime( $tw_anim_path ) : '1.1';
+    wp_enqueue_script('tw-animations', get_template_directory_uri() . '/assets/js/tw-animations.js', array(), $tw_anim_ver, true);
     // Content image carousel — auto-activates for 2+ images in any post content area
     wp_enqueue_script('tw-carousel', get_template_directory_uri() . '/assets/js/tw-carousel.js', array(), '1.0', true);
     // AJAX section filter
