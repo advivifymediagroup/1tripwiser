@@ -107,7 +107,7 @@
         var LEGACY_SEL = [
             '.ba-card', '.ba-featured', '.ba-aff-banner', '.ba-aff-chip',
             '.ba-table-wrap', '.ba-filter-pill',
-            '.sp-content', '.sp-author', '.sp-nav-link', '.sp-share', '.sp-comments',
+            '.sp-author', '.sp-nav-link', '.sp-share', '.sp-comments',
             '.sb-guidelines',
             '.auth-card', '.auth-benefits'
         ].join(',');
