@@ -210,6 +210,12 @@
                 <a class="tw-auth-btn" href="<?php echo esc_url(home_url('/register/')); ?>">Sign Up</a>
             <?php endif; ?>
             </div>
+
+            <!-- App — Coming Soon -->
+            <a class="tw-app-icon" href="<?php echo esc_url(home_url('/app/')); ?>" aria-label="Get the 1TripWiser App — Coming Soon" title="Get the App">
+                <i class="fa-solid fa-mobile-screen-button" aria-hidden="true"></i>
+                <span class="tw-app-icon-dot" aria-hidden="true"></span>
+            </a>
         </nav>
 
         <!-- Mobile Toggle -->
@@ -243,6 +249,12 @@
             <a href="<?php echo esc_url(home_url('/register/')); ?>" class="signup">Sign Up Free</a>
         <?php endif; ?>
         </div>
+
+        <!-- App — Coming Soon -->
+        <a class="tw-app-icon tw-app-icon-mobile" href="<?php echo esc_url(home_url('/app/')); ?>">
+            <i class="fa-solid fa-mobile-screen-button" aria-hidden="true"></i> Get the App — Coming Soon
+            <span class="tw-app-icon-dot" aria-hidden="true"></span>
+        </a>
     </div>
 </header>
 
