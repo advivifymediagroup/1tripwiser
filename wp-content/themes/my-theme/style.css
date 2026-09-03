@@ -11146,12 +11146,15 @@ select.fi {
   bottom: 98px;
 }
 /* Hidden while the WhatsApp chat popup is open — that popup is tall enough
-   to sit over this button's spot, so avoid the overlap instead of fighting
-   z-index against it. */
-#tw-ig-widget.tw-ig-hidden {
-  opacity: 0;
-  transform: translateY(8px);
-  pointer-events: none;
+   to sit over this corner, so avoid the overlap instead of fighting z-index
+   against it. Shared by all the floating social buttons below. */
+#tw-ig-widget.tw-social-hidden,
+#tw-social-toggle.tw-social-hidden,
+#tw-fb-widget.tw-social-hidden,
+#tw-li-widget.tw-social-hidden {
+  opacity: 0 !important;
+  transform: translateY(8px) !important;
+  pointer-events: none !important;
 }
 .tw-ig-btn {
   display: flex;
@@ -11208,6 +11211,198 @@ select.fi {
   }
   #tw-ig-widget.has-wa {
     bottom: 88px;
+  }
+}
+
+/* ── Arrow toggle — expands/collapses Facebook + LinkedIn. Instagram is
+   never affected by this, it always stays put in its own slot. ── */
+#tw-social-toggle {
+  position: fixed;
+  bottom: 98px;
+  right: 24px;
+  z-index: 9998;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+#tw-social-toggle.has-wa {
+  bottom: 172px;
+}
+.tw-social-toggle-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  background: transparent;
+  box-shadow: none;
+  color: var(--tw-pink);
+  transition: transform 0.25s;
+}
+.tw-social-toggle-btn:hover {
+  transform: translateY(-2px);
+}
+.tw-social-toggle-btn i {
+  font-size: 1.5rem;
+  line-height: 1;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.35));
+  transition: transform 0.3s ease;
+}
+.tw-social-toggle-btn.is-open i {
+  transform: rotate(180deg);
+}
+@media (max-width: 400px) {
+  #tw-social-toggle {
+    bottom: 88px;
+    right: 20px;
+  }
+  #tw-social-toggle.has-wa {
+    bottom: 160px;
+  }
+}
+
+/* ── Floating "Follow us on Facebook" button — hidden by default, revealed
+   via the arrow toggle above; stacks above the toggle when expanded. ── */
+#tw-fb-widget {
+  position: fixed;
+  bottom: 172px;
+  right: 24px;
+  z-index: 9998;
+  opacity: 0;
+  transform: translateY(10px) scale(0.85);
+  pointer-events: none;
+  transition: opacity 0.22s ease, transform 0.22s ease;
+  font-family: var(--body-font);
+}
+#tw-fb-widget.tw-social-expanded {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+#tw-fb-widget.has-wa {
+  bottom: 246px;
+}
+.tw-fb-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  overflow: hidden;
+  height: 60px;
+  width: 60px;
+  padding: 0 16px;
+  border-radius: 30px;
+  background: #1877f2;
+  color: var(--white);
+  text-decoration: none;
+  font-weight: 800;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  box-shadow: 0 8px 28px rgba(24, 119, 242, 0.45);
+  transition: width 0.28s ease, gap 0.28s ease, box-shadow 0.25s,
+    transform 0.25s;
+}
+.tw-fb-btn i {
+  font-size: 1.5rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.tw-fb-btn-label {
+  max-width: 0;
+  opacity: 0;
+  transition: max-width 0.28s ease, opacity 0.2s ease;
+}
+.tw-fb-btn:hover {
+  width: 172px;
+  gap: 10px;
+  color: var(--white);
+  box-shadow: 0 12px 36px rgba(24, 119, 242, 0.55);
+  transform: translateY(-2px);
+}
+.tw-fb-btn:hover .tw-fb-btn-label {
+  max-width: 120px;
+  opacity: 1;
+}
+@media (max-width: 400px) {
+  #tw-fb-widget {
+    bottom: 160px;
+    right: 16px;
+  }
+  #tw-fb-widget.has-wa {
+    bottom: 232px;
+  }
+}
+
+/* ── Floating "Follow us on LinkedIn" button — hidden by default, revealed
+   via the arrow toggle alongside Facebook; stacks above it when expanded. ── */
+#tw-li-widget {
+  position: fixed;
+  bottom: 246px;
+  right: 24px;
+  z-index: 9998;
+  opacity: 0;
+  transform: translateY(10px) scale(0.85);
+  pointer-events: none;
+  transition: opacity 0.22s ease, transform 0.22s ease;
+  font-family: var(--body-font);
+}
+#tw-li-widget.tw-social-expanded {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+#tw-li-widget.has-wa {
+  bottom: 320px;
+}
+.tw-li-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  overflow: hidden;
+  height: 60px;
+  width: 60px;
+  padding: 0 16px;
+  border-radius: 30px;
+  background: #0a66c2;
+  color: var(--white);
+  text-decoration: none;
+  font-weight: 800;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  box-shadow: 0 8px 28px rgba(10, 102, 194, 0.45);
+  transition: width 0.28s ease, gap 0.28s ease, box-shadow 0.25s,
+    transform 0.25s;
+}
+.tw-li-btn i {
+  font-size: 1.5rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.tw-li-btn-label {
+  max-width: 0;
+  opacity: 0;
+  transition: max-width 0.28s ease, opacity 0.2s ease;
+}
+.tw-li-btn:hover {
+  width: 172px;
+  gap: 10px;
+  color: var(--white);
+  box-shadow: 0 12px 36px rgba(10, 102, 194, 0.55);
+  transform: translateY(-2px);
+}
+.tw-li-btn:hover .tw-li-btn-label {
+  max-width: 120px;
+  opacity: 1;
+}
+@media (max-width: 400px) {
+  #tw-li-widget {
+    bottom: 232px;
+    right: 16px;
+  }
+  #tw-li-widget.has-wa {
+    bottom: 304px;
   }
 }
 
