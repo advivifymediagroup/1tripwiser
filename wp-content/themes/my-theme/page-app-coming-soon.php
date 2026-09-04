@@ -97,8 +97,8 @@ get_header();
             </div>
             <div class="app-feature-card" data-reveal>
                 <div class="app-feature-icon"><i class="fa-solid fa-coins" aria-hidden="true"></i></div>
-                <h3>WiseCoins &amp; Rewards</h3>
-                <p>Earn coins for check-ins, cheers and posts — redeem them for real lounge access, vouchers and discounts.</p>
+                <h3>WiseCoins</h3>
+                <p>Earn coins for check-ins, cheers and posts — spend them to boost your own posts and reach more travellers.</p>
             </div>
             <div class="app-feature-card" data-reveal>
                 <div class="app-feature-icon"><i class="fa-solid fa-bolt" aria-hidden="true"></i></div>
