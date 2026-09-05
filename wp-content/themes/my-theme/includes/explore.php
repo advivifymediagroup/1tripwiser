@@ -934,7 +934,6 @@ function tw_explore_subheader() {
                     <div class="tw-mega-events-grid">
                         <?php foreach ( $group_dests as $d ) : ?>
                             <a class="tw-mega-event" href="<?php echo esc_url( tw_group_trip_region_url( $d->slug ) ); ?>">
-                                <i class="fa-solid fa-location-dot tw-mega-event-icon"></i>
                                 <span class="tw-mega-event-name"><?php echo esc_html( $d->name ); ?></span>
                             </a>
                         <?php endforeach; ?>
@@ -960,7 +959,6 @@ function tw_explore_subheader() {
                         <?php foreach ( $events as $ev ) :
                             $cur = get_queried_object_id() === $ev->ID; ?>
                             <a class="tw-mega-event <?php echo $cur ? 'active' : ''; ?>" href="<?php echo esc_url( get_permalink( $ev->ID ) ); ?>">
-                                <i class="fa-solid fa-ticket tw-mega-event-icon"></i>
                                 <span class="tw-mega-event-name"><?php echo esc_html( get_the_title( $ev->ID ) ); ?></span>
                             </a>
                         <?php endforeach; ?>
@@ -985,7 +983,6 @@ function tw_explore_subheader() {
                 </a>
                 <div class="tw-mega tw-mega-events tw-mega--womens" role="menu">
                     <div class="tw-mega-womens-hero">
-                        <i class="fa-solid fa-venus tw-mega-womens-icon"></i>
                         <div>
                             <strong>Women's Group Trips</strong>
                             <small>Safe &middot; Curated &middot; Empowering</small>
@@ -995,7 +992,6 @@ function tw_explore_subheader() {
                     <div class="tw-mega-events-grid">
                         <?php foreach ( $womens_trips as $wt ) : ?>
                             <a class="tw-mega-event" href="<?php echo esc_url( get_permalink( $wt->ID ) ); ?>">
-                                <i class="fa-solid fa-venus tw-mega-event-icon"></i>
                                 <span class="tw-mega-event-name"><?php echo esc_html( get_the_title( $wt->ID ) ); ?></span>
                             </a>
                         <?php endforeach; ?>

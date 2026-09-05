@@ -252,10 +252,17 @@
        8. NAV SCROLL SHRINK
     ═══════════════════════════════════════════════════════════════ */
     var nav = document.getElementById('tw-nav');
+    var heroEl = document.getElementById('tw-hero-top');
     if (nav) {
-        window.addEventListener('scroll', function () {
+        var syncNavScroll = function () {
             nav.classList.toggle('tw-nav-scrolled', window.scrollY > 40);
-        }, { passive: true });
+            if (heroEl) {
+                var heroInView = heroEl.getBoundingClientRect().bottom > 80;
+                nav.classList.toggle('tw-hero-in-view', heroInView);
+            }
+        };
+        window.addEventListener('scroll', syncNavScroll, { passive: true });
+        syncNavScroll();
     }
 
     /* ═══════════════════════════════════════════════════════════════

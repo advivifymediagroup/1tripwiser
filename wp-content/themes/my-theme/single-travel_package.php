@@ -32,7 +32,6 @@ while ( have_posts() ) :
     $tag       = $package['tag'];
     $emi       = $package['emi'];
     $overview  = $package['overview'];
-    $book_url  = $package['book_url'] ?: mytheme_get_plan_trip_url();
     $route     = get_post_meta( $id, 'route_summary', true ) ?: mytheme_get_travel_field( 'route_summary', $id );
     $best_time = get_post_meta( $id, 'best_time', true )     ?: mytheme_get_travel_field( 'best_time', $id );
     $grp_size  = get_post_meta( $id, 'group_size', true )    ?: mytheme_get_travel_field( 'group_size', $id );
@@ -212,43 +211,16 @@ while ( have_posts() ) :
                 <?php endif; ?>
 
                 <!-- Enquiry form -->
-                <section class="tw-package-enquiry dest-article-section" id="package-enquiry">
-                    <div class="tw-package-enquiry-copy">
-                        <span>Interested in this package?</span>
-                        <h2>Get a callback for <?php the_title(); ?></h2>
-                        <p>Share your details and our travel expert will help with dates, pricing, inclusions and customisation.</p>
-                    </div>
-                    <?php if ( isset($_GET['package_enquiry']) && $_GET['package_enquiry'] === 'success' ) : ?>
-                        <div class="tw-form-notice success">Thanks. Your enquiry has been received.</div>
-                    <?php elseif ( isset($_GET['package_enquiry']) && $_GET['package_enquiry'] === 'error' ) : ?>
-                        <div class="tw-form-notice error">Please fill your name and phone number.</div>
-                    <?php endif; ?>
-                    <form class="tw-package-enquiry-form" action="<?php echo esc_url( admin_url('admin-post.php') ); ?>" method="post">
-                        <input type="hidden" name="action"     value="mytheme_package_inquiry">
-                        <input type="hidden" name="package_id" value="<?php echo esc_attr( $id ); ?>">
-                        <?php wp_nonce_field('mytheme_package_inquiry','mytheme_package_inquiry_nonce'); ?>
-                        <div class="tw-form-grid">
-                            <label><span>Name *</span><input type="text"   name="name"   required></label>
-                            <label><span>Phone *</span><input type="tel"   name="phone"  required></label>
-                            <label><span>Email</span><input  type="email"  name="email"></label>
-                            <label><span>Preferred Travel Date</span><input type="date" name="date"></label>
-                            <label><span>Adults</span><input type="number" name="adults" min="1" value="1"></label>
-                            <label><span>Budget</span>
-                                <select name="budget">
-                                    <option value="">Select budget range</option>
-                                    <option>Budget - Under Rs. 25,000</option>
-                                    <option>Mid-range - Rs. 25K–Rs. 60K</option>
-                                    <option>Premium - Rs. 60K–Rs. 1.5L</option>
-                                    <option>Luxury - Above Rs. 1.5L</option>
-                                </select>
-                            </label>
-                            <label class="tw-form-full"><span>Message</span>
-                                <textarea name="message" rows="4" placeholder="Tell us your travel dates, group size, or custom requests."></textarea>
-                            </label>
-                        </div>
-                        <button type="submit">Send Enquiry</button>
-                    </form>
-                </section>
+                <?php
+                get_template_part( 'template-parts/enquiry-form', null, array(
+                    'type'    => 'package',
+                    'ref_id'  => $id,
+                    'anchor'  => 'package-enquiry',
+                    'kicker'  => __( 'Interested in this package?', 'mytheme' ),
+                    'heading' => sprintf( __( 'Get a callback for %s', 'mytheme' ), get_the_title() ),
+                    'intro'   => __( 'Share your details and our travel expert will help with dates, pricing, inclusions and customisation.', 'mytheme' ),
+                ) );
+                ?>
 
                 <?php if ( $has_faqs ) : ?>
                 <section id="pkg-faqs" class="dest-article-section dest-article-faqs">
@@ -257,7 +229,7 @@ while ( have_posts() ) :
                 <?php endif; ?>
 
                 <footer class="dest-article-cta">
-                    <a href="<?php echo esc_url( $book_url ); ?>" class="btn-primary"><?php esc_html_e( 'Book Now', 'mytheme' ); ?></a>
+                    <a href="#package-enquiry" class="btn-primary"><?php esc_html_e( 'Book Now', 'mytheme' ); ?></a>
                     <a href="<?php echo esc_url( $archive ); ?>" class="btn-secondary"><?php esc_html_e( 'All Packages', 'mytheme' ); ?></a>
                 </footer>
 
@@ -292,8 +264,7 @@ while ( have_posts() ) :
                         <?php endforeach; ?>
                     </dl>
                     <?php endif; ?>
-                    <a class="dest-rail-btn" href="<?php echo esc_url( $book_url ); ?>"><?php esc_html_e( 'Book Now', 'mytheme' ); ?></a>
-                    <a class="dest-rail-btn dest-rail-btn--ghost" href="#package-enquiry"><?php esc_html_e( 'Enquire Now', 'mytheme' ); ?></a>
+                    <a class="dest-rail-btn" href="#package-enquiry"><?php esc_html_e( 'Book Now', 'mytheme' ); ?></a>
                 </div>
             </aside>
 

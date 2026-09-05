@@ -17,8 +17,9 @@ Description: This is my custom theme for the website 1tripwiser.
   --white:#ffffff;
   --pastel-pink:#fce4ec;
   --tw-pink:#e5127d;
+  --tw-pink-hover:#c8123f;
   --tw-crimson:#d5374f;
-  --tw-blue: #25d7f2;
+  --tw-blue: #1B93B0;
   --tw-yellow:#ffd700;
   --luxe-gold: 212, 175, 55;
   --tw-navy: #0d1526;
@@ -161,9 +162,15 @@ h6 {
 }
 
 .cta-btn {
-  background: var(--tw-yellow) !important;
-  color: #333 !important;
+  background: var(--tw-pink) !important;
+  color: var(--white) !important;
   font-weight: bold;
+  border-radius: 6px;
+  padding: 8px 16px;
+  transition: background 0.18s;
+}
+.cta-btn:hover {
+  background: var(--tw-pink-hover) !important;
 }
 
 .travel-tabs {
@@ -291,22 +298,23 @@ h6 {
 
 .post-card {
   background: var(--white);
-  border-radius: 12px;
-  border: 1px solid #e7eaf0;
+  border-radius: 6px;
+  border: 1px solid rgba(13, 21, 38, 0.08);
   overflow: hidden;
   padding-top: 0;
-  box-shadow: 0 2px 8px rgba(13, 21, 38, 0.04);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  box-shadow: 0 4px 20px rgba(13, 21, 38, 0.05);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
 }
 
 .post-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 28px rgba(13, 21, 38, 0.12);
+  transform: translateY(-6px);
+  box-shadow: 0 24px 56px rgba(216, 53, 80, 0.16);
+  border-color: rgba(216, 53, 80, 0.3);
 }
 
 .post-thumbnail img {
   width: 100%;
-  height: 230px;
+  height: 200px;
   object-fit: cover;
   transition: transform 0.5s ease;
 }
@@ -353,24 +361,20 @@ h6 {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: linear-gradient(135deg, var(--tw-blue) 0%, #056d83 100%);
+  background: var(--tw-pink);
   color: var(--white);
   padding: 10px 22px;
   font-weight: 800;
   font-size: 0.86rem;
   letter-spacing: 0.03em;
   text-decoration: none;
-  border-radius: 4px;
-  box-shadow: 0 4px 14px rgba(27, 147, 176, 0.25);
-  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+  border-radius: 6px;
+  transition: background 0.18s ease;
 }
 
 .read-more:hover {
-  background: linear-gradient(135deg, var(--tw-blue) 0%, #056d83 100%);
+  background: var(--tw-pink-hover);
   color: var(--white);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 22px rgba(27, 147, 176, 0.4);
-  filter: brightness(1.08);
 }
 
 /* Pagination */
@@ -393,9 +397,9 @@ h6 {
 
 .pagination .page-numbers:hover,
 .pagination .page-numbers.current {
-  background: #0d6b68;
+  background: var(--tw-pink);
   color: var(--white);
-  border-color: #0d6b68;
+  border-color: var(--tw-pink);
 }
 
 .tag-label {
@@ -485,40 +489,33 @@ h6 {
   font-size: 0.9rem;
   letter-spacing: 0.03em;
   text-decoration: none;
-  border-radius: 4px;
+  border-radius: 6px;
   margin: 0 10px;
   border: none;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
-/* Primary CTA — brand yellow gradient */
+/* Primary CTA — solid pink, red tint on hover */
 .btn-primary {
   background: var(--tw-pink);
   color: var(--white);
-  box-shadow: 0 6px 18px rgba(216, 53, 80, 0.32);
 }
 .btn-primary:hover {
-  background: var(--tw-pink);
+  background: var(--tw-pink-hover);
   color: var(--white);
-  transform: translateY(-2px);
-  box-shadow: 0 10px 26px rgba(216, 53, 80, 0.45);
-  filter: brightness(1.05);
 }
 
-/* Secondary — brand teal gradient */
+/* Secondary — pink outline, fills pink/red on hover */
 .btn-secondary {
-  background: linear-gradient(135deg, var(--tw-blue) 0%, #056d83 100%);
-  color: var(--white);
-  border: none;
-  box-shadow: 0 6px 18px rgba(27, 147, 176, 0.28);
+  background: transparent;
+  color: var(--tw-pink);
+  border: 1.5px solid var(--tw-pink);
 }
 .btn-secondary:hover {
-  background: linear-gradient(135deg, var(--tw-blue) 0%, #056d83 100%);
+  background: var(--tw-pink-hover);
   color: var(--white);
-  transform: translateY(-2px);
-  box-shadow: 0 10px 26px rgba(27, 147, 176, 0.4);
-  filter: brightness(1.08);
+  border-color: var(--tw-pink-hover);
 }
 
 
@@ -866,50 +863,33 @@ h6 {
 
 /* Homepage package / itinerary grids — fixed 3 columns so a single filtered
    result never stretches to full width (auto-fit collapses empty tracks). */
-#tw-cards-packages {
+#tw-cards-packages,
+#tw-cards-itineraries {
   grid-template-columns: repeat(3, 1fr) !important;
 }
 @media (max-width: 900px) {
-  #tw-cards-packages {
+  #tw-cards-packages,
+  #tw-cards-itineraries {
     grid-template-columns: repeat(2, 1fr) !important;
   }
 }
 @media (max-width: 600px) {
-  #tw-cards-packages {
+  #tw-cards-packages,
+  #tw-cards-itineraries {
     grid-template-columns: 1fr !important;
   }
 }
 
-/* Itineraries — single-column list of rows (image left, details right),
-   editorial and image-led, matching the Design reference layout. */
-#tw-cards-itineraries {
-  display: block !important;
-}
+/* Itineraries — same vertical grid-card layout as every other card on the
+   site (see .tw-womens-card): full-width image on top, body below. */
 .tw-itin-row {
-  display: grid;
-  grid-template-columns: 120px 1fr;
-  gap: 20px;
-  align-items: center;
-  background: transparent;
-  border: none;
-  box-shadow: none;
-  border-radius: 0;
-  border-bottom: 1px solid rgba(13, 21, 38, 0.08);
-  padding: 12px 0;
-  margin: 0;
-}
-.tw-itin-row:hover {
-  transform: none;
-  box-shadow: none;
-}
-.tw-itin-row:first-child {
-  padding-top: 4px;
+  display: flex;
+  flex-direction: column;
 }
 .tw-itin-media {
   display: block;
   position: relative;
-  aspect-ratio: 4/3;
-  border-radius: 4px;
+  height: 200px;
   overflow: hidden;
   background: #f0f4f8;
 }
@@ -925,25 +905,25 @@ h6 {
 }
 .tw-itin-media-ph {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 1.3rem;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
   color: rgba(13, 21, 38, 0.25);
 }
 .tw-itin-body {
-  padding: 0;
+  padding: 16px 18px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  flex: 1;
 }
 .tw-itin-title {
-  font-family: var(--heading-font);
-  font-weight: 400;
+  font-family: var(--body-font);
+  font-weight: 800;
   font-size: 1.05rem;
-  margin: 0 0 6px;
-  line-height: 1.25;
-  letter-spacing: -0.005em;
+  margin: 0 0 8px;
+  line-height: 1.3;
 }
 .tw-itin-title a {
   color: var(--tw-navy);
@@ -957,7 +937,7 @@ h6 {
   display: flex;
   gap: 14px;
   flex-wrap: wrap;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
   line-height: 1;
 }
 .tw-itin-meta span {
@@ -970,45 +950,48 @@ h6 {
   gap: 5px;
 }
 .tw-itin-meta i {
-  color: var(--tw-blue);
+  color: var(--tw-pink);
 }
 .tw-itin-route {
-  font-size: 0.82rem;
-  color: rgba(13, 21, 38, 0.55);
-  line-height: 1.4;
-  margin: 0 0 10px;
+  font-size: 0.85rem;
+  color: #5b6b7d;
+  line-height: 1.5;
+  margin: 0 0 14px;
   max-width: 100%;
+  flex: 1;
 }
 .tw-itin-actions {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
+  margin-top: auto;
 }
 .tw-itin-open {
   display: inline-flex;
   align-items: center;
   line-height: 1;
   padding: 8px 16px;
-  border-radius: 24px;
-  color: var(--tw-navy);
+  border-radius: 6px;
+  color: var(--tw-pink);
+  border: 1.5px solid var(--tw-pink);
   font-size: 0.78rem;
-  font-weight: 600;
+  font-weight: 700;
   text-decoration: none;
-  background: var(--tw-blue);
-  transition: border-color 0.2s, background 0.2s;
+  background: transparent;
+  transition: background 0.2s, color 0.2s;
 }
 .tw-itin-open:hover {
-  color: #fff;
-  border-color: var(--tw-navy);
-  background: var(--tw-navy);
+  color: var(--white);
+  background: var(--tw-pink-hover);
+  border-color: var(--tw-pink-hover);
 }
 .tw-itin-book {
   display: inline-flex;
   align-items: center;
   line-height: 1;
-  padding: 6px 16px;
+  padding: 8px 16px;
   background: var(--tw-pink);
-  border-radius: 4px;
+  border-radius: 6px;
   color: var(--white) !important;
   font-size: 0.78rem;
   font-weight: 700;
@@ -1016,36 +999,7 @@ h6 {
   transition: background 0.2s;
 }
 .tw-itin-book:hover {
-  background: #b82940;
-}
-/* Beat the generic .travel-card/.post-content card rules (same or higher
-   specificity, defined earlier) that were re-padding/re-margining these
-   rows and roughly tripling the section's height. */
-#tw-cards-itineraries .tw-itin-body {
-  padding: 0;
-}
-#tw-cards-itineraries .tw-itin-title {
-  margin: 0 0 6px;
-  font-size: 1.05rem;
-}
-#tw-cards-itineraries .tw-itin-meta {
-  margin: 0 0 6px;
-}
-#tw-cards-itineraries .tw-itin-actions {
-  margin-top: 4px;
-}
-@media (max-width: 640px) {
-  .tw-itin-row {
-    grid-template-columns: 80px 1fr;
-    gap: 14px;
-    padding: 14px 0;
-  }
-  .tw-itin-title {
-    font-size: 1rem;
-  }
-  .tw-itin-route {
-    display: none;
-  }
+  background: var(--tw-pink-hover);
 }
 
 .package-search-page {
@@ -1142,29 +1096,30 @@ h6 {
   padding: 20px;
 }
 
-/* Trip.com-style card: image dominant, title overlaid on dark gradient,
-   minimal footer with price + CTA. */
+/* Card layout aligned with the site's canonical card (see .tw-womens-card):
+   fixed-height image, badge top-left, normal-flow body below. */
 .package-card,
 .destination-card {
-  border-radius: 12px;
+  border-radius: 6px;
   display: flex;
   flex-direction: column;
   min-height: 100%;
   background: var(--white);
-  border: 1px solid #e7eaf0;
+  border: 1px solid rgba(13, 21, 38, 0.08);
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(13, 21, 38, 0.04);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  box-shadow: 0 4px 20px rgba(13, 21, 38, 0.05);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
 }
 
 .package-card:hover,
 .destination-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 28px rgba(13, 21, 38, 0.12);
+  transform: translateY(-6px);
+  box-shadow: 0 24px 56px rgba(216, 53, 80, 0.16);
+  border-color: rgba(216, 53, 80, 0.3);
 }
 
 .package-media {
-  aspect-ratio: 4 / 3;
+  height: 200px;
   background: #eef7f6;
   margin: 0;
   overflow: hidden;
@@ -1187,20 +1142,6 @@ h6 {
 .package-card:hover .package-media img,
 .destination-card:hover .package-media img {
   transform: scale(1.05);
-}
-
-/* Dark gradient at the bottom of the image so overlaid text is readable */
-.package-media::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    to top,
-    rgba(13, 21, 38, 0.78) 0%,
-    rgba(13, 21, 38, 0) 55%
-  );
-  pointer-events: none;
-  z-index: 1;
 }
 
 .package-tag {
@@ -1247,26 +1188,18 @@ h6 {
   display: flex;
   flex: 1;
   flex-direction: column;
-  padding: 14px 16px 16px;
+  padding: 16px 18px;
   position: relative;
 }
 
-/* Location + Title slide UP and overlay the bottom of the image */
 .package-card .package-location {
-  position: absolute;
-  left: 16px;
-  right: 16px;
-  top: -78px;
-  z-index: 2;
-  color: rgba(255, 255, 255, 0.92);
+  color: rgba(13, 21, 38, 0.6);
   font-size: 0.78rem;
   font-weight: 600;
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  margin: 0;
-  pointer-events: none;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  margin: 0 0 6px;
 }
 
 .package-card .package-location i {
@@ -1276,25 +1209,16 @@ h6 {
 
 .package-card .package-content h2,
 .package-card .package-content h3 {
-  position: absolute;
-  left: 16px;
-  right: 16px;
-  top: -54px;
-  z-index: 2;
-  font-size: 1.15rem;
+  font-size: 1.05rem;
   line-height: 1.25;
-  margin: 0;
-  color: var(--white);
+  margin: 0 0 10px;
+  color: var(--tw-navy);
   font-weight: 800;
-  pointer-events: none;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
-  /* Allow clicks on the link inside */
 }
 .package-card .package-content h2 a,
 .package-card .package-content h3 a {
-  color: var(--white);
+  color: var(--tw-navy);
   text-decoration: none;
-  pointer-events: auto;
 }
 
 /* Below image: clean facts row */
@@ -1332,7 +1256,7 @@ h6 {
 }
 
 .package-price-row strong {
-  color: var(--tw-blue);
+  color: var(--tw-pink);
   display: block;
   font-size: 1.3rem;
   font-weight: 800;
@@ -1348,7 +1272,7 @@ h6 {
 }
 
 .book-now-btn {
-  background: var(--tw-blue);
+  background: var(--tw-pink);
   border-radius: 6px;
   color: var(--white);
   flex: 0 0 auto;
@@ -1359,12 +1283,7 @@ h6 {
   transition: background 0.18s;
 }
 .book-now-btn:hover {
-  background: #057a92;
-  color: var(--white);
-}
-
-.book-now-btn:hover {
-  background: #095654;
+  background: var(--tw-pink-hover);
   color: var(--white);
 }
 
@@ -1905,7 +1824,7 @@ main.dest-single {
   flex-shrink: 0;
 }
 .dest-toc-list a.is-current {
-  background: rgba(37, 215, 242, 0.12);
+  background: rgba(27, 147, 176, 0.12);
   color: var(--tw-navy);
 }
 .dest-toc-list a.is-current .dest-toc-num {
@@ -1933,7 +1852,7 @@ main.dest-single {
   color: #94a3b8;
 }
 .dest-toc-sublist a.is-current {
-  background: rgba(37, 215, 242, 0.1);
+  background: rgba(27, 147, 176, 0.1);
   color: var(--tw-navy);
 }
 .dest-toc-sublist a.is-current .dest-toc-subnum {
@@ -2002,16 +1921,16 @@ main.dest-single {
   display: block;
   text-align: center;
   padding: 11px 18px;
-  border-radius: 8px;
+  border-radius: 6px;
   background: var(--tw-pink);
   color: var(--white);
   font-size: 0.86rem;
   font-weight: 800;
   text-decoration: none;
-  transition: filter 0.2s;
+  transition: background 0.18s;
 }
 .dest-rail-btn:hover {
-  filter: brightness(1.06);
+  background: var(--tw-pink-hover);
 }
 .dest-rail-btn--ghost {
   background: transparent;
@@ -2019,8 +1938,8 @@ main.dest-single {
   border: 1.5px solid rgba(13, 21, 38, 0.16);
 }
 .dest-rail-btn--ghost:hover {
-  border-color: var(--tw-blue);
-  color: var(--tw-blue);
+  border-color: var(--tw-pink);
+  color: var(--tw-pink);
 }
 
 /* ── Article column — one continuous read ── */
@@ -2099,8 +2018,7 @@ main.dest-single {
 .dest-article.ev-content-styled .dest-article-cta a {
   text-decoration: none;
 }
-.dest-article.ev-content-styled .dest-article-cta .btn-primary,
-.dest-article.ev-content-styled .dest-article-cta .btn-secondary {
+.dest-article.ev-content-styled .dest-article-cta .btn-primary {
   color: var(--white);
 }
 .dest-article.ev-content-styled .tribe-back-link {
@@ -2232,8 +2150,8 @@ main.dest-single {
     ),
     radial-gradient(
       circle 520px at 0% 100%,
-      rgba(37, 215, 242, 0.14) 0%,
-      rgba(37, 215, 242, 0.05) 45%,
+      rgba(27, 147, 176, 0.14) 0%,
+      rgba(27, 147, 176, 0.05) 45%,
       transparent 70%
     );
 }
@@ -2326,13 +2244,11 @@ main.dest-single {
   font-weight: 800;
   margin-top: 16px;
   padding: 12px 18px;
-  box-shadow: 0 6px 18px rgba(229, 18, 125, 0.32);
-  transition: filter 0.2s ease, transform 0.2s ease;
+  transition: background 0.18s ease;
 }
 
 .tw-package-enquiry-form button:hover {
-  filter: brightness(1.06);
-  transform: translateY(-2px);
+  background: var(--tw-pink-hover);
 }
 
 .tw-form-notice {
@@ -2655,7 +2571,7 @@ main.dest-single {
 
 .visa-service-icon {
   align-items: center;
-  background: var(--tw-blue) 1a;
+  background: rgba(27, 147, 176, 0.1);
   border-radius: 8px;
   display: inline-flex;
   font-size: 2rem;
@@ -3148,6 +3064,11 @@ body.page-template-page-plan-a-trip-php {
   display: flex;
   align-items: center;
   gap: 8px;
+  /* Fixed height so this always matches .tw-sub's hardcoded top offset
+     (84px) exactly — an intrinsic (content-driven) height here caused a
+     visible gap/overlap between the header and the subheader depending on
+     logo size. */
+  height: 84px;
 }
 .tw-brand {
   display: flex;
@@ -3279,7 +3200,7 @@ body.page-template-page-plan-a-trip-php {
   color: var(--white) !important;
   font-size: 0.84rem;
   font-weight: 500;
-  border-radius: 24px;
+  border-radius: 6px;
   text-decoration: none;
   letter-spacing: 0;
   transition: background 0.18s;
@@ -3287,22 +3208,32 @@ body.page-template-page-plan-a-trip-php {
   flex-shrink: 0;
 }
 .tw-cta:hover {
-  background: #b82940;
+  background: var(--tw-pink-hover);
+}
+.tw-cta-mobile-search {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  margin-top: 10px;
+}
+.tw-cta-mobile-search:hover {
+  background: rgba(255, 255, 255, 0.16);
 }
 .tw-user-nav {
   display: flex;
   align-items: center;
-  gap: 6px;
-  margin-left: 6px;
+  gap: 4px;
+  margin-left: 4px;
   flex-shrink: 0;
 }
 .tw-auth-link {
   color: rgba(13, 21, 38, 0.7);
   text-decoration: none;
-  font-size: 0.84rem;
+  font-size: 0.8rem;
   font-weight: 500;
-  padding: 6px 11px;
-  border-radius: 24px;
+  padding: 5px 9px;
+  border-radius: 6px;
   transition: background 0.2s, color 0.2s;
   white-space: nowrap;
 }
@@ -3313,18 +3244,19 @@ body.page-template-page-plan-a-trip-php {
 .tw-auth-btn {
   display: inline-flex;
   align-items: center;
-  padding: 7px 14px;
+  padding: 5px 11px;
   border: 1.5px solid rgba(216, 53, 80, 0.6);
-  border-radius: 24px;
+  border-radius: 6px;
   color: var(--tw-pink);
-  font-size: 0.84rem;
+  font-size: 0.8rem;
   font-weight: 500;
   text-decoration: none;
   transition: background 0.2s, color 0.2s, border-color 0.2s;
   white-space: nowrap;
 }
 .tw-auth-btn:hover {
-  background: var(--tw-pink);
+  background: var(--tw-pink-hover);
+  border-color: var(--tw-pink-hover);
   color: var(--white);
   border-color: var(--tw-pink);
 }
@@ -3710,7 +3642,7 @@ body.page-template-page-plan-a-trip-php {
   font-weight: 700;
   color: var(--tw-pink);
   border: 1px solid rgba(216, 53, 80, 0.35);
-  border-radius: 4px;
+  border-radius: 6px;
   padding: 3px 9px;
   text-decoration: none;
   white-space: nowrap;
@@ -3718,8 +3650,9 @@ body.page-template-page-plan-a-trip-php {
   flex-shrink: 0;
 }
 .tw-aff-btn:hover {
-  background: var(--tw-pink);
+  background: var(--tw-pink-hover);
   color: var(--white);
+  border-color: var(--tw-pink-hover);
 }
 .tw-f-bottom-wrap {
   border-top: 1px solid rgba(255, 255, 255, 0.04);
@@ -4030,17 +3963,16 @@ body.page-template-page-plan-a-trip-php {
   font-size: 1rem;
   font-weight: 800;
   border: none;
-  border-radius: 10px;
+  border-radius: 6px;
   cursor: pointer;
-  transition: opacity 0.2s, transform 0.15s;
+  transition: background 0.18s;
   margin-top: 8px;
   letter-spacing: 0.02em;
   position: relative;
   overflow: hidden;
 }
 .auth-submit-btn:hover {
-  opacity: 0.88;
-  transform: translateY(-1px);
+  background: var(--tw-pink-hover);
 }
 .auth-submit-btn:disabled {
   opacity: 0.5;
@@ -4498,7 +4430,7 @@ body.page-template-page-plan-a-trip-php {
   align-items: center;
   gap: 8px;
   padding: 13px 26px;
-  border-radius: 24px;
+  border-radius: 6px;
   font-size: 0.95rem;
   font-weight: 500;
   text-decoration: none;
@@ -4509,7 +4441,7 @@ body.page-template-page-plan-a-trip-php {
   color: var(--white);
 }
 .tw-cta-btn--primary:hover {
-  background: #b82940;
+  background: var(--tw-pink-hover);
   color: var(--white);
 }
 .tw-cta-btn--outline {
@@ -4518,33 +4450,58 @@ body.page-template-page-plan-a-trip-php {
   color: var(--tw-navy);
 }
 .tw-cta-btn--outline:hover {
-  background: rgba(27, 147, 176, 0.08);
-  border-color: var(--tw-blue);
+  background: rgba(216, 53, 80, 0.08);
+  border-color: var(--tw-pink);
   color: var(--tw-navy);
 }
-.tw-hero-tags {
+.tw-hero-search {
   display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  background: var(--white);
+  border: 1px solid rgba(13, 21, 38, 0.1);
+  border-radius: 8px;
+  padding: 5px 6px 5px 18px;
+  box-shadow: 0 10px 30px rgba(13, 21, 38, 0.1);
+  max-width: 480px;
+  margin-bottom: 22px;
 }
-.tw-hero-tag {
+.tw-hero-search-field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+}
+.tw-hero-search-field i {
+  color: rgba(13, 21, 38, 0.4);
+  flex-shrink: 0;
+}
+.tw-hero-search-input {
+  border: none;
+  outline: none;
+  font: inherit;
+  font-size: 0.92rem;
+  width: 100%;
+  background: transparent;
+  color: var(--tw-navy);
+}
+.tw-hero-search-btn {
   display: inline-flex;
   align-items: center;
-  background: rgba(13, 21, 38, 0.04);
-  border: 1px solid rgba(13, 21, 38, 0.09);
-  color: rgba(13, 21, 38, 0.7);
-  font-size: 0.78rem;
+  background: var(--tw-pink);
+  color: var(--white);
+  border: none;
+  border-radius: 6px;
+  padding: 11px 22px;
   font-weight: 700;
-  padding: 6px 13px;
-  border-radius: 4px;
-  text-decoration: none;
+  font-size: 0.88rem;
+  cursor: pointer;
   white-space: nowrap;
-  transition: background 0.2s, border-color 0.2s, color 0.2s;
+  transition: background 0.18s;
 }
-.tw-hero-tag:hover {
-  background: rgba(216, 53, 80, 0.08);
-  border-color: rgba(216, 53, 80, 0.35);
-  color: var(--tw-pink);
+.tw-hero-search-btn:hover {
+  background: var(--tw-pink-hover);
 }
 .tw-hero-scroll {
   display: none;
@@ -4900,7 +4857,7 @@ body.page-template-page-plan-a-trip-php {
   transition: background 0.18s;
 }
 .tw-womens-cta-btn:hover {
-  background: var(--tw-crimson);
+  background: var(--tw-pink-hover);
   color: var(--white);
 }
 
@@ -5090,14 +5047,13 @@ body.page-template-page-plan-a-trip-php {
   color: var(--white);
   font-size: 0.82rem;
   font-weight: 800;
-  border-radius: 10px;
+  border-radius: 6px;
   text-decoration: none;
-  transition: opacity 0.2s, transform 0.2s;
+  transition: background 0.18s;
   white-space: nowrap;
 }
 .tw-womens-book-btn:hover {
-  opacity: 0.9;
-  transform: translateY(-2px);
+  background: var(--tw-pink-hover);
   color: var(--white);
 }
 
@@ -6738,29 +6694,23 @@ body.page-template-page-plan-a-trip-php {
 }
 
 .tw-mega--womens {
-  min-width: 280px;
+  min-width: 560px;
 }
 .tw-mega-womens-hero {
-  display: flex;
-  align-items: center;
-  gap: 12px;
   padding: 12px 16px 10px;
   border-bottom: 1px solid rgba(255, 105, 135, 0.2);
   margin-bottom: 8px;
 }
-.tw-mega-womens-hero .tw-mega-womens-icon {
-  font-size: 2rem;
-}
 .tw-mega-womens-hero strong {
   display: block;
   font-size: 0.88rem;
-  font-weight: 800;
-  color: var(--tw-navy);
+  font-weight: 600;
+  color: #000;
 }
 .tw-mega-womens-hero small {
   font-size: 0.72rem;
-  color: #c2185b;
-  font-weight: 700;
+  color: #000;
+  font-weight: 400;
 }
 
 /* Responsive */
@@ -7292,14 +7242,16 @@ body.page-template-page-plan-a-trip-php {
   background: var(--white);
   border-radius: 6px;
   overflow: hidden;
-  border: 1px solid #e8edf5;
-  transition: transform 0.3s, box-shadow 0.3s;
+  border: 1px solid rgba(13, 21, 38, 0.08);
+  box-shadow: 0 4px 20px rgba(13, 21, 38, 0.05);
+  transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
   display: flex;
   flex-direction: column;
 }
 .dest-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 20px 48px rgba(13, 21, 38, 0.12);
+  transform: translateY(-6px);
+  box-shadow: 0 24px 56px rgba(216, 53, 80, 0.16);
+  border-color: rgba(216, 53, 80, 0.3);
 }
 .dest-card-img {
   display: block;
@@ -7368,7 +7320,7 @@ body.page-template-page-plan-a-trip-php {
   text-decoration: none;
 }
 .dest-card-title a:hover {
-  color: var(--tw-blue);
+  color: var(--tw-pink);
 }
 .dest-card-meta {
   display: flex;
@@ -7409,7 +7361,7 @@ body.page-template-page-plan-a-trip-php {
 .dest-card-price strong {
   font-size: 1.05rem;
   font-weight: 900;
-  color: var(--tw-navy);
+  color: var(--tw-pink);
 }
 .dest-card-btn {
   display: inline-flex;
@@ -7424,8 +7376,7 @@ body.page-template-page-plan-a-trip-php {
   transition: background 0.18s;
 }
 .dest-card-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(216, 53, 80, 0.35);
+  background: var(--tw-pink-hover);
   color: var(--white);
 }
 @media (max-width: 900px) {
@@ -8122,8 +8073,7 @@ main.tw-search-page {
   transition: opacity 0.2s, transform 0.2s;
 }
 .tw-community-btn:hover {
-  opacity: 0.88;
-  transform: translateY(-2px);
+  background: var(--tw-pink-hover);
   color: var(--white);
 }
 .tw-community-stats {
@@ -8206,8 +8156,8 @@ main.tw-search-page {
     ),
     radial-gradient(
       circle 480px at 0% 100%,
-      rgba(37, 215, 242, 0.6) 0%,
-      rgba(37, 215, 242, 0.28) 45%,
+      rgba(27, 147, 176, 0.6) 0%,
+      rgba(27, 147, 176, 0.28) 45%,
       transparent 78%
     ),
     linear-gradient(
@@ -8637,16 +8587,15 @@ main.tw-search-page {
   color: var(--white);
   font-size: 0.85rem;
   font-weight: 800;
-  border-radius: 9px;
+  border-radius: 6px;
   text-decoration: none;
   letter-spacing: 0.02em;
-  transition: opacity 0.2s, transform 0.15s;
+  transition: background 0.18s;
   white-space: nowrap;
   flex-shrink: 0;
 }
 .ba-write-btn:hover {
-  opacity: 0.88;
-  transform: translateY(-1px);
+  background: var(--tw-pink-hover);
 }
 /* Filter empty-state */
 .ba-no-filter-results {
@@ -8674,7 +8623,7 @@ main.tw-search-page {
   font-family: inherit;
 }
 .ba-reset-filter:hover {
-  color: #055e72;
+  color: var(--tw-pink);
 }
 /* Row actions wrapper + "View All Blogs" pill */
 .ba-section-row-actions {
@@ -8689,21 +8638,21 @@ main.tw-search-page {
   gap: 6px;
   padding: 9px 20px;
   background: transparent;
-  color: var(--tw-blue);
-  border: 1.5px solid var(--tw-blue);
+  color: var(--tw-pink);
+  border: 1.5px solid var(--tw-pink);
   font-size: 0.85rem;
   font-weight: 800;
-  border-radius: 9px;
+  border-radius: 6px;
   text-decoration: none;
   letter-spacing: 0.02em;
-  transition: background 0.2s, color 0.2s, transform 0.15s;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
   white-space: nowrap;
   flex-shrink: 0;
 }
 .ba-view-all-btn:hover {
-  background: var(--tw-blue);
+  background: var(--tw-pink-hover);
   color: var(--white);
-  transform: translateY(-1px);
+  border-color: var(--tw-pink-hover);
 }
 .ba-grid {
   display: grid;
@@ -8715,15 +8664,11 @@ main.tw-search-page {
   background: var(--white);
   border-radius: 6px;
   overflow: hidden;
-  border: 1px solid #e0e8f0;
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.07);
+  border: 1px solid rgba(13, 21, 38, 0.08);
+  box-shadow: 0 4px 20px rgba(13, 21, 38, 0.05);
   display: flex;
   flex-direction: column;
   transition: transform 0.25s, box-shadow 0.25s;
-}
-.ba-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.13);
 }
 .ba-card-img {
   height: 190px;
@@ -8921,7 +8866,7 @@ table.ba-table tr:hover td {
   transition: opacity 0.2s;
 }
 .ba-table-book-btn:hover {
-  opacity: 0.85;
+  background: var(--tw-pink-hover);
 }
 .ba-card-read-more {
   display: inline-flex;
@@ -9874,14 +9819,13 @@ table.ba-table tr:hover td {
   font-size: 1rem;
   font-weight: 800;
   border: none;
-  border-radius: 10px;
+  border-radius: 6px;
   cursor: pointer;
-  transition: opacity 0.2s, transform 0.15s;
+  transition: background 0.18s;
   letter-spacing: 0.02em;
 }
 .sb-submit-btn:hover {
-  opacity: 0.88;
-  transform: translateY(-1px);
+  background: var(--tw-pink-hover);
 }
 .sb-submit-btn:disabled {
   opacity: 0.55;
@@ -9942,11 +9886,11 @@ table.ba-table tr:hover td {
 }
 .sb-success-btn {
   padding: 11px 26px;
-  border-radius: 10px;
+  border-radius: 6px;
   font-weight: 800;
   font-size: 0.88rem;
   text-decoration: none;
-  transition: opacity 0.2s;
+  transition: background 0.18s;
 }
 .sb-success-btn.primary {
   background: var(--tw-pink);
@@ -9957,8 +9901,11 @@ table.ba-table tr:hover td {
   color: var(--tw-bodyColor);
   border: 1px solid #dde5ef;
 }
-.sb-success-btn:hover {
-  opacity: 0.88;
+.sb-success-btn.primary:hover {
+  background: var(--tw-pink-hover);
+}
+.sb-success-btn.secondary:hover {
+  background: #dde5ef;
 }
 .sb-guidelines {
   background: var(--white);
@@ -10519,6 +10466,21 @@ select.fi {
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
+.pat-reset-wrap {
+  margin-top: 24px;
+}
+.pat-reset-btn {
+  font-family: var(--body-font);
+  font-size: 12px;
+  color: var(--tw-pink);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+}
+.pat-reset-btn:hover {
+  color: var(--tw-pink-hover);
+}
 @media (max-width: 600px) {
   .plan-card {
     padding: 24px 18px;
@@ -10760,16 +10722,15 @@ select.fi {
   font-size: 0.95rem;
   font-weight: 800;
   border: none;
-  border-radius: 9px;
+  border-radius: 6px;
   cursor: pointer;
-  transition: opacity 0.2s, transform 0.15s;
+  transition: background 0.18s;
   position: relative;
   overflow: hidden;
   margin-top: 8px;
 }
 .pf-save-btn:hover {
-  opacity: 0.88;
-  transform: translateY(-1px);
+  background: var(--tw-pink-hover);
 }
 .pf-save-btn:disabled {
   opacity: 0.5;
@@ -11535,12 +11496,14 @@ object {
   .tw-hero-desc {
     font-size: 0.96rem;
   }
-  .tw-hero-tags {
-    gap: 8px;
+  .tw-hero-search {
+    max-width: 100%;
+    flex-wrap: wrap;
+    padding: 12px 14px;
   }
-  .tw-hero-tag {
-    font-size: 0.75rem;
-    padding: 6px 11px;
+  .tw-hero-search-btn {
+    width: 100%;
+    justify-content: center;
   }
 }
 @media (max-width: 360px) {
@@ -12223,7 +12186,7 @@ object {
   background: var(--tw-pink);
   color: var(--white);
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   font-family: var(--body-font);
   font-size: 0.92rem;
   font-weight: 800;
@@ -12231,14 +12194,11 @@ object {
   padding: 13px 30px;
   cursor: pointer;
   text-decoration: none;
-  box-shadow: 0 6px 20px rgba(216, 53, 80, 0.32);
-  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+  transition: background 0.18s;
 }
 .tribe-start-btn:hover,
 .tribe-btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 28px rgba(216, 53, 80, 0.45);
-  filter: brightness(1.05);
+  background: var(--tw-pink-hover);
   color: var(--white);
 }
 .tribe-btn-ghost {
@@ -12247,9 +12207,9 @@ object {
   justify-content: center;
   gap: 8px;
   background: transparent;
-  color: var(--tw-blue);
-  border: 1.5px solid var(--tw-blue);
-  border-radius: 4px;
+  color: var(--tw-pink);
+  border: 1.5px solid var(--tw-pink);
+  border-radius: 6px;
   font-family: var(--body-font);
   font-size: 0.92rem;
   font-weight: 800;
@@ -12259,8 +12219,9 @@ object {
   transition: background 0.2s, color 0.2s;
 }
 .tribe-btn-ghost:hover {
-  background: var(--tw-blue);
+  background: var(--tw-pink-hover);
   color: var(--white);
+  border-color: var(--tw-pink-hover);
 }
 
 /* Instagram button — Instagram brand gradient */
@@ -13036,22 +12997,23 @@ object {
   align-items: center;
   gap: 6px;
   background: transparent;
-  border: 1.5px solid var(--tw-blue);
-  color: var(--tw-blue);
-  border-radius: 4px;
+  border: 1.5px solid var(--tw-pink);
+  color: var(--tw-pink);
+  border-radius: 6px;
   padding: 8px 16px;
   cursor: pointer;
   font-family: var(--body-font);
   font-weight: 800;
   font-size: 0.84rem;
-  transition: all 0.2s;
+  transition: background 0.2s, color 0.2s;
 }
 .tribe-solve-btn:hover {
-  background: var(--tw-blue);
+  background: var(--tw-pink-hover);
   color: var(--white);
+  border-color: var(--tw-pink-hover);
 }
 .tribe-solve-btn.is-solved {
-  background: rgba(27, 147, 176, 0.12);
+  background: rgba(216, 53, 80, 0.12);
 }
 
 /* ── Replies ── */
@@ -13397,17 +13359,17 @@ object {
 .tw-mega-head {
   display: block;
   font-size: 0.78rem;
-  font-weight: 800;
+  font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--tw-blue);
+  color: #000;
   text-decoration: none;
   margin-bottom: 10px;
   padding-bottom: 8px;
   border-bottom: 1px solid var(--tw-lightBase);
 }
 .tw-mega-head:hover {
-  color: var(--tw-navy);
+  color: var(--tw-pink);
 }
 .tw-mega-list {
   list-style: none;
@@ -13421,7 +13383,7 @@ object {
   display: block;
   padding: 6px 8px;
   border-radius: 7px;
-  color: #2d3b4d;
+  color: #000;
   font-size: 0.88rem;
   font-weight: 600;
   text-decoration: none;
@@ -13429,12 +13391,15 @@ object {
 }
 .tw-mega-list a:hover {
   background: #f0f6fa;
-  color: var(--tw-blue);
+  color: var(--tw-pink);
 }
 
-/* Events mega — right-aligned (Events is the rightmost item) */
+/* Events mega — right-aligned (Events is the rightmost item).
+   Same min-width as the base .tw-mega panel (India/International) so every
+   non-LUXE dropdown opens at a consistent size; LUXE's own min-width
+   override (.tw-mega--luxe, more specific) still wins for that one. */
 .tw-mega-events {
-  min-width: 520px;
+  min-width: 560px;
   left: auto;
   right: 0;
 }
@@ -13462,12 +13427,12 @@ object {
   flex-shrink: 0;
 }
 .tw-mega-event-name {
-  color: var(--tw-navy);
+  color: #000;
   font-size: 0.88rem;
-  font-weight: 700;
+  font-weight: 600;
 }
 .tw-mega-event:hover .tw-mega-event-name {
-  color: var(--tw-blue);
+  color: var(--tw-pink);
 }
 
 /* Mobile subheader → horizontal scroll + tap-to-open accordion panels */
@@ -13724,16 +13689,18 @@ object {
 }
 .explore-card {
   background: var(--white);
-  border: 1px solid #e6edf3;
+  border: 1px solid rgba(13, 21, 38, 0.08);
   border-radius: 6px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 20px rgba(13, 21, 38, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 .explore-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 16px 40px rgba(13, 21, 38, 0.1);
+  transform: translateY(-6px);
+  box-shadow: 0 24px 56px rgba(216, 53, 80, 0.16);
+  border-color: rgba(216, 53, 80, 0.3);
 }
 .explore-card-img {
   position: relative;
@@ -13791,7 +13758,7 @@ object {
   text-decoration: none;
 }
 .explore-card-title a:hover {
-  color: var(--tw-blue);
+  color: var(--tw-pink);
 }
 .explore-card-excerpt {
   color: #5b6b7d;
@@ -13801,14 +13768,14 @@ object {
   flex: 1;
 }
 .explore-card-link {
-  color: var(--tw-blue);
+  color: var(--tw-pink);
   font-weight: 800;
   font-size: 0.85rem;
   text-decoration: none;
   margin-top: auto;
 }
 .explore-card-link:hover {
-  color: var(--tw-blue);
+  color: var(--tw-pink-hover);
 }
 
 /* Mega-menu empty state (Group Trips with no trips yet) */
@@ -13817,15 +13784,18 @@ object {
   text-align: center;
 }
 .tw-mega-empty p {
-  color: #5b6b7d;
+  color: #000;
   font-size: 0.9rem;
   margin: 0 0 10px;
 }
 .tw-mega-allcta {
-  color: var(--tw-blue);
-  font-weight: 800;
+  color: #000;
+  font-weight: 600;
   font-size: 0.88rem;
   text-decoration: none;
+}
+.tw-mega-allcta:hover {
+  color: var(--tw-pink);
 }
 
 /* ================================================================
@@ -13865,8 +13835,8 @@ object {
     ),
     radial-gradient(
       circle 480px at 0% 100%,
-      rgba(37, 215, 242, 0.6) 0%,
-      rgba(37, 215, 242, 0.28) 45%,
+      rgba(27, 147, 176, 0.6) 0%,
+      rgba(27, 147, 176, 0.28) 45%,
       transparent 78%
     ),
     linear-gradient(
@@ -14069,12 +14039,26 @@ object {
   font-size: 0.85rem;
   font-weight: 500;
   flex-shrink: 0;
-  transition: background 0.2s, border-color 0.2s;
+  max-width: 260px;
+  transition: background 0.2s, border-color 0.2s, opacity 0.25s ease, max-width 0.3s ease, padding 0.3s ease, margin 0.3s ease;
   margin-right: 4px;
 }
 .tw-search-toggle:hover {
   background: #eef3f6;
   border-color: rgba(27, 147, 176, 0.4);
+}
+/* Home page only: the hero has its own search bar, so the header's search
+   pill stays hidden while the hero is in view and fades in once scrolled
+   past it (see tw-animations.js "NAV SCROLL SHRINK"). */
+#tw-nav.tw-hero-in-view .tw-search-toggle {
+  opacity: 0;
+  pointer-events: none;
+  max-width: 0;
+  padding-left: 0;
+  padding-right: 0;
+  margin-right: 0;
+  border-width: 0;
+  overflow: hidden;
 }
 .tw-search-toggle i {
   color: var(--tw-blue);
@@ -14292,7 +14276,7 @@ object {
 }
 .tw-search-mood:hover {
   border-color: var(--tw-blue);
-  background: rgba(37, 215, 242, 0.06);
+  background: rgba(27, 147, 176, 0.06);
 }
 
 .tw-search-footer {
@@ -14406,9 +14390,9 @@ object {
     border-color 0.25s ease;
 }
 .ba-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 18px 44px rgba(13, 21, 38, 0.12);
-  border-color: #cfe0ea;
+  transform: translateY(-6px);
+  box-shadow: 0 24px 56px rgba(216, 53, 80, 0.16);
+  border-color: rgba(216, 53, 80, 0.3);
 }
 .ba-card-img img {
   transition: transform 0.45s ease;
@@ -14432,10 +14416,10 @@ object {
   transition: color 0.2s;
 }
 .ba-card:hover .ba-card-title a {
-  color: var(--tw-blue);
+  color: var(--tw-pink);
 }
 .ba-card-read-more {
-  color: var(--tw-blue);
+  color: var(--tw-pink);
   font-weight: 800;
   transition: color 0.2s;
 }
@@ -14568,16 +14552,18 @@ object {
 }
 .ev-card {
   background: var(--white);
-  border: 1px solid #e6edf3;
+  border: 1px solid rgba(13, 21, 38, 0.08);
   border-radius: 6px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 20px rgba(13, 21, 38, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 .ev-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 18px 44px rgba(13, 21, 38, 0.12);
+  transform: translateY(-6px);
+  box-shadow: 0 24px 56px rgba(216, 53, 80, 0.16);
+  border-color: rgba(216, 53, 80, 0.3);
 }
 .ev-card-img {
   position: relative;
@@ -14683,15 +14669,12 @@ object {
   font-weight: 800;
   font-size: 0.84rem;
   padding: 9px 20px;
-  border-radius: 4px;
+  border-radius: 6px;
   text-decoration: none;
-  transition: transform 0.2s, box-shadow 0.2s, filter 0.2s;
-  box-shadow: 0 4px 14px rgba(216, 53, 80, 0.3);
+  transition: background 0.18s;
 }
 .ev-card-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(216, 53, 80, 0.45);
-  filter: brightness(1.05);
+  background: var(--tw-pink-hover);
   color: var(--white);
 }
 
@@ -14904,23 +14887,11 @@ object {
 }
 
 /* ================================================================
-   PACKAGE / DESTINATION CARD — polish + branded image placeholder
+   PACKAGE / DESTINATION CARD — branded image placeholder
    ================================================================ */
 .package-card,
 .destination-card {
   padding-top: 0;
-  border: 1px solid #e6edf3;
-  border-radius: 6px;
-  overflow: hidden;
-  box-shadow: 0 6px 20px rgba(13, 21, 38, 0.06);
-  transition: transform 0.22s ease, box-shadow 0.22s ease,
-    border-color 0.22s ease;
-}
-.package-card:hover,
-.destination-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 18px 44px rgba(13, 21, 38, 0.13);
-  border-color: #cfe0ea;
 }
 /* Branded placeholder behind the image so image-less cards look intentional */
 .package-media {
@@ -14944,11 +14915,6 @@ object {
   position: relative;
   z-index: 1;
 }
-.package-location {
-  color: var(--tw-blue);
-  font-weight: 700;
-  font-size: 0.8rem;
-}
 .package-facts span {
   background: #f0f6fa;
   color: var(--tw-navy);
@@ -14958,20 +14924,15 @@ object {
   font-weight: 700;
 }
 
-/* Book Now — gradient teal pill matching the design system */
 .book-now-btn {
-  background: linear-gradient(135deg, var(--tw-blue) 0%, #056d83 100%);
-  border-radius: 4px;
+  background: var(--tw-pink);
+  border-radius: 6px;
   padding: 10px 22px;
-  box-shadow: 0 4px 14px rgba(27, 147, 176, 0.28);
-  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+  transition: background 0.18s ease;
 }
 .book-now-btn:hover {
-  background: linear-gradient(135deg, var(--tw-blue) 0%, #056d83 100%);
+  background: var(--tw-pink-hover);
   color: var(--white);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 22px rgba(27, 147, 176, 0.42);
-  filter: brightness(1.06);
 }
 
 /* ================================================================
@@ -14994,13 +14955,12 @@ object {
   font-size: 0.86rem;
   letter-spacing: 0.03em;
   padding: 10px 22px;
-  border-radius: 24px;
+  border-radius: 6px;
   text-decoration: none;
-  box-shadow: 0 4px 14px rgba(216, 53, 80, 0.3);
-  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+  transition: background 0.18s ease;
 }
 .book-now-gold:hover {
-  filter: brightness(1.05);
+  background: var(--tw-pink-hover);
   color: var(--white);
 }
 
@@ -15164,30 +15124,28 @@ object {
   align-items: center;
   justify-content: center;
   padding: 14px;
-  border-radius: 12px;
+  border-radius: 6px;
   font-weight: 800;
   font-size: 0.95rem;
   text-decoration: none;
-  transition: transform 0.2s, box-shadow 0.2s, filter 0.2s;
+  transition: background 0.18s, color 0.18s, border-color 0.18s;
 }
 .ev-single-btn:not(.ev-single-btn--ghost) {
   background: var(--tw-pink);
   color: var(--white);
-  box-shadow: 0 6px 20px rgba(216, 53, 80, 0.32);
 }
 .ev-single-btn:not(.ev-single-btn--ghost):hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 28px rgba(216, 53, 80, 0.45);
-  filter: brightness(1.05);
+  background: var(--tw-pink-hover);
 }
 .ev-single-btn--ghost {
   background: transparent;
-  border: 1.5px solid var(--tw-blue);
-  color: var(--tw-blue);
+  border: 1.5px solid var(--tw-pink);
+  color: var(--tw-pink);
 }
 .ev-single-btn--ghost:hover {
-  background: var(--tw-blue);
+  background: var(--tw-pink-hover);
   color: var(--white);
+  border-color: var(--tw-pink-hover);
 }
 /* Women's Trips callout on Group Trips archive */
 .gt-womens-callout {
@@ -15229,15 +15187,14 @@ object {
   color: var(--white);
   font-size: 0.85rem;
   font-weight: 800;
-  border-radius: 10px;
+  border-radius: 6px;
   text-decoration: none;
   white-space: nowrap;
-  transition: opacity 0.2s, transform 0.2s;
+  transition: background 0.18s;
   flex-shrink: 0;
 }
 .gt-womens-callout-btn:hover {
-  opacity: 0.9;
-  transform: translateY(-2px);
+  background: var(--tw-pink-hover);
   color: var(--white);
 }
 /* ── Styled overview / day-by-day content ── */
@@ -15455,7 +15412,7 @@ body.page-template-page-app-coming-soon-php {
   padding: 128px 24px 36px;
   background:
     radial-gradient(1100px 700px at 12% -10%, rgba(229, 18, 125, 0.22), transparent 55%),
-    radial-gradient(900px 650px at 92% 12%, rgba(37, 215, 242, 0.17), transparent 55%),
+    radial-gradient(900px 650px at 92% 12%, rgba(27, 147, 176, 0.17), transparent 55%),
     radial-gradient(800px 600px at 50% 115%, rgba(139, 47, 191, 0.2), transparent 60%),
     linear-gradient(180deg, #0a1120 0%, var(--tw-navy) 45%, #060a13 100%);
   text-align: center;
@@ -15533,8 +15490,8 @@ body.page-template-page-app-coming-soon-php {
   letter-spacing: 3px;
   text-transform: uppercase;
   color: var(--tw-blue);
-  background: rgba(37, 215, 242, 0.1);
-  border: 1px solid rgba(37, 215, 242, 0.3);
+  background: rgba(27, 147, 176, 0.1);
+  border: 1px solid rgba(27, 147, 176, 0.3);
   padding: 7px 16px;
   border-radius: 999px;
   margin-bottom: 16px;
@@ -15556,7 +15513,7 @@ body.page-template-page-app-coming-soon-php {
   margin: 0 auto 14px;
   max-width: 460px;
   text-wrap: balance;
-  text-shadow: 0 0 60px rgba(229, 18, 125, 0.35), 0 0 120px rgba(37, 215, 242, 0.12);
+  text-shadow: 0 0 60px rgba(229, 18, 125, 0.35), 0 0 120px rgba(27, 147, 176, 0.12);
 }
 .app-hero-title .accent {
   color: var(--tw-pink);
@@ -15666,7 +15623,7 @@ body.page-template-page-app-coming-soon-php {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(37, 215, 242, 0.1);
+  background: rgba(27, 147, 176, 0.1);
   color: var(--tw-blue);
   font-size: 17px;
   margin-bottom: 14px;
