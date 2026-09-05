@@ -3799,7 +3799,7 @@ body.page-template-page-plan-a-trip-php {
 .auth-hero {
   background: #eef3f6;
   margin-top: -132px;
-  padding: 196px 24px 52px;
+  padding: 164px 24px 28px;
   text-align: center;
   position: relative;
   overflow: hidden;
@@ -3807,7 +3807,7 @@ body.page-template-page-plan-a-trip-php {
 @media (max-width: 600px) {
   .auth-hero {
     margin-top: -112px;
-    padding-top: 176px;
+    padding-top: 144px;
   }
 }
 .auth-hero::before {
@@ -3858,13 +3858,13 @@ body.page-template-page-plan-a-trip-php {
 .auth-wrap {
   max-width: 480px;
   margin: 0 auto;
-  padding: 48px 24px 88px;
+  padding: 24px 24px 60px;
 }
 .auth-card {
   background: var(--white);
   border: 1px solid #dde5ef;
   border-radius: 8px;
-  padding: 40px 40px 36px;
+  padding: 32px 40px 28px;
   box-shadow: 0 12px 48px rgba(0, 0, 0, 0.1);
 }
 .tw-float-group {
