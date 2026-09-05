@@ -67,15 +67,15 @@ h2 {
 
 h3,
 h4 {
-  font-family: var(--body-font);
-  font-weight: 800;
+  font-family: var(--heading-font);
+  font-weight: 700;
   line-height: 1.35;
 }
 
 h5,
 h6 {
-  font-family: var(--body-font);
-  font-weight: 700;
+  font-family: var(--heading-font);
+  font-weight: 600;
   line-height: 1.4;
 }
 
@@ -919,8 +919,8 @@ h6 {
   flex: 1;
 }
 .tw-itin-title {
-  font-family: var(--body-font);
-  font-weight: 800;
+  font-family: var(--heading-font);
+  font-weight: 700;
   font-size: 1.05rem;
   margin: 0 0 8px;
   line-height: 1.3;
@@ -1976,16 +1976,16 @@ main.dest-single {
   margin: 0 0 16px;
 }
 .dest-article.ev-content-styled h3 {
-  font-family: var(--body-font);
+  font-family: var(--heading-font);
   font-size: 1.12rem;
-  font-weight: 800;
+  font-weight: 700;
   color: var(--tw-navy);
   margin: 28px 0 10px;
 }
 .dest-article.ev-content-styled h4 {
-  font-family: var(--body-font);
+  font-family: var(--heading-font);
   font-size: 1rem;
-  font-weight: 800;
+  font-weight: 700;
   color: var(--tw-navy);
   margin: 22px 0 8px;
 }
@@ -2068,7 +2068,7 @@ main.dest-single {
   font-size: 0.96rem;
 }
 .dest-article.ev-content-styled .itinerary-day summary strong {
-  font-family: var(--body-font);
+  font-family: var(--heading-font);
 }
 
 .dest-article-cta {
@@ -5115,7 +5115,7 @@ body.page-template-page-plan-a-trip-php {
   font-size: 1rem;
 }
 .tw-womens-testi-quote-mark {
-  font-family: Georgia, serif;
+  font-family: var(--heading-font);
   font-size: 5rem;
   color: var(--pastel-pink);
   line-height: 0.5;
@@ -5232,7 +5232,7 @@ body.page-template-page-plan-a-trip-php {
 }
 .tw-mega--luxe .tw-mega-event-name {
   color: #f3e9c8 !important;
-  font-family: Georgia, serif;
+  font-family: var(--heading-font);
   font-style: italic;
   font-weight: 400;
   font-size: 0.9rem;
@@ -5246,7 +5246,7 @@ body.page-template-page-plan-a-trip-php {
 }
 .tw-mega--luxe .tw-mega-empty p {
   color: rgba(230, 230, 230, 0.6);
-  font-family: Georgia, serif;
+  font-family: var(--body-font);
   font-style: italic;
   font-size: 0.88rem;
   margin: 0;
@@ -5332,7 +5332,7 @@ body.page-template-page-plan-a-trip-php {
   margin: 0 0 14px;
 }
 .tw-luxe-sub {
-  font-family: Georgia, serif;
+  font-family: var(--body-font);
   font-style: italic;
   font-size: 0.98rem;
   color: rgba(230, 230, 230, 0.68);
@@ -5415,7 +5415,7 @@ body.page-template-page-plan-a-trip-php {
   color: var(--white);
   margin: 0 0 12px;
   line-height: 1.3;
-  font-family: Georgia, serif;
+  font-family: var(--heading-font);
 }
 .tw-luxe-card-foot {
   display: flex;
@@ -5435,7 +5435,7 @@ body.page-template-page-plan-a-trip-php {
   font-size: 1.1rem;
   font-weight: 600;
   color: rgb(var(--luxe-gold));
-  font-family: Georgia, serif;
+  font-family: var(--heading-font);
 }
 .tw-luxe-card-price small {
   display: block;
@@ -5559,7 +5559,7 @@ body.page-template-page-plan-a-trip-php {
   padding-left: 0.42em;
 }
 .tw-luxe-hero-sub {
-  font-family: Georgia, serif;
+  font-family: var(--body-font);
   font-style: italic;
   font-size: 1.1rem;
   color: rgba(230, 230, 230, 0.72);
@@ -5590,7 +5590,7 @@ body.page-template-page-plan-a-trip-php {
 }
 .tw-luxe-stat strong {
   display: block;
-  font-family: Georgia, serif;
+  font-family: var(--heading-font);
   font-style: italic;
   font-size: 1.5rem;
   color: rgb(var(--luxe-gold));
@@ -5653,7 +5653,7 @@ body.page-template-page-plan-a-trip-php {
   display: block;
 }
 .tw-luxe-why-card h3 {
-  font-family: Georgia, serif;
+  font-family: var(--heading-font);
   font-style: italic;
   font-size: 1.25rem;
   font-weight: 400;
@@ -5693,7 +5693,7 @@ body.page-template-page-plan-a-trip-php {
   background: rgba(var(--luxe-gold), 0.4);
 }
 .tw-luxe-section-head h2 {
-  font-family: Georgia, serif;
+  font-family: var(--heading-font);
   font-style: italic;
   font-size: 2.1rem;
   font-weight: 400;
@@ -5769,7 +5769,7 @@ body.page-template-page-plan-a-trip-php {
   font-weight: 600;
 }
 .tw-luxe-trip-body h3 {
-  font-family: Georgia, serif;
+  font-family: var(--heading-font);
   font-style: italic;
   font-size: 1.4rem;
   font-weight: 400;
@@ -5809,7 +5809,7 @@ body.page-template-page-plan-a-trip-php {
 }
 .tw-luxe-trip-price {
   display: block;
-  font-family: Georgia, serif;
+  font-family: var(--heading-font);
   font-style: italic;
   font-size: 1.4rem;
   font-weight: 400;
@@ -5849,7 +5849,7 @@ body.page-template-page-plan-a-trip-php {
   margin-bottom: 20px;
 }
 .tw-luxe-empty h3 {
-  font-family: Georgia, serif;
+  font-family: var(--heading-font);
   font-size: 1.5rem;
   color: var(--white);
   margin: 0 0 12px;
@@ -5884,7 +5884,7 @@ body.page-template-page-plan-a-trip-php {
   background: rgba(var(--luxe-gold), 0.4);
 }
 .tw-luxe-enquiry-copy h2 {
-  font-family: Georgia, serif;
+  font-family: var(--heading-font);
   font-style: italic;
   font-size: 2rem;
   color: var(--white);
@@ -5896,7 +5896,7 @@ body.page-template-page-plan-a-trip-php {
   color: rgba(230, 230, 230, 0.6);
   font-size: 0.95rem;
   margin: 0;
-  font-family: Georgia, serif;
+  font-family: var(--body-font);
   font-style: italic;
 }
 .tw-luxe-form-grid {
@@ -6047,7 +6047,7 @@ body.page-template-page-plan-a-trip-php {
   background: rgba(var(--luxe-gold), 0.45);
 }
 .tw-luxe-single-title {
-  font-family: Georgia, serif;
+  font-family: var(--heading-font);
   font-style: italic;
   font-weight: 400;
   font-size: clamp(2.6rem, 5.4vw, 4.4rem);
@@ -6057,7 +6057,7 @@ body.page-template-page-plan-a-trip-php {
   letter-spacing: 0.01em;
 }
 .tw-luxe-single-location {
-  font-family: Georgia, serif;
+  font-family: var(--heading-font);
   font-style: italic;
   color: rgba(var(--luxe-gold), 0.85);
   font-size: 1.05rem;
@@ -6096,7 +6096,7 @@ body.page-template-page-plan-a-trip-php {
 }
 .tw-luxe-single-meta-item .val {
   display: block;
-  font-family: Georgia, serif;
+  font-family: var(--heading-font);
   font-style: italic;
   color: rgb(var(--luxe-gold));
   font-size: 1.15rem;
@@ -6146,7 +6146,7 @@ body.page-template-page-plan-a-trip-php {
   background: rgba(var(--luxe-gold), 0.4);
 }
 .tw-luxe-single-section-title {
-  font-family: Georgia, serif;
+  font-family: var(--heading-font);
   font-style: italic;
   font-weight: 400;
   font-size: 2rem;
@@ -6157,7 +6157,7 @@ body.page-template-page-plan-a-trip-php {
 }
 
 .tw-luxe-single-overview {
-  font-family: Georgia, serif;
+  font-family: var(--body-font);
   font-style: italic;
   font-size: 1.2rem;
   line-height: 1.95;
@@ -6184,7 +6184,7 @@ body.page-template-page-plan-a-trip-php {
 }
 .tw-luxe-single-content h2,
 .tw-luxe-single-content h3 {
-  font-family: Georgia, serif;
+  font-family: var(--heading-font);
   font-style: italic;
   color: var(--white);
   font-weight: 400;
@@ -6217,7 +6217,7 @@ body.page-template-page-plan-a-trip-php {
   color: rgba(230, 230, 230, 0.82);
   font-size: 0.96rem;
   line-height: 1.55;
-  font-family: Georgia, serif;
+  font-family: var(--body-font);
   font-style: italic;
   font-weight: 300;
 }
@@ -6251,7 +6251,7 @@ body.page-template-page-plan-a-trip-php {
   padding-top: 8px;
 }
 .tw-luxe-day-num {
-  font-family: Georgia, serif;
+  font-family: var(--heading-font);
   font-style: italic;
   font-size: 2.4rem;
   color: rgb(var(--luxe-gold));
@@ -6260,7 +6260,7 @@ body.page-template-page-plan-a-trip-php {
   padding-top: 4px;
 }
 .tw-luxe-day-copy h3 {
-  font-family: Georgia, serif;
+  font-family: var(--heading-font);
   font-style: italic;
   font-weight: 400;
   color: var(--white);
@@ -6304,7 +6304,7 @@ body.page-template-page-plan-a-trip-php {
 }
 .tw-luxe-single-enquiry-sub {
   color: rgba(230, 230, 230, 0.62);
-  font-family: Georgia, serif;
+  font-family: var(--body-font);
   font-style: italic;
   font-size: 0.98rem;
   margin: 0;
@@ -6599,7 +6599,7 @@ body.page-template-page-plan-a-trip-php {
   pointer-events: none;
 }
 .tw-luxury-hero-line {
-  font-family: Georgia, serif;
+  font-family: var(--heading-font);
   font-style: italic;
   font-weight: 300;
   font-size: clamp(1.25rem, 2.4vw, 1.9rem);
@@ -6921,7 +6921,7 @@ body.page-template-page-plan-a-trip-php {
   font-size: 1rem;
 }
 .tw-testi-card-quote-mark {
-  font-family: Georgia, serif;
+  font-family: var(--heading-font);
   font-size: 4.5rem;
   color: rgba(27, 147, 176, 0.18);
   line-height: 0.5;
@@ -7039,6 +7039,7 @@ body.page-template-page-plan-a-trip-php {
   justify-content: flex-start !important;
   font-size: 0.82rem;
   color: rgba(13, 21, 38, 0.5);
+  margin-top: 28px;
   margin-bottom: 18px;
 }
 .dest-crumbs a {
@@ -7898,8 +7899,8 @@ main.tw-search-page {
   flex: 1;
 }
 .tw-blog-card-title {
-  font-family: var(--body-font);
-  font-weight: 800;
+  font-family: var(--heading-font);
+  font-weight: 700;
   line-height: 1.35;
   margin: 0;
 }
@@ -10466,6 +10467,13 @@ select.fi {
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
+.pat-submit-note {
+  text-align: center;
+  margin-top: 10px;
+  font-family: var(--body-font);
+  font-size: 11px;
+  color: var(--muted);
+}
 .pat-reset-wrap {
   margin-top: 24px;
 }
@@ -12877,6 +12885,7 @@ object {
 .tribe-crumbs {
   font-size: 0.85rem;
   color: #8595a6;
+  margin-top: 28px;
   margin-bottom: 16px;
   display: flex;
   align-items: center;
@@ -13131,9 +13140,9 @@ object {
   margin-bottom: 16px;
 }
 .tribe-reply-form-title {
-  font-family: var(--body-font);
+  font-family: var(--heading-font);
   font-size: 1.05rem;
-  font-weight: 800;
+  font-weight: 700;
   color: var(--tw-navy);
   margin: 0 0 14px;
 }
@@ -13631,6 +13640,7 @@ object {
 .explore-crumbs {
   font-size: 0.82rem;
   color: rgba(13, 21, 38, 0.5);
+  margin-top: 28px;
   margin-bottom: 14px;
   display: flex;
   gap: 8px;
@@ -13747,9 +13757,9 @@ object {
   flex: 1;
 }
 .explore-card-title {
-  font-family: var(--body-font);
+  font-family: var(--heading-font);
   font-size: 1.08rem;
-  font-weight: 800;
+  font-weight: 700;
   line-height: 1.3;
   margin: 0 0 8px;
 }
@@ -13917,9 +13927,9 @@ object {
   letter-spacing: 0.04em;
 }
 .tw-events-name {
-  font-family: var(--body-font);
+  font-family: var(--heading-font);
   font-size: 1.3rem;
-  font-weight: 800;
+  font-weight: 700;
   color: var(--white);
   display: flex;
   flex-direction: column;
@@ -14345,9 +14355,9 @@ object {
   padding-top: 36px;
 }
 .tw-results-group-title {
-  font-family: var(--body-font);
+  font-family: var(--heading-font);
   font-size: 1.15rem;
-  font-weight: 800;
+  font-weight: 700;
   color: var(--tw-navy);
   margin: 0 0 16px;
   display: flex;
@@ -14623,9 +14633,9 @@ object {
   color: var(--tw-blue);
 }
 .ev-card-title {
-  font-family: var(--body-font);
+  font-family: var(--heading-font);
   font-size: 1.05rem;
-  font-weight: 800;
+  font-weight: 700;
   line-height: 1.3;
   margin: 0 0 8px;
 }
@@ -14754,9 +14764,9 @@ object {
   margin-bottom: 6px;
 }
 .ev-row-title {
-  font-family: var(--body-font);
+  font-family: var(--heading-font);
   font-size: 1.08rem;
-  font-weight: 800;
+  font-weight: 700;
   margin: 0 0 4px;
 }
 .ev-row-title a {
@@ -15204,8 +15214,8 @@ object {
 .ev-content-styled h2,
 .ev-content-styled h3,
 .ev-content-styled h4 {
-  font-family: var(--body-font);
-  font-weight: 800;
+  font-family: var(--heading-font);
+  font-weight: 700;
   color: var(--tw-navy);
   margin: 28px 0 10px;
   padding: 10px 16px;
@@ -15629,7 +15639,7 @@ body.page-template-page-app-coming-soon-php {
   margin-bottom: 14px;
 }
 .app-feature-card h3 {
-  font-family: var(--body-font);
+  font-family: var(--heading-font);
   font-size: 15px;
   font-weight: 700;
   color: var(--tw-navy);

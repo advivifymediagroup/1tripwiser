@@ -210,7 +210,7 @@ $pat_subtitle  = get_option('tw_pat_subtitle', "Tell us your dream destination, 
           Get My Personalised Itinerary
         </button>
       </div>
-      <div style="text-align:center;margin-top:10px;font-family:'Nunito',sans-serif;font-size:11px;color:var(--muted);">
+      <div class="pat-submit-note">
         No payment required &middot; Delivered to your WhatsApp &amp; email within minutes
       </div>
     </div>

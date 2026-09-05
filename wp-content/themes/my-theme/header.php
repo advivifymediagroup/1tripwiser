@@ -416,7 +416,7 @@ function tw_default_mobile_nav() {
         'padding:0 30px',
         'border:none',
         'border-radius:999px',
-        'font-family:Nunito,sans-serif',
+        'font-family:var(--body-font)',
         'font-size:0.88rem',
         'font-weight:800',
         'letter-spacing:0.06em',
