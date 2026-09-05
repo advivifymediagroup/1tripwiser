@@ -1301,7 +1301,7 @@ function mytheme_package_card($post_id = null) {
     if ( ! $image_url && has_post_thumbnail( $post_id ) ) {
         $image_url = get_the_post_thumbnail_url( $post_id, 'large' );
     }
-    $book_url = $data['book_url'] ? $data['book_url'] : get_permalink($post_id);
+    $book_url = get_permalink($post_id) . '#package-enquiry';
     ?>
     <article class="post-card package-card" data-package-card-id="<?php echo esc_attr($post_id); ?>">
         <div class="package-media">
@@ -1330,7 +1330,6 @@ function mytheme_package_card($post_id = null) {
             <div class="package-price-row">
                 <div>
                     <?php if ($data['amount']) : ?><strong><?php echo esc_html($data['amount']); ?></strong><?php endif; ?>
-                    <?php if ($data['emi']) : ?><small><?php echo esc_html($data['emi']); ?></small><?php endif; ?>
                 </div>
                 <a href="<?php echo esc_url($book_url); ?>" class="book-now-btn">Book Now</a>
             </div>
@@ -1558,6 +1557,8 @@ function mytheme_save_enquiry($enquiry_type, $ref_id, $ref_title, $ref_url, $fie
         'package'     => 'Package',
         'itinerary'   => 'Itinerary',
         'destination' => 'Destination',
+        'group_trip'  => 'Group Trip',
+        'event'       => 'Event',
     );
     $type_label = isset($type_labels[$enquiry_type]) ? $type_labels[$enquiry_type] : ucfirst($enquiry_type);
 
@@ -1592,7 +1593,7 @@ function mytheme_handle_enquiry_submission() {
     }
 
     $enquiry_type = isset($_POST['enquiry_type']) ? sanitize_key(wp_unslash($_POST['enquiry_type'])) : 'package';
-    if (!in_array($enquiry_type, array('package', 'itinerary', 'destination'), true)) {
+    if (!in_array($enquiry_type, array('package', 'itinerary', 'destination', 'group_trip', 'event'), true)) {
         $enquiry_type = 'package';
     }
     $ref_id = isset($_POST['package_id']) ? absint($_POST['package_id']) : (isset($_POST['ref_id']) ? absint($_POST['ref_id']) : 0);
@@ -1609,7 +1610,7 @@ function mytheme_handle_enquiry_submission() {
     // A ref_id of 0 is a generic "interest" enquiry not tied to a specific
     // post (e.g. the LUXE collection page when no packages are published
     // yet) — allowed as long as one is submitted with a real name/phone.
-    $post_type_map = array('package' => 'travel_package', 'itinerary' => 'itinerary', 'destination' => 'destination');
+    $post_type_map = array('package' => 'travel_package', 'itinerary' => 'itinerary', 'destination' => 'destination', 'group_trip' => 'group_trip', 'event' => 'tw_event');
     $expected_post_type = $post_type_map[$enquiry_type];
     $valid_ref = !$ref_id || in_array(get_post_type($ref_id), array($expected_post_type, 'tw_luxe'), true);
 
@@ -1778,7 +1779,7 @@ function tw_homepage_itinerary_card() {
             <?php endif; ?>
             <div class="itin-actions tw-itin-actions">
                 <a href="<?php the_permalink(); ?>" class="read-more tw-itin-open">Open Itinerary</a>
-                <a href="<?php echo esc_url( mytheme_get_travel_field('book_url') ?: get_permalink() ); ?>" class="book-now-gold tw-itin-book">Book Now</a>
+                <a href="<?php echo esc_url( get_permalink() . '#itinerary-enquiry' ); ?>" class="book-now-gold tw-itin-book">Enquire</a>
             </div>
         </div>
     </article>
@@ -3183,7 +3184,7 @@ function mytheme_render_enquiries_page() {
 
     $where = '';
     $args  = array();
-    if (in_array($type_filter, array('package', 'itinerary', 'destination'), true)) {
+    if (in_array($type_filter, array('package', 'itinerary', 'destination', 'group_trip', 'event'), true)) {
         $where = 'WHERE enquiry_type = %s';
         $args[] = $type_filter;
     }
@@ -3195,7 +3196,7 @@ function mytheme_render_enquiries_page() {
     $rows_args = array_merge($args, array($per_page, $offset));
     $rows = $wpdb->get_results($wpdb->prepare($rows_sql, $rows_args));
 
-    $type_labels = array('package' => 'Package', 'itinerary' => 'Itinerary', 'destination' => 'Destination');
+    $type_labels = array('package' => 'Package', 'itinerary' => 'Itinerary', 'destination' => 'Destination', 'group_trip' => 'Group Trip', 'event' => 'Event');
     $base_url = admin_url('admin.php?page=tw-enquiries');
     ?>
     <div class="wrap">

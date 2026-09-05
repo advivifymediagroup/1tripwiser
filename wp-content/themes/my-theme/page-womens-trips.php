@@ -87,8 +87,7 @@ $has_trips = $trips_query->have_posts();
                 $days    = (int) get_post_meta( $id, 'total_days', true )   ?: (int) mytheme_get_travel_field('total_days', $id);
                 $dur     = $nights ? $nights . ' Nights ' . ( $days ?: $nights + 1 ) . ' Days' : mytheme_get_travel_field('trip_duration', $id);
                 $loc     = get_post_meta( $id, 'package_location', true ) ?: mytheme_get_travel_field('destination_name', $id);
-                $emi     = get_post_meta( $id, 'package_emi', true );
-                $book    = get_post_meta( $id, 'package_book_url', true ) ?: get_permalink( $id );
+                $book    = get_permalink( $id ) . '#group-enquiry';
                 $regions = get_the_terms( $id, 'destination_region' );
                 $region  = ( $regions && ! is_wp_error($regions) ) ? $regions[0]->name : '';
             ?>
