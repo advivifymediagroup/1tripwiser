@@ -30,7 +30,6 @@ while ( have_posts() ) :
     $dur       = $package['duration'];
     $trip_type = $package['trip_type'];
     $tag       = $package['tag'];
-    $emi       = $package['emi'];
     $overview  = $package['overview'];
     $route     = get_post_meta( $id, 'route_summary', true ) ?: mytheme_get_travel_field( 'route_summary', $id );
     $best_time = get_post_meta( $id, 'best_time', true )     ?: mytheme_get_travel_field( 'best_time', $id );
@@ -243,7 +242,7 @@ while ( have_posts() ) :
                     <div class="dest-rail-price">
                         <span><?php esc_html_e( 'Starts from', 'mytheme' ); ?></span>
                         <strong><?php echo esc_html( mytheme_format_rupee_amount( $price ) ); ?></strong>
-                        <small><?php echo $emi ? esc_html( $emi ) . '/mo · ' : ''; ?><?php esc_html_e( 'per person', 'mytheme' ); ?></small>
+                        <small><?php esc_html_e( 'per person', 'mytheme' ); ?></small>
                     </div>
                     <?php endif; ?>
                     <?php

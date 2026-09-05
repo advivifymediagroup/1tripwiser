@@ -51,7 +51,7 @@
                             </div>
                             <div class="itin-actions">
                                 <a href="<?php the_permalink(); ?>" class="read-more">Open Itinerary</a>
-                                <a href="<?php echo esc_url( mytheme_get_travel_field('book_url') ?: get_permalink() ); ?>" class="book-now-gold">Book Now</a>
+                                <a href="<?php echo esc_url( get_permalink() . '#itinerary-enquiry' ); ?>" class="book-now-gold">Enquire</a>
                             </div>
                         </div>
                     </article>

@@ -42,13 +42,11 @@ if ( $tw_events->have_posts() ) {
         if ( ! $dur && $nights ) {
             $dur = $nights . ' Nights ' . ( $days ? $days : $nights + 1 ) . ' Days';
         }
-        // Book URL: ACF group uses package_book_url; old meta fallback = book_url
-        $book   = mytheme_get_travel_field( 'package_book_url', $p->ID ) ?: mytheme_get_travel_field( 'book_url', $p->ID );
         $row = array(
             'id'      => $p->ID,
             'title'   => get_the_title( $p->ID ),
             'url'     => get_permalink( $p->ID ),
-            'book'    => $book ? $book : get_permalink( $p->ID ),
+            'book'    => get_permalink( $p->ID ) . '#event-enquiry',
             'thumb'   => get_the_post_thumbnail_url( $p->ID, 'large' ),
             'date'    => $date,
             'ts'      => $ts,

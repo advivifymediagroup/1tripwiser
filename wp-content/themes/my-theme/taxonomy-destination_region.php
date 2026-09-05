@@ -156,7 +156,13 @@ $total = array_sum( $counts );
                     'itinerary'      => array( 'Itinerary',  '#10b981', '#fff'    ),
                 );
                 $badge     = isset( $badges[$pt] ) ? $badges[$pt] : array( '<i class="fi-rr-plane" aria-hidden="true"></i> Trip', '#6b7a8f', '#fff' );
-                $book_url  = get_post_meta( $pid, 'package_book_url', true ) ?: get_permalink( $pid );
+                $enquiry_anchors = array(
+                    'travel_package' => 'package-enquiry',
+                    'group_trip'     => 'group-enquiry',
+                    'tw_event'       => 'event-enquiry',
+                    'itinerary'      => 'itinerary-enquiry',
+                );
+                $book_url  = get_permalink( $pid ) . '#' . ( isset( $enquiry_anchors[$pt] ) ? $enquiry_anchors[$pt] : 'package-enquiry' );
                 $tag_label = get_post_meta( $pid, 'package_tag', true );
             ?>
             <article class="dest-card" data-type="<?php echo esc_attr( $pt ); ?>">
