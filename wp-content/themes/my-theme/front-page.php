@@ -40,27 +40,17 @@ if ( $tw_hero_video ) {
             </h1>
             <p class="tw-hero-desc">Handcrafted itineraries, priced fairly, ready in 24 hours.</p>
 
+            <form class="tw-hero-search" role="search" method="get" action="<?php echo esc_url( home_url( '/' ) ); ?>">
+                <div class="tw-hero-search-field">
+                    <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                    <input type="search" name="s" class="tw-hero-search-input" placeholder="Where do you want to go? Try Bali, Ladakh, Honeymoon&hellip;" autocomplete="off" value="<?php echo esc_attr( get_search_query() ); ?>">
+                </div>
+                <button type="submit" class="tw-hero-search-btn">Search</button>
+            </form>
+
             <div class="tw-hero-actions">
                 <a href="<?php echo esc_url(mytheme_get_plan_trip_url()); ?>" class="tw-cta-btn tw-cta-btn--primary">Plan a Trip &mdash; Free</a>
                 <a href="#featured-packages" class="tw-cta-btn tw-cta-btn--outline">Explore Packages</a>
-            </div>
-
-            <?php
-            $tw_pkg_archive = get_post_type_archive_link( 'travel_package' );
-            $tw_mood_tags   = array(
-                'Mountains'     => $tw_pkg_archive,
-                'Beaches'       => $tw_pkg_archive,
-                'Offbeat'       => $tw_pkg_archive,
-                'Honeymoon'     => $tw_pkg_archive,
-                'Group Trips'   => get_post_type_archive_link( 'group_trip' ) ?: $tw_pkg_archive,
-                'Budget'        => add_query_arg( 'package_filter', 'budget-under-30k', $tw_pkg_archive ),
-                'International' => add_query_arg( 'package_filter', 'international', $tw_pkg_archive ),
-            );
-            ?>
-            <div class="tw-hero-tags">
-                <?php foreach ( $tw_mood_tags as $tw_mood_label => $tw_mood_url ) : ?>
-                <a href="<?php echo esc_url( $tw_mood_url ); ?>" class="tw-hero-tag"><?php echo esc_html( $tw_mood_label ); ?></a>
-                <?php endforeach; ?>
             </div>
         </div>
 

@@ -235,7 +235,7 @@
         ));
         ?>
         <a class="tw-cta tw-cta-mobile" href="<?php echo esc_url(mytheme_get_plan_trip_url()); ?>"><i class="fa-solid fa-paper-plane"></i> Plan My Trip</a>
-        <button type="button" class="tw-cta tw-cta-mobile" id="tw-search-open-mobile" style="width:100%;background:rgba(255,255,255,0.08);color:#fff;border:1px solid rgba(255,255,255,0.15);margin-top:10px;"><i class="fa-solid fa-magnifying-glass"></i> Search the site</button>
+        <button type="button" class="tw-cta tw-cta-mobile tw-cta-mobile-search" id="tw-search-open-mobile"><i class="fa-solid fa-magnifying-glass"></i> Search the site</button>
 
         <!-- Mobile auth links -->
         <div class="tw-mobile-auth">
@@ -269,7 +269,7 @@ function tw_default_nav() {
     echo '<li class="tw-menu-item"><a href="' . $dest_url . '" class="tw-nav-link">Destinations</a></li>';
     echo '<li class="tw-menu-item"><a href="' . $itin_url . '" class="tw-nav-link">Itineraries</a></li>';
     echo '<li class="tw-menu-item"><a href="' . $pkg_url . '" class="tw-nav-link">Packages</a></li>';
-    echo '<li class="tw-menu-item"><a href="' . $blog_url . '" class="tw-nav-link">Blog</a></li>';
+    echo '<li class="tw-menu-item"><a href="' . $blog_url . '" class="tw-nav-link">Blogs</a></li>';
     if ( $tribe_url ) { echo '<li class="tw-menu-item"><a href="' . $tribe_url . '" class="tw-nav-link">Tribe</a></li>'; }
     echo '</ul>';
 }
@@ -284,7 +284,7 @@ function tw_default_mobile_nav() {
     echo '<li><a href="' . $dest_url . '">Destinations</a></li>';
     echo '<li><a href="' . $itin_url . '">Itineraries</a></li>';
     echo '<li><a href="' . $pkg_url . '">Packages</a></li>';
-    echo '<li><a href="' . $blog_url . '">Blog</a></li>';
+    echo '<li><a href="' . $blog_url . '">Blogs</a></li>';
     if ( $tribe_url ) { echo '<li><a href="' . $tribe_url . '">Tribe</a></li>'; }
     echo '</ul>';
 }

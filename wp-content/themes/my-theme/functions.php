@@ -1473,70 +1473,174 @@ function mytheme_render_faq_section($post_id = null, $heading = 'Frequently Aske
     <?php
 }
 
-function mytheme_handle_package_inquiry() {
-    if (!isset($_POST['mytheme_package_inquiry_nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['mytheme_package_inquiry_nonce'])), 'mytheme_package_inquiry')) {
+// ============================================================
+// ENQUIRIES — package / itinerary / destination "Book Now" and
+// "Enquire" forms all save here, in a dedicated table separate
+// from the trip_inquiry CPT used by the Plan A Trip flow.
+// ============================================================
+function mytheme_enquiries_table_name() {
+    global $wpdb;
+    return $wpdb->prefix . 'tw_enquiries';
+}
+
+function mytheme_maybe_create_enquiries_table() {
+    $installed_version = get_option('tw_enquiries_table_version');
+    if ($installed_version === '1.0') {
+        return;
+    }
+    global $wpdb;
+    $table_name      = mytheme_enquiries_table_name();
+    $charset_collate = $wpdb->get_charset_collate();
+    $sql = "CREATE TABLE $table_name (
+        id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+        enquiry_type VARCHAR(20) NOT NULL DEFAULT 'package',
+        ref_id BIGINT UNSIGNED NOT NULL DEFAULT 0,
+        ref_title VARCHAR(255) NOT NULL DEFAULT '',
+        ref_url VARCHAR(500) NOT NULL DEFAULT '',
+        name VARCHAR(150) NOT NULL DEFAULT '',
+        phone VARCHAR(40) NOT NULL DEFAULT '',
+        email VARCHAR(150) NOT NULL DEFAULT '',
+        travel_date VARCHAR(40) NOT NULL DEFAULT '',
+        adults SMALLINT UNSIGNED NOT NULL DEFAULT 1,
+        budget VARCHAR(100) NOT NULL DEFAULT '',
+        message TEXT NULL,
+        status VARCHAR(20) NOT NULL DEFAULT 'new',
+        created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY  (id),
+        KEY enquiry_type (enquiry_type),
+        KEY ref_id (ref_id)
+    ) $charset_collate;";
+    require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+    dbDelta($sql);
+    update_option('tw_enquiries_table_version', '1.0');
+}
+add_action('init', 'mytheme_maybe_create_enquiries_table');
+
+/**
+ * Insert an enquiry row and email 1tripwiser@gmail.com. Shared by the
+ * package, itinerary and destination "Book Now" / "Enquire" forms.
+ */
+function mytheme_save_enquiry($enquiry_type, $ref_id, $ref_title, $ref_url, $fields) {
+    global $wpdb;
+
+    $data = wp_parse_args($fields, array(
+        'name'        => '',
+        'phone'       => '',
+        'email'       => '',
+        'travel_date' => '',
+        'adults'      => 1,
+        'budget'      => '',
+        'message'     => '',
+    ));
+
+    $wpdb->insert(
+        mytheme_enquiries_table_name(),
+        array(
+            'enquiry_type' => $enquiry_type,
+            'ref_id'       => $ref_id,
+            'ref_title'    => $ref_title,
+            'ref_url'      => $ref_url,
+            'name'         => $data['name'],
+            'phone'        => $data['phone'],
+            'email'        => $data['email'],
+            'travel_date'  => $data['travel_date'],
+            'adults'       => max(1, (int) $data['adults']),
+            'budget'       => $data['budget'],
+            'message'      => $data['message'],
+            'status'       => 'new',
+            'created_at'   => current_time('mysql'),
+        ),
+        array('%s', '%d', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%s', '%s', '%s')
+    );
+    $enquiry_id = $wpdb->insert_id;
+
+    $type_labels = array(
+        'package'     => 'Package',
+        'itinerary'   => 'Itinerary',
+        'destination' => 'Destination',
+    );
+    $type_label = isset($type_labels[$enquiry_type]) ? $type_labels[$enquiry_type] : ucfirst($enquiry_type);
+
+    $subject = sprintf('New %s Enquiry — %s', $type_label, $ref_title ?: $data['name']);
+    $body_lines = array(
+        "A new {$type_label} enquiry was submitted on 1TripWiser.",
+        '',
+        'Name: ' . $data['name'],
+        'Phone: ' . $data['phone'],
+        'Email: ' . $data['email'],
+        $ref_title ? ($type_label . ': ' . $ref_title) : '',
+        $ref_url ? 'Link: ' . $ref_url : '',
+        $data['travel_date'] ? 'Preferred Travel Date: ' . $data['travel_date'] : '',
+        'Adults: ' . max(1, (int) $data['adults']),
+        $data['budget'] ? 'Budget: ' . $data['budget'] : '',
+        $data['message'] ? "Message:\n" . $data['message'] : '',
+    );
+    $body = implode("\n", array_filter($body_lines, function ($line) { return $line !== ''; }));
+
+    wp_mail('1tripwiser@gmail.com', $subject, $body, array(
+        $data['email'] ? ('Reply-To: ' . $data['name'] . ' <' . $data['email'] . '>') : '',
+    ));
+
+    return $enquiry_id;
+}
+
+function mytheme_handle_enquiry_submission() {
+    $nonce_ok = isset($_POST['mytheme_enquiry_nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['mytheme_enquiry_nonce'])), 'mytheme_enquiry')
+        || isset($_POST['mytheme_package_inquiry_nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['mytheme_package_inquiry_nonce'])), 'mytheme_package_inquiry');
+    if (!$nonce_ok) {
         wp_die(esc_html__('Security check failed.', 'mytheme'));
     }
 
-    $package_id = isset($_POST['package_id']) ? absint($_POST['package_id']) : 0;
-    $name = isset($_POST['name']) ? sanitize_text_field(wp_unslash($_POST['name'])) : '';
-    $phone = isset($_POST['phone']) ? sanitize_text_field(wp_unslash($_POST['phone'])) : '';
-    $email = isset($_POST['email']) ? sanitize_email(wp_unslash($_POST['email'])) : '';
-    $travel_date = isset($_POST['date']) ? sanitize_text_field(wp_unslash($_POST['date'])) : '';
-    $adults = isset($_POST['adults']) ? max(1, absint($_POST['adults'])) : 1;
-    $budget = isset($_POST['budget']) ? sanitize_text_field(wp_unslash($_POST['budget'])) : '';
-    $message = isset($_POST['message']) ? sanitize_textarea_field(wp_unslash($_POST['message'])) : '';
-    $redirect = isset($_POST['_wp_http_referer']) ? esc_url_raw(wp_unslash($_POST['_wp_http_referer'])) : home_url('/');
+    $enquiry_type = isset($_POST['enquiry_type']) ? sanitize_key(wp_unslash($_POST['enquiry_type'])) : 'package';
+    if (!in_array($enquiry_type, array('package', 'itinerary', 'destination'), true)) {
+        $enquiry_type = 'package';
+    }
+    $ref_id = isset($_POST['package_id']) ? absint($_POST['package_id']) : (isset($_POST['ref_id']) ? absint($_POST['ref_id']) : 0);
+    $name        = isset($_POST['name'])    ? sanitize_text_field(wp_unslash($_POST['name']))    : '';
+    $phone       = isset($_POST['phone'])   ? sanitize_text_field(wp_unslash($_POST['phone']))   : '';
+    $email       = isset($_POST['email'])   ? sanitize_email(wp_unslash($_POST['email']))        : '';
+    $travel_date = isset($_POST['date'])    ? sanitize_text_field(wp_unslash($_POST['date']))    : '';
+    $adults      = isset($_POST['adults'])  ? max(1, absint($_POST['adults']))                   : 1;
+    $budget      = isset($_POST['budget'])  ? sanitize_text_field(wp_unslash($_POST['budget']))  : '';
+    $message     = isset($_POST['message']) ? sanitize_textarea_field(wp_unslash($_POST['message'])) : '';
+    $redirect    = isset($_POST['_wp_http_referer']) ? esc_url_raw(wp_unslash($_POST['_wp_http_referer'])) : home_url('/');
+    $anchor      = isset($_POST['enquiry_anchor']) ? sanitize_key(wp_unslash($_POST['enquiry_anchor'])) : '';
 
-    if (!$package_id || get_post_type($package_id) !== 'travel_package' || empty($name) || empty($phone)) {
-        wp_safe_redirect(add_query_arg('package_enquiry', 'error', $redirect));
+    // A ref_id of 0 is a generic "interest" enquiry not tied to a specific
+    // post (e.g. the LUXE collection page when no packages are published
+    // yet) — allowed as long as one is submitted with a real name/phone.
+    $post_type_map = array('package' => 'travel_package', 'itinerary' => 'itinerary', 'destination' => 'destination');
+    $expected_post_type = $post_type_map[$enquiry_type];
+    $valid_ref = !$ref_id || in_array(get_post_type($ref_id), array($expected_post_type, 'tw_luxe'), true);
+
+    if (!$valid_ref || empty($name) || empty($phone)) {
+        $redirect = add_query_arg('enquiry', 'error', $redirect);
+        wp_safe_redirect($anchor ? $redirect . '#' . $anchor : $redirect);
         exit;
     }
 
-    $package = mytheme_get_package_data($package_id);
-    $package_title = get_the_title($package_id);
-    $destination = $package['location'] ? $package['location'] : $package_title;
+    $ref_title = $ref_id ? get_the_title($ref_id) : '';
+    $ref_url   = $ref_id ? get_permalink($ref_id) : '';
 
-    $post_id = wp_insert_post(array(
-        'post_type' => 'trip_inquiry',
-        'post_title' => sanitize_text_field(sprintf('%s - Package Enquiry - %s', $name, $package_title)),
-        'post_status' => 'publish',
+    mytheme_save_enquiry($enquiry_type, $ref_id, $ref_title, $ref_url, array(
+        'name'        => $name,
+        'phone'       => $phone,
+        'email'       => $email,
+        'travel_date' => $travel_date,
+        'adults'      => $adults,
+        'budget'      => $budget,
+        'message'     => $message,
     ));
 
-    if (is_wp_error($post_id)) {
-        wp_safe_redirect(add_query_arg('package_enquiry', 'error', $redirect));
-        exit;
-    }
-
-    $meta = array(
-        '_ti_name' => $name,
-        '_ti_phone' => $phone,
-        '_ti_email' => $email,
-        '_ti_destination' => $destination,
-        '_ti_date' => $travel_date,
-        '_ti_duration' => $package['duration'],
-        '_ti_time_pref' => '',
-        '_ti_trip_type' => $package['trip_type'],
-        '_ti_adults' => $adults,
-        '_ti_children' => 0,
-        '_ti_budget' => $budget ? $budget : $package['amount'],
-        '_ti_departing' => '',
-        '_ti_notes' => $message,
-        '_ti_source' => 'Package Enquiry',
-        '_ti_package_id' => $package_id,
-        '_ti_package_title' => $package_title,
-        '_ti_package_url' => get_permalink($package_id),
-    );
-
-    foreach ($meta as $key => $value) {
-        update_post_meta($post_id, $key, $value);
-    }
-
-    wp_safe_redirect(add_query_arg('package_enquiry', 'success', $redirect));
+    $redirect = add_query_arg('enquiry', 'success', $redirect);
+    wp_safe_redirect($anchor ? $redirect . '#' . $anchor : $redirect);
     exit;
 }
-add_action('admin_post_mytheme_package_inquiry', 'mytheme_handle_package_inquiry');
-add_action('admin_post_nopriv_mytheme_package_inquiry', 'mytheme_handle_package_inquiry');
+add_action('admin_post_mytheme_enquiry', 'mytheme_handle_enquiry_submission');
+add_action('admin_post_nopriv_mytheme_enquiry', 'mytheme_handle_enquiry_submission');
+// Legacy action name — the package enquiry form on package/LUXE pages still posts here.
+add_action('admin_post_mytheme_package_inquiry', 'mytheme_handle_enquiry_submission');
+add_action('admin_post_nopriv_mytheme_package_inquiry', 'mytheme_handle_enquiry_submission');
 
 function mytheme_travel_filter_options($post_type) {
     if ($post_type === 'travel_package') {
@@ -2341,6 +2445,17 @@ function mytheme_register_admin_menus() {
         'mytheme_render_inquiries_page'
     );
 
+    // ── 3b. ENQUIRIES (package / itinerary / destination "Book Now") ──
+    add_menu_page(
+        __('Enquiries', 'mytheme'),
+        __('Enquiries', 'mytheme'),
+        'manage_options',
+        'tw-enquiries',
+        'mytheme_render_enquiries_page',
+        'dashicons-clipboard',
+        28.5
+    );
+
     // ── 4. 1TRIPWISER SETTINGS HUB ────────────────────────
     add_menu_page(
         __('1TripWiser Settings', 'mytheme'),
@@ -3039,6 +3154,110 @@ function mytheme_render_inquiries_page() {
         </table>
         <?php
         $total_pages = $query->max_num_pages;
+        if ($total_pages > 1) {
+            echo '<div style="margin-top:16px">';
+            echo paginate_links(array(
+                'base'    => add_query_arg('paged', '%#%'),
+                'format'  => '',
+                'current' => $paged,
+                'total'   => $total_pages,
+            ));
+            echo '</div>';
+        }
+        ?>
+    </div>
+    <?php
+}
+
+// ============================================================
+// ADMIN: Enquiries list (package / itinerary / destination)
+// ============================================================
+function mytheme_render_enquiries_page() {
+    global $wpdb;
+    $table = mytheme_enquiries_table_name();
+
+    $type_filter = isset($_GET['enquiry_type']) ? sanitize_key($_GET['enquiry_type']) : '';
+    $paged       = isset($_GET['paged']) ? max(1, intval($_GET['paged'])) : 1;
+    $per_page    = 20;
+    $offset      = ($paged - 1) * $per_page;
+
+    $where = '';
+    $args  = array();
+    if (in_array($type_filter, array('package', 'itinerary', 'destination'), true)) {
+        $where = 'WHERE enquiry_type = %s';
+        $args[] = $type_filter;
+    }
+
+    $total_sql = "SELECT COUNT(*) FROM $table $where";
+    $total = $args ? $wpdb->get_var($wpdb->prepare($total_sql, $args)) : $wpdb->get_var($total_sql);
+
+    $rows_sql = "SELECT * FROM $table $where ORDER BY created_at DESC LIMIT %d OFFSET %d";
+    $rows_args = array_merge($args, array($per_page, $offset));
+    $rows = $wpdb->get_results($wpdb->prepare($rows_sql, $rows_args));
+
+    $type_labels = array('package' => 'Package', 'itinerary' => 'Itinerary', 'destination' => 'Destination');
+    $base_url = admin_url('admin.php?page=tw-enquiries');
+    ?>
+    <div class="wrap">
+        <h1 style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+            <?php esc_html_e('Enquiries', 'mytheme'); ?>
+            <span style="font-size:14px;font-weight:normal;color:#666;"><?php echo esc_html($total); ?> total</span>
+        </h1>
+        <ul class="subsubsub">
+            <li><a href="<?php echo esc_url($base_url); ?>" class="<?php echo $type_filter === '' ? 'current' : ''; ?>">All</a> |</li>
+            <?php $i = 0; foreach ($type_labels as $key => $label) : $i++; ?>
+            <li><a href="<?php echo esc_url(add_query_arg('enquiry_type', $key, $base_url)); ?>" class="<?php echo $type_filter === $key ? 'current' : ''; ?>"><?php echo esc_html($label); ?></a><?php echo $i < count($type_labels) ? ' |' : ''; ?></li>
+            <?php endforeach; ?>
+        </ul>
+        <table class="wp-list-table widefat fixed striped" style="margin-top:12px">
+            <thead>
+                <tr>
+                    <th style="width:30px">#</th>
+                    <th><?php esc_html_e('Type', 'mytheme'); ?></th>
+                    <th><?php esc_html_e('Name', 'mytheme'); ?></th>
+                    <th><?php esc_html_e('Phone', 'mytheme'); ?></th>
+                    <th><?php esc_html_e('Email', 'mytheme'); ?></th>
+                    <th><?php esc_html_e('Reference', 'mytheme'); ?></th>
+                    <th><?php esc_html_e('Travel Date', 'mytheme'); ?></th>
+                    <th><?php esc_html_e('Adults', 'mytheme'); ?></th>
+                    <th><?php esc_html_e('Budget', 'mytheme'); ?></th>
+                    <th><?php esc_html_e('Message', 'mytheme'); ?></th>
+                    <th><?php esc_html_e('Submitted', 'mytheme'); ?></th>
+                </tr>
+            </thead>
+            <tbody>
+            <?php if ($rows) :
+                $i = $offset + 1;
+                foreach ($rows as $row) : ?>
+                    <tr>
+                        <td><?php echo esc_html($i++); ?></td>
+                        <td><?php echo esc_html(isset($type_labels[$row->enquiry_type]) ? $type_labels[$row->enquiry_type] : $row->enquiry_type); ?></td>
+                        <td><strong><?php echo esc_html($row->name); ?></strong></td>
+                        <td><?php echo esc_html($row->phone); ?></td>
+                        <td><?php echo esc_html($row->email); ?></td>
+                        <td>
+                            <?php if ($row->ref_title && $row->ref_url) : ?>
+                                <a href="<?php echo esc_url($row->ref_url); ?>" target="_blank" rel="noopener"><?php echo esc_html($row->ref_title); ?></a>
+                            <?php elseif ($row->ref_title) : ?>
+                                <?php echo esc_html($row->ref_title); ?>
+                            <?php else : ?>
+                                &mdash;
+                            <?php endif; ?>
+                        </td>
+                        <td><?php echo esc_html($row->travel_date); ?></td>
+                        <td><?php echo esc_html($row->adults); ?></td>
+                        <td><?php echo esc_html($row->budget); ?></td>
+                        <td><?php echo esc_html(wp_trim_words($row->message, 12)); ?></td>
+                        <td><?php echo esc_html(mysql2date('d M Y, g:i a', $row->created_at)); ?></td>
+                    </tr>
+                <?php endforeach;
+            else : ?>
+                <tr><td colspan="11" style="text-align:center;padding:24px;color:#666;"><?php esc_html_e('No enquiries yet. "Book Now" / "Enquire" submissions will appear here.', 'mytheme'); ?></td></tr>
+            <?php endif; ?>
+            </tbody>
+        </table>
+        <?php
+        $total_pages = $per_page ? ceil($total / $per_page) : 1;
         if ($total_pages > 1) {
             echo '<div style="margin-top:16px">';
             echo paginate_links(array(
@@ -4199,8 +4418,9 @@ function mytheme_submit_trip_inquiry() {
     }
 
     // Fire notification hooks (WhatsApp, Google Sheet, ...). Only the Plan
-    // My Trip form reaches this action — package-page enquiries are saved
-    // through a separate handler (mytheme_handle_package_inquiry) that
+    // My Trip form reaches this action — package/itinerary/destination
+    // enquiries are saved through a separate handler
+    // (mytheme_handle_enquiry_submission, its own tw_enquiries table) that
     // never fires it, so downstream listeners naturally only see this source.
     do_action('tw_trip_inquiry_saved', $post_id, array(
         'name'        => $name,
@@ -4216,6 +4436,28 @@ function mytheme_submit_trip_inquiry() {
         'budget'      => $budget,
         'departing'   => $departing,
         'notes'       => $notes,
+    ));
+
+    $trip_mail_body = implode("\n", array_filter(array(
+        'A new Plan A Trip enquiry was submitted on 1TripWiser.',
+        '',
+        'Name: ' . $name,
+        'Phone: ' . $phone,
+        'Email: ' . $email,
+        'Destination: ' . $destination,
+        'Departure Date: ' . $date,
+        'Duration: ' . $duration,
+        'Preferred Time: ' . $time_pref,
+        'Trip Type: ' . $trip_type,
+        'Adults: ' . $adults,
+        'Children: ' . $children,
+        'Budget: ' . $budget,
+        'Departing From: ' . $departing,
+        $notes ? "Special Requests:\n" . $notes : '',
+    ), function ($line) { return $line !== ''; }));
+
+    wp_mail('1tripwiser@gmail.com', sprintf('New Plan A Trip Enquiry — %s', $name), $trip_mail_body, array(
+        $email ? ('Reply-To: ' . $name . ' <' . $email . '>') : '',
     ));
 
     wp_send_json_success(array('message' => 'Inquiry saved successfully.', 'id' => $post_id));
