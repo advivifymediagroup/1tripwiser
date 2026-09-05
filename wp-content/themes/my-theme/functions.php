@@ -3648,7 +3648,7 @@ add_action( 'tw_trip_inquiry_saved', 'tw_push_trip_inquiry_to_sheet', 10, 2 );
 // SHARED HELPER — settings page chrome (header + breadcrumb)
 // ============================================================
 function tw_settings_page_header( $title, $icon, $description = '' ) {
-    $logo_html = '<span style="display:inline-flex;align-items:center;gap:10px;font-size:1.5rem;font-weight:800;color:#0d1526;font-family:Georgia,serif;margin-bottom:4px"><span style="color:#D83550">1</span>TRIPWISER</span>';
+    $logo_html = '<span style="display:inline-flex;align-items:center;gap:10px;font-size:1.5rem;font-weight:800;color:#0d1526;font-family:var(--accent-font, \'Saira\', sans-serif);margin-bottom:4px"><span style="color:#D83550">1</span>TRIPWISER</span>';
     ?>
     <style>
     .tw-admin-wrap { max-width:900px; }
