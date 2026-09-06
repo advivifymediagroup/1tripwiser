@@ -2,7 +2,7 @@
 /**
  * Destination Region archive — Tripoto-style destination landing page.
  *
- * Shows all packages, group trips, events and itineraries tagged with
+ * Shows all packages, group trips, corporate trips, events and itineraries tagged with
  * this region/country/state in one consolidated, filterable grid.
  *
  * @package my-theme
@@ -40,6 +40,7 @@ function tw_count_type_in_term( $post_type, $term ) {
 $counts = array(
     'travel_package' => tw_count_type_in_term( 'travel_package', $term ),
     'group_trip'     => tw_count_type_in_term( 'group_trip',     $term ),
+    'corporate_trip' => tw_count_type_in_term( 'corporate_trip', $term ),
     'tw_event'       => tw_count_type_in_term( 'tw_event',       $term ),
     'itinerary'      => tw_count_type_in_term( 'itinerary',      $term ),
 );
@@ -77,6 +78,7 @@ $total = array_sum( $counts );
                 <div class="dest-stat"><strong><?php echo $total; ?></strong><span>Trips</span></div>
                 <?php if ( $counts['travel_package'] ) : ?><div class="dest-stat-div"></div><div class="dest-stat"><strong><?php echo $counts['travel_package']; ?></strong><span>Packages</span></div><?php endif; ?>
                 <?php if ( $counts['group_trip'] ) : ?><div class="dest-stat-div"></div><div class="dest-stat"><strong><?php echo $counts['group_trip']; ?></strong><span>Group Trips</span></div><?php endif; ?>
+                <?php if ( $counts['corporate_trip'] ) : ?><div class="dest-stat-div"></div><div class="dest-stat"><strong><?php echo $counts['corporate_trip']; ?></strong><span>Corporate</span></div><?php endif; ?>
                 <?php if ( $counts['tw_event'] ) : ?><div class="dest-stat-div"></div><div class="dest-stat"><strong><?php echo $counts['tw_event']; ?></strong><span>Events</span></div><?php endif; ?>
                 <?php if ( $counts['itinerary'] ) : ?><div class="dest-stat-div"></div><div class="dest-stat"><strong><?php echo $counts['itinerary']; ?></strong><span>Itineraries</span></div><?php endif; ?>
             </div>
@@ -110,6 +112,9 @@ $total = array_sum( $counts );
             <?php endif; ?>
             <?php if ( $counts['group_trip'] ) : ?>
             <button class="dest-tab" data-filter="group_trip" role="tab">Group Trips <span><?php echo $counts['group_trip']; ?></span></button>
+            <?php endif; ?>
+            <?php if ( $counts['corporate_trip'] ) : ?>
+            <button class="dest-tab" data-filter="corporate_trip" role="tab">Corporate <span><?php echo $counts['corporate_trip']; ?></span></button>
             <?php endif; ?>
             <?php if ( $counts['itinerary'] ) : ?>
             <button class="dest-tab" data-filter="itinerary" role="tab">Itineraries <span><?php echo $counts['itinerary']; ?></span></button>
@@ -152,6 +157,7 @@ $total = array_sum( $counts );
                 $badges = array(
                     'travel_package' => array( 'Package',    'var(--tw-pink)', '#0d1526' ),
                     'group_trip'     => array( 'Group Trip',  '#1B93B0', '#fff'    ),
+                    'corporate_trip' => array( 'Corporate',   '#334155', '#fff'    ),
                     'tw_event'       => array( 'Event',       'var(--tw-pink)', '#fff'    ),
                     'itinerary'      => array( 'Itinerary',  '#10b981', '#fff'    ),
                 );
@@ -159,6 +165,7 @@ $total = array_sum( $counts );
                 $enquiry_anchors = array(
                     'travel_package' => 'package-enquiry',
                     'group_trip'     => 'group-enquiry',
+                    'corporate_trip' => 'corporate-enquiry',
                     'tw_event'       => 'event-enquiry',
                     'itinerary'      => 'itinerary-enquiry',
                 );

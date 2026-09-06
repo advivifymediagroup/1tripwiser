@@ -188,7 +188,7 @@ add_action( 'wp_ajax_nopriv_tw_ajax_register', 'tw_ajax_register' );
 
 // Register travel content types and taxonomies
 function mytheme_register_travel_content() {
-    register_taxonomy('destination_region', array('post', 'destination', 'itinerary', 'travel_package', 'group_trip', 'tw_event'), array(
+    register_taxonomy('destination_region', array('post', 'destination', 'itinerary', 'travel_package', 'group_trip', 'corporate_trip', 'tw_event'), array(
         'labels' => array(
             'name' => __('Destination Regions', 'mytheme'),
             'singular_name' => __('Destination Region', 'mytheme'),
@@ -280,7 +280,7 @@ function mytheme_register_travel_content() {
 add_action('init', 'mytheme_register_travel_content');
 
 function mytheme_use_classic_editor_for_travel_content($use_block_editor, $post_type) {
-    if (in_array($post_type, array('destination', 'itinerary', 'travel_package'), true)) {
+    if (in_array($post_type, array('destination', 'itinerary', 'travel_package', 'corporate_trip'), true)) {
         return false;
     }
 
@@ -575,7 +575,7 @@ function mytheme_add_travel_meta_boxes() {
         'mytheme_travel_details',
         __('Travel Details', 'mytheme'),
         'mytheme_render_travel_meta_box',
-        array('itinerary', 'travel_package', 'tw_event', 'group_trip'),
+        array('itinerary', 'travel_package', 'tw_event', 'group_trip', 'corporate_trip'),
         'normal',
         'high'
     );
@@ -613,6 +613,7 @@ function mytheme_save_travel_meta($post_id) {
 }
 add_action('save_post_itinerary', 'mytheme_save_travel_meta');
 add_action('save_post_travel_package', 'mytheme_save_travel_meta');
+add_action('save_post_corporate_trip', 'mytheme_save_travel_meta');
 
 function mytheme_get_plan_trip_url() {
     $page = get_page_by_path('plan-a-trip');
@@ -1636,6 +1637,7 @@ function mytheme_save_enquiry($enquiry_type, $ref_id, $ref_title, $ref_url, $fie
         'itinerary'   => 'Itinerary',
         'destination' => 'Destination',
         'group_trip'  => 'Group Trip',
+        'corporate_trip' => 'Corporate Trip',
         'event'       => 'Event',
     );
     $type_label = isset($type_labels[$enquiry_type]) ? $type_labels[$enquiry_type] : ucfirst($enquiry_type);
@@ -1671,7 +1673,7 @@ function mytheme_handle_enquiry_submission() {
     }
 
     $enquiry_type = isset($_POST['enquiry_type']) ? sanitize_key(wp_unslash($_POST['enquiry_type'])) : 'package';
-    if (!in_array($enquiry_type, array('package', 'itinerary', 'destination', 'group_trip', 'event'), true)) {
+    if (!in_array($enquiry_type, array('package', 'itinerary', 'destination', 'group_trip', 'corporate_trip', 'event'), true)) {
         $enquiry_type = 'package';
     }
     $ref_id = isset($_POST['package_id']) ? absint($_POST['package_id']) : (isset($_POST['ref_id']) ? absint($_POST['ref_id']) : 0);
@@ -1688,7 +1690,7 @@ function mytheme_handle_enquiry_submission() {
     // A ref_id of 0 is a generic "interest" enquiry not tied to a specific
     // post (e.g. the LUXE collection page when no packages are published
     // yet) — allowed as long as one is submitted with a real name/phone.
-    $post_type_map = array('package' => 'travel_package', 'itinerary' => 'itinerary', 'destination' => 'destination', 'group_trip' => 'group_trip', 'event' => 'tw_event');
+    $post_type_map = array('package' => 'travel_package', 'itinerary' => 'itinerary', 'destination' => 'destination', 'group_trip' => 'group_trip', 'corporate_trip' => 'corporate_trip', 'event' => 'tw_event');
     $expected_post_type = $post_type_map[$enquiry_type];
     $valid_ref = !$ref_id || in_array(get_post_type($ref_id), array($expected_post_type, 'tw_luxe'), true);
 
@@ -2250,7 +2252,7 @@ function mytheme_apply_travel_archive_filters($query) {
 
     /* Destination region taxonomy — query ALL travel CPTs together */
     if ( $query->is_tax( 'destination_region' ) ) {
-        $query->set( 'post_type', array( 'travel_package', 'group_trip', 'tw_event', 'itinerary' ) );
+        $query->set( 'post_type', array( 'travel_package', 'group_trip', 'corporate_trip', 'tw_event', 'itinerary' ) );
         $query->set( 'posts_per_page', 12 );
         $query->set( 'orderby', 'date' );
         $query->set( 'order', 'DESC' );
@@ -3262,7 +3264,7 @@ function mytheme_render_enquiries_page() {
 
     $where = '';
     $args  = array();
-    if (in_array($type_filter, array('package', 'itinerary', 'destination', 'group_trip', 'event'), true)) {
+    if (in_array($type_filter, array('package', 'itinerary', 'destination', 'group_trip', 'corporate_trip', 'event'), true)) {
         $where = 'WHERE enquiry_type = %s';
         $args[] = $type_filter;
     }
@@ -3274,7 +3276,7 @@ function mytheme_render_enquiries_page() {
     $rows_args = array_merge($args, array($per_page, $offset));
     $rows = $wpdb->get_results($wpdb->prepare($rows_sql, $rows_args));
 
-    $type_labels = array('package' => 'Package', 'itinerary' => 'Itinerary', 'destination' => 'Destination', 'group_trip' => 'Group Trip', 'event' => 'Event');
+    $type_labels = array('package' => 'Package', 'itinerary' => 'Itinerary', 'destination' => 'Destination', 'group_trip' => 'Group Trip', 'corporate_trip' => 'Corporate Trip', 'event' => 'Event');
     $base_url = admin_url('admin.php?page=tw-enquiries');
     ?>
     <div class="wrap">

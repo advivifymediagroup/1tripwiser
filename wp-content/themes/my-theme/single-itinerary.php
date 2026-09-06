@@ -248,7 +248,7 @@ while ( have_posts() ) :
                     </dl>
                     <?php endif; ?>
                     <a class="dest-rail-btn" href="#itinerary-enquiry"><?php esc_html_e( 'Enquire', 'mytheme' ); ?></a>
-                    <a class="dest-rail-btn dest-rail-btn--ghost" href="<?php echo esc_url( mytheme_get_plan_trip_url() ); ?>"><?php esc_html_e( 'Get Your Own Itinerary', 'mytheme' ); ?></a>
+                    <a class="dest-rail-btn dest-rail-btn--ghost" href="<?php echo esc_url( mytheme_get_plan_trip_url() ); ?>"><?php esc_html_e( 'Create Your Own Itinerary', 'mytheme' ); ?></a>
                 </div>
             </aside>
 

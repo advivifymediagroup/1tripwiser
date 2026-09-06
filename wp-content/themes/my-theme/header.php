@@ -107,7 +107,7 @@
                 <span class="tw-search-col-label">Browse by Mood</span>
                 <div class="tw-search-mood-grid">
                     <?php
-                    $tw_moods = array('Mountains', 'Beaches', 'Offbeat', 'Honeymoon', 'Group Trips', 'Budget', 'International');
+                    $tw_moods = array('Mountains', 'Beaches', 'Offbeat', 'Honeymoon', 'Group Trips', 'Corporate Trips', 'Budget', 'International');
                     foreach ($tw_moods as $tw_m) :
                         $tw_url = esc_url(add_query_arg('s', urlencode($tw_m), home_url('/')));
                     ?>
@@ -365,7 +365,7 @@ function tw_default_mobile_nav() {
        never changes, only the word after it cross-fades on an interval. */
     var sRotate = document.getElementById('tw-search-rotate');
     if (sRotate && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        var sWords = ['destinations', 'itineraries', 'packages', 'group trips', "women's trips", 'Luxe experience'];
+        var sWords = ['destinations', 'itineraries', 'packages', 'group trips', 'corporate trips', "women's trips", 'Luxe experience'];
         var sIndex = 0;
         /* The "…" travels with each word (instead of sitting fixed after a
            fixed-width box) so it always hugs the actual text, whatever its

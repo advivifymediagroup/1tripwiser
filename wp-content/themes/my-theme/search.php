@@ -26,6 +26,7 @@ $tw_meta = array(
     'travel_package' => array( 'icon' => 'suitcase-alt',         'label' => 'Packages',          'type' => 'Package' ),
     'itinerary'      => array( 'icon' => 'location-crosshairs',  'label' => 'Itineraries',        'type' => 'Itinerary' ),
     'group_trip'     => array( 'icon' => 'users',                'label' => 'Group Trips',        'type' => 'Group Trip' ),
+    'corporate_trip' => array( 'icon' => 'briefcase',            'label' => 'Corporate Trips',    'type' => 'Corporate Trip' ),
     'destination'    => array( 'icon' => 'marker',                'label' => 'Destinations',       'type' => 'Destination' ),
     'post'           => array( 'icon' => 'edit-alt',             'label' => 'Blog & Stories',      'type' => 'Story' ),
     'forum_topic'    => array( 'icon' => 'comment',              'label' => 'Tribe Discussions',   'type' => 'Tribe' ),
