@@ -2051,8 +2051,12 @@ main.dest-single {
   gap: 12px;
   margin-bottom: 14px;
 }
-.dest-guide-icon {
-  display: inline-flex;
+.dest-article.ev-content-styled .dest-guide-icon {
+  /* !important: Font Awesome's own .fa-solid rule (display:inline-block)
+     has equal specificity and loads after this stylesheet, so it wins the
+     cascade tie without this — leaving the glyph top-left instead of
+     centered in the badge. */
+  display: inline-flex !important;
   align-items: center;
   justify-content: center;
   width: 38px;
@@ -2062,6 +2066,7 @@ main.dest-single {
   background: rgba(216, 53, 80, 0.08);
   color: var(--tw-pink);
   font-size: 0.95rem;
+  line-height: 1;
 }
 .dest-article.ev-content-styled .dest-guide-card > :last-child {
   margin-bottom: 0;
@@ -7657,7 +7662,7 @@ main.tw-search-page {
   position: relative;
   background: #eef3f6;
   margin-top: -132px;
-  padding-top: 132px;
+  padding-top: 164px;
   padding-bottom: 56px;
   overflow: hidden;
   text-align: center;
@@ -7665,7 +7670,7 @@ main.tw-search-page {
 @media (max-width: 600px) {
   .tw-agency-hero {
     margin-top: -112px;
-    padding-top: 112px;
+    padding-top: 144px;
   }
 }
 .tw-agency-hero-overlay {
@@ -8354,7 +8359,7 @@ main.tw-search-page {
 
 .ba-hero {
   margin-top: -132px;
-  padding-top: 132px;
+  padding-top: 164px;
   padding-left: 24px;
   padding-right: 24px;
   padding-bottom: 92px;
@@ -12201,6 +12206,18 @@ object {
   background: #eef3f6;
   overflow: hidden;
   text-align: center;
+}
+/* The shared .explore-hero/.tribe-hero/.dest-hero rule's margin-top/
+   padding-top net to zero, so this hero's content sat flush against the
+   subheader with no breathing room. Nudge it down a bit; higher
+   specificity (tag+class) so it wins regardless of source order. */
+section.tribe-hero {
+  padding-top: 190px;
+}
+@media (max-width: 560px) {
+  section.tribe-hero {
+    padding-top: 140px;
+  }
 }
 .tribe-hero > .container {
   width: 100%;
