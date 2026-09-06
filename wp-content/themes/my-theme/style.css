@@ -8664,19 +8664,6 @@ main.tw-search-page {
   background: var(--tw-blue);
   color: var(--white);
 }
-.ba-read-more {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  color: var(--tw-blue);
-  font-weight: 700;
-  font-size: 0.88rem;
-  text-decoration: none;
-  margin-top: 16px;
-}
-.ba-read-more:hover {
-  color: var(--tw-pink);
-}
 .ba-section-row {
   display: flex;
   align-items: center;
@@ -14590,6 +14577,7 @@ section.tribe-hero {
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  margin-top: 16px;
   background: var(--tw-pink);
   color: var(--white) !important;
   border-radius: 4px;
