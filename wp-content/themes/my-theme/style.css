@@ -4523,14 +4523,14 @@ body.page-template-page-plan-a-trip-php {
 .tw-hero-title-quiet {
   color: rgba(13, 21, 38, 0.75);
   font-weight: 400;
-  font-style: italic;
+  /* font-style: italic; */
 }
 .tw-hero-tagline {
   display: none;
 }
 .tw-hero-desc {
   font-family: var(--heading-font);
-  font-style: italic;
+  /* font-style: italic; */
   font-size: 1.08rem;
   color: var(--tw-navy);
   line-height: 1.6;
@@ -6994,7 +6994,7 @@ body.page-template-page-plan-a-trip-php {
   margin: 0;
 }
 .tw-testimonials-title span {
-  font-style: italic;
+  /* font-style: italic; */
   font-weight: 400;
   color: var(--tw-pink);
 }
@@ -8158,7 +8158,7 @@ main.tw-search-page {
 }
 
 .tw-community-title span {
-  font-style: italic;
+  /* font-style: italic; */
   font-weight: 400;
   color: var(--tw-pink);
 }
@@ -8171,7 +8171,7 @@ main.tw-search-page {
 }
 .tw-community-copy p {
   font-family: var(--heading-font);
-  font-style: italic;
+  /* font-style: italic; */
   font-weight: 400;
   color: rgba(13, 21, 38, 0.65);
   font-size: 1.08rem;
