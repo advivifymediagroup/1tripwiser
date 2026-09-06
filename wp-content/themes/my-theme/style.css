@@ -1938,6 +1938,7 @@ main.dest-single {
   border: 1.5px solid rgba(13, 21, 38, 0.16);
 }
 .dest-rail-btn--ghost:hover {
+  background: transparent;
   border-color: var(--tw-pink);
   color: var(--tw-pink);
 }
@@ -2020,6 +2021,9 @@ main.dest-single {
 }
 .dest-article.ev-content-styled .dest-article-cta .btn-primary {
   color: var(--white);
+}
+.dest-article.ev-content-styled .dest-article-cta .btn-secondary {
+  color: var(--tw-pink);
 }
 .dest-article.ev-content-styled .tribe-back-link {
   color: var(--tw-blue);
