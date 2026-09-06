@@ -13425,10 +13425,12 @@ section.tribe-hero {
 /* Active-page indicator — a solid pill so the current section stays readable
    no matter what's behind the translucent subheader (dark hero video, light
    page, imagery, etc.). Same mechanism on every nav item; each keeps its own
-   accent color. */
+   accent color. Pink and gold are reserved for Women's Trips / LUXE, so the
+   plain geography/trip-type tabs (India, International, Group Trips, Events
+   & Festivals) get the site's teal instead — that stays the differentiator. */
 .tw-sub-link.is-active {
   color: var(--white);
-  background: var(--tw-pink);
+  background: var(--tw-blue);
   border-radius: 999px;
   border-bottom-color: transparent;
   margin: 8px 0;
@@ -13437,7 +13439,8 @@ section.tribe-hero {
 }
 .tw-sub-link.is-active:hover {
   color: var(--white);
-  background: var(--tw-pink-hover);
+  background: var(--tw-blue);
+  filter: brightness(1.1);
 }
 .tw-sub-link--luxe.is-active {
   background: rgb(var(--luxe-gold));
