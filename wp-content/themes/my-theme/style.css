@@ -2031,6 +2031,108 @@ main.dest-single {
   color: #2b3644;
 }
 
+/* Overview + guide sections (Best Time, Things to Do, Food, Visa, Budget,
+   How to Reach, Travel Tips) as distinct cards with an icon badge, instead
+   of running straight into the page background as plain text. */
+.dest-guide-card {
+  background: var(--white);
+  border: 1px solid rgba(13, 21, 38, 0.08);
+  border-radius: 10px;
+  padding: 24px 26px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 16px rgba(13, 21, 38, 0.04);
+}
+.dest-guide-card:last-of-type {
+  margin-bottom: 32px;
+}
+.dest-article.ev-content-styled .dest-guide-card h2 {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.dest-guide-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  border-radius: 9px;
+  background: rgba(216, 53, 80, 0.08);
+  color: var(--tw-pink);
+  font-size: 0.95rem;
+}
+.dest-article.ev-content-styled .dest-guide-card > :last-child {
+  margin-bottom: 0;
+}
+
+/* Free-text lists (Things to Do, Food, Travel Tips) rendered as a real
+   checklist instead of a run-on paragraph with literal "*" bullets. */
+.dest-guide-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 11px;
+}
+.dest-article.ev-content-styled .dest-guide-list li {
+  position: relative;
+  padding-left: 28px;
+  margin: 0;
+}
+.dest-guide-list li::before {
+  content: "\f00c";
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  position: absolute;
+  left: 0;
+  top: 2px;
+  font-size: 0.72rem;
+  color: var(--tw-pink);
+  width: 18px;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(216, 53, 80, 0.08);
+  border-radius: 50%;
+}
+
+/* "Label: value" free text (Budget tiers) rendered as a small stat grid. */
+.dest-guide-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+}
+.dest-guide-stat {
+  background: rgba(13, 21, 38, 0.03);
+  border: 1px solid rgba(13, 21, 38, 0.07);
+  border-radius: 8px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.dest-guide-stat-k {
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--tw-pink);
+}
+.dest-guide-stat-v {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--tw-navy);
+  line-height: 1.4;
+}
+@media (max-width: 600px) {
+  .dest-guide-card {
+    padding: 18px 18px;
+  }
+}
+
 /* FAQ block sits inside the flow — strip its standalone section chrome */
 .dest-article .dest-article-faqs .tw-faq-section,
 .dest-article-faqs .tw-faq-section {
