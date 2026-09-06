@@ -2972,6 +2972,7 @@ main.dest-single {
 
 .comment-reply-link:hover {
   background: #095654;
+  color: var(--white);
 }
 
 /* Comment Form */
