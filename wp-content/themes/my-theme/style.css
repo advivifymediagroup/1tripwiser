@@ -9501,12 +9501,10 @@ table.ba-table tr:hover td {
   cursor: pointer;
   font-weight: 800;
   padding: 12px 18px;
-  box-shadow: 0 6px 18px rgba(229, 18, 125, 0.32);
-  transition: filter 0.2s ease, transform 0.2s ease;
+  transition: background 0.18s;
 }
 .sp-comments .comment-form input[type="submit"]:hover {
-  filter: brightness(1.06);
-  transform: translateY(-2px);
+  background: var(--tw-pink-hover);
 }
 .sp-comments .logged-in-as {
   font-size: 0.84rem;
@@ -12117,10 +12115,9 @@ object {
 .instagram-feed-wrap a.sbi_load_btn:hover,
 .instagram-feed-wrap a.sb-loadmore_btn:hover,
 .instagram-feed-wrap .sb-loadmore_btn:hover {
-  transform: translateY(-2px) !important;
-  box-shadow: 0 8px 22px rgba(216, 53, 80, 0.4) !important;
-  filter: brightness(1.05) !important;
-  color: var(--tw-navy) !important;
+  background: var(--tw-pink-hover) !important;
+  background-color: var(--tw-pink-hover) !important;
+  color: var(--white) !important;
 }
 
 /* Follow on Instagram — secondary teal (filled, no halo) */
@@ -14599,13 +14596,10 @@ section.tribe-hero {
   padding: 11px 24px;
   font-weight: 800;
   text-decoration: none;
-  box-shadow: 0 6px 18px rgba(216, 53, 80, 0.3);
-  transition: transform 0.2s, box-shadow 0.2s, filter 0.2s;
+  transition: background 0.18s;
 }
 .ba-read-more:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 26px rgba(216, 53, 80, 0.45);
-  filter: brightness(1.05);
+  background: var(--tw-pink-hover);
 }
 
 /* Write-a-post button consistency */
