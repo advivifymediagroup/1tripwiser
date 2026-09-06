@@ -6810,7 +6810,7 @@ body.page-template-page-plan-a-trip-php {
   min-width: 560px;
 }
 .tw-mega-womens-hero {
-  padding: 12px 16px 10px;
+  padding: 12px 11px 10px;
   border-bottom: 1px solid rgba(255, 105, 135, 0.2);
   margin-bottom: 8px;
 }
@@ -13790,6 +13790,12 @@ section.tribe-hero {
   padding: 5px 16px;
   margin-bottom: 12px;
 }
+/* Pages whose hero has no breadcrumb (e.g. Events & Festivals) would
+   otherwise put the kicker flush against the subheader with no breathing
+   room — .explore-crumbs normally carries that top margin instead. */
+.explore-hero-inner > .explore-hero-kicker:first-child {
+  margin-top: 28px;
+}
 .explore-hero-title {
   font-family: var(--heading-font);
   font-weight: 400;
@@ -13924,10 +13930,12 @@ section.tribe-hero {
   margin: 0 0 10px;
 }
 .tw-mega-allcta {
+  display: inline-block;
   color: #000;
   font-weight: 600;
   font-size: 0.88rem;
   text-decoration: none;
+  padding: 0 11px;
 }
 .tw-mega-allcta:hover {
   color: var(--tw-pink);
