@@ -1352,6 +1352,84 @@ function mytheme_get_destination_data($post_id = null) {
     );
 }
 
+/**
+ * Icon shown next to each destination guide section heading, keyed by the
+ * section's ACF field name (see mytheme_get_destination_guide_sections()).
+ */
+function mytheme_destination_guide_icon( $field ) {
+    $icons = array(
+        'destination_best_time'     => 'fa-solid fa-sun',
+        'destination_things_to_do'  => 'fa-solid fa-compass',
+        'destination_food'          => 'fa-solid fa-utensils',
+        'destination_visa_info'     => 'fa-solid fa-passport',
+        'destination_budget'        => 'fa-solid fa-wallet',
+        'destination_how_to_reach'  => 'fa-solid fa-plane',
+        'destination_travel_tips'   => 'fa-solid fa-lightbulb',
+    );
+    return isset( $icons[ $field ] ) ? $icons[ $field ] : 'fa-solid fa-circle-info';
+}
+
+/**
+ * Destination guide content is free-text entered in the CMS, often as one
+ * fact per line (with or without a leading "*"/"-" bullet) rather than real
+ * paragraphs. Rendering it through a bare wpautop() just strings those
+ * lines into one run-on paragraph with literal asterisks, which is the
+ * "plain" look this is fixing. Detect the shape of the content instead:
+ *   - "Label: value" lines (e.g. Budget tiers)      -> a small stat grid
+ *   - bulleted or many short lines (e.g. Things to Do, Food, Travel Tips)
+ *                                                    -> a real <ul>
+ *   - otherwise (prose, e.g. Visa Info, How to Reach) -> normal wpautop()
+ */
+function mytheme_format_guide_content( $text ) {
+    $text = trim( (string) $text );
+    if ( '' === $text ) {
+        return '';
+    }
+
+    $lines = preg_split( '/\r\n|\r|\n/', $text );
+    $lines = array_values( array_filter( array_map( 'trim', $lines ), function ( $line ) {
+        return $line !== '';
+    } ) );
+
+    if ( count( $lines ) < 2 ) {
+        return wp_kses_post( wpautop( $text ) );
+    }
+
+    $stripped = array_map( function ( $line ) {
+        return preg_replace( '/^[\*\-•]\s*/', '', $line );
+    }, $lines );
+
+    $is_stat_list = true;
+    foreach ( $stripped as $line ) {
+        if ( ! preg_match( '/^[^:]{2,40}:\s*\S.*/', $line ) ) {
+            $is_stat_list = false;
+            break;
+        }
+    }
+    if ( $is_stat_list ) {
+        $html = '<div class="dest-guide-stats">';
+        foreach ( $stripped as $line ) {
+            $parts = explode( ':', $line, 2 );
+            $html .= '<div class="dest-guide-stat"><span class="dest-guide-stat-k">' . esc_html( trim( $parts[0] ) ) . '</span><span class="dest-guide-stat-v">' . esc_html( trim( $parts[1] ) ) . '</span></div>';
+        }
+        $html .= '</div>';
+        return $html;
+    }
+
+    $had_markers = ( $stripped !== $lines );
+    $avg_len     = array_sum( array_map( 'strlen', $stripped ) ) / count( $stripped );
+    if ( $had_markers || ( count( $stripped ) >= 3 && $avg_len < 70 ) ) {
+        $html = '<ul class="dest-guide-list">';
+        foreach ( $stripped as $line ) {
+            $html .= '<li>' . wp_kses_post( $line ) . '</li>';
+        }
+        $html .= '</ul>';
+        return $html;
+    }
+
+    return wp_kses_post( wpautop( $text ) );
+}
+
 function mytheme_get_destination_guide_sections($post_id = null) {
     $post_id = $post_id ? $post_id : get_the_ID();
 

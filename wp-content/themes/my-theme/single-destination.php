@@ -99,8 +99,8 @@ while ( have_posts() ) :
             <article class="dest-article ev-content-styled">
 
                 <?php if ( $destination['short_intro'] || $destination['overview'] ) : ?>
-                <section id="dest-overview" class="dest-article-section">
-                    <h2><?php esc_html_e( 'Overview', 'mytheme' ); ?></h2>
+                <section id="dest-overview" class="dest-article-section dest-guide-card">
+                    <h2><i class="fa-solid fa-earth-americas dest-guide-icon" aria-hidden="true"></i> <?php esc_html_e( 'Overview', 'mytheme' ); ?></h2>
                     <?php if ( $destination['short_intro'] ) : ?>
                         <div class="dest-lede"><?php echo wp_kses_post( wpautop( $destination['short_intro'] ) ); ?></div>
                     <?php endif; ?>
@@ -111,9 +111,9 @@ while ( have_posts() ) :
                 <?php endif; ?>
 
                 <?php foreach ( $guide_sections as $g_i => $section ) : ?>
-                <section id="dest-guide-<?php echo esc_attr( $g_i + 1 ); ?>" class="dest-article-section">
-                    <h2><?php echo esc_html( $section['label'] ); ?></h2>
-                    <?php echo wp_kses_post( wpautop( $section['content'] ) ); ?>
+                <section id="dest-guide-<?php echo esc_attr( $g_i + 1 ); ?>" class="dest-article-section dest-guide-card">
+                    <h2><i class="<?php echo esc_attr( mytheme_destination_guide_icon( $section['field'] ) ); ?> dest-guide-icon" aria-hidden="true"></i> <?php echo esc_html( $section['label'] ); ?></h2>
+                    <?php echo mytheme_format_guide_content( $section['content'] ); ?>
                 </section>
                 <?php endforeach; ?>
 
