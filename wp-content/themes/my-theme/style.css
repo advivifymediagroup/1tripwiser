@@ -2633,7 +2633,7 @@ main.dest-single {
   text-transform: none;
   letter-spacing: normal;
   margin-bottom: 0;
-  color: var(--tw-blue) !important;
+  color: var(--tw-pink) !important;
   font-style: italic;
   font-weight: 400;
 }
@@ -2652,7 +2652,12 @@ main.dest-single {
 .visa-services-grid {
   display: grid;
   gap: 24px;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+@media (max-width: 1024px) {
+  .visa-services-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 .visa-service-card {
@@ -2670,7 +2675,7 @@ main.dest-single {
 }
 
 .visa-service-card:hover {
-  border-color: var(--tw-blue);
+  border-color: rgba(216, 53, 80, 0.3);
   box-shadow: 0 16px 34px rgba(13, 21, 38, 0.12);
   color: var(--tw-navy);
   transform: translateY(-4px);
@@ -2678,7 +2683,8 @@ main.dest-single {
 
 .visa-service-icon {
   align-items: center;
-  background: rgba(27, 147, 176, 0.1);
+  background: rgba(216, 53, 80, 0.08);
+  color: var(--tw-pink);
   border-radius: 8px;
   display: inline-flex;
   font-size: 2rem;
@@ -2700,7 +2706,7 @@ main.dest-single {
 }
 
 .visa-service-link {
-  color: var(--tw-blue);
+  color: var(--tw-pink);
   font-weight: 800;
   margin-top: auto;
 }
@@ -15419,6 +15425,49 @@ section.tribe-hero {
   color: var(--tw-blue);
   text-decoration: underline;
 }
+
+/* Visa Assistance / Passport Services / Travel Insurance — plain
+   block-editor pages given the site's editorial hero + a readable
+   single column, reusing .ev-content-styled for the heading/list look. */
+.tw-service-wrap {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 48px 24px 80px;
+}
+.tw-service-content.ev-content-styled {
+  margin-top: 0;
+}
+.tw-service-content.ev-content-styled hr {
+  border: none;
+  border-top: 1px solid rgba(13, 21, 38, 0.1);
+  margin: 36px 0;
+}
+.tw-service-cta {
+  background: var(--white);
+  border: 1px solid rgba(13, 21, 38, 0.08);
+  border-radius: 12px;
+  padding: 36px 32px;
+  text-align: center;
+  margin-top: 16px;
+  box-shadow: 0 4px 20px rgba(13, 21, 38, 0.05);
+}
+.tw-service-cta h2 {
+  font-family: var(--heading-font);
+  font-weight: 400;
+  font-size: 1.6rem;
+  color: var(--tw-navy);
+  margin: 0 0 8px;
+}
+.tw-service-cta p {
+  color: #667085;
+  margin: 0 0 20px;
+}
+@media (max-width: 600px) {
+  .tw-service-cta {
+    padding: 28px 22px;
+  }
+}
+
 /* Trip Details panel (events + group trips single page) */
 .ev-trip-details {
   background: #f8fafc;

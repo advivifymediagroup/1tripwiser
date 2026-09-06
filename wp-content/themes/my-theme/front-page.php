@@ -204,7 +204,7 @@ if ( $tw_hero_video ) {
         <div class="container">
             <div class="section-heading visa-services-heading" data-reveal="up">
                 <span class="section-subtitle">Travel made simple</span>
-                <h2 class="section-title">Visa <span class="highlight">Services</span></h2>
+                <h2 class="section-title">Trip <span class="highlight">Services</span></h2>
             </div>
             <div class="visa-services-grid">
                 <a class="visa-service-card" href="<?php echo esc_url(mytheme_get_page_url_by_path('visa-assistance')); ?>">
@@ -223,6 +223,12 @@ if ( $tw_hero_video ) {
                     <span class="visa-service-icon"><i class="fi-rr-globe" aria-hidden="true"></i></span>
                     <h3>Travel Insurance</h3>
                     <p>Protect your trip with medical, cancellation, baggage, and emergency coverage for domestic and international travel.</p>
+                    <span class="visa-service-link">Learn More -></span>
+                </a>
+                <a class="visa-service-card" href="<?php echo esc_url(mytheme_get_page_url_by_path('travel-agency-registration')); ?>">
+                    <span class="visa-service-icon"><i class="fi-rr-briefcase" aria-hidden="true"></i></span>
+                    <h3>Travel Agency Registration</h3>
+                    <p>Run a travel agency? Partner with us for quality leads, a verified listing, and marketing support.</p>
                     <span class="visa-service-link">Learn More -></span>
                 </a>
             </div>
