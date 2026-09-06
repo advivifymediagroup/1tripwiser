@@ -3916,7 +3916,7 @@ body.page-template-page-plan-a-trip-php {
   font-family: var(--body-font);
 }
 .auth-hero {
-  background: #eef3f6;
+  /* background: #eef3f6; */
   margin-top: -132px;
   padding: 164px 24px 28px;
   text-align: center;
