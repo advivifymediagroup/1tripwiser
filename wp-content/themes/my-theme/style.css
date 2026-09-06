@@ -13428,7 +13428,7 @@ section.tribe-hero {
    accent color. */
 .tw-sub-link.is-active {
   color: var(--white);
-  background: var(--tw-navy);
+  background: var(--tw-pink);
   border-radius: 999px;
   border-bottom-color: transparent;
   margin: 8px 0;
@@ -13437,7 +13437,7 @@ section.tribe-hero {
 }
 .tw-sub-link.is-active:hover {
   color: var(--white);
-  background: var(--tw-navy);
+  background: var(--tw-pink-hover);
 }
 .tw-sub-link--luxe.is-active {
   background: rgb(var(--luxe-gold));
