@@ -1931,6 +1931,7 @@ main.dest-single {
 }
 .dest-rail-btn:hover {
   background: var(--tw-pink-hover);
+  color: var(--white);
 }
 .dest-rail-btn--ghost {
   background: transparent;
@@ -8701,6 +8702,7 @@ main.tw-search-page {
 }
 .ba-write-btn:hover {
   background: var(--tw-pink-hover);
+  color: var(--white);
 }
 /* Filter empty-state */
 .ba-no-filter-results {
@@ -8972,6 +8974,7 @@ table.ba-table tr:hover td {
 }
 .ba-table-book-btn:hover {
   background: var(--tw-pink-hover);
+  color: var(--white);
 }
 .ba-card-read-more {
   display: inline-flex;
@@ -12510,6 +12513,7 @@ section.tribe-hero {
 }
 .tribe-chip-cat:hover {
   background: rgba(27, 147, 176, 0.16);
+  color: var(--tw-blue);
 }
 .tribe-flag {
   display: inline-flex;
