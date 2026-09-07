@@ -99,23 +99,35 @@ while ( have_posts() ) :
             <article class="dest-article ev-content-styled">
 
                 <?php if ( $destination['short_intro'] || $destination['overview'] ) : ?>
-                <section id="dest-overview" class="dest-article-section">
-                    <h2><?php esc_html_e( 'Overview', 'mytheme' ); ?></h2>
+                <section id="dest-overview" class="dest-article-section dest-guide-card">
+                    <h2><i class="fa-solid fa-earth-americas dest-guide-icon" aria-hidden="true"></i> <?php esc_html_e( 'Overview', 'mytheme' ); ?></h2>
                     <?php if ( $destination['short_intro'] ) : ?>
                         <div class="dest-lede"><?php echo wp_kses_post( wpautop( $destination['short_intro'] ) ); ?></div>
                     <?php endif; ?>
                     <?php if ( $destination['overview'] ) : ?>
-                        <?php echo wp_kses_post( $destination['overview'] ); ?>
+                        <?php echo wp_kses_post( wpautop( $destination['overview'] ) ); ?>
                     <?php endif; ?>
                 </section>
                 <?php endif; ?>
 
                 <?php foreach ( $guide_sections as $g_i => $section ) : ?>
-                <section id="dest-guide-<?php echo esc_attr( $g_i + 1 ); ?>" class="dest-article-section">
-                    <h2><?php echo esc_html( $section['label'] ); ?></h2>
-                    <?php echo wp_kses_post( wpautop( $section['content'] ) ); ?>
+                <section id="dest-guide-<?php echo esc_attr( $g_i + 1 ); ?>" class="dest-article-section dest-guide-card">
+                    <h2><i class="<?php echo esc_attr( mytheme_destination_guide_icon( $section['field'] ) ); ?> dest-guide-icon" aria-hidden="true"></i> <?php echo esc_html( $section['label'] ); ?></h2>
+                    <?php echo mytheme_format_guide_content( $section['content'] ); ?>
                 </section>
                 <?php endforeach; ?>
+
+                <!-- Enquiry form -->
+                <?php
+                get_template_part( 'template-parts/enquiry-form', null, array(
+                    'type'    => 'destination',
+                    'ref_id'  => $id,
+                    'anchor'  => 'destination-enquiry',
+                    'kicker'  => __( 'Ready to go?', 'mytheme' ),
+                    'heading' => sprintf( __( 'Book your %s trip', 'mytheme' ), get_the_title() ),
+                    'intro'   => __( 'Share your details and our travel expert will help with dates, pricing and a custom plan.', 'mytheme' ),
+                ) );
+                ?>
 
                 <?php if ( $has_faqs ) : ?>
                 <section id="dest-faqs" class="dest-article-section dest-article-faqs">
@@ -124,8 +136,8 @@ while ( have_posts() ) :
                 <?php endif; ?>
 
                 <footer class="dest-article-cta">
-                    <a href="<?php echo esc_url( get_post_type_archive_link('travel_package') ); ?>" class="btn-primary"><?php esc_html_e( 'View Packages', 'mytheme' ); ?></a>
-                    <a href="<?php echo esc_url( mytheme_get_plan_trip_url() ); ?>" class="btn-secondary"><?php esc_html_e( 'Plan a Trip', 'mytheme' ); ?></a>
+                    <a href="#destination-enquiry" class="btn-primary"><?php esc_html_e( 'Book Now', 'mytheme' ); ?></a>
+                    <a href="<?php echo esc_url( get_post_type_archive_link('travel_package') ); ?>" class="btn-secondary"><?php esc_html_e( 'View Packages', 'mytheme' ); ?></a>
                 </footer>
 
                 <a class="tribe-back-link" href="<?php echo esc_url( $archive ); ?>">← <?php esc_html_e( 'All Destinations', 'mytheme' ); ?></a>
@@ -157,7 +169,7 @@ while ( have_posts() ) :
                         <?php endforeach; ?>
                     </dl>
                     <?php endif; ?>
-                    <a class="dest-rail-btn" href="<?php echo esc_url( get_post_type_archive_link('travel_package') ); ?>"><?php esc_html_e( 'View Packages', 'mytheme' ); ?></a>
+                    <a class="dest-rail-btn" href="#destination-enquiry"><?php esc_html_e( 'Book Now', 'mytheme' ); ?></a>
                     <a class="dest-rail-btn dest-rail-btn--ghost" href="<?php echo esc_url( mytheme_get_plan_trip_url() ); ?>"><?php esc_html_e( 'Plan a Trip', 'mytheme' ); ?></a>
                 </div>
             </aside>

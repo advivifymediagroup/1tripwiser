@@ -22,8 +22,8 @@ if ( isset( $_GET['login'] ) && $_GET['login'] === 'failed' ) {
 
     <!-- Hero -->
     <section class="auth-hero">
-        <div class="auth-hero-kicker"><i class="fi-rr-plane" aria-hidden="true"></i> Welcome Back</div>
-        <h1>Log In to <span>1TripWiser</span></h1>
+        <!-- <div class="auth-hero-kicker"><i class="fi-rr-plane" aria-hidden="true"></i> Welcome Back</div> -->
+        <!-- <h1>Log In to <span>1TripWiser</span></h1> -->
         <p>Your travel dashboard, saved trips, and community posts are waiting.</p>
     </section>
 

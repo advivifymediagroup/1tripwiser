@@ -107,7 +107,7 @@
                 <span class="tw-search-col-label">Browse by Mood</span>
                 <div class="tw-search-mood-grid">
                     <?php
-                    $tw_moods = array('Mountains', 'Beaches', 'Offbeat', 'Honeymoon', 'Group Trips', 'Budget', 'International');
+                    $tw_moods = array('Mountains', 'Beaches', 'Offbeat', 'Honeymoon', 'Group Trips', 'Corporate Trips', 'Budget', 'International');
                     foreach ($tw_moods as $tw_m) :
                         $tw_url = esc_url(add_query_arg('s', urlencode($tw_m), home_url('/')));
                     ?>
@@ -210,6 +210,12 @@
                 <a class="tw-auth-btn" href="<?php echo esc_url(home_url('/register/')); ?>">Sign Up</a>
             <?php endif; ?>
             </div>
+
+            <!-- App — Coming Soon -->
+            <a class="tw-app-icon" href="<?php echo esc_url(home_url('/app/')); ?>" aria-label="Get the 1TripWiser App — Coming Soon" title="Get the App">
+                <i class="fa-solid fa-mobile-screen-button" aria-hidden="true"></i>
+                <span class="tw-app-icon-dot" aria-hidden="true"></span>
+            </a>
         </nav>
 
         <!-- Mobile Toggle -->
@@ -229,7 +235,7 @@
         ));
         ?>
         <a class="tw-cta tw-cta-mobile" href="<?php echo esc_url(mytheme_get_plan_trip_url()); ?>"><i class="fa-solid fa-paper-plane"></i> Plan My Trip</a>
-        <button type="button" class="tw-cta tw-cta-mobile" id="tw-search-open-mobile" style="width:100%;background:rgba(255,255,255,0.08);color:#fff;border:1px solid rgba(255,255,255,0.15);margin-top:10px;"><i class="fa-solid fa-magnifying-glass"></i> Search the site</button>
+        <button type="button" class="tw-cta tw-cta-mobile tw-cta-mobile-search" id="tw-search-open-mobile"><i class="fa-solid fa-magnifying-glass"></i> Search the site</button>
 
         <!-- Mobile auth links -->
         <div class="tw-mobile-auth">
@@ -243,6 +249,12 @@
             <a href="<?php echo esc_url(home_url('/register/')); ?>" class="signup">Sign Up Free</a>
         <?php endif; ?>
         </div>
+
+        <!-- App — Coming Soon -->
+        <a class="tw-app-icon tw-app-icon-mobile" href="<?php echo esc_url(home_url('/app/')); ?>">
+            <i class="fa-solid fa-mobile-screen-button" aria-hidden="true"></i> Get the App — Coming Soon
+            <span class="tw-app-icon-dot" aria-hidden="true"></span>
+        </a>
     </div>
 </header>
 
@@ -257,7 +269,7 @@ function tw_default_nav() {
     echo '<li class="tw-menu-item"><a href="' . $dest_url . '" class="tw-nav-link">Destinations</a></li>';
     echo '<li class="tw-menu-item"><a href="' . $itin_url . '" class="tw-nav-link">Itineraries</a></li>';
     echo '<li class="tw-menu-item"><a href="' . $pkg_url . '" class="tw-nav-link">Packages</a></li>';
-    echo '<li class="tw-menu-item"><a href="' . $blog_url . '" class="tw-nav-link">Blog</a></li>';
+    echo '<li class="tw-menu-item"><a href="' . $blog_url . '" class="tw-nav-link">Blogs</a></li>';
     if ( $tribe_url ) { echo '<li class="tw-menu-item"><a href="' . $tribe_url . '" class="tw-nav-link">Tribe</a></li>'; }
     echo '</ul>';
 }
@@ -272,7 +284,7 @@ function tw_default_mobile_nav() {
     echo '<li><a href="' . $dest_url . '">Destinations</a></li>';
     echo '<li><a href="' . $itin_url . '">Itineraries</a></li>';
     echo '<li><a href="' . $pkg_url . '">Packages</a></li>';
-    echo '<li><a href="' . $blog_url . '">Blog</a></li>';
+    echo '<li><a href="' . $blog_url . '">Blogs</a></li>';
     if ( $tribe_url ) { echo '<li><a href="' . $tribe_url . '">Tribe</a></li>'; }
     echo '</ul>';
 }
@@ -353,7 +365,7 @@ function tw_default_mobile_nav() {
        never changes, only the word after it cross-fades on an interval. */
     var sRotate = document.getElementById('tw-search-rotate');
     if (sRotate && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        var sWords = ['destinations', 'itineraries', 'packages', 'group trips', "women's trips", 'Luxe experience'];
+        var sWords = ['destinations', 'itineraries', 'packages', 'group trips', 'corporate trips', "women's trips", 'Luxe experience'];
         var sIndex = 0;
         /* The "…" travels with each word (instead of sitting fixed after a
            fixed-width box) so it always hugs the actual text, whatever its
@@ -404,7 +416,7 @@ function tw_default_mobile_nav() {
         'padding:0 30px',
         'border:none',
         'border-radius:999px',
-        'font-family:Nunito,sans-serif',
+        'font-family:var(--body-font)',
         'font-size:0.88rem',
         'font-weight:800',
         'letter-spacing:0.06em',

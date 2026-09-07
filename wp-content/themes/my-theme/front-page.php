@@ -40,27 +40,17 @@ if ( $tw_hero_video ) {
             </h1>
             <p class="tw-hero-desc">Handcrafted itineraries, priced fairly, ready in 24 hours.</p>
 
+            <form class="tw-hero-search" role="search" method="get" action="<?php echo esc_url( home_url( '/' ) ); ?>">
+                <div class="tw-hero-search-field">
+                    <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                    <input type="search" name="s" class="tw-hero-search-input" placeholder="Where do you want to go? Try Bali, Ladakh, Honeymoon&hellip;" autocomplete="off" value="<?php echo esc_attr( get_search_query() ); ?>">
+                </div>
+                <button type="submit" class="tw-hero-search-btn">Search</button>
+            </form>
+
             <div class="tw-hero-actions">
                 <a href="<?php echo esc_url(mytheme_get_plan_trip_url()); ?>" class="tw-cta-btn tw-cta-btn--primary">Plan a Trip &mdash; Free</a>
                 <a href="#featured-packages" class="tw-cta-btn tw-cta-btn--outline">Explore Packages</a>
-            </div>
-
-            <?php
-            $tw_pkg_archive = get_post_type_archive_link( 'travel_package' );
-            $tw_mood_tags   = array(
-                'Mountains'     => $tw_pkg_archive,
-                'Beaches'       => $tw_pkg_archive,
-                'Offbeat'       => $tw_pkg_archive,
-                'Honeymoon'     => $tw_pkg_archive,
-                'Group Trips'   => get_post_type_archive_link( 'group_trip' ) ?: $tw_pkg_archive,
-                'Budget'        => add_query_arg( 'package_filter', 'budget-under-30k', $tw_pkg_archive ),
-                'International' => add_query_arg( 'package_filter', 'international', $tw_pkg_archive ),
-            );
-            ?>
-            <div class="tw-hero-tags">
-                <?php foreach ( $tw_mood_tags as $tw_mood_label => $tw_mood_url ) : ?>
-                <a href="<?php echo esc_url( $tw_mood_url ); ?>" class="tw-hero-tag"><?php echo esc_html( $tw_mood_label ); ?></a>
-                <?php endforeach; ?>
             </div>
         </div>
 
@@ -214,7 +204,7 @@ if ( $tw_hero_video ) {
         <div class="container">
             <div class="section-heading visa-services-heading" data-reveal="up">
                 <span class="section-subtitle">Travel made simple</span>
-                <h2 class="section-title">Visa <span class="highlight">Services</span></h2>
+                <h2 class="section-title">Trip <span class="highlight">Services</span></h2>
             </div>
             <div class="visa-services-grid">
                 <a class="visa-service-card" href="<?php echo esc_url(mytheme_get_page_url_by_path('visa-assistance')); ?>">
@@ -233,6 +223,12 @@ if ( $tw_hero_video ) {
                     <span class="visa-service-icon"><i class="fi-rr-globe" aria-hidden="true"></i></span>
                     <h3>Travel Insurance</h3>
                     <p>Protect your trip with medical, cancellation, baggage, and emergency coverage for domestic and international travel.</p>
+                    <span class="visa-service-link">Learn More -></span>
+                </a>
+                <a class="visa-service-card" href="<?php echo esc_url(mytheme_get_page_url_by_path('travel-agency-registration')); ?>">
+                    <span class="visa-service-icon"><i class="fi-rr-briefcase" aria-hidden="true"></i></span>
+                    <h3>Travel Agency Registration</h3>
+                    <p>Run a travel agency? Partner with us for quality leads, a verified listing, and marketing support.</p>
                     <span class="visa-service-link">Learn More -></span>
                 </a>
             </div>

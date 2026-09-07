@@ -25,24 +25,29 @@ $pat_subtitle  = get_option('tw_pat_subtitle', "Tell us your dream destination, 
 
 <div class="plan-body">
 
-  <div class="progress-track" id="ptrack">
-    <div class="ps active" id="ps1">
-      <div class="pc">1</div>
-      <div class="ps-lbl">Destination</div>
-    </div>
-    <div class="ps" id="ps2">
-      <div class="pc">2</div>
-      <div class="ps-lbl">Date & Time</div>
-    </div>
-    <div class="ps" id="ps3">
-      <div class="pc">3</div>
-      <div class="ps-lbl">Budget & Quote</div>
-    </div>
-  </div>
-
   <div class="plan-card">
 
-    <div class="plan-step active" id="pstep1">
+    <div class="plan-step active" id="pstep-form">
+      <div class="ps-title">YOUR CONTACT DETAILS</div>
+      <div class="ps-sub">We'll send your personalised itinerary here first</div>
+
+      <div class="fr">
+        <div class="fg" style="margin-bottom: 0;">
+          <label class="fl2">Full Name</label>
+          <input class="fi" type="text" id="p-name" placeholder="Your name">
+        </div>
+        <div class="fg" style="margin-bottom: 0;">
+          <label class="fl2">WhatsApp Number</label>
+          <input class="fi" type="tel" id="p-phone" placeholder="+91 98765 43210">
+        </div>
+      </div>
+      <div class="fg">
+        <label class="fl2">Email Address</label>
+        <input class="fi" type="email" id="p-email" placeholder="your@email.com">
+      </div>
+
+      <hr class="step-divider">
+
       <div class="ps-title">WHERE DO YOU WANT TO GO?</div>
       <div class="ps-sub">Pick a destination or type your own below</div>
 
@@ -84,20 +89,15 @@ $pat_subtitle  = get_option('tw_pat_subtitle', "Tell us your dream destination, 
         <input class="fi" type="text" id="custom-dest" placeholder="e.g. Thailand, Rajasthan, Japan...">
       </div>
 
-      <div class="plan-nav">
-        <span></span>
-        <button class="btn-nx btn-primary" onclick="goToStep(2)">Next: Date &amp; Time &rarr;</button>
-      </div>
-    </div>
+      <hr class="step-divider">
 
-    <div class="plan-step" id="pstep2">
       <div class="ps-title">WHEN ARE YOU TRAVELLING?</div>
       <div class="ps-sub">Pick your dates and preferred time of travel</div>
 
       <div class="fr">
         <div class="fg" style="margin-bottom: 0;">
           <label class="fl2">Departure Date</label>
-          <input class="fi" type="date" id="p-date">
+          <input class="fi" type="date" id="p-date" value="<?php echo esc_attr( date_i18n( 'Y-m-d' ) ); ?>">
         </div>
         <div class="fg" style="margin-bottom: 0;">
           <label class="fl2">Trip Duration</label>
@@ -170,14 +170,9 @@ $pat_subtitle  = get_option('tw_pat_subtitle', "Tell us your dream destination, 
         </div>
       </div>
 
-      <div class="plan-nav">
-        <button class="btn-back" onclick="goToStep(1)">&larr; Back</button>
-        <button class="btn-nx btn-primary" onclick="goToStep(3)">Next: Budget &amp; Quote &rarr;</button>
-      </div>
-    </div>
+      <hr class="step-divider">
 
-    <div class="plan-step" id="pstep3">
-      <div class="ps-title">YOUR BUDGET &amp; DETAILS</div>
+      <div class="ps-title">YOUR BUDGET</div>
       <div class="ps-sub">Per person · We only show options in your range</div>
 
       <div class="tile-g2" id="budget-grid">
@@ -203,48 +198,19 @@ $pat_subtitle  = get_option('tw_pat_subtitle', "Tell us your dream destination, 
         <label class="fl2">Departing From</label>
         <input class="fi" type="text" id="p-from" placeholder="e.g. Delhi, Mumbai, Bangalore...">
       </div>
-
-      <hr class="step-divider">
-
-      <span class="sec-label">Where should we send your quote?</span>
-
-      <div class="fr">
-        <div class="fg" style="margin-bottom: 0;">
-          <label class="fl2">Full Name</label>
-          <input class="fi" type="text" id="p-name" placeholder="Your name">
-        </div>
-        <div class="fg" style="margin-bottom: 0;">
-          <label class="fl2">WhatsApp Number</label>
-          <input class="fi" type="tel" id="p-phone" placeholder="+91 98765 43210">
-        </div>
-      </div>
-      <div class="fg">
-        <label class="fl2">Email Address</label>
-        <input class="fi" type="email" id="p-email" placeholder="your@email.com">
-      </div>
       <div class="fg">
         <label class="fl2">Special Requests <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--muted);">(optional)</span></label>
         <textarea class="fi" id="p-notes" rows="2" placeholder="Vegetarian meals, anniversary surprise, wheelchair access..." style="resize: none;"></textarea>
       </div>
 
-      <div class="sum-box" id="sum-box">
-        <div class="sum-title"><i class="fi-rr-clipboard-list" aria-hidden="true"></i> Your Trip Summary</div>
-        <div class="sum-row"><span class="sum-k">Destination</span><span class="sum-v" id="s-dest">—</span></div>
-        <div class="sum-row"><span class="sum-k">Departure Date</span><span class="sum-v" id="s-date">—</span></div>
-        <div class="sum-row"><span class="sum-k">Travel Time</span><span class="sum-v" id="s-time">—</span></div>
-        <div class="sum-row"><span class="sum-k">Duration</span><span class="sum-v" id="s-dur">—</span></div>
-        <div class="sum-row"><span class="sum-k">Travellers</span><span class="sum-v" id="s-pax">—</span></div>
-        <div class="sum-row"><span class="sum-k">Budget</span><span class="sum-v" id="s-budget">—</span></div>
-      </div>
-
       <div class="plan-nav">
-        <button class="btn-back" onclick="goToStep(2)">&larr; Back</button>
+        <span></span>
         <button class="btn-nx btn-primary" onclick="submitTrip()">
           <i class="fi-rr-check-circle" aria-hidden="true"></i>
           Get My Personalised Itinerary
         </button>
       </div>
-      <div style="text-align:center;margin-top:10px;font-family:'Nunito',sans-serif;font-size:11px;color:var(--muted);">
+      <div class="pat-submit-note">
         No payment required &middot; Delivered to your WhatsApp &amp; email within minutes
       </div>
     </div>
@@ -270,8 +236,8 @@ $pat_subtitle  = get_option('tw_pat_subtitle', "Tell us your dream destination, 
             <div class="succ-stat-lbl">Community</div>
           </div>
         </div>
-        <div style="margin-top:24px;">
-          <button onclick="resetForm()" style="font-family:'Nunito',sans-serif;font-size:12px;color:var(--reset-color);background:transparent;border:none;cursor:pointer;text-decoration:underline;">
+        <div class="pat-reset-wrap">
+          <button onclick="resetForm()" class="pat-reset-btn">
             Plan another trip
           </button>
         </div>
@@ -298,7 +264,6 @@ $pat_subtitle  = get_option('tw_pat_subtitle', "Tell us your dream destination, 
     email:  '',
     notes:  ''
   };
-  var currentStep = 1;
 
   function initTiles(gridId) {
     var g = document.getElementById(gridId);
@@ -316,7 +281,6 @@ $pat_subtitle  = get_option('tw_pat_subtitle', "Tell us your dream destination, 
   ['dest-grid', 'time-grid', 'type-grid', 'budget-grid'].forEach(initTiles);
 
   function collectData() {
-    /* Step 1 */
     var customDest = document.getElementById('custom-dest');
     var selDest    = document.querySelector('#dest-grid .ptile.sel');
     if (customDest && customDest.value.trim()) {
@@ -365,40 +329,19 @@ $pat_subtitle  = get_option('tw_pat_subtitle', "Tell us your dream destination, 
     if (notesEl) tripData.notes = notesEl.value.trim();
   }
 
-  function updateSummary() {
-    var pax = tripData.adults + ' adult' + (tripData.adults !== '1 (Solo)' ? 's' : '');
-    if (tripData.child && tripData.child !== 'None') {
-      pax += ' · ' + tripData.child + ' child' + (tripData.child === '1' ? '' : 'ren');
-    }
-    document.getElementById('s-dest').textContent   = tripData.dest;
-    document.getElementById('s-date').textContent   = tripData.date || 'Flexible';
-    document.getElementById('s-time').textContent   = tripData.time + ' flight';
-    document.getElementById('s-dur').textContent    = tripData.dur;
-    document.getElementById('s-pax').textContent    = pax;
-    document.getElementById('s-budget').textContent = tripData.budget.split('—')[0].trim();
-  }
-
-  window.goToStep = function (target) {
-    collectData();
-
-    var cur = document.getElementById('ps' + currentStep);
-    if (cur) { cur.classList.remove('active'); cur.classList.add('done'); }
-    document.getElementById('pstep' + currentStep).classList.remove('active');
-
-    currentStep = target;
-    var tgt = document.getElementById('ps' + target);
-    if (tgt) { tgt.classList.remove('done'); tgt.classList.add('active'); }
-
-    var stepEl = document.getElementById('pstep' + target);
-    if (stepEl) stepEl.classList.add('active');
-
-    if (target === 3) updateSummary();
-
-    document.querySelector('.plan-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
-  };
-
   window.submitTrip = function () {
     collectData();
+
+    if (!tripData.phone) {
+      alert('Please enter your WhatsApp number so we can send your itinerary.');
+      document.getElementById('p-phone').focus();
+      return;
+    }
+    if (!tripData.name) {
+      alert('Please enter your name.');
+      document.getElementById('p-name').focus();
+      return;
+    }
 
     /* ── Save to WordPress database via AJAX ── */
     if (typeof twAjax !== 'undefined' && twAjax.url) {
@@ -424,9 +367,7 @@ $pat_subtitle  = get_option('tw_pat_subtitle', "Tell us your dream destination, 
     }
 
     /* ── Show success screen ── */
-    document.getElementById('pstep3').classList.remove('active');
-    document.getElementById('ps3').classList.remove('active');
-    document.getElementById('ps3').classList.add('done');
+    document.getElementById('pstep-form').classList.remove('active');
     document.getElementById('pstep-success').classList.add('active');
 
     /* Confirm back the contact details their itinerary will be sent to */

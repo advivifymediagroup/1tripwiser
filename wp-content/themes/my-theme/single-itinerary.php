@@ -30,9 +30,6 @@ while ( have_posts() ) :
         if ( is_numeric( $_v ) && $_v > 0 ) { $price = $_v; break; }
     }
 
-    /* ── book URL ── */
-    $book_url = mytheme_get_travel_field( 'book_url', $id ) ?: mytheme_get_plan_trip_url();
-
     /* ── region ── */
     $regions = get_the_terms( $id, 'destination_region' );
     $region  = ( $regions && ! is_wp_error( $regions ) ) ? $regions[0] : null;
@@ -198,6 +195,18 @@ while ( have_posts() ) :
                 </section>
                 <?php endif; ?>
 
+                <!-- Enquiry form -->
+                <?php
+                get_template_part( 'template-parts/enquiry-form', null, array(
+                    'type'    => 'itinerary',
+                    'ref_id'  => $id,
+                    'anchor'  => 'itinerary-enquiry',
+                    'kicker'  => __( 'Interested in this itinerary?', 'mytheme' ),
+                    'heading' => sprintf( __( 'Enquire about %s', 'mytheme' ), get_the_title() ),
+                    'intro'   => __( 'Share your details and our travel expert will help with dates, pricing and booking.', 'mytheme' ),
+                ) );
+                ?>
+
                 <?php if ( $has_faqs ) : ?>
                 <section id="itin-faqs" class="dest-article-section dest-article-faqs">
                     <?php mytheme_render_faq_section( $id, __( 'Itinerary FAQs', 'mytheme' ) ); ?>
@@ -238,8 +247,8 @@ while ( have_posts() ) :
                         <?php endforeach; ?>
                     </dl>
                     <?php endif; ?>
-                    <a class="dest-rail-btn" href="<?php echo esc_url( $book_url ); ?>"><?php esc_html_e( 'Book Now', 'mytheme' ); ?></a>
-                    <a class="dest-rail-btn dest-rail-btn--ghost" href="<?php echo esc_url( mytheme_get_plan_trip_url() ); ?>"><?php esc_html_e( 'Customise Route', 'mytheme' ); ?></a>
+                    <a class="dest-rail-btn" href="#itinerary-enquiry"><?php esc_html_e( 'Enquire', 'mytheme' ); ?></a>
+                    <a class="dest-rail-btn dest-rail-btn--ghost" href="<?php echo esc_url( mytheme_get_plan_trip_url() ); ?>"><?php esc_html_e( 'Create Your Own Itinerary', 'mytheme' ); ?></a>
                 </div>
             </aside>
 

@@ -25,6 +25,7 @@
                 <li><a href="#">International</a></li>
                 <li><a href="#">Honeymoon</a></li>
                 <li><a href="<?php echo esc_url(get_post_type_archive_link('travel_package')); ?>">Group Tours</a></li>
+                <li><a href="<?php echo esc_url(get_post_type_archive_link('corporate_trip')); ?>">Corporate Trips</a></li>
                 <li><a href="<?php echo esc_url(home_url('/blog-affiliates/')); ?>">Blog &amp; Guides</a></li>
             </ul>
         </div>

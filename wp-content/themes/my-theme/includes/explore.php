@@ -231,6 +231,40 @@ function tw_group_trip_register_acf_fields() {
 }
 add_action( 'acf/init', 'tw_group_trip_register_acf_fields' );
 
+/** Corporate Trips — B2B retreats, offsites and incentive journeys. */
+function tw_corporate_trip_register_acf_fields() {
+    if ( ! function_exists( 'acf_add_local_field_group' ) ) { return; }
+
+    $f = array(
+        array( 'key' => 'field_twcorp_img',    'label' => 'Trip Image',             'name' => 'package_image',       'type' => 'image',    'return_format' => 'array', 'preview_size' => 'medium', 'library' => 'all' ),
+        array( 'key' => 'field_twcorp_loc',    'label' => 'Location / Destination', 'name' => 'package_location',    'type' => 'text',     'instructions' => 'e.g. Goa, Rishikesh, Dubai', 'wrapper' => array( 'width' => '50' ) ),
+        array( 'key' => 'field_twcorp_dep',    'label' => 'Available Date / Season','name' => 'event_date',          'type' => 'text',     'instructions' => 'e.g. On request, Oct-Mar, Q4 offsites', 'wrapper' => array( 'width' => '50' ) ),
+        array( 'key' => 'field_twcorp_tag',    'label' => 'Trip Tag',               'name' => 'package_tag',         'type' => 'select',   'choices' => array( 'offsite' => 'Offsite', 'team-retreat' => 'Team Retreat', 'incentive' => 'Incentive Trip', 'leadership' => 'Leadership Retreat', 'new' => 'New' ), 'allow_null' => 0, 'wrapper' => array( 'width' => '50' ) ),
+        array( 'key' => 'field_twcorp_nights', 'label' => 'Total Nights',           'name' => 'total_nights',        'type' => 'number',   'wrapper' => array( 'width' => '50' ) ),
+        array( 'key' => 'field_twcorp_days',   'label' => 'Total Days',             'name' => 'total_days',          'type' => 'number',   'wrapper' => array( 'width' => '50' ) ),
+        array( 'key' => 'field_twcorp_type',   'label' => 'Corporate Trip Type',    'name' => 'package_trip_type',   'type' => 'select',   'choices' => array( 'Corporate Offsite' => 'Corporate Offsite', 'Team Retreat' => 'Team Retreat', 'Incentive Trip' => 'Incentive Trip', 'Leadership Retreat' => 'Leadership Retreat', 'MICE' => 'MICE / Conference', 'Custom Corporate Trip' => 'Custom Corporate Trip' ), 'allow_null' => 0, 'wrapper' => array( 'width' => '50' ) ),
+        array( 'key' => 'field_twcorp_amt',    'label' => 'Starting Price Per Person (₹)', 'name' => 'package_amount', 'type' => 'number', 'wrapper' => array( 'width' => '50' ) ),
+        array( 'key' => 'field_twcorp_size',   'label' => 'Team Size',              'name' => 'group_size',          'type' => 'text',     'instructions' => 'e.g. 20-80 employees', 'wrapper' => array( 'width' => '50' ) ),
+        array( 'key' => 'field_twcorp_book',   'label' => 'Enquiry URL',            'name' => 'package_book_url',    'type' => 'url',      'instructions' => 'Leave blank to use this corporate trip page' ),
+        array( 'key' => 'field_twcorp_route',  'label' => 'Route / Venue Summary',  'name' => 'route_summary',       'type' => 'text',     'instructions' => 'e.g. Mumbai -> Goa resort -> team activities -> Mumbai' ),
+        array( 'key' => 'field_twcorp_best',   'label' => 'Best Time to Run',       'name' => 'best_time',           'type' => 'text',     'instructions' => 'e.g. October to March', 'wrapper' => array( 'width' => '50' ) ),
+        array( 'key' => 'field_twcorp_ov',     'label' => 'Trip Overview',          'name' => 'package_overview',    'type' => 'wysiwyg',  'tabs' => 'all', 'toolbar' => 'full', 'media_upload' => 1 ),
+        array( 'key' => 'field_twcorp_objectives', 'label' => 'Corporate Objectives', 'name' => 'corporate_objectives', 'type' => 'textarea', 'instructions' => 'One objective per line: bonding, rewards, annual meet, leadership alignment, etc.', 'rows' => 4, 'new_lines' => 'br' ),
+        array( 'key' => 'field_twcorp_inclusions', 'label' => 'Corporate Inclusions', 'name' => 'corporate_inclusions', 'type' => 'textarea', 'instructions' => 'One inclusion per line: stay, transfers, activities, gala dinner, AV setup, etc.', 'rows' => 5, 'new_lines' => 'br' ),
+        array( 'key' => 'field_twcorp_notes',  'label' => 'Internal Corporate Notes','name' => 'corporate_private_notes', 'type' => 'textarea', 'instructions' => 'Admin-only notes. Never displayed on the site.', 'rows' => 4 ),
+        array( 'key' => 'field_twcorp_dest',   'label' => 'Linked Destination',     'name' => 'linked_destination',  'type' => 'post_object', 'post_type' => array( 'destination' ), 'post_status' => array( 'publish' ), 'return_format' => 'object', 'ui' => 1, 'allow_null' => 1 ),
+        array( 'key' => 'field_twcorp_reg',    'label' => 'Trip Region',            'name' => 'package_region',      'type' => 'checkbox', 'choices' => array( 'india' => 'India', 'international' => 'International', 'asia' => 'Asia', 'europe' => 'Europe', 'middle-east' => 'Middle East' ), 'layout' => 'vertical' ),
+        array( 'key' => 'field_twcorp_mon',    'label' => 'Available Months',       'name' => 'package_months',      'type' => 'checkbox', 'choices' => array( 'january' => 'January', 'february' => 'February', 'march' => 'March', 'april' => 'April', 'may' => 'May', 'june' => 'June', 'july' => 'July', 'august' => 'August', 'september' => 'September', 'october' => 'October', 'november' => 'November', 'december' => 'December' ), 'layout' => 'vertical' ),
+    );
+    acf_add_local_field_group( array(
+        'key' => 'group_tw_corporate_trip', 'title' => 'Corporate Trip Details', 'fields' => $f,
+        'location' => array( array( array( 'param' => 'post_type', 'operator' => '==', 'value' => 'corporate_trip' ) ) ),
+        'menu_order' => 0, 'position' => 'normal', 'style' => 'default', 'label_placement' => 'top', 'active' => true,
+        'show_in_rest' => true,
+    ) );
+}
+add_action( 'acf/init', 'tw_corporate_trip_register_acf_fields' );
+
 /**
  * Day-wise itinerary — one shared repeater for every trip type.
  *
@@ -270,6 +304,7 @@ function tw_register_daywise_acf_fields() {
         'location' => array(
             array( array( 'param' => 'post_type', 'operator' => '==', 'value' => 'travel_package' ) ),
             array( array( 'param' => 'post_type', 'operator' => '==', 'value' => 'group_trip' ) ),
+            array( array( 'param' => 'post_type', 'operator' => '==', 'value' => 'corporate_trip' ) ),
             array( array( 'param' => 'post_type', 'operator' => '==', 'value' => 'tw_event' ) ),
         ),
         'menu_order' => 5, 'position' => 'normal', 'style' => 'default', 'label_placement' => 'top', 'active' => true,
@@ -295,7 +330,7 @@ function tw_extend_faq_field_group_locations( $group ) {
             }
         }
     }
-    foreach ( array( 'group_trip', 'tw_event' ) as $pt ) {
+    foreach ( array( 'group_trip', 'corporate_trip', 'tw_event' ) as $pt ) {
         if ( ! in_array( $pt, $existing, true ) ) {
             $group['location'][] = array( array( 'param' => 'post_type', 'operator' => '==', 'value' => $pt ) );
         }
@@ -374,11 +409,46 @@ function tw_groups_register_cpt() {
 }
 add_action( 'init', 'tw_groups_register_cpt', 6 );
 
+/* =============================================================
+ * 1c. CORPORATE TRIPS — dedicated CPT with its own admin section
+ * ============================================================= */
+function tw_corporate_trips_register_cpt() {
+    register_post_type( 'corporate_trip', array(
+        'labels' => array(
+            'name'          => __( 'Corporate Trips', 'mytheme' ),
+            'singular_name' => __( 'Corporate Trip', 'mytheme' ),
+            'add_new_item'  => __( 'Add New Corporate Trip', 'mytheme' ),
+            'edit_item'     => __( 'Edit Corporate Trip', 'mytheme' ),
+            'new_item'      => __( 'New Corporate Trip', 'mytheme' ),
+            'view_item'     => __( 'View Corporate Trip', 'mytheme' ),
+            'search_items'  => __( 'Search Corporate Trips', 'mytheme' ),
+            'menu_name'     => __( 'Corporate Trips', 'mytheme' ),
+        ),
+        'public'        => true,
+        'has_archive'   => 'corporate-trips',
+        'menu_icon'     => 'dashicons-building',
+        'menu_position' => 25,
+        'rewrite'       => array( 'slug' => 'corporate-trips', 'with_front' => false ),
+        'show_in_rest'  => true,
+        'supports'      => array( 'title', 'editor', 'excerpt', 'thumbnail', 'author', 'revisions' ),
+        'taxonomies'    => array( 'destination_region', 'trip_style' ),
+    ) );
+}
+add_action( 'init', 'tw_corporate_trips_register_cpt', 6 );
+
+function tw_corporate_trips_flush_rewrites_once() {
+    if ( get_option( 'tw_corporate_trips_rewrites_flushed' ) === '1' ) { return; }
+    if ( ! post_type_exists( 'corporate_trip' ) ) { return; }
+    flush_rewrite_rules( false );
+    update_option( 'tw_corporate_trips_rewrites_flushed', '1' );
+}
+add_action( 'init', 'tw_corporate_trips_flush_rewrites_once', 30 );
+
 /* Force Classic Editor for tw_event and group_trip so ACF field panels display
    inline and prominently — identical to the Travel Packages admin experience.
    show_in_rest stays true for REST API access; only the admin editor is switched. */
 add_filter( 'use_block_editor_for_post_type', function ( $use_block_editor, $post_type ) {
-    if ( in_array( $post_type, array( 'tw_event', 'group_trip' ), true ) ) {
+    if ( in_array( $post_type, array( 'tw_event', 'group_trip', 'corporate_trip' ), true ) ) {
         return false;
     }
     return $use_block_editor;
@@ -590,7 +660,7 @@ function tw_explore_ensure_term( $name, $taxonomy, $parent = 0 ) {
 function tw_explore_tax_query( $q ) {
     if ( is_admin() || ! $q->is_main_query() ) { return; }
     if ( $q->is_tax( 'destination_region' ) ) {
-        $q->set( 'post_type', array( 'travel_package', 'itinerary', 'group_trip', 'tw_event', 'destination', 'post' ) );
+        $q->set( 'post_type', array( 'travel_package', 'itinerary', 'group_trip', 'corporate_trip', 'tw_event', 'destination', 'post' ) );
         $q->set( 'posts_per_page', 12 );
     }
 }
@@ -600,7 +670,7 @@ add_action( 'pre_get_posts', 'tw_explore_tax_query' );
    archives so the unified region categories work in every archive filter. */
 function tw_explore_archive_filter( $q ) {
     if ( is_admin() || ! $q->is_main_query() ) { return; }
-    if ( $q->is_post_type_archive( array( 'travel_package', 'itinerary', 'group_trip', 'tw_event', 'destination' ) ) ) {
+    if ( $q->is_post_type_archive( array( 'travel_package', 'itinerary', 'group_trip', 'corporate_trip', 'tw_event', 'destination' ) ) ) {
         $tax = tw_explore_active_tax_query();
         if ( $tax ) {
             $existing = $q->get( 'tax_query' );
@@ -616,7 +686,7 @@ add_action( 'pre_get_posts', 'tw_explore_archive_filter' );
 function tw_explore_search_query( $q ) {
     if ( is_admin() || ! $q->is_main_query() ) { return; }
     if ( $q->is_search() ) {
-        $q->set( 'post_type', array( 'travel_package', 'itinerary', 'group_trip', 'tw_event', 'destination', 'post', 'forum_topic' ) );
+        $q->set( 'post_type', array( 'travel_package', 'itinerary', 'group_trip', 'corporate_trip', 'tw_event', 'destination', 'post', 'forum_topic' ) );
         $q->set( 'posts_per_page', 24 );
     }
 }
@@ -690,6 +760,32 @@ function tw_group_trip_destinations() {
 /** URL to the group-trips archive filtered by a region term slug. */
 function tw_group_trip_region_url( $slug = '' ) {
     $base = get_post_type_archive_link( 'group_trip' );
+    return $slug ? add_query_arg( 'region', $slug, $base ) : $base;
+}
+
+/** Region/destination terms that actually have corporate trips attached. */
+function tw_corporate_trip_destinations() {
+    $ids = get_posts( array(
+        'post_type'      => 'corporate_trip',
+        'post_status'    => 'publish',
+        'posts_per_page' => -1,
+        'fields'         => 'ids',
+        'no_found_rows'  => true,
+    ) );
+    if ( empty( $ids ) ) { return array(); }
+    $term_ids = wp_get_object_terms( $ids, 'destination_region', array( 'fields' => 'ids' ) );
+    if ( is_wp_error( $term_ids ) || empty( $term_ids ) ) { return array(); }
+    $terms = array();
+    foreach ( array_unique( $term_ids ) as $tid ) {
+        $t = get_term( $tid, 'destination_region' );
+        if ( $t && ! is_wp_error( $t ) ) { $terms[] = $t; }
+    }
+    usort( $terms, function ( $a, $b ) { return strcmp( $a->name, $b->name ); } );
+    return $terms;
+}
+
+function tw_corporate_trip_region_url( $slug = '' ) {
+    $base = get_post_type_archive_link( 'corporate_trip' );
     return $slug ? add_query_arg( 'region', $slug, $base ) : $base;
 }
 
@@ -934,7 +1030,6 @@ function tw_explore_subheader() {
                     <div class="tw-mega-events-grid">
                         <?php foreach ( $group_dests as $d ) : ?>
                             <a class="tw-mega-event" href="<?php echo esc_url( tw_group_trip_region_url( $d->slug ) ); ?>">
-                                <i class="fa-solid fa-location-dot tw-mega-event-icon"></i>
                                 <span class="tw-mega-event-name"><?php echo esc_html( $d->name ); ?></span>
                             </a>
                         <?php endforeach; ?>
@@ -943,6 +1038,34 @@ function tw_explore_subheader() {
                         <div class="tw-mega-empty">
                             <p>No group trips yet.</p>
                             <a class="tw-mega-allcta" href="<?php echo esc_url( get_post_type_archive_link( 'group_trip' ) ); ?>">Browse all group trips →</a>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+
+            <?php
+            $corp_dests = tw_corporate_trip_destinations();
+            $tw_sub_active_corp = is_post_type_archive( 'corporate_trip' ) || is_singular( 'corporate_trip' );
+            ?>
+            <div class="tw-sub-item has-mega">
+                <a class="tw-sub-link<?php echo $tw_sub_active_corp ? ' is-active' : ''; ?>" href="<?php echo esc_url( get_post_type_archive_link( 'corporate_trip' ) ); ?>">
+                    Corporate Trips
+                    <i class="fa-solid fa-chevron-down tw-sub-caret" aria-hidden="true"></i>
+                </a>
+                <div class="tw-mega tw-mega-events" role="menu">
+                    <?php if ( $corp_dests ) : ?>
+                    <div class="tw-mega-events-grid">
+                        <?php foreach ( $corp_dests as $d ) : ?>
+                            <a class="tw-mega-event" href="<?php echo esc_url( tw_corporate_trip_region_url( $d->slug ) ); ?>">
+                                <i class="fa-solid tw-mega-event-icon" aria-hidden="true"></i>
+                                <span class="tw-mega-event-name"><?php echo esc_html( $d->name ); ?></span>
+                            </a>
+                        <?php endforeach; ?>
+                    </div>
+                    <?php else : ?>
+                        <div class="tw-mega-empty">
+                            <p>No corporate trips yet.</p>
+                            <a class="tw-mega-allcta" href="<?php echo esc_url( get_post_type_archive_link( 'corporate_trip' ) ); ?>">Browse corporate trips -></a>
                         </div>
                     <?php endif; ?>
                 </div>
@@ -960,7 +1083,6 @@ function tw_explore_subheader() {
                         <?php foreach ( $events as $ev ) :
                             $cur = get_queried_object_id() === $ev->ID; ?>
                             <a class="tw-mega-event <?php echo $cur ? 'active' : ''; ?>" href="<?php echo esc_url( get_permalink( $ev->ID ) ); ?>">
-                                <i class="fa-solid fa-ticket tw-mega-event-icon"></i>
                                 <span class="tw-mega-event-name"><?php echo esc_html( get_the_title( $ev->ID ) ); ?></span>
                             </a>
                         <?php endforeach; ?>
@@ -985,7 +1107,6 @@ function tw_explore_subheader() {
                 </a>
                 <div class="tw-mega tw-mega-events tw-mega--womens" role="menu">
                     <div class="tw-mega-womens-hero">
-                        <i class="fa-solid fa-venus tw-mega-womens-icon"></i>
                         <div>
                             <strong>Women's Group Trips</strong>
                             <small>Safe &middot; Curated &middot; Empowering</small>
@@ -995,7 +1116,6 @@ function tw_explore_subheader() {
                     <div class="tw-mega-events-grid">
                         <?php foreach ( $womens_trips as $wt ) : ?>
                             <a class="tw-mega-event" href="<?php echo esc_url( get_permalink( $wt->ID ) ); ?>">
-                                <i class="fa-solid fa-venus tw-mega-event-icon"></i>
                                 <span class="tw-mega-event-name"><?php echo esc_html( get_the_title( $wt->ID ) ); ?></span>
                             </a>
                         <?php endforeach; ?>

@@ -44,14 +44,9 @@ while ( have_posts() ) :
     $grp_size  = get_post_meta( $id, 'group_size', true )         ?: mytheme_get_travel_field( 'group_size', $id );
     $trip_type = get_post_meta( $id, 'package_trip_type', true )  ?: mytheme_get_travel_field( 'package_trip_type', $id );
     $tag       = get_post_meta( $id, 'package_tag', true );
-    $emi       = get_post_meta( $id, 'package_emi', true );
     $overview  = get_post_meta( $id, 'package_overview', true );
     $route     = get_post_meta( $id, 'route_summary', true )      ?: mytheme_get_travel_field( 'route_summary', $id );
     $best_time = get_post_meta( $id, 'best_time', true )          ?: mytheme_get_travel_field( 'best_time', $id );
-
-    /* ── book URL ── */
-    $book     = get_post_meta( $id, 'package_book_url', true ) ?: mytheme_get_travel_field( 'book_url', $id );
-    $book_url = $book ?: mytheme_get_plan_trip_url();
 
     /* ── region / taxonomy ── */
     $regions = get_the_terms( $id, 'destination_region' );
@@ -267,6 +262,18 @@ while ( have_posts() ) :
                 </section>
                 <?php endif; ?>
 
+                <!-- Enquiry form -->
+                <?php
+                get_template_part( 'template-parts/enquiry-form', null, array(
+                    'type'    => 'group_trip',
+                    'ref_id'  => $id,
+                    'anchor'  => 'group-enquiry',
+                    'kicker'  => __( 'Interested in this trip?', 'mytheme' ),
+                    'heading' => sprintf( __( 'Get a callback for %s', 'mytheme' ), get_the_title() ),
+                    'intro'   => __( 'Share your details and our travel expert will help with dates, pricing and booking.', 'mytheme' ),
+                ) );
+                ?>
+
                 <?php if ( $has_faqs ) : ?>
                 <section id="gt-faqs" class="dest-article-section dest-article-faqs">
                     <?php mytheme_render_faq_section( $id, __( 'Group Trip FAQs', 'mytheme' ) ); ?>
@@ -274,7 +281,7 @@ while ( have_posts() ) :
                 <?php endif; ?>
 
                 <footer class="dest-article-cta">
-                    <a href="<?php echo esc_url( $book_url ); ?>" class="btn-primary"><?php esc_html_e( 'Book Now', 'mytheme' ); ?></a>
+                    <a href="#group-enquiry" class="btn-primary"><?php esc_html_e( 'Book Now', 'mytheme' ); ?></a>
                     <a href="<?php echo esc_url( $archive_url ); ?>" class="btn-secondary"><?php printf( esc_html__( 'All %s', 'mytheme' ), esc_html( $archive_label ) ); ?></a>
                 </footer>
 
@@ -288,7 +295,6 @@ while ( have_posts() ) :
                     <div class="dest-rail-price">
                         <span><?php esc_html_e( 'Price per person', 'mytheme' ); ?></span>
                         <strong><?php echo esc_html( function_exists('mytheme_format_rupee_amount') ? mytheme_format_rupee_amount( $price ) : $price ); ?></strong>
-                        <?php if ( $emi ) : ?><small><?php echo esc_html( $emi ); ?>/mo</small><?php endif; ?>
                     </div>
                     <?php endif; ?>
                     <?php
@@ -310,7 +316,7 @@ while ( have_posts() ) :
                         <?php endforeach; ?>
                     </dl>
                     <?php endif; ?>
-                    <a class="dest-rail-btn" href="<?php echo esc_url( $book_url ); ?>"><?php esc_html_e( 'Book Now', 'mytheme' ); ?></a>
+                    <a class="dest-rail-btn" href="#group-enquiry"><?php esc_html_e( 'Book Now', 'mytheme' ); ?></a>
                     <a class="dest-rail-btn dest-rail-btn--ghost" href="<?php echo esc_url( mytheme_get_plan_trip_url() ); ?>"><?php esc_html_e( 'Customise this trip', 'mytheme' ); ?></a>
                 </div>
             </aside>
