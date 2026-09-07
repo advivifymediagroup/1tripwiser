@@ -10,7 +10,7 @@
                 <a href="<?php echo esc_url( home_url('/') ); ?>">Home</a><span>›</span><span>Destinations</span>
             </nav>
             <span class="explore-hero-kicker">Explore by Place</span>
-            <h1 class="explore-hero-title">Dest<span style="color:var(--tw-red)">inations</span></h1>
+            <h1 class="tw-h1">Dest<span class="accent-red">inations</span></h1>
             <p class="explore-hero-sub">Browse destinations, best seasons, ideal trip lengths and package starting prices.</p>
         </div>
     </section>
@@ -53,7 +53,7 @@
                                         <strong><?php echo esc_html( $destination['starting_price'] ); ?></strong>
                                     <?php endif; ?>
                                 </div>
-                                <a href="<?php the_permalink(); ?>" class="book-now-btn">Explore</a>
+                                <a href="<?php the_permalink(); ?>" class="btn-primary btn-sm">Explore</a>
                             </div>
                         </div>
                     </article>

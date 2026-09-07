@@ -28,7 +28,7 @@ $tw_service_page_slugs = array( 'visa-assistance', 'passport-services', 'travel-
                 <span><?php the_title(); ?></span>
             </nav>
             <span class="explore-hero-kicker"><?php esc_html_e( 'Travel Made Simple', 'mytheme' ); ?></span>
-            <h1 class="explore-hero-title"><?php the_title(); ?></h1>
+            <h1 class="tw-h1"><?php the_title(); ?></h1>
         </div>
     </section>
 
@@ -52,7 +52,7 @@ $tw_service_page_slugs = array( 'visa-assistance', 'passport-services', 'travel-
     <div class="container">
         <?php mytheme_breadcrumbs(); ?>
         <article class="page-content">
-            <h1><?php the_title(); ?></h1>
+            <h1 class="tw-h1"><?php the_title(); ?></h1>
             <!-- <div class="page-meta">
                 <span class="date"><?php echo get_the_date(); ?></span>
                 <span class="author">by <?php the_author(); ?></span>

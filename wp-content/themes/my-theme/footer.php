@@ -64,7 +64,7 @@
             ?>
             <div class="tw-aff-item">
                 <span class="tw-aff-label"><?php echo esc_html($aff_desc[$name]); ?> — <?php echo esc_html($name); ?></span>
-                <a href="<?php echo esc_url($url); ?>" target="_blank" rel="noopener sponsored" class="tw-aff-btn">Book</a>
+                <a href="<?php echo esc_url($url); ?>" target="_blank" rel="noopener sponsored" class="btn-secondary btn-sm">Book</a>
             </div>
             <?php
                 endif;

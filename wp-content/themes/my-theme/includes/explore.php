@@ -915,7 +915,7 @@ function tw_womens_trips_showcase( $limit = 6 ) {
 
             <div class="tw-womens-header" data-reveal="up">
                 <div class="tw-womens-kicker"><i class="fi-rr-sparkles" aria-hidden="true"></i> Only for the brave ones</div>
-                <h2 class="tw-womens-title">Women's <span>Group Trips</span></h2>
+                <h2 class="tw-h2 tw-h2--lg tw-womens-title">Women's <span>Group Trips</span></h2>
                 <p class="tw-womens-sub">Safe. Curated. Empowering. Join a crew of like-minded women and explore the world your way.</p>
             </div>
 
@@ -959,7 +959,7 @@ function tw_womens_trips_showcase( $limit = 6 ) {
             </div>
 
             <div class="tw-womens-cta">
-                <a href="<?php echo esc_url( $page_url ); ?>" class="tw-womens-cta-btn">Explore All Women's Trips <i class="fa-solid fa-arrow-right"></i></a>
+                <a href="<?php echo esc_url( $page_url ); ?>" class="btn-primary">Explore All Women's Trips <i class="fa-solid fa-arrow-right"></i></a>
             </div>
         </div>
     </section>

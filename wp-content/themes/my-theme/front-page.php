@@ -34,7 +34,7 @@ if ( $tw_hero_video ) {
                 India's Most Trusted Travel Community <span class="tw-hero-pill-dot"></span> 300K+ on Instagram
             </div>
 
-            <h1 class="tw-hero-title">
+            <h1 class="tw-h1">
                 Trips designed around <span class="tw-hero-title-accent">you</span>.<br>
                 <span class="tw-hero-title-quiet">Not around a package.</span>
             </h1>
@@ -45,12 +45,12 @@ if ( $tw_hero_video ) {
                     <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
                     <input type="search" name="s" class="tw-hero-search-input" placeholder="Where do you want to go? Try Bali, Ladakh, Honeymoon&hellip;" autocomplete="off" value="<?php echo esc_attr( get_search_query() ); ?>">
                 </div>
-                <button type="submit" class="tw-hero-search-btn">Search</button>
+                <button type="submit" class="btn-primary btn-sm">Search</button>
             </form>
 
             <div class="tw-hero-actions">
-                <a href="<?php echo esc_url(mytheme_get_plan_trip_url()); ?>" class="tw-cta-btn tw-cta-btn--primary">Plan a Trip &mdash; Free</a>
-                <a href="#featured-packages" class="tw-cta-btn tw-cta-btn--outline">Explore Packages</a>
+                <a href="<?php echo esc_url(mytheme_get_plan_trip_url()); ?>" class="btn-primary">Plan a Trip &mdash; Free</a>
+                <a href="#featured-packages" class="btn-secondary">Explore Packages</a>
             </div>
         </div>
 
@@ -120,7 +120,7 @@ if ( $tw_hero_video ) {
         <div class="container">
             <div class="section-heading" data-reveal="up">
                 <span>Curated trips</span>
-                <h2>Popular Travel Packages</h2>
+                <h2 class="tw-h2">Popular Travel Packages</h2>
             </div>
             <?php mytheme_travel_filter_box('travel_package', 'package_filter', home_url('/'), '#featured-packages'); ?>
             <div class="posts-grid tw-ajax-grid" id="tw-cards-packages">
@@ -168,7 +168,7 @@ if ( $tw_hero_video ) {
         <div class="container">
             <div class="section-heading" data-reveal="up">
                 <span>CURATED BY OUR EXPERTS</span>
-                <h2>UPCOMING TRIPS</h2>
+                <h2 class="tw-h2">UPCOMING TRIPS</h2>
             </div>
             <?php mytheme_travel_filter_box('itinerary', 'itinerary_filter', home_url('/'), '#upcoming-trips'); ?>
             <div class="posts-grid tw-ajax-grid" id="tw-cards-itineraries">
@@ -204,7 +204,7 @@ if ( $tw_hero_video ) {
         <div class="container">
             <div class="section-heading visa-services-heading" data-reveal="up">
                 <span class="section-subtitle">Travel made simple</span>
-                <h2 class="section-title">Trip <span class="highlight">Services</span></h2>
+                <h2 class="tw-h2 tw-h2--lg section-title">Trip <span class="highlight">Services</span></h2>
             </div>
             <div class="visa-services-grid">
                 <a class="visa-service-card" href="<?php echo esc_url(mytheme_get_page_url_by_path('visa-assistance')); ?>">
@@ -241,7 +241,7 @@ if ( $tw_hero_video ) {
             <div class="tw-blog-header" data-reveal="up">
                 <div>
                     <div class="tw-blog-kicker"><i class="fi-rr-plane" aria-hidden="true"></i> From the Blog</div>
-                    <h2 class="tw-blog-title">Latest Travel Stories</h2>
+                    <h2 class="tw-h2 tw-blog-title">Latest Travel Stories</h2>
                 </div>
                 <a href="<?php echo esc_url(home_url('/blog-affiliates/')); ?>" class="tw-blog-viewall">All Stories <span aria-hidden="true">→</span></a>
             </div>
@@ -299,9 +299,9 @@ if ( $tw_hero_video ) {
             <div class="tw-community-inner">
                 <div class="tw-community-copy" data-reveal="left">
                     <span class="tw-community-kicker">Join Our Community</span>
-                    <h2 class="tw-community-title"><span class="tw-community-title-num">1</span>TRIPWISER <span>TRIBE</span></h2>
+                    <h2 class="tw-h2 tw-h2--lg tw-community-title"><span class="tw-community-title-num">1</span>TRIPWISER <span>TRIBE</span></h2>
                     <p>Connect, share, and grow with 300K+ travel enthusiasts. Ask questions, share tips, and get inspired by real travelers.</p>
-                    <a href="<?php echo esc_url( post_type_exists('forum_topic') ? get_post_type_archive_link('forum_topic') : mytheme_get_plan_trip_url() ); ?>" class="tw-community-btn">Enter the Tribe →</a>
+                    <a href="<?php echo esc_url( post_type_exists('forum_topic') ? get_post_type_archive_link('forum_topic') : mytheme_get_plan_trip_url() ); ?>" class="btn-primary">Enter the Tribe →</a>
                 </div>
                 <div class="tw-community-stats">
                     <div class="tw-cstat"><strong>12.5K</strong><span>Active Members</span></div>

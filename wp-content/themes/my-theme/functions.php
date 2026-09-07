@@ -916,7 +916,7 @@ function mytheme_render_package_compare_table($package_ids = array()) {
                         <th><?php esc_html_e('Action', 'mytheme'); ?></th>
                         <?php foreach ($package_ids as $package_id) : ?>
                             <td>
-                                <a class="book-now-btn" href="<?php echo esc_url(get_permalink($package_id)); ?>">
+                                <a class="btn-primary btn-sm" href="<?php echo esc_url(get_permalink($package_id)); ?>">
                                     <?php esc_html_e('View Package', 'mytheme'); ?>
                                 </a>
                             </td>
@@ -1332,7 +1332,7 @@ function mytheme_package_card($post_id = null) {
                 <div>
                     <?php if ($data['amount']) : ?><strong><?php echo esc_html($data['amount']); ?></strong><?php endif; ?>
                 </div>
-                <a href="<?php echo esc_url($book_url); ?>" class="book-now-btn">Book Now</a>
+                <a href="<?php echo esc_url($book_url); ?>" class="btn-primary btn-sm">Book Now</a>
             </div>
         </div>
     </article>
@@ -1858,8 +1858,8 @@ function tw_homepage_itinerary_card() {
             <p class="tw-itin-route"><?php echo esc_html( wp_strip_all_tags( $route_summary ) ); ?></p>
             <?php endif; ?>
             <div class="itin-actions tw-itin-actions">
-                <a href="<?php the_permalink(); ?>" class="read-more tw-itin-open">Open Itinerary</a>
-                <a href="<?php echo esc_url( get_permalink() . '#itinerary-enquiry' ); ?>" class="book-now-gold tw-itin-book">Enquire</a>
+                <a href="<?php the_permalink(); ?>" class="btn-secondary btn-sm">Open Itinerary</a>
+                <a href="<?php echo esc_url( get_permalink() . '#itinerary-enquiry' ); ?>" class="btn-primary btn-sm">Enquire</a>
             </div>
         </div>
     </article>
@@ -2655,7 +2655,7 @@ function tw_homepage_testimonials_section() {
         <div class="container tw-testimonials-inner">
             <div class="tw-testimonials-head" data-reveal="up">
                 <span class="tw-testimonials-kicker"><i class="fi-rr-comment" aria-hidden="true"></i> Real travellers. Real stories.</span>
-                <h2 class="tw-testimonials-title">What Our <span>Travellers Say</span></h2>
+                <h2 class="tw-h2 tw-testimonials-title">What Our <span>Travellers Say</span></h2>
             </div>
             <div class="tw-testimonials-grid">
                 <?php foreach ( $testimonials as $t ) :

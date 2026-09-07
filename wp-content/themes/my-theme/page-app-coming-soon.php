@@ -73,7 +73,7 @@ get_header();
 <section class="app-features">
     <div class="app-features-inner">
         <span class="app-kicker">What's Inside</span>
-        <h2 class="app-section-title">Everything your trip needs</h2>
+        <h2 class="tw-h2 tw-h2--lg app-section-title">Everything your trip needs</h2>
         <div class="app-feature-grid">
             <div class="app-feature-card" data-reveal>
                 <div class="app-feature-icon"><i class="fa-solid fa-robot" aria-hidden="true"></i></div>

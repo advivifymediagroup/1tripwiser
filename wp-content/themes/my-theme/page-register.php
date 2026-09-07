@@ -31,7 +31,7 @@ get_header();
                 <?php wp_nonce_field( 'tw_register_nonce', 'tw_register_nonce' ); ?>
 
                 <!-- Name row -->
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+                <div class="form-row-2col">
                     <div class="tw-float-group">
                         <input type="text" id="tw_first_name" name="tw_first_name" autocomplete="given-name" required>
                         <label for="tw_first_name">First Name</label>
@@ -48,7 +48,7 @@ get_header();
                            autocomplete="username" required pattern="[a-zA-Z0-9_\-]{3,}">
                     <label for="tw_reg_username">Username</label>
                 </div>
-                <p style="font-size:0.74rem;color:#b0bac9;margin:-12px 0 16px;padding-left:4px">
+                <p class="field-hint">
                     3+ characters, letters, numbers, underscores only.
                 </p>
 
@@ -73,7 +73,7 @@ get_header();
                 <span class="pw-strength-label" id="pw-label"></span>
 
                 <!-- Confirm password -->
-                <div class="tw-float-group" style="margin-top:16px">
+                <div class="tw-float-group field-mt">
                     <input type="password" id="tw_reg_confirm" name="tw_reg_confirm"
                            autocomplete="new-password" required>
                     <label for="tw_reg_confirm">Confirm Password</label>
@@ -89,13 +89,13 @@ get_header();
                     </label>
                 </div>
 
-                <button type="submit" class="auth-submit-btn" id="tw-reg-btn">
+                <button type="submit" class="btn-primary btn-lg btn-block" id="tw-reg-btn">
                     <span id="tw-reg-btn-text">Create Account →</span>
                 </button>
             </form>
 
             <div class="auth-divider">Already a member?</div>
-            <div class="auth-footer-text" style="margin-top:0">
+            <div class="auth-footer-text no-top-margin">
                 <a href="<?php echo esc_url( home_url('/login/') ); ?>">← Log in to your account</a>
             </div>
         </div>

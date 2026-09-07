@@ -92,7 +92,7 @@ function tw_ev_card( $row ) {
             <p class="ev-card-excerpt"><?php echo esc_html( $row['excerpt'] ); ?></p>
             <div class="ev-card-foot">
                 <?php echo tw_ev_price_html( $row['price'] ); // phpcs:ignore ?>
-                <a class="ev-card-btn" href="<?php echo esc_url( $row['book'] ); ?>">Book Now</a>
+                <a class="btn-primary btn-sm" href="<?php echo esc_url( $row['book'] ); ?>">Book Now</a>
             </div>
         </div>
     </article>
@@ -108,7 +108,7 @@ endif;
         <div class="explore-hero-overlay" aria-hidden="true"></div>
         <div class="container explore-hero-inner">
             <span class="explore-hero-kicker">Plan around the moment</span>
-            <h1 class="explore-hero-title">Events &amp; <span style="color:var(--tw-red)">Festivals</span></h1>
+            <h1 class="tw-h1">Events &amp; <span class="accent-red">Festivals</span></h1>
             <p class="explore-hero-sub">Beyond ordinary — live the story worth telling. Bookable trips built around the world's best events &amp; festivals.</p>
         </div>
     </section>
@@ -118,7 +118,7 @@ endif;
         <!-- ALL EVENT PACKAGES -->
         <section class="ev-section">
             <div class="ev-section-head">
-                <h2>Explore All Event Packages</h2>
+                <h2 class="tw-h2">Explore All Event Packages</h2>
                 <p>Hand-crafted, ready-to-book trips timed perfectly around each celebration.</p>
             </div>
             <?php if ( $tw_rows ) : ?>
@@ -130,7 +130,7 @@ endif;
                     <div class="tribe-empty-icon"><i class="fi-rr-ticket-alt" aria-hidden="true"></i></div>
                     <h3>No event packages yet</h3>
                     <p>Add one under <strong>Events &amp; Festivals → Add Event</strong> in the dashboard — it works just like a Travel Package.</p>
-                    <a class="tribe-btn-primary" href="<?php echo esc_url( mytheme_get_plan_trip_url() ); ?>"><i class="fi-rr-plane" aria-hidden="true"></i> Plan a Trip — Free</a>
+                    <a class="btn-primary" href="<?php echo esc_url( mytheme_get_plan_trip_url() ); ?>"><i class="fi-rr-plane" aria-hidden="true"></i> Plan a Trip — Free</a>
                 </div>
             <?php endif; ?>
         </section>
@@ -139,7 +139,7 @@ endif;
         <?php if ( $tw_buckets ) : ?>
         <section class="ev-section">
             <div class="ev-section-head">
-                <h2>Upcoming by Month</h2>
+                <h2 class="tw-h2">Upcoming by Month</h2>
                 <p>Dated departures, easy to plan around.</p>
             </div>
             <?php foreach ( $tw_buckets as $bucket ) : ?>
@@ -161,7 +161,7 @@ endif;
                                 </div>
                                 <div class="ev-row-foot">
                                     <?php echo tw_ev_price_html( $row['price'] ); // phpcs:ignore ?>
-                                    <a class="ev-card-btn" href="<?php echo esc_url( $row['book'] ); ?>">Book Now</a>
+                                    <a class="btn-primary btn-sm" href="<?php echo esc_url( $row['book'] ); ?>">Book Now</a>
                                 </div>
                             </div>
                         <?php endforeach; ?>

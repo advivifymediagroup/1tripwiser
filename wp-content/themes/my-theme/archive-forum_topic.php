@@ -115,7 +115,7 @@ $tw_pinned_ids = wp_list_pluck( $tw_pinned, 'ID' );
         <div class="tribe-hero-overlay" aria-hidden="true"></div>
         <div class="container tribe-hero-inner">
             <span class="tribe-hero-kicker">Join the conversation</span>
-            <h1 class="tribe-hero-title">1TripWiser <span>Tribe</span></h1>
+            <h1 class="tw-h1 tribe-hero-title">1TripWiser <span>Tribe</span></h1>
             <p class="tribe-hero-sub">
                 <?php
                 if ( $tw_is_cat && $tw_cat_term ) {
@@ -135,7 +135,7 @@ $tw_pinned_ids = wp_list_pluck( $tw_pinned, 'ID' );
             </div>
 
             <div class="tribe-hero-actions">
-                <button type="button" class="tribe-start-btn" id="tribe-open-new">
+                <button type="button" class="btn-primary" id="tribe-open-new">
                     <span aria-hidden="true"><i class="fi-rr-edit-alt" aria-hidden="true"></i></span> Start a Discussion
                 </button>
                 <a class="tribe-ig-btn" href="https://www.instagram.com/1tripwiser_tribe/" target="_blank" rel="noopener noreferrer">
@@ -209,7 +209,7 @@ $tw_pinned_ids = wp_list_pluck( $tw_pinned, 'ID' );
                     <div class="tribe-empty-icon"><i class="fi-rr-map" aria-hidden="true"></i></div>
                     <h3>No discussions here yet</h3>
                     <p>Be the first to break the ice — start a topic and get the conversation going.</p>
-                    <button type="button" class="tribe-start-btn" id="tribe-open-new-2"><i class="fi-rr-edit-alt" aria-hidden="true"></i> Start a Discussion</button>
+                    <button type="button" class="btn-primary" id="tribe-open-new-2"><i class="fi-rr-edit-alt" aria-hidden="true"></i> Start a Discussion</button>
                 </div>
             <?php endif; ?>
         </div>
@@ -313,16 +313,16 @@ $tw_pinned_ids = wp_list_pluck( $tw_pinned, 'ID' );
             </div>
             <div class="tribe-form-msg" id="tribe-form-msg" role="status"></div>
             <div class="tribe-form-actions">
-                <button type="button" class="tribe-btn-ghost" data-tribe-close>Cancel</button>
-                <button type="submit" class="tribe-btn-primary" id="tribe-submit">Post Topic</button>
+                <button type="button" class="btn-secondary" data-tribe-close>Cancel</button>
+                <button type="submit" class="btn-primary" id="tribe-submit">Post Topic</button>
             </div>
         </form>
         <?php else : ?>
         <div class="tribe-login-prompt">
             <p>You need to be a Tribe member to start a discussion.</p>
             <div class="tribe-form-actions">
-                <a class="tribe-btn-ghost" href="<?php echo esc_url( home_url( '/register/' ) ); ?>">Sign Up Free</a>
-                <a class="tribe-btn-primary" href="<?php echo esc_url( home_url( '/login/' ) ); ?>">Log In</a>
+                <a class="btn-secondary" href="<?php echo esc_url( home_url( '/register/' ) ); ?>">Sign Up Free</a>
+                <a class="btn-primary" href="<?php echo esc_url( home_url( '/login/' ) ); ?>">Log In</a>
             </div>
         </div>
         <?php endif; ?>

@@ -14,7 +14,7 @@ $pat_subtitle  = get_option('tw_pat_subtitle', "Tell us your dream destination, 
 <div class="plan-hero">
     <?php mytheme_breadcrumbs(); ?>
   <div class="plan-hero-kicker"><?php echo esc_html($pat_kicker); ?></div>
-  <h1 class="plan-hero-title"><?php
+  <h1 class="tw-h1 plan-hero-title"><?php
     // Split title at last space to make last word gold-accented
     $words = explode(' ', $pat_title);
     $last  = array_pop($words);
@@ -32,11 +32,11 @@ $pat_subtitle  = get_option('tw_pat_subtitle', "Tell us your dream destination, 
       <div class="ps-sub">We'll send your personalised itinerary here first</div>
 
       <div class="fr">
-        <div class="fg" style="margin-bottom: 0;">
+        <div class="fg no-mb">
           <label class="fl2">Full Name</label>
           <input class="fi" type="text" id="p-name" placeholder="Your name">
         </div>
-        <div class="fg" style="margin-bottom: 0;">
+        <div class="fg no-mb">
           <label class="fl2">WhatsApp Number</label>
           <input class="fi" type="tel" id="p-phone" placeholder="+91 98765 43210">
         </div>
@@ -84,7 +84,7 @@ $pat_subtitle  = get_option('tw_pat_subtitle', "Tell us your dream destination, 
         </div>
       </div>
 
-      <div class="fg" style="margin-top: 16px;">
+      <div class="fg mt-16">
         <label class="fl2">Or type your destination</label>
         <input class="fi" type="text" id="custom-dest" placeholder="e.g. Thailand, Rajasthan, Japan...">
       </div>
@@ -95,11 +95,11 @@ $pat_subtitle  = get_option('tw_pat_subtitle', "Tell us your dream destination, 
       <div class="ps-sub">Pick your dates and preferred time of travel</div>
 
       <div class="fr">
-        <div class="fg" style="margin-bottom: 0;">
+        <div class="fg no-mb">
           <label class="fl2">Departure Date</label>
           <input class="fi" type="date" id="p-date" value="<?php echo esc_attr( date_i18n( 'Y-m-d' ) ); ?>">
         </div>
-        <div class="fg" style="margin-bottom: 0;">
+        <div class="fg no-mb">
           <label class="fl2">Trip Duration</label>
           <select class="fi" id="p-dur">
             <option>3–4 nights</option>
@@ -130,7 +130,7 @@ $pat_subtitle  = get_option('tw_pat_subtitle', "Tell us your dream destination, 
         </div>
       </div>
 
-      <span class="sec-label" style="margin-top: 20px;">Trip Type</span>
+      <span class="sec-label mt-20">Trip Type</span>
       <div class="tile-g3" id="type-grid">
         <div class="ptile sel" data-v="Leisure">
           <div class="ptile-em"><i class="fi-rr-sunrise" aria-hidden="true"></i></div>
@@ -146,9 +146,9 @@ $pat_subtitle  = get_option('tw_pat_subtitle', "Tell us your dream destination, 
         </div>
       </div>
 
-      <span class="sec-label" style="margin-top: 20px;">Who's Travelling?</span>
+      <span class="sec-label mt-20">Who's Travelling?</span>
       <div class="fr">
-        <div class="fg" style="margin-bottom: 0;">
+        <div class="fg no-mb">
           <label class="fl2">Adults</label>
           <select class="fi" id="p-adults">
             <option>1 (Solo)</option>
@@ -159,7 +159,7 @@ $pat_subtitle  = get_option('tw_pat_subtitle', "Tell us your dream destination, 
             <option>9+</option>
           </select>
         </div>
-        <div class="fg" style="margin-bottom: 0;">
+        <div class="fg no-mb">
           <label class="fl2">Children</label>
           <select class="fi" id="p-child">
             <option selected>None</option>
@@ -194,13 +194,13 @@ $pat_subtitle  = get_option('tw_pat_subtitle', "Tell us your dream destination, 
         </div>
       </div>
 
-      <div class="fg" style="margin-top: 16px;">
+      <div class="fg mt-16">
         <label class="fl2">Departing From</label>
         <input class="fi" type="text" id="p-from" placeholder="e.g. Delhi, Mumbai, Bangalore...">
       </div>
       <div class="fg">
-        <label class="fl2">Special Requests <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--muted);">(optional)</span></label>
-        <textarea class="fi" id="p-notes" rows="2" placeholder="Vegetarian meals, anniversary surprise, wheelchair access..." style="resize: none;"></textarea>
+        <label class="fl2">Special Requests <span class="field-note-inline">(optional)</span></label>
+        <textarea class="fi no-resize" id="p-notes" rows="2" placeholder="Vegetarian meals, anniversary surprise, wheelchair access..."></textarea>
       </div>
 
       <div class="plan-nav">

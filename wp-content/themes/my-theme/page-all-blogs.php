@@ -33,7 +33,7 @@ $total_posts = (int) $blog_q->found_posts;
                 <span>All Stories</span>
             </nav>
             <span class="explore-hero-kicker">From the Blog</span>
-            <h1 class="explore-hero-title">All <span style="color:var(--tw-red)">Stories</span></h1>
+            <h1 class="tw-h1">All <span class="accent-red">Stories</span></h1>
             <p class="explore-hero-sub">Every travel guide, honest review and trip story from the 1TRIPWISER team — in one place.</p>
             <?php if ( $total_posts ) : ?>
             <p class="explore-hero-count"><?php echo esc_html( $total_posts ); ?> <?php echo ( 1 === $total_posts ) ? 'story' : 'stories'; ?></p>
@@ -93,9 +93,9 @@ $total_posts = (int) $blog_q->found_posts;
             <h3>No blog posts yet</h3>
             <p>Our writers are crafting fresh travel stories. Check back soon.</p>
             <?php if ( is_user_logged_in() ) : ?>
-                <a class="tribe-btn-primary" href="<?php echo esc_url( home_url('/submit-blog/') ); ?>"><i class="fi-rr-edit-alt" aria-hidden="true"></i> Write a Post</a>
+                <a class="btn-primary" href="<?php echo esc_url( home_url('/submit-blog/') ); ?>"><i class="fi-rr-edit-alt" aria-hidden="true"></i> Write a Post</a>
             <?php else : ?>
-                <a class="tribe-btn-primary" href="<?php echo esc_url( home_url('/blog-affiliates/') ); ?>">← Back to Blog</a>
+                <a class="btn-primary" href="<?php echo esc_url( home_url('/blog-affiliates/') ); ?>">← Back to Blog</a>
             <?php endif; ?>
         </div>
         <?php endif; ?>

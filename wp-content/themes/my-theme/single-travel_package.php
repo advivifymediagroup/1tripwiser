@@ -101,7 +101,7 @@ while ( have_posts() ) :
                 <a href="<?php echo esc_url( $archive ); ?>">Packages</a><span>›</span>
                 <span><?php the_title(); ?></span>
             </nav>
-            <h1 class="explore-hero-title"><?php the_title(); ?></h1>
+            <h1 class="tw-h1"><?php the_title(); ?></h1>
             <?php if ( $location ) : ?>
             <p class="explore-hero-sub"><?php echo esc_html( $location ); ?><?php if ( $region ) { echo ' · ' . esc_html( $region->name ); } ?></p>
             <?php endif; ?>
@@ -263,7 +263,7 @@ while ( have_posts() ) :
                         <?php endforeach; ?>
                     </dl>
                     <?php endif; ?>
-                    <a class="dest-rail-btn" href="#package-enquiry"><?php esc_html_e( 'Book Now', 'mytheme' ); ?></a>
+                    <a class="btn-primary btn-block" href="#package-enquiry"><?php esc_html_e( 'Book Now', 'mytheme' ); ?></a>
                 </div>
             </aside>
 

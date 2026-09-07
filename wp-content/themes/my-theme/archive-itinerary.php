@@ -10,7 +10,7 @@
                 <a href="<?php echo esc_url( home_url('/') ); ?>">Home</a><span>›</span><span>Itineraries</span>
             </nav>
             <span class="explore-hero-kicker">Ready-made Routes</span>
-            <h1 class="explore-hero-title">Itin<span style="color:var(--tw-red)">eraries</span></h1>
+            <h1 class="tw-h1">Itin<span class="accent-red">eraries</span></h1>
             <p class="explore-hero-sub">Browse day-wise routes, practical travel notes and inspiration for your next journey.</p>
         </div>
     </section>
@@ -50,8 +50,8 @@
                                 ?>
                             </div>
                             <div class="itin-actions">
-                                <a href="<?php the_permalink(); ?>" class="read-more">Open Itinerary</a>
-                                <a href="<?php echo esc_url( get_permalink() . '#itinerary-enquiry' ); ?>" class="book-now-gold">Enquire</a>
+                                <a href="<?php the_permalink(); ?>" class="btn-primary btn-sm">Open Itinerary</a>
+                                <a href="<?php echo esc_url( get_permalink() . '#itinerary-enquiry' ); ?>" class="btn-primary btn-sm">Enquire</a>
                             </div>
                         </div>
                     </article>

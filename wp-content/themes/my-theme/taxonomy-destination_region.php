@@ -65,7 +65,7 @@ $total = array_sum( $counts );
                 <span><?php echo esc_html( $term->name ); ?></span>
             </nav>
 
-            <h1 class="dest-hero-title">
+            <h1 class="tw-h1 tw-h1--lg dest-hero-title">
                 <?php if ( $icon ) : ?><span class="dest-hero-icon" aria-hidden="true"><?php echo wp_kses_post( $icon ); ?></span><?php endif; ?>
                 <?php echo esc_html( $term->name ); ?>
             </h1>
@@ -200,7 +200,7 @@ $total = array_sum( $counts );
                             <strong><?php echo esc_html( function_exists('mytheme_format_rupee_amount') ? mytheme_format_rupee_amount($price) : '₹'.$price ); ?></strong>
                         </div>
                         <?php endif; ?>
-                        <a class="dest-card-btn" href="<?php echo esc_url( $book_url ); ?>">Book Now</a>
+                        <a class="btn-primary btn-sm" href="<?php echo esc_url( $book_url ); ?>">Book Now</a>
                     </div>
                 </div>
             </article>
@@ -215,7 +215,7 @@ $total = array_sum( $counts );
             <div class="tribe-empty-icon"><?php echo wp_kses_post( $icon ); ?></div>
             <h3>No trips for <?php echo esc_html( $term->name ); ?> yet</h3>
             <p>We're curating amazing trips here. Tell us where you want to go and we'll build a custom itinerary.</p>
-            <a class="tribe-btn-primary" href="<?php echo esc_url( mytheme_get_plan_trip_url() ); ?>">Plan a Trip — Free</a>
+            <a class="btn-primary" href="<?php echo esc_url( mytheme_get_plan_trip_url() ); ?>">Plan a Trip — Free</a>
         </div>
         <?php endif; ?>
 

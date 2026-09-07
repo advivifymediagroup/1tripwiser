@@ -31,7 +31,7 @@ if ( isset( $_GET['login'] ) && $_GET['login'] === 'failed' ) {
 
         <!-- Error from failed WP login redirect -->
         <?php if ( $error ) : ?>
-        <div class="auth-msg error" style="display:block"><?php echo esc_html( $error ); ?></div>
+        <div class="auth-msg error is-visible"><?php echo esc_html( $error ); ?></div>
         <?php endif; ?>
 
         <!-- AJAX message -->
@@ -57,22 +57,22 @@ if ( isset( $_GET['login'] ) && $_GET['login'] === 'failed' ) {
                 </div>
 
                 <!-- Forgot + Remember row -->
-                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;margin-top:-8px">
-                    <div class="auth-check-row" style="margin:0">
+                <div class="auth-inline-row">
+                    <div class="auth-check-row auth-check-row--tight">
                         <input type="checkbox" id="tw_remember" name="tw_remember" value="1">
-                        <label for="tw_remember" style="color:#6b7a8f;font-size:0.83rem;cursor:pointer">Remember me</label>
+                        <label for="tw_remember" class="auth-link-muted">Remember me</label>
                     </div>
-                    <a href="<?php echo esc_url( wp_lostpassword_url() ); ?>" style="font-size:0.8rem;font-weight:700;color:#6b7a8f;text-decoration:none">Forgot password?</a>
+                    <a href="<?php echo esc_url( wp_lostpassword_url() ); ?>" class="auth-link-muted">Forgot password?</a>
                 </div>
 
-                <button type="submit" class="auth-submit-btn" id="tw-login-btn">
+                <button type="submit" class="btn-primary btn-lg btn-block" id="tw-login-btn">
                     <span id="tw-login-btn-text">Log In →</span>
                 </button>
             </form>
 
             <div class="auth-divider">or</div>
 
-            <div class="auth-footer-text" style="margin-top:0">
+            <div class="auth-footer-text no-top-margin">
                 Don't have an account? <a href="<?php echo esc_url( home_url('/register/') ); ?>">Sign up free →</a>
             </div>
         </div>

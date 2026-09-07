@@ -49,7 +49,7 @@ while ( have_posts() ) :
                     <span class="tribe-flag tribe-flag-solved <?php echo $tw_solved ? '' : 'is-off'; ?>" id="tribe-solved-badge"><?php echo $tw_solved ? '<i class="fi-rr-check-circle" aria-hidden="true"></i> Solved' : '<i class="fi-rr-checkbox" aria-hidden="true"></i> Unsolved'; ?></span>
                 </div>
 
-                <h1 class="tribe-post-title"><?php the_title(); ?></h1>
+                <h1 class="tw-h1 tribe-post-title"><?php the_title(); ?></h1>
 
                 <div class="tribe-post-byline">
                     <a class="tribe-byline-user" href="<?php echo esc_url( tw_forum_member_url( get_the_author_meta( 'ID' ) ) ); ?>">
@@ -81,7 +81,7 @@ while ( have_posts() ) :
                 <span class="tribe-action-stat"><i class="fi-rr-eye" aria-hidden="true"></i> <?php echo esc_html( $tw_views ); ?> views</span>
 
                 <?php if ( $tw_can_solve ) : ?>
-                    <button type="button" class="tribe-solve-btn <?php echo $tw_solved ? 'is-solved' : ''; ?>" data-id="<?php echo esc_attr( $tw_id ); ?>">
+                    <button type="button" class="btn-secondary btn-sm tribe-solve-btn <?php echo $tw_solved ? 'is-solved' : ''; ?>" data-id="<?php echo esc_attr( $tw_id ); ?>">
                         <?php echo $tw_solved ? '<i class="fi-rr-undo" aria-hidden="true"></i> Mark unsolved' : '<i class="fi-rr-check-circle" aria-hidden="true"></i> Mark solved'; ?>
                     </button>
                 <?php endif; ?>
@@ -90,7 +90,7 @@ while ( have_posts() ) :
 
         <!-- ═══════════ REPLIES ═══════════ -->
         <section class="tribe-replies" id="replies">
-            <h2 class="tribe-replies-title"><?php echo esc_html( $tw_repl ); ?> <?php echo ( 1 === $tw_repl ) ? 'Reply' : 'Replies'; ?></h2>
+            <h2 class="tw-h2 tribe-replies-title"><?php echo esc_html( $tw_repl ); ?> <?php echo ( 1 === $tw_repl ) ? 'Reply' : 'Replies'; ?></h2>
 
             <?php if ( have_comments() ) : ?>
                 <ol class="tribe-reply-list">
@@ -118,7 +118,7 @@ while ( have_posts() ) :
                         'class_form'          => 'tribe-reply-form',
                         'comment_field'       => '<div class="tribe-field"><textarea name="comment" id="comment" rows="5" required placeholder="Share your thoughts, tips or answer…"></textarea></div>',
                         'label_submit'        => 'Post Reply',
-                        'class_submit'        => 'tribe-btn-primary',
+                        'class_submit'        => 'btn-primary',
                         'comment_notes_before'=> '',
                         'comment_notes_after' => '',
                         'logged_in_as'        => '',
@@ -128,8 +128,8 @@ while ( have_posts() ) :
                     <div class="tribe-login-prompt tribe-login-inline">
                         <p>Join the Tribe to reply to this discussion.</p>
                         <div class="tribe-form-actions">
-                            <a class="tribe-btn-ghost" href="<?php echo esc_url( home_url( '/register/' ) ); ?>">Sign Up Free</a>
-                            <a class="tribe-btn-primary" href="<?php echo esc_url( home_url( '/login/' ) ); ?>">Log In</a>
+                            <a class="btn-secondary" href="<?php echo esc_url( home_url( '/register/' ) ); ?>">Sign Up Free</a>
+                            <a class="btn-primary" href="<?php echo esc_url( home_url( '/login/' ) ); ?>">Log In</a>
                         </div>
                     </div>
                 <?php endif; ?>

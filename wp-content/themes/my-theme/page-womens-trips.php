@@ -35,8 +35,8 @@ $has_trips = $trips_query->have_posts();
                 <a href="<?php echo esc_url( home_url('/') ); ?>">Home</a><span>›</span>
                 <span>Women's Group Trips</span>
             </nav>
-            <span class="explore-hero-kicker" style="background:rgba(216,53,80,0.1);border-color:rgba(216,53,80,0.3);color:var(--tw-red);"><i class="fi-rr-sparkles" aria-hidden="true"></i> Travel Together · Grow Together</span>
-            <h1 class="explore-hero-title">Women's <span style="color:var(--tw-red)">Group Trips</span></h1>
+            <span class="tw-womens-kicker"><i class="fi-rr-sparkles" aria-hidden="true"></i> Travel Together · Grow Together</span>
+            <h1 class="tw-h1">Women's <span class="accent-red">Group Trips</span></h1>
             <p class="explore-hero-sub">Safe, curated and empowering travel experiences designed exclusively for women. Join your tribe, explore the world.</p>
         </div>
     </section>
@@ -69,7 +69,7 @@ $has_trips = $trips_query->have_posts();
 
         <!-- TRIPS GRID -->
         <div class="tw-womens-section-head">
-            <h2>Upcoming Women's Trips</h2>
+            <h2 class="tw-h2">Upcoming Women's Trips</h2>
             <p><?php echo $has_trips ? $trips_query->found_posts . ' curated trips available' : 'Check back soon — new trips added regularly'; ?></p>
         </div>
 
@@ -114,7 +114,7 @@ $has_trips = $trips_query->have_posts();
                             <?php endif; ?>
                             <?php if ( $emi ) : ?><small><?php echo esc_html( $emi ); ?>/mo</small><?php endif; ?>
                         </div>
-                        <a href="<?php echo esc_url( $book ); ?>" class="tw-womens-book-btn">Book Now</a>
+                        <a href="<?php echo esc_url( $book ); ?>" class="btn-primary btn-sm">Book Now</a>
                     </div>
                 </div>
             </article>
@@ -126,7 +126,7 @@ $has_trips = $trips_query->have_posts();
             <div class="tribe-empty-icon"><i class="fi-rr-flower" aria-hidden="true"></i></div>
             <h3>Women's trips coming soon</h3>
             <p>We're curating the most empowering travel experiences. In the meantime, plan a custom women's trip with us!</p>
-            <a class="tribe-btn-primary" href="<?php echo esc_url( mytheme_get_plan_trip_url() ); ?>"><i class="fi-rr-plane" aria-hidden="true"></i> Plan a Custom Trip — Free</a>
+            <a class="btn-primary" href="<?php echo esc_url( mytheme_get_plan_trip_url() ); ?>"><i class="fi-rr-plane" aria-hidden="true"></i> Plan a Custom Trip — Free</a>
         </div>
         <?php endif; ?>
 
@@ -143,7 +143,7 @@ $has_trips = $trips_query->have_posts();
         if ( ! empty( $testimonials ) ) : ?>
         <div class="tw-womens-testimonials">
             <div class="tw-womens-testi-head">
-                <span class="tw-womens-kicker" style="background:rgba(255,105,135,0.08);border-color:rgba(255,105,135,0.25);color:#e05580;"><i class="fi-rr-comment" aria-hidden="true"></i> What our travellers say</span>
+                <span class="tw-womens-kicker"><i class="fi-rr-comment" aria-hidden="true"></i> What our travellers say</span>
                 <h2 class="tw-womens-testi-title">Stories from <span>Our Tribe</span></h2>
             </div>
             <div class="tw-womens-testi-grid">

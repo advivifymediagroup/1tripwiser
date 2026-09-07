@@ -72,7 +72,7 @@ $g_insure_aff  = tw_aff_by_cat($affiliates, 'Insurance');
     <!-- HERO -->
     <section class="ba-hero">
         <div class="ba-hero-kicker"><?php echo esc_html($hero_kicker); ?></div>
-        <h1 class="ba-hero-title"><?php
+        <h1 class="tw-h1 ba-hero-title"><?php
             $parts = explode('+', $hero_title, 2);
             if (count($parts) === 2) {
                 echo esc_html(trim($parts[0])) . ' + <span>' . esc_html(trim($parts[1])) . '</span>';
@@ -202,12 +202,12 @@ $g_insure_aff  = tw_aff_by_cat($affiliates, 'Insurance');
              data-featured-for="<?php echo esc_attr( $cat_slug ); ?>"
              data-cats="<?php echo esc_attr( $f_cat_slugs ); ?>"
              data-post-id="<?php echo (int) $featured_post->ID; ?>"
-             <?php if ( ! $f_visible ) : ?>style="display:none;"<?php endif; ?>>
+             <?php if ( ! $f_visible ) : ?>class="hidden"<?php endif; ?>>
             <div class="ba-featured-img">
                 <?php if ( has_post_thumbnail( $featured_post->ID ) ) : ?>
                     <a href="<?php echo esc_url( get_permalink( $featured_post->ID ) ); ?>"><?php echo get_the_post_thumbnail( $featured_post->ID, 'large' ); ?></a>
                 <?php else : ?>
-                    <a href="<?php echo esc_url( get_permalink( $featured_post->ID ) ); ?>" style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--ba-muted);font-size:3rem;"><i class="fi-rr-plane" aria-hidden="true"></i></a>
+                    <a href="<?php echo esc_url( get_permalink( $featured_post->ID ) ); ?>" class="ba-featured-img-placeholder"><i class="fi-rr-plane" aria-hidden="true"></i></a>
                 <?php endif; ?>
                 <span class="ba-featured-badge"><i class="fi-rr-star" aria-hidden="true"></i> Featured</span>
             </div>
@@ -227,7 +227,7 @@ $g_insure_aff  = tw_aff_by_cat($affiliates, 'Insurance');
                     <p class="ba-featured-excerpt"><?php echo esc_html( wp_trim_words( get_the_excerpt( $featured_post->ID ), 28, '…' ) ); ?></p>
                 </div>
                 <div>
-                    <a href="<?php echo esc_url( get_permalink( $featured_post->ID ) ); ?>" class="ba-read-more">Read Full Guide →</a>
+                    <a href="<?php echo esc_url( get_permalink( $featured_post->ID ) ); ?>" class="btn-primary">Read Full Guide →</a>
                 </div>
             </div>
         </div>
@@ -246,13 +246,13 @@ $g_insure_aff  = tw_aff_by_cat($affiliates, 'Insurance');
 
         <!-- BLOG GRID -->
         <div class="ba-section-row">
-            <h2 class="ba-section-head">Latest Guides</h2>
+            <h2 class="tw-h2 ba-section-head">Latest Guides</h2>
             <div class="ba-section-row-actions">
-                <a href="<?php echo esc_url( home_url('/blogs/') ); ?>" class="ba-view-all-btn">
+                <a href="<?php echo esc_url( home_url('/blogs/') ); ?>" class="btn-secondary btn-sm">
                     View All Blogs →
                 </a>
                 <?php if ( is_user_logged_in() ) : ?>
-                <a href="<?php echo esc_url( home_url('/submit-blog/') ); ?>" class="ba-write-btn">
+                <a href="<?php echo esc_url( home_url('/submit-blog/') ); ?>" class="btn-primary btn-sm">
                     <i class="fi-rr-edit-alt" aria-hidden="true"></i> Write a Post
                 </a>
                 <?php endif; ?>
@@ -302,7 +302,7 @@ $g_insure_aff  = tw_aff_by_cat($affiliates, 'Insurance');
         </div>
 
         <!-- Empty state for filter results — hidden until JS toggles it -->
-        <div class="ba-no-filter-results" style="display:none;">
+        <div class="ba-no-filter-results hidden">
             <p><i class="fi-rr-inbox" aria-hidden="true"></i> No posts in this category yet. <button type="button" class="ba-reset-filter">Show all posts</button></p>
         </div>
         <?php else : ?>
@@ -336,16 +336,16 @@ $g_insure_aff  = tw_aff_by_cat($affiliates, 'Insurance');
                         <td><?php echo esc_html($aff['category']); ?></td>
                         <td><span class="ba-commission-rate"><?php echo esc_html($aff['commission'] ?: '—'); ?></span></td>
                         <td><?php echo esc_html($aff['desc'] ?: '—'); ?></td>
-                        <td><a href="<?php echo esc_url($aff['url']); ?>" target="_blank" rel="noopener sponsored" class="ba-table-book-btn"><?php echo esc_html($aff['cta']); ?></a></td>
+                        <td><a href="<?php echo esc_url($aff['url']); ?>" target="_blank" rel="noopener sponsored" class="btn-primary btn-sm"><?php echo esc_html($aff['cta']); ?></a></td>
                     </tr>
                     <?php endforeach; ?>
                 </tbody>
             </table>
         </div>
         <?php else : ?>
-        <div class="ba-no-posts" style="border:1px solid var(--ba-border);border-radius:14px;background:var(--ba-card)">
+        <div class="ba-no-posts">
             <p>No affiliate partners added yet.<br>
-            <a href="<?php echo esc_url(admin_url('post-new.php?post_type=tw_affiliate')); ?>" style="color:var(--blue);font-weight:700">Add your first affiliate link →</a></p>
+            <a href="<?php echo esc_url(admin_url('post-new.php?post_type=tw_affiliate')); ?>">Add your first affiliate link →</a></p>
         </div>
         <?php endif; ?>
 

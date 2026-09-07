@@ -58,7 +58,7 @@ while ( have_posts() ) :
                 <a href="<?php echo esc_url( $archive ); ?>">Destinations</a><span>›</span>
                 <span><?php the_title(); ?></span>
             </nav>
-            <h1 class="explore-hero-title"><?php the_title(); ?></h1>
+            <h1 class="tw-h1"><?php the_title(); ?></h1>
             <?php if ( $destination['country'] ) : ?>
             <p class="explore-hero-sub"><?php echo esc_html( $destination['country'] ); ?></p>
             <?php endif; ?>
@@ -169,8 +169,8 @@ while ( have_posts() ) :
                         <?php endforeach; ?>
                     </dl>
                     <?php endif; ?>
-                    <a class="dest-rail-btn" href="#destination-enquiry"><?php esc_html_e( 'Book Now', 'mytheme' ); ?></a>
-                    <a class="dest-rail-btn dest-rail-btn--ghost" href="<?php echo esc_url( mytheme_get_plan_trip_url() ); ?>"><?php esc_html_e( 'Plan a Trip', 'mytheme' ); ?></a>
+                    <a class="btn-primary btn-block" href="#destination-enquiry"><?php esc_html_e( 'Book Now', 'mytheme' ); ?></a>
+                    <a class="btn-secondary btn-block" href="<?php echo esc_url( mytheme_get_plan_trip_url() ); ?>"><?php esc_html_e( 'Plan a Trip', 'mytheme' ); ?></a>
                 </div>
             </aside>
 
