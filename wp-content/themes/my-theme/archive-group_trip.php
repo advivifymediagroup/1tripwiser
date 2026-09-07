@@ -65,7 +65,7 @@ if ( ! function_exists( 'tw_explore_card' ) ) {
                 <span>We have a dedicated section with safe, curated travel experiences exclusively for women.</span>
             </div>
             <a class="btn-primary btn-sm" href="<?php echo esc_url( tw_womens_trips_page_url() ); ?>">
-                Explore Women's Trips →
+                Explore Women's Trips
             </a>
         </div>
         <?php endif; ?>

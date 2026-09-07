@@ -119,8 +119,8 @@ if ( $tw_hero_video ) {
     <section id="featured-packages" class="featured-posts travel-section">
         <div class="container">
             <div class="section-heading" data-reveal="up">
-                <span>Curated trips</span>
-                <h2 class="tw-h2">Popular Travel Packages</h2>
+                <span>Wiser Packages</span>
+                <h2 class="tw-h2 tw-h2--lg">Popular Travel <span class="tw-h2-accent">Packages</span></h2>
             </div>
             <?php mytheme_travel_filter_box('travel_package', 'package_filter', home_url('/'), '#featured-packages'); ?>
             <div class="posts-grid tw-ajax-grid" id="tw-cards-packages">
@@ -168,7 +168,7 @@ if ( $tw_hero_video ) {
         <div class="container">
             <div class="section-heading" data-reveal="up">
                 <span>CURATED BY OUR EXPERTS</span>
-                <h2 class="tw-h2">UPCOMING TRIPS</h2>
+                <h2 class="tw-h2 tw-h2--lg">Exquisite <span class="tw-h2-accent">Itineraries</span></h2>
             </div>
             <?php mytheme_travel_filter_box('itinerary', 'itinerary_filter', home_url('/'), '#upcoming-trips'); ?>
             <div class="posts-grid tw-ajax-grid" id="tw-cards-itineraries">
@@ -204,7 +204,7 @@ if ( $tw_hero_video ) {
         <div class="container">
             <div class="section-heading visa-services-heading" data-reveal="up">
                 <span class="section-subtitle">Travel made simple</span>
-                <h2 class="tw-h2 tw-h2--lg section-title">Trip <span class="highlight">Services</span></h2>
+                <h2 class="tw-h2 tw-h2--lg section-title">Trip <span class="tw-h2-accent">Services</span></h2>
             </div>
             <div class="visa-services-grid">
                 <a class="visa-service-card" href="<?php echo esc_url(mytheme_get_page_url_by_path('visa-assistance')); ?>">
@@ -240,8 +240,8 @@ if ( $tw_hero_video ) {
         <div class="container">
             <div class="tw-blog-header" data-reveal="up">
                 <div>
-                    <div class="tw-blog-kicker"><i class="fi-rr-plane" aria-hidden="true"></i> From the Blog</div>
-                    <h2 class="tw-h2 tw-blog-title">Latest Travel Stories</h2>
+                    <div class="tw-blog-kicker">From the Blog</div>
+                    <h2 class="tw-h2 tw-h2--lg tw-blog-title">Latest Travel <span class="tw-h2-accent">Stories</span></h2>
                 </div>
                 <a href="<?php echo esc_url(home_url('/blog-affiliates/')); ?>" class="tw-blog-viewall">All Stories <span aria-hidden="true">→</span></a>
             </div>
@@ -299,9 +299,9 @@ if ( $tw_hero_video ) {
             <div class="tw-community-inner">
                 <div class="tw-community-copy" data-reveal="left">
                     <span class="tw-community-kicker">Join Our Community</span>
-                    <h2 class="tw-h2 tw-h2--lg tw-community-title"><span class="tw-community-title-num">1</span>TRIPWISER <span>TRIBE</span></h2>
+                    <h2 class="tw-h2 tw-h2--lg tw-community-title"><span class="tw-community-title-num">1</span>TripWiser <span class="tw-h2-accent">Tribe</span></h2>
                     <p>Connect, share, and grow with 300K+ travel enthusiasts. Ask questions, share tips, and get inspired by real travelers.</p>
-                    <a href="<?php echo esc_url( post_type_exists('forum_topic') ? get_post_type_archive_link('forum_topic') : mytheme_get_plan_trip_url() ); ?>" class="btn-primary">Enter the Tribe →</a>
+                    <a href="<?php echo esc_url( post_type_exists('forum_topic') ? get_post_type_archive_link('forum_topic') : mytheme_get_plan_trip_url() ); ?>" class="btn-primary">Enter the Tribe</a>
                 </div>
                 <div class="tw-community-stats">
                     <div class="tw-cstat"><strong>12.5K</strong><span>Active Members</span></div>
@@ -318,7 +318,7 @@ if ( $tw_hero_video ) {
         <div class="container">
             <div class="instagram-feed-heading" data-reveal="up">
                 <span class="tw-ig-kicker">Follow the journey</span>
-                <h2 class="tw-ig-title">Our Instagram</h2>
+                <h2 class="tw-h2 tw-h2--lg">Our <span class="tw-h2-accent">Instagram</span></h2>
                 <a class="tw-ig-handle" href="https://www.instagram.com/1tripwiser/" target="_blank" rel="noopener noreferrer"><i class="fi-rr-camera" aria-hidden="true"></i> @1tripwiser</a>
             </div>
             <div class="instagram-feed-wrap">

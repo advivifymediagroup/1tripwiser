@@ -2654,8 +2654,8 @@ function tw_homepage_testimonials_section() {
     <section class="tw-testimonials-section">
         <div class="container tw-testimonials-inner">
             <div class="tw-testimonials-head" data-reveal="up">
-                <span class="tw-testimonials-kicker"><i class="fi-rr-comment" aria-hidden="true"></i> Real travellers. Real stories.</span>
-                <h2 class="tw-h2 tw-testimonials-title">What Our <span>Travellers Say</span></h2>
+                <span class="tw-testimonials-kicker"> Real travellers. Real stories.</span>
+                <h2 class="tw-h2 tw-h2--lg tw-testimonials-title">What <span class="tw-h2-accent">Travellers Say</span></h2>
             </div>
             <div class="tw-testimonials-grid">
                 <?php foreach ( $testimonials as $t ) :

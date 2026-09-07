@@ -227,7 +227,7 @@ $g_insure_aff  = tw_aff_by_cat($affiliates, 'Insurance');
                     <p class="ba-featured-excerpt"><?php echo esc_html( wp_trim_words( get_the_excerpt( $featured_post->ID ), 28, '…' ) ); ?></p>
                 </div>
                 <div>
-                    <a href="<?php echo esc_url( get_permalink( $featured_post->ID ) ); ?>" class="btn-primary">Read Full Guide →</a>
+                    <a href="<?php echo esc_url( get_permalink( $featured_post->ID ) ); ?>" class="btn-primary">Read Full Guide</a>
                 </div>
             </div>
         </div>
@@ -249,7 +249,7 @@ $g_insure_aff  = tw_aff_by_cat($affiliates, 'Insurance');
             <h2 class="tw-h2 ba-section-head">Latest Guides</h2>
             <div class="ba-section-row-actions">
                 <a href="<?php echo esc_url( home_url('/blogs/') ); ?>" class="btn-secondary btn-sm">
-                    View All Blogs →
+                    View All Blogs
                 </a>
                 <?php if ( is_user_logged_in() ) : ?>
                 <a href="<?php echo esc_url( home_url('/submit-blog/') ); ?>" class="btn-primary btn-sm">

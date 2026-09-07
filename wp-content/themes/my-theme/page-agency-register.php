@@ -83,7 +83,7 @@ $status = isset( $_GET['agency'] ) ? sanitize_key( $_GET['agency'] ) : '';
                 </label>
             </div>
 
-            <button type="submit" class="tw-agency-submit">Submit Registration →</button>
+            <button type="submit" class="tw-agency-submit">Submit Registration</button>
         </form>
 
     </div>

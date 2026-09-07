@@ -66,7 +66,7 @@ if ( isset( $_GET['login'] ) && $_GET['login'] === 'failed' ) {
                 </div>
 
                 <button type="submit" class="btn-primary btn-lg btn-block" id="tw-login-btn">
-                    <span id="tw-login-btn-text">Log In →</span>
+                    <span id="tw-login-btn-text">Log In</span>
                 </button>
             </form>
 
@@ -136,13 +136,13 @@ if ( isset( $_GET['login'] ) && $_GET['login'] === 'failed' ) {
                 }, 700);
             } else {
                 showMsg(data.data || 'Login failed. Please check your credentials.', 'error');
-                btnText.textContent = 'Log In →';
+                btnText.textContent = 'Log In';
                 btn.disabled = false;
             }
         })
         .catch(function () {
             showMsg('Network error. Please try again.', 'error');
-            btnText.textContent = 'Log In →';
+            btnText.textContent = 'Log In';
             btn.disabled = false;
         });
     });

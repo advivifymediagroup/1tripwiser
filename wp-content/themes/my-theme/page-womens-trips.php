@@ -70,7 +70,7 @@ $has_trips = $trips_query->have_posts();
         <!-- TRIPS GRID -->
         <div class="tw-womens-section-head">
             <h2 class="tw-h2">Upcoming Women's Trips</h2>
-            <p><?php echo $has_trips ? $trips_query->found_posts . ' curated trips available' : 'Check back soon — new trips added regularly'; ?></p>
+            <p><?php echo $has_trips ? $trips_query->found_posts . ' Wiser Packages available' : 'Check back soon — new trips added regularly'; ?></p>
         </div>
 
         <?php if ( $has_trips ) : ?>

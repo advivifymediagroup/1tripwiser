@@ -20,6 +20,7 @@ Description: This is my custom theme for the website 1tripwiser.
   --tw-pink-hover:#c8123f;
   --tw-crimson:#d5374f;
   --tw-red: #d5374f;
+  --tw-red-hover: #e5127d;
   --tw-blue: #1B93B0;
   --tw-yellow:#ffd700;
   --luxe-gold: 212, 175, 55;
@@ -102,7 +103,7 @@ h6 {
 }
 
 /* Section heading h2 — used in packages, itineraries, visa, etc. */
-.section-heading span {
+.section-heading > span {
   font-size: 0.72rem;
   font-weight: 800;
   letter-spacing: 0.18em;
@@ -537,7 +538,7 @@ h6 {
   line-height: 1;
   color: var(--tw-navy);
   margin: 0 0 12px;
-  font-size: clamp(2.2rem, 5vw, 3.6rem);
+  font-size: clamp(2.2rem, 5vw, 3rem);
 }
 .tw-h1--on-dark {
   color: var(--white);
@@ -552,16 +553,21 @@ h6 {
   line-height: 1.2;
   color: var(--tw-navy);
   margin: 0;
-  font-size: clamp(1.8rem, 2.9vw, 2.6rem);
+  font-size: clamp(1.8rem, 2.9vw, 2.6rem) !important;
 }
 .tw-h2--lg {
-  font-size: clamp(2.2rem, 4.4vw, 3.3rem);
+  font-size: clamp(2.2rem, 4.4vw, 2.8rem) !important;
 }
 .tw-h2--on-dark {
   color: var(--white);
 }
 .accent-red {
-  color: var(--tw-red);
+  color: var(--tw-pink);
+}
+.tw-h2-accent {
+  color: var(--tw-pink);
+  font-style: italic;
+  font-weight: 400;
 }
 
 
@@ -704,16 +710,19 @@ h6 {
   border-radius: 8px;
 }
 
-.section-heading span,
+.section-heading > span,
 .travel-archive-header span,
 .travel-single-header > span {
-  font-size: 16px;
-  font-weight: 800;
-  color: var(--tw-blue);
+  color: #000;
   letter-spacing: 3px;
   text-transform: uppercase;
   margin-bottom: 1rem;
   animation: fadeUp 1s ease 0.5s both;
+  display: block;
+  text-align: start;
+  font-size: 0.98rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
 }
 
 
@@ -2590,25 +2599,14 @@ main.dest-single {
   text-align: start;
 }
 
-.visa-services-heading .highlight {
-  display: inline;
-  font-size: inherit;
-  text-transform: none;
-  letter-spacing: normal;
-  margin-bottom: 0;
-  color: var(--tw-pink) !important;
-  font-style: italic;
-  font-weight: 400;
-}
-
-.visa-services-heading span {
+.visa-services-heading > span {
   display: block;
   text-align: start;
-  font-size: 0.78rem;
+  font-size: 0.98rem;
   font-weight: 800;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--tw-pink);
+  color: #000;
   margin-bottom: 10px;
 }
 
@@ -4577,15 +4575,14 @@ body.page-template-page-plan-a-trip-php {
   align-items: center;
   white-space: nowrap;
   width: max-content;
-  animation: tw-marquee-scroll 32s linear infinite;
+  animation: tw-marquee-scroll 64s ease-in-out infinite;
 }
 .tw-marquee-section:hover .tw-marquee-track {
   animation-play-state: paused;
 }
 .tw-marquee-item {
   font-family: var(--heading-font);
-  font-style: italic;
-  font-weight: 400;
+  font-weight: 300;
   font-size: clamp(1.3rem, 2.6vw, 1.9rem);
   color: var(--white);
   letter-spacing: 0.01em;
@@ -6789,21 +6786,14 @@ body.page-template-page-plan-a-trip-php {
 }
 .tw-testimonials-kicker {
   display: inline-block;
-  font-size: 0.72rem;
+  text-align: start;
+  font-size: 0.78rem;
   font-weight: 800;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--tw-blue);
-  background: rgba(27, 147, 176, 0.12);
-  border: 1px solid rgba(27, 147, 176, 0.3);
-  border-radius: 4px;
+  color: #000;
+  margin-bottom: 1rem;
   padding: 5px 18px;
-  margin-bottom: 14px;
-}
-.tw-testimonials-title span {
-  /* font-style: italic; */
-  font-weight: 400;
-  color: var(--tw-pink);
 }
 .tw-testimonials-grid {
   display: grid;
@@ -7672,12 +7662,13 @@ main.tw-search-page {
   flex-wrap: wrap;
 }
 .tw-blog-kicker {
-  font-size: 0.78rem;
+  text-align: start;
+  font-size: 0.98rem;
   font-weight: 800;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--tw-pink);
-  margin-bottom: 8px;
+  color: #000;
+  margin-bottom: 10px;
 }
 .tw-blog-viewall {
   display: inline-flex;
@@ -7905,23 +7896,18 @@ main.tw-search-page {
   align-items: center;
 }
 .tw-community-kicker {
-  font-size: 0.78rem;
+  text-align: start;
+  font-size: 0.98rem;
   font-weight: 800;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--tw-blue);
-  display: block;
-  margin-bottom: 12px;
+  color: #000;
+  margin-bottom: 1rem;
 }
 .tw-community-title {
   margin: 0 0 20px;
 }
 
-.tw-community-title span {
-  /* font-style: italic; */
-  font-weight: 400;
-  color: var(--tw-pink);
-}
 .tw-community-title span.tw-community-title-num {
   font-variant-numeric: lining-nums;
   font-feature-settings: "lnum" 1;
@@ -7933,7 +7919,7 @@ main.tw-search-page {
   font-family: var(--heading-font);
   /* font-style: italic; */
   font-weight: 400;
-  color: rgba(13, 21, 38, 0.65);
+  color: rgba(13, 21, 38, 0.85);
   font-size: 1.08rem;
   line-height: 1.75;
   margin-bottom: 28px;
@@ -7959,17 +7945,17 @@ main.tw-search-page {
 .tw-cstat strong {
   display: block;
   font-family: var(--heading-font);
-  font-size: 2.2rem;
+  font-size: 2.4rem;
   letter-spacing: 0.02em;
-  color: var(--tw-pink);
+  color: var(--tw-navy);
   margin-bottom: 6px;
 }
 .tw-cstat span {
-  font-size: 0.75rem;
+  font-size: 0.65rem;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: rgba(13, 21, 38, 0.5);
+  color: #000;
 }
 @media (max-width: 768px) {
   .tw-community-inner {
@@ -8012,13 +7998,13 @@ main.tw-search-page {
   z-index: 0;
   pointer-events: none;
   background: radial-gradient(
-      circle 480px at 100% 0%,
+      circle 440px at 100% 0%,
       rgba(229, 18, 125, 0.65) 0%,
       rgba(229, 18, 125, 0.3) 45%,
       transparent 78%
     ),
     radial-gradient(
-      circle 480px at 0% 100%,
+      circle 440px at 0% 100%,
       rgba(27, 147, 176, 0.6) 0%,
       rgba(27, 147, 176, 0.28) 45%,
       transparent 78%
@@ -8042,7 +8028,7 @@ main.tw-search-page {
   font-weight: 800;
   letter-spacing: 0.24em;
   text-transform: uppercase;
-  color: var(--tw-blue);
+  color: #fff;
   display: block;
   margin-bottom: 18px;
 }
@@ -11529,12 +11515,13 @@ object {
 
 .tw-ig-kicker {
   display: block;
-  font-size: 0.72rem;
+  text-align: start;
+  font-size: 0.98rem;
   font-weight: 800;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--tw-blue);
-  margin-bottom: 10px;
+  color: #000;
+  margin-bottom: 1rem;
 }
 
 .tw-ig-title {
@@ -11935,7 +11922,7 @@ section.tribe-hero {
   font-size: 2rem;
   letter-spacing: 0.04em;
   line-height: 1;
-  background: linear-gradient(135deg, var(--tw-pink), var(--tw-blue));
+  background: var(--tw-navy);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -13076,9 +13063,13 @@ section.tribe-hero {
   margin-bottom: 10px;
   padding-bottom: 8px;
   border-bottom: 1px solid var(--tw-lightBase);
+  padding: 6px 8px;
+  border-radius: 7px;
+  transition: background 0.15s, color 0.15s;
 }
 .tw-mega-head:hover {
-  color: var(--tw-pink);
+  background: var(--tw-navy);
+  color: #fff;
 }
 .tw-mega-list {
   list-style: none;
@@ -13099,8 +13090,8 @@ section.tribe-hero {
   transition: background 0.15s, color 0.15s;
 }
 .tw-mega-list a:hover {
-  background: #f0f6fa;
-  color: var(--tw-pink);
+  background: var(--tw-navy);
+  color: #fff;
 }
 
 /* Events mega — right-aligned (Events is the rightmost item).
@@ -13117,6 +13108,13 @@ section.tribe-hero {
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 8px;
 }
+
+.tw-mega-events-grid-events {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 8px;
+}
+
 .tw-mega-event {
   display: flex;
   align-items: center;
@@ -13128,7 +13126,8 @@ section.tribe-hero {
 }
 .tw-mega-event:hover,
 .tw-mega-event.active {
-  background: #f0f6fa;
+  background: var(--tw-navy);
+  color: #fff;
 }
 .tw-mega-event-icon {
   font-size: 1.2rem;
@@ -13141,7 +13140,7 @@ section.tribe-hero {
   font-weight: 400;
 }
 .tw-mega-event:hover .tw-mega-event-name {
-  color: var(--tw-pink);
+  color: #fff;
 }
 
 /* Mobile subheader → horizontal scroll + tap-to-open accordion panels */
@@ -13565,12 +13564,12 @@ section.tribe-hero {
   align-items: center;
 }
 .tw-events-kicker {
-  display: block;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.3em;
+  text-align: start;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--tw-pink);
+  color: #fff;
   margin-bottom: 20px;
 }
 .tw-events-title {
@@ -13680,7 +13679,7 @@ section.tribe-hero {
 }
 .tw-events-row-link:hover .tw-events-arrow {
   background: var(--luxe-gold);
-  color: var(--tw-navy);
+  color: var(--tw-pink);
 }
 @media (max-width: 900px) {
   .tw-events-inner {

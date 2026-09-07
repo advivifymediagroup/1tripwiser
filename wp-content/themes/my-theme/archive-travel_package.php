@@ -9,7 +9,7 @@
             <nav class="explore-crumbs" aria-label="Breadcrumb">
                 <a href="<?php echo esc_url( home_url('/') ); ?>">Home</a><span>›</span><span>Packages</span>
             </nav>
-            <span class="explore-hero-kicker">Curated Trips</span>
+            <span class="explore-hero-kicker">Wiser Packages</span>
             <h1 class="tw-h1">Travel <span class="accent-red">Packages</span></h1>
             <p class="explore-hero-sub">Choose a ready-to-book trip, then customize the pace, stays and experiences around your travel style.</p>
         </div>

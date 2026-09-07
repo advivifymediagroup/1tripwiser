@@ -90,7 +90,7 @@ get_header();
                 </div>
 
                 <button type="submit" class="btn-primary btn-lg btn-block" id="tw-reg-btn">
-                    <span id="tw-reg-btn-text">Create Account →</span>
+                    <span id="tw-reg-btn-text">Create Account</span>
                 </button>
             </form>
 
@@ -190,13 +190,13 @@ get_header();
                 }, 900);
             } else {
                 showMsg(data.data || 'Registration failed. Please try again.', 'error');
-                btnText.textContent = 'Create Account →';
+                btnText.textContent = 'Create Account';
                 btn.disabled = false;
             }
         })
         .catch(function () {
             showMsg('Network error. Please try again.', 'error');
-            btnText.textContent = 'Create Account →';
+            btnText.textContent = 'Create Account';
             btn.disabled = false;
         });
     });
