@@ -169,7 +169,6 @@ if ( $tw_hero_video ) {
                 <span>CURATED BY OUR EXPERTS</span>
                 <h2 class="tw-h2 tw-h2--lg">Exquisite <span class="tw-h2-accent">Itineraries</span></h2>
             </div>
-            <?php mytheme_travel_filter_box('itinerary', 'itinerary_filter', home_url('/'), '#upcoming-trips'); ?>
             <div class="posts-grid tw-ajax-grid" id="tw-cards-itineraries">
                 <?php
                 $itinerary_filter = mytheme_get_active_travel_filter("itinerary_filter", "itinerary");
