@@ -5,7 +5,7 @@ Version: 11.0
 Description: This is my custom theme for the website 1tripwiser.
 */
 
-@import url("https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,300;1,9..144,400;1,9..144,600;1,9..144,700&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Saira:wght@400;500;600&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,300;1,9..144,400;1,9..144,600;1,9..144,700&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Saira:wght@400;500;600&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Bebas+Neue&display=swap");
 
 /* ── Brand colour tokens — pink + blue only, sampled from the logo mark. (LUXE / LUXURY keep their own gold identity by design — untouched.) ── */
 
@@ -14,6 +14,8 @@ Description: This is my custom theme for the website 1tripwiser.
   --heading-font: "Fraunces", serif;
   --body-font: "Poppins", sans-serif;
   --accent-font: "Saira", sans-serif;
+  --luxe-font: "Cormorant Garamond", serif;
+  --luxe-hero-font: "Bebas Neue", sans-serif;
   --white:#ffffff;
   --pastel-pink:#fce4ec;
   --tw-pink:#e5127d;
@@ -819,22 +821,6 @@ h6 {
   gap: 12px;
   flex-wrap: wrap;
 }
-.tw-filter-row + .tw-filter-row {
-  margin-top: 12px;
-  padding-top: 12px;
-  border-top: 1px dashed #e8edf5;
-}
-.tw-filter-row--type {
-}
-.tw-filter-row-label {
-  font-size: 0.68rem;
-  font-weight: 800;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: #9ba8bb;
-  white-space: nowrap;
-  min-width: 72px;
-}
 .tw-filter-pills {
   display: flex;
   gap: 7px;
@@ -879,17 +865,6 @@ h6 {
   color: var(--white);
   box-shadow: 0 4px 14px rgba(216, 53, 80, 0.3);
 }
-.tw-filter-pill--type:hover {
-  border-color: var(--tw-blue);
-  color: var(--tw-blue);
-  background: rgba(27, 147, 176, 0.06);
-}
-.tw-filter-pill--type.active {
-  background: var(--tw-pink);
-  border-color: var(--tw-pink);
-  color: var(--white);
-  box-shadow: 0 4px 14px rgba(216, 53, 80, 0.3);
-}
 .tw-filter-pill-icon {
   font-size: 0.9rem;
   line-height: 1;
@@ -905,10 +880,6 @@ h6 {
   .tw-filter-pill {
     font-size: 0.76rem;
     padding: 6px 11px;
-  }
-  .tw-filter-row-label {
-    min-width: 56px;
-    font-size: 0.62rem;
   }
 }
 /* AJAX grid fade transition */
@@ -5263,7 +5234,7 @@ body.page-template-page-plan-a-trip-php {
   background: rgba(var(--luxe-gold), 0.45);
 }
 .tw-luxe-title {
-  font-family: var(--heading-font);
+  font-family: var(--luxe-font);
   font-style: italic;
   font-weight: 600;
   font-size: clamp(2.4rem, 4.4vw, 3.4rem);
@@ -5490,12 +5461,12 @@ body.page-template-page-plan-a-trip-php {
   background: rgba(var(--luxe-gold), 0.45);
 }
 .tw-luxe-hero-title {
-  font-family: var(--heading-font);
+  font-family: var(--luxe-hero-font);
   font-size: clamp(4rem, 9vw, 7rem);
   letter-spacing: 0.42em;
   color: rgb(var(--luxe-gold));
   margin: 0 0 30px;
-  font-weight: 400;
+  font-weight: 800;
   padding-left: 0.42em;
 }
 .tw-luxe-hero-sub {
@@ -5633,10 +5604,10 @@ body.page-template-page-plan-a-trip-php {
   background: rgba(var(--luxe-gold), 0.4);
 }
 .tw-luxe-section-head h2 {
-  font-family: var(--heading-font);
+  font-family: var(--luxe-font);
   font-style: italic;
   font-size: 2.1rem;
-  font-weight: 400;
+  font-weight: 500;
   color: var(--white);
   margin: 0;
   letter-spacing: 0.01em;
@@ -11782,26 +11753,28 @@ object {
   flex: 0 0 auto !important;
   align-items: center !important;
   justify-content: center !important;
-  gap: 10px !important;
-  height: 48px !important;
-  padding: 0 30px !important;
-  border: none !important;
-  border-radius: 4px !important;
+  gap: 8px !important;
+  height: auto !important;
+  padding: 12px 28px !important;
+  border: 1.5px solid transparent !important;
+  border-radius: 6px !important;
   font-family: var(--body-font) !important;
-  font-size: 0.88rem !important;
+  font-size: 0.9rem !important;
   font-weight: 800 !important;
-  letter-spacing: 0.06em !important;
-  text-transform: uppercase !important;
+  letter-spacing: 0.03em !important;
+  text-transform: none !important;
   text-decoration: none !important;
   line-height: 1 !important;
   margin: 0 !important;
   box-sizing: border-box !important;
   cursor: pointer !important;
   float: none !important;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease !important;
+  box-shadow: none !important;
+  transition: background 0.18s, color 0.18s, border-color 0.18s !important;
 }
 
-/* Load More — primary yellow */
+/* Load More — reuses the sitewide .btn-primary treatment (solid pink,
+   turns navy on hover) so it matches every other CTA on the site. */
 .instagram-feed-wrap a#sbi_load_btn,
 .instagram-feed-wrap a.sbi_load_btn,
 .instagram-feed-wrap a.sb-loadmore_btn,
@@ -11809,48 +11782,42 @@ object {
 .instagram-feed-wrap #sbi_load_btn:not(div) {
   background: var(--tw-pink) !important;
   background-color: var(--tw-pink) !important;
+  border-color: var(--tw-pink) !important;
   color: var(--white) !important;
-  box-shadow: 0 4px 14px rgba(216, 53, 80, 0.28) !important;
 }
 .instagram-feed-wrap a#sbi_load_btn:hover,
 .instagram-feed-wrap a.sbi_load_btn:hover,
 .instagram-feed-wrap a.sb-loadmore_btn:hover,
 .instagram-feed-wrap .sb-loadmore_btn:hover {
-  background: var(--tw-pink-hover) !important;
-  background-color: var(--tw-pink-hover) !important;
+  background: var(--tw-navy) !important;
+  background-color: var(--tw-navy) !important;
+  border-color: var(--tw-navy) !important;
   color: var(--white) !important;
 }
 
-/* Follow on Instagram — secondary teal (filled, no halo) */
+/* Follow on Instagram — reuses the sitewide .btn-secondary treatment
+   (pink outline, transparent fill, turns blue on hover). */
 .instagram-feed-wrap a#sbi_follow_btn,
 .instagram-feed-wrap a.sbi_follow_btn,
 .instagram-feed-wrap #sbi_follow_btn > a,
 .instagram-feed-wrap #sbi_follow_btn a.sb-followBtn-link,
 .instagram-feed-wrap a.sb-followBtn-link,
 .instagram-feed-wrap #sbi_follow_btn:not(div) {
-  background: linear-gradient(
-    135deg,
-    var(--tw-blue) 0%,
-    #056d83 100%
-  ) !important;
-  background-color: var(--tw-blue) !important;
-  background-image: linear-gradient(
-    135deg,
-    var(--tw-blue) 0%,
-    #056d83 100%
-  ) !important;
-  color: var(--white)!important;
-  box-shadow: 0 4px 14px rgba(27, 147, 176, 0.28) !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border-color: var(--tw-pink) !important;
+  color: var(--tw-pink) !important;
 }
 .instagram-feed-wrap a#sbi_follow_btn:hover,
 .instagram-feed-wrap a.sbi_follow_btn:hover,
 .instagram-feed-wrap #sbi_follow_btn > a:hover,
 .instagram-feed-wrap #sbi_follow_btn a.sb-followBtn-link:hover,
 .instagram-feed-wrap a.sb-followBtn-link:hover {
-  transform: translateY(-2px) !important;
-  box-shadow: 0 8px 22px rgba(27, 147, 176, 0.4) !important;
-  filter: brightness(1.08) !important;
-  color: var(--white)!important;
+  background: transparent !important;
+  background-color: transparent !important;
+  border-color: var(--tw-blue) !important;
+  color: var(--tw-blue) !important;
 }
 
 /* Reset inner spans + icons so they inherit the button's text styles cleanly */

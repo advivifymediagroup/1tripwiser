@@ -86,7 +86,7 @@ if ( ! $tw_luxury_video_url ) {
                       fill="#ffffff"
                       font-family="'Michroma','Bebas Neue','Impact','Arial Narrow',sans-serif"
                       font-size="120"
-                      font-weight="400"
+                      font-weight="800"
                       textLength="480"
                       lengthAdjust="spacing"
                       xml:space="preserve"

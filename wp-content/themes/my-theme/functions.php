@@ -2277,29 +2277,15 @@ function mytheme_build_travel_filter_meta_query($post_type, $filter) {
 function mytheme_travel_filter_box($post_type, $param, $base_url, $anchor = '') {
     $active = mytheme_get_active_travel_filter($param, $post_type);
 
-    // Destination pills — clean text labels, no emoji
-    $dest_pills = array(
-        'all'              => array( '', 'All' ),
-        'india'            => array( '', 'India' ),
-        'international'    => array( '', 'International' ),
-        'asia'             => array( '', 'Asia' ),
-        'europe'           => array( '', 'Europe' ),
-        'africa'           => array( '', 'Africa' ),
-        'north-america'    => array( '', 'North America' ),
-        'south-america'    => array( '', 'South America' ),
-        'oceania'          => array( '', 'Oceania' ),
-        'budget-under-30k' => array( '', 'Budget < 30K' ),
+    // Single consolidated pill list — no destination/type grouping, no continents.
+    $pills = array(
+        'all'              => 'All',
+        'india'            => 'India',
+        'international'    => 'International',
+        'bestseller'       => 'Bestseller',
+        'trending'         => 'Trending',
+        'budget-under-30k' => 'Budget < 30K',
     );
-    // Type pills (packages only)
-    $type_pills = array(
-        'bestseller' => array( '', 'Bestseller' ),
-        'trending'   => array( '', 'Trending' ),
-        'new'        => array( '', 'New' ),
-    );
-
-    // Which dest options apply to this post type
-    $post_type_dest_keys = array_keys( mytheme_travel_filter_options( $post_type ) );
-    $has_type_group = ( $post_type === 'travel_package' );
 
     $build_url = function( $value ) use ( $param, $base_url, $anchor ) {
         $url = $value === 'all'
@@ -2317,36 +2303,17 @@ function mytheme_travel_filter_box($post_type, $param, $base_url, $anchor = '') 
          aria-label="<?php esc_attr_e('Travel filters','mytheme'); ?>">
 
         <div class="tw-filter-row">
-            <span class="tw-filter-row-label">Destination</span>
             <div class="tw-filter-pills" role="list">
-                <?php foreach ( $dest_pills as $val => list( $icon, $label ) ) :
-                    if ( $val !== 'all' && ! in_array( $val, $post_type_dest_keys, true ) ) continue;
+                <?php foreach ( $pills as $val => $label ) :
                     $is_active = ( $active === $val );
                     $extra_cls = $val === 'budget-under-30k' ? ' tw-filter-pill--budget' : ''; ?>
                 <a class="tw-filter-pill<?php echo $is_active ? ' active' : ''; echo $extra_cls; ?>"
                    href="<?php echo $build_url( $val ); ?>" role="listitem">
-                    <?php if ( $icon ) : ?><span class="tw-filter-pill-icon" aria-hidden="true"><?php echo $icon; ?></span><?php endif; ?>
                     <?php echo esc_html( $label ); ?>
                 </a>
                 <?php endforeach; ?>
             </div>
         </div>
-
-        <?php if ( $has_type_group ) : ?>
-        <div class="tw-filter-row tw-filter-row--type">
-            <span class="tw-filter-row-label">Type</span>
-            <div class="tw-filter-pills" role="list">
-                <?php foreach ( $type_pills as $val => list( $icon, $label ) ) :
-                    $is_active = ( $active === $val ); ?>
-                <a class="tw-filter-pill tw-filter-pill--type<?php echo $is_active ? ' active' : ''; ?>"
-                   href="<?php echo $build_url( $val ); ?>" role="listitem">
-                    <?php if ( $icon ) : ?><span class="tw-filter-pill-icon" aria-hidden="true"><?php echo $icon; ?></span><?php endif; ?>
-                    <?php echo esc_html( $label ); ?>
-                </a>
-                <?php endforeach; ?>
-            </div>
-        </div>
-        <?php endif; ?>
 
     </div>
     <?php
