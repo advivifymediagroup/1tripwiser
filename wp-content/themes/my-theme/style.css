@@ -4141,7 +4141,7 @@ body.page-template-page-plan-a-trip-php {
   position: relative;
   background-image: url('assets/images/hero-sunset-bg.jpg');
   background-color: #f3d9c6;
-  background-size: 130%;
+  background-size: 120%;
   background-position: 65% 40%;
   background-repeat: no-repeat;
   padding: 60px 0 80px;
@@ -8984,14 +8984,11 @@ table.ba-table tr:hover td {
   line-height: 1.6;
   margin: 0;
 }
-.sp-share-rail-btns {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-top: 12px;
-}
-.sp-share-rail-btns .sp-share-btn {
-  justify-content: center;
+.sp-blog-enquiry-rail p {
+  font-size: 0.9rem;
+  color: var(--tw-bodyColor);
+  line-height: 1.6;
+  margin: 0;
 }
 
 .sp-nav {
@@ -9033,13 +9030,6 @@ table.ba-table tr:hover td {
   color: var(--tw-navy);
   line-height: 1.4;
 }
-.sp-share-label {
-  font-size: 0.82rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--tw-muted);
-}
 .sp-share-btn {
   display: inline-flex;
   align-items: center;
@@ -9074,6 +9064,33 @@ table.ba-table tr:hover td {
 }
 .sp-share-copy:hover {
   border-color: var(--tw-blue);
+}
+/* Compact icon-only share row inside the hero, replacing the old
+   full-width "Share this post" sidebar card. */
+.sp-hero-share {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+.sp-hero-share-label {
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+  margin-right: 2px;
+}
+.sp-hero-share .sp-share-btn {
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border-radius: 50%;
+  justify-content: center;
+  font-size: 0.85rem;
+}
+.sp-hero-no-img .sp-hero-share-label {
+  color: var(--tw-muted);
 }
 /* No outer card — comments flow as part of the continuous article, same as
    every other dest-article-section, instead of sitting in their own box. */
@@ -15542,4 +15559,94 @@ body.page-template-page-app-coming-soon-php {
 #tw-app-demo .slot {transition:none;}
 #tw-app-demo .seg .thumb {transition:none;}
 #tw-app-demo .phone-screen {transition:none;}
+}
+
+/* ================================================================
+   SITE-WIDE LEAD POPUP — auto-shows a few seconds after landing,
+   also opened on demand via window.twOpenLeadPopup() (blog sidebar).
+   ================================================================ */
+.tw-lead-popup-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: rgba(13, 21, 38, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.tw-lead-popup-overlay[hidden] {
+  display: none;
+}
+.tw-lead-popup {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
+  background: var(--white);
+  border-radius: 12px;
+  padding: 32px 28px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
+  animation: tw-lead-popup-in 0.25s ease;
+}
+@keyframes tw-lead-popup-in {
+  from { opacity: 0; transform: translateY(12px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.tw-lead-popup-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 50%;
+  background: var(--tw-bg-soft);
+  color: var(--tw-navy);
+  font-size: 1.3rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.tw-lead-popup-close:hover {
+  background: var(--tw-border);
+}
+.tw-lead-popup-step h3 {
+  font-family: var(--heading-font);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--tw-navy);
+  margin: 0 0 8px;
+}
+.tw-lead-popup-step p {
+  font-size: 0.9rem;
+  color: var(--tw-muted);
+  line-height: 1.5;
+  margin: 0 0 20px;
+}
+.tw-lead-popup-step .tw-form-grid {
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+.tw-lead-popup-step .btn-primary {
+  border: none;
+  cursor: pointer;
+}
+.tw-lead-popup-skip {
+  display: block;
+  width: 100%;
+  text-align: center;
+  margin-top: 12px;
+  background: none;
+  border: none;
+  color: var(--tw-muted);
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-decoration: underline;
+  cursor: pointer;
+}
+@media (max-width: 480px) {
+  .tw-lead-popup {
+    padding: 26px 20px;
+  }
 }

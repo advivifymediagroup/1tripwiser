@@ -103,6 +103,14 @@ if ($sp_show_comments) {
             <div class="sp-hero-meta-item"><i class="fi-rr-book-open-reader" aria-hidden="true"></i> <?php echo number_format($sp_word_cnt); ?> words</div>
             <?php endif; ?>
         </div>
+
+        <div class="sp-hero-share">
+            <span class="sp-hero-share-label"><?php esc_html_e('Share', 'mytheme'); ?></span>
+            <a class="sp-share-btn sp-share-twitter" href="https://twitter.com/intent/tweet?url=<?php echo $sp_post_enc; ?>&text=<?php echo $sp_title_enc; ?>" target="_blank" rel="noopener noreferrer" aria-label="<?php esc_attr_e('Share on X', 'mytheme'); ?>">𝕏</a>
+            <a class="sp-share-btn sp-share-facebook" href="https://www.facebook.com/sharer/sharer.php?u=<?php echo $sp_post_enc; ?>" target="_blank" rel="noopener noreferrer" aria-label="<?php esc_attr_e('Share on Facebook', 'mytheme'); ?>">f</a>
+            <a class="sp-share-btn sp-share-whatsapp" href="https://wa.me/?text=<?php echo $sp_title_enc; ?>%20<?php echo $sp_post_enc; ?>" target="_blank" rel="noopener noreferrer" aria-label="<?php esc_attr_e('Share on WhatsApp', 'mytheme'); ?>"><i class="fi-rr-comment" aria-hidden="true"></i></a>
+            <button class="sp-share-btn sp-share-copy" aria-label="<?php esc_attr_e('Copy link', 'mytheme'); ?>" onclick="navigator.clipboard.writeText('<?php echo esc_js($sp_post_url); ?>').then(function(){this.innerHTML='<i class=\'fi-rr-check-circle\' aria-hidden=\'true\'></i>';}.bind(this))"><i class="fi-rr-link" aria-hidden="true"></i></button>
+        </div>
     </div>
 </section>
 
@@ -195,22 +203,9 @@ if ($sp_show_comments) {
                         <?php echo esc_html($sp_bio ?: 'Travel writer & explorer sharing honest guides and tips from the road. Every recommendation is tried and tested.'); ?>
                     </p>
                 </div>
-                <div class="dest-rail-card sp-share-rail">
-                    <span class="sp-share-label"><?php esc_html_e('Share this post', 'mytheme'); ?></span>
-                    <div class="sp-share-rail-btns">
-                        <a class="sp-share-btn sp-share-twitter"
-                           href="https://twitter.com/intent/tweet?url=<?php echo $sp_post_enc; ?>&text=<?php echo $sp_title_enc; ?>"
-                           target="_blank" rel="noopener noreferrer">𝕏 Twitter</a>
-                        <a class="sp-share-btn sp-share-facebook"
-                           href="https://www.facebook.com/sharer/sharer.php?u=<?php echo $sp_post_enc; ?>"
-                           target="_blank" rel="noopener noreferrer">f Facebook</a>
-                        <a class="sp-share-btn sp-share-whatsapp"
-                           href="https://wa.me/?text=<?php echo $sp_title_enc; ?>%20<?php echo $sp_post_enc; ?>"
-                           target="_blank" rel="noopener noreferrer">
-                            <i class="fi-rr-comment" aria-hidden="true"></i> WhatsApp</a>
-                        <button class="sp-share-btn sp-share-copy" onclick="navigator.clipboard.writeText('<?php echo esc_js($sp_post_url); ?>').then(function(){this.innerHTML='<i class=\'fi-rr-check-circle\' aria-hidden=\'true\'></i> Copied!';}.bind(this))">
-                            <i class="fi-rr-link" aria-hidden="true"></i> Copy Link</button>
-                    </div>
+                <div class="dest-rail-card sp-blog-enquiry-rail">
+                    <p><?php esc_html_e('Planning your next trip? Talk to our travel experts and get a personalized itinerary.', 'mytheme'); ?></p>
+                    <button type="button" class="btn-primary btn-block" onclick="window.twOpenLeadPopup && window.twOpenLeadPopup()"><?php esc_html_e('Enquire Now', 'mytheme'); ?></button>
                 </div>
             </aside>
 

@@ -1639,6 +1639,7 @@ function mytheme_save_enquiry($enquiry_type, $ref_id, $ref_title, $ref_url, $fie
         'group_trip'  => 'Group Trip',
         'corporate_trip' => 'Corporate Trip',
         'event'       => 'Event',
+        'popup'       => 'Website Popup',
     );
     $type_label = isset($type_labels[$enquiry_type]) ? $type_labels[$enquiry_type] : ucfirst($enquiry_type);
 
@@ -1722,6 +1723,228 @@ add_action('admin_post_nopriv_mytheme_enquiry', 'mytheme_handle_enquiry_submissi
 // Legacy action name — the package enquiry form on package/LUXE pages still posts here.
 add_action('admin_post_mytheme_package_inquiry', 'mytheme_handle_enquiry_submission');
 add_action('admin_post_nopriv_mytheme_package_inquiry', 'mytheme_handle_enquiry_submission');
+
+// ============================================================
+// SITE-WIDE LEAD POPUP + NEWSLETTER — a popup shown a few seconds
+// after landing on any page. Step 1 (name/phone/email) reuses the
+// enquiries table above; step 2 (email only) saves to its own
+// newsletter table, kept separate as requested.
+// ============================================================
+function mytheme_newsletter_table_name() {
+    global $wpdb;
+    return $wpdb->prefix . 'tw_newsletter';
+}
+
+function mytheme_maybe_create_newsletter_table() {
+    $installed_version = get_option('tw_newsletter_table_version');
+    if ($installed_version === '1.0') {
+        return;
+    }
+    global $wpdb;
+    $table_name      = mytheme_newsletter_table_name();
+    $charset_collate = $wpdb->get_charset_collate();
+    $sql = "CREATE TABLE $table_name (
+        id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+        email VARCHAR(150) NOT NULL,
+        created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY  (id),
+        UNIQUE KEY email (email)
+    ) $charset_collate;";
+    require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+    dbDelta($sql);
+    update_option('tw_newsletter_table_version', '1.0');
+}
+add_action('init', 'mytheme_maybe_create_newsletter_table');
+
+function mytheme_save_newsletter_signup($email) {
+    global $wpdb;
+    $wpdb->insert(
+        mytheme_newsletter_table_name(),
+        array(
+            'email'      => $email,
+            'created_at' => current_time('mysql'),
+        ),
+        array('%s', '%s')
+    );
+    // A duplicate email hits the UNIQUE KEY and $wpdb->insert() simply
+    // returns false — already-subscribed is treated the same as success.
+    return true;
+}
+
+function mytheme_handle_lead_popup_submit() {
+    check_ajax_referer('tw_lead_popup', 'nonce');
+
+    $name  = isset($_POST['name'])  ? sanitize_text_field(wp_unslash($_POST['name']))  : '';
+    $phone = isset($_POST['phone']) ? sanitize_text_field(wp_unslash($_POST['phone'])) : '';
+    $email = isset($_POST['email']) ? sanitize_email(wp_unslash($_POST['email']))      : '';
+
+    if (empty($name) || empty($phone)) {
+        wp_send_json_error(array('message' => __('Please fill your name and phone number.', 'mytheme')));
+    }
+
+    mytheme_save_enquiry('popup', 0, '', wp_get_referer() ?: home_url('/'), array(
+        'name'  => $name,
+        'phone' => $phone,
+        'email' => $email,
+    ));
+
+    wp_send_json_success(array('message' => __('Thanks! Our team will reach out shortly.', 'mytheme')));
+}
+add_action('wp_ajax_mytheme_lead_popup_submit', 'mytheme_handle_lead_popup_submit');
+add_action('wp_ajax_nopriv_mytheme_lead_popup_submit', 'mytheme_handle_lead_popup_submit');
+
+function mytheme_handle_newsletter_signup() {
+    check_ajax_referer('tw_lead_popup', 'nonce');
+
+    $email = isset($_POST['email']) ? sanitize_email(wp_unslash($_POST['email'])) : '';
+    if (empty($email) || !is_email($email)) {
+        wp_send_json_error(array('message' => __('Please enter a valid email address.', 'mytheme')));
+    }
+
+    mytheme_save_newsletter_signup($email);
+    wp_send_json_success(array('message' => __('Subscribed! Watch your inbox for travel deals.', 'mytheme')));
+}
+add_action('wp_ajax_mytheme_newsletter_signup', 'mytheme_handle_newsletter_signup');
+add_action('wp_ajax_nopriv_mytheme_newsletter_signup', 'mytheme_handle_newsletter_signup');
+
+/**
+ * Site-wide popup — name/phone/email, then an email-only newsletter step.
+ * Auto-opens once per session a few seconds after landing; can also be
+ * opened on demand via window.twOpenLeadPopup() (used by the blog
+ * sidebar's "Enquire Now" card).
+ */
+function tw_lead_popup_widget() {
+    $nonce = wp_create_nonce('tw_lead_popup');
+    ?>
+    <div class="tw-lead-popup-overlay" id="tw-lead-popup-overlay" hidden>
+        <div class="tw-lead-popup" role="dialog" aria-modal="true" aria-label="<?php esc_attr_e('Plan your trip', 'mytheme'); ?>">
+            <button type="button" class="tw-lead-popup-close" id="tw-lead-popup-close" aria-label="<?php esc_attr_e('Close', 'mytheme'); ?>">&times;</button>
+
+            <div class="tw-lead-popup-step" id="tw-lead-popup-step-contact">
+                <h3><?php esc_html_e('Planning a trip?', 'mytheme'); ?></h3>
+                <p><?php esc_html_e('Share your details and our travel expert will get in touch.', 'mytheme'); ?></p>
+                <div class="tw-form-notice error" id="tw-lead-popup-contact-error" hidden></div>
+                <form class="tw-form-grid" id="tw-lead-popup-contact-form">
+                    <label><span><?php esc_html_e('Name *', 'mytheme'); ?></span><input type="text" name="name" required></label>
+                    <label><span><?php esc_html_e('Phone *', 'mytheme'); ?></span><input type="tel" name="phone" required></label>
+                    <label class="tw-form-full"><span><?php esc_html_e('Email', 'mytheme'); ?></span><input type="email" name="email"></label>
+                    <button type="submit" class="btn-primary tw-form-full"><?php esc_html_e('Send Enquiry', 'mytheme'); ?></button>
+                </form>
+            </div>
+
+            <div class="tw-lead-popup-step" id="tw-lead-popup-step-newsletter" hidden>
+                <h3><?php esc_html_e('Before you go…', 'mytheme'); ?></h3>
+                <p><?php esc_html_e('Get travel deals and updates from 1TripWiser in your inbox.', 'mytheme'); ?></p>
+                <div class="tw-form-notice error" id="tw-lead-popup-newsletter-error" hidden></div>
+                <form class="tw-form-grid" id="tw-lead-popup-newsletter-form">
+                    <label class="tw-form-full"><span><?php esc_html_e('Email', 'mytheme'); ?></span><input type="email" name="email" required></label>
+                    <button type="submit" class="btn-primary tw-form-full"><?php esc_html_e('Subscribe', 'mytheme'); ?></button>
+                </form>
+                <button type="button" class="tw-lead-popup-skip" id="tw-lead-popup-skip"><?php esc_html_e('No thanks', 'mytheme'); ?></button>
+            </div>
+        </div>
+    </div>
+    <script>
+    (function () {
+        var overlay   = document.getElementById('tw-lead-popup-overlay');
+        var closeBtn  = document.getElementById('tw-lead-popup-close');
+        var stepC     = document.getElementById('tw-lead-popup-step-contact');
+        var stepN     = document.getElementById('tw-lead-popup-step-newsletter');
+        var formC     = document.getElementById('tw-lead-popup-contact-form');
+        var formN     = document.getElementById('tw-lead-popup-newsletter-form');
+        var errC      = document.getElementById('tw-lead-popup-contact-error');
+        var errN      = document.getElementById('tw-lead-popup-newsletter-error');
+        var skipBtn   = document.getElementById('tw-lead-popup-skip');
+        var nonce     = '<?php echo esc_js($nonce); ?>';
+        var ajaxUrl   = '<?php echo esc_url(admin_url('admin-ajax.php')); ?>';
+        if (!overlay) return;
+
+        function openPopup() {
+            stepC.hidden = false;
+            stepN.hidden = true;
+            overlay.hidden = false;
+            document.body.style.overflow = 'hidden';
+        }
+        function closePopup() {
+            overlay.hidden = true;
+            document.body.style.overflow = '';
+        }
+        function showNewsletterStep() {
+            stepC.hidden = true;
+            stepN.hidden = false;
+        }
+
+        window.twOpenLeadPopup = openPopup;
+
+        closeBtn.addEventListener('click', showNewsletterStep);
+        skipBtn.addEventListener('click', closePopup);
+        overlay.addEventListener('click', function (e) { if (e.target === overlay) closePopup(); });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && !overlay.hidden) closePopup();
+        });
+
+        formC.addEventListener('submit', function (e) {
+            e.preventDefault();
+            errC.hidden = true;
+            var data = new FormData(formC);
+            data.append('action', 'mytheme_lead_popup_submit');
+            data.append('nonce', nonce);
+            fetch(ajaxUrl, { method: 'POST', body: data, credentials: 'same-origin' })
+                .then(function (r) { return r.json(); })
+                .then(function (res) {
+                    if (res.success) {
+                        showNewsletterStep();
+                    } else {
+                        errC.textContent = (res.data && res.data.message) || '<?php echo esc_js(__('Something went wrong. Please try again.', 'mytheme')); ?>';
+                        errC.hidden = false;
+                    }
+                })
+                .catch(function () {
+                    errC.textContent = '<?php echo esc_js(__('Something went wrong. Please try again.', 'mytheme')); ?>';
+                    errC.hidden = false;
+                });
+        });
+
+        formN.addEventListener('submit', function (e) {
+            e.preventDefault();
+            errN.hidden = true;
+            var data = new FormData(formN);
+            data.append('action', 'mytheme_newsletter_signup');
+            data.append('nonce', nonce);
+            fetch(ajaxUrl, { method: 'POST', body: data, credentials: 'same-origin' })
+                .then(function (r) { return r.json(); })
+                .then(function (res) {
+                    if (res.success) {
+                        closePopup();
+                    } else {
+                        errN.textContent = (res.data && res.data.message) || '<?php echo esc_js(__('Something went wrong. Please try again.', 'mytheme')); ?>';
+                        errN.hidden = false;
+                    }
+                })
+                .catch(function () {
+                    errN.textContent = '<?php echo esc_js(__('Something went wrong. Please try again.', 'mytheme')); ?>';
+                    errN.hidden = false;
+                });
+        });
+
+        // Auto-open once per session, 6s after landing.
+        if (!sessionStorage.getItem('tw_lead_popup_shown')) {
+            setTimeout(function () {
+                openPopup();
+                sessionStorage.setItem('tw_lead_popup_shown', '1');
+            }, 6000);
+        }
+    })();
+    </script>
+    <?php
+}
+add_action('wp_footer', 'tw_lead_popup_widget');
+
+// Every wp_mail() the theme sends (enquiries, Plan A Trip, blog
+// submissions, agency registration) was showing up as "WordPress".
+add_filter('wp_mail_from_name', function () {
+    return '1tripwiser Enquiry - Plan a Trip';
+});
 
 function mytheme_travel_filter_options($post_type) {
     if ($post_type === 'travel_package') {
@@ -2536,6 +2759,14 @@ function mytheme_register_admin_menus() {
         'dashicons-clipboard',
         28.5
     );
+    add_submenu_page(
+        'tw-enquiries',
+        __('Newsletter', 'mytheme'),
+        __('Newsletter', 'mytheme'),
+        'manage_options',
+        'tw-newsletter',
+        'mytheme_render_newsletter_page'
+    );
 
     // ── 4. 1TRIPWISER SETTINGS HUB ────────────────────────
     add_menu_page(
@@ -3264,7 +3495,7 @@ function mytheme_render_enquiries_page() {
 
     $where = '';
     $args  = array();
-    if (in_array($type_filter, array('package', 'itinerary', 'destination', 'group_trip', 'corporate_trip', 'event'), true)) {
+    if (in_array($type_filter, array('package', 'itinerary', 'destination', 'group_trip', 'corporate_trip', 'event', 'popup'), true)) {
         $where = 'WHERE enquiry_type = %s';
         $args[] = $type_filter;
     }
@@ -3276,7 +3507,7 @@ function mytheme_render_enquiries_page() {
     $rows_args = array_merge($args, array($per_page, $offset));
     $rows = $wpdb->get_results($wpdb->prepare($rows_sql, $rows_args));
 
-    $type_labels = array('package' => 'Package', 'itinerary' => 'Itinerary', 'destination' => 'Destination', 'group_trip' => 'Group Trip', 'corporate_trip' => 'Corporate Trip', 'event' => 'Event');
+    $type_labels = array('package' => 'Package', 'itinerary' => 'Itinerary', 'destination' => 'Destination', 'group_trip' => 'Group Trip', 'corporate_trip' => 'Corporate Trip', 'event' => 'Event', 'popup' => 'Website Popup');
     $base_url = admin_url('admin.php?page=tw-enquiries');
     ?>
     <div class="wrap">
@@ -3334,6 +3565,66 @@ function mytheme_render_enquiries_page() {
                 <?php endforeach;
             else : ?>
                 <tr><td colspan="11" style="text-align:center;padding:24px;color:#666;"><?php esc_html_e('No enquiries yet. "Book Now" / "Enquire" submissions will appear here.', 'mytheme'); ?></td></tr>
+            <?php endif; ?>
+            </tbody>
+        </table>
+        <?php
+        $total_pages = $per_page ? ceil($total / $per_page) : 1;
+        if ($total_pages > 1) {
+            echo '<div style="margin-top:16px">';
+            echo paginate_links(array(
+                'base'    => add_query_arg('paged', '%#%'),
+                'format'  => '',
+                'current' => $paged,
+                'total'   => $total_pages,
+            ));
+            echo '</div>';
+        }
+        ?>
+    </div>
+    <?php
+}
+
+// ============================================================
+// ADMIN: Newsletter subscribers (kept in its own table/page, separate
+// from Enquiries, per the request that this data stay separate)
+// ============================================================
+function mytheme_render_newsletter_page() {
+    global $wpdb;
+    $table = mytheme_newsletter_table_name();
+
+    $paged    = isset($_GET['paged']) ? max(1, intval($_GET['paged'])) : 1;
+    $per_page = 20;
+    $offset   = ($paged - 1) * $per_page;
+
+    $total = $wpdb->get_var("SELECT COUNT(*) FROM $table");
+    $rows  = $wpdb->get_results($wpdb->prepare("SELECT * FROM $table ORDER BY created_at DESC LIMIT %d OFFSET %d", $per_page, $offset));
+    ?>
+    <div class="wrap">
+        <h1 style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+            <?php esc_html_e('Newsletter Subscribers', 'mytheme'); ?>
+            <span style="font-size:14px;font-weight:normal;color:#666;"><?php echo esc_html($total); ?> total</span>
+        </h1>
+        <table class="wp-list-table widefat fixed striped" style="margin-top:12px">
+            <thead>
+                <tr>
+                    <th style="width:30px">#</th>
+                    <th><?php esc_html_e('Email', 'mytheme'); ?></th>
+                    <th><?php esc_html_e('Subscribed', 'mytheme'); ?></th>
+                </tr>
+            </thead>
+            <tbody>
+            <?php if ($rows) :
+                $i = $offset + 1;
+                foreach ($rows as $row) : ?>
+                    <tr>
+                        <td><?php echo esc_html($i++); ?></td>
+                        <td><strong><?php echo esc_html($row->email); ?></strong></td>
+                        <td><?php echo esc_html(mysql2date('d M Y, g:i a', $row->created_at)); ?></td>
+                    </tr>
+                <?php endforeach;
+            else : ?>
+                <tr><td colspan="3" style="text-align:center;padding:24px;color:#666;"><?php esc_html_e('No subscribers yet.', 'mytheme'); ?></td></tr>
             <?php endif; ?>
             </tbody>
         </table>
