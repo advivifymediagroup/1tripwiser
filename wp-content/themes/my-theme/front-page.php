@@ -209,25 +209,25 @@ if ( $tw_hero_video ) {
                     <span class="visa-service-icon"><i class="fi-rr-document-signed" aria-hidden="true"></i></span>
                     <h3>Visa Assistance</h3>
                     <p>Complete guidance for Schengen, UK, US, and Asia visas. We handle documentation, interviews, and follow-ups.</p>
-                    <span class="visa-service-link">Learn More -></span>
+                    <span class="visa-service-link">Learn More</span>
                 </a>
                 <a class="visa-service-card" href="<?php echo esc_url(mytheme_get_page_url_by_path('passport-services')); ?>">
                     <span class="visa-service-icon"><i class="fi-rr-passport" aria-hidden="true"></i></span>
                     <h3>Passport Services</h3>
                     <p>New passport, renewal, or emergency services. Fast-track assistance for urgent travel plans.</p>
-                    <span class="visa-service-link">Learn More -></span>
+                    <span class="visa-service-link">Learn More</span>
                 </a>
                 <a class="visa-service-card" href="<?php echo esc_url(mytheme_get_page_url_by_path('travel-insurance')); ?>">
                     <span class="visa-service-icon"><i class="fi-rr-globe" aria-hidden="true"></i></span>
                     <h3>Travel Insurance</h3>
                     <p>Protect your trip with medical, cancellation, baggage, and emergency coverage for domestic and international travel.</p>
-                    <span class="visa-service-link">Learn More -></span>
+                    <span class="visa-service-link">Learn More</span>
                 </a>
                 <a class="visa-service-card" href="<?php echo esc_url(mytheme_get_page_url_by_path('travel-agency-registration')); ?>">
                     <span class="visa-service-icon"><i class="fi-rr-briefcase" aria-hidden="true"></i></span>
                     <h3>Travel Agency Registration</h3>
                     <p>Run a travel agency? Partner with us for quality leads, a verified listing, and marketing support.</p>
-                    <span class="visa-service-link">Learn More -></span>
+                    <span class="visa-service-link">Learn More</span>
                 </a>
             </div>
         </div>
