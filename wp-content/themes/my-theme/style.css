@@ -11782,26 +11782,28 @@ object {
   flex: 0 0 auto !important;
   align-items: center !important;
   justify-content: center !important;
-  gap: 10px !important;
-  height: 48px !important;
-  padding: 0 30px !important;
-  border: none !important;
-  border-radius: 4px !important;
+  gap: 8px !important;
+  height: auto !important;
+  padding: 12px 28px !important;
+  border: 1.5px solid transparent !important;
+  border-radius: 6px !important;
   font-family: var(--body-font) !important;
-  font-size: 0.88rem !important;
+  font-size: 0.9rem !important;
   font-weight: 800 !important;
-  letter-spacing: 0.06em !important;
-  text-transform: uppercase !important;
+  letter-spacing: 0.03em !important;
+  text-transform: none !important;
   text-decoration: none !important;
   line-height: 1 !important;
   margin: 0 !important;
   box-sizing: border-box !important;
   cursor: pointer !important;
   float: none !important;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease !important;
+  box-shadow: none !important;
+  transition: background 0.18s, color 0.18s, border-color 0.18s !important;
 }
 
-/* Load More — primary yellow */
+/* Load More — reuses the sitewide .btn-primary treatment (solid pink,
+   turns navy on hover) so it matches every other CTA on the site. */
 .instagram-feed-wrap a#sbi_load_btn,
 .instagram-feed-wrap a.sbi_load_btn,
 .instagram-feed-wrap a.sb-loadmore_btn,
@@ -11809,48 +11811,42 @@ object {
 .instagram-feed-wrap #sbi_load_btn:not(div) {
   background: var(--tw-pink) !important;
   background-color: var(--tw-pink) !important;
+  border-color: var(--tw-pink) !important;
   color: var(--white) !important;
-  box-shadow: 0 4px 14px rgba(216, 53, 80, 0.28) !important;
 }
 .instagram-feed-wrap a#sbi_load_btn:hover,
 .instagram-feed-wrap a.sbi_load_btn:hover,
 .instagram-feed-wrap a.sb-loadmore_btn:hover,
 .instagram-feed-wrap .sb-loadmore_btn:hover {
-  background: var(--tw-pink-hover) !important;
-  background-color: var(--tw-pink-hover) !important;
+  background: var(--tw-navy) !important;
+  background-color: var(--tw-navy) !important;
+  border-color: var(--tw-navy) !important;
   color: var(--white) !important;
 }
 
-/* Follow on Instagram — secondary teal (filled, no halo) */
+/* Follow on Instagram — reuses the sitewide .btn-secondary treatment
+   (pink outline, transparent fill, turns blue on hover). */
 .instagram-feed-wrap a#sbi_follow_btn,
 .instagram-feed-wrap a.sbi_follow_btn,
 .instagram-feed-wrap #sbi_follow_btn > a,
 .instagram-feed-wrap #sbi_follow_btn a.sb-followBtn-link,
 .instagram-feed-wrap a.sb-followBtn-link,
 .instagram-feed-wrap #sbi_follow_btn:not(div) {
-  background: linear-gradient(
-    135deg,
-    var(--tw-blue) 0%,
-    #056d83 100%
-  ) !important;
-  background-color: var(--tw-blue) !important;
-  background-image: linear-gradient(
-    135deg,
-    var(--tw-blue) 0%,
-    #056d83 100%
-  ) !important;
-  color: var(--white)!important;
-  box-shadow: 0 4px 14px rgba(27, 147, 176, 0.28) !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border-color: var(--tw-pink) !important;
+  color: var(--tw-pink) !important;
 }
 .instagram-feed-wrap a#sbi_follow_btn:hover,
 .instagram-feed-wrap a.sbi_follow_btn:hover,
 .instagram-feed-wrap #sbi_follow_btn > a:hover,
 .instagram-feed-wrap #sbi_follow_btn a.sb-followBtn-link:hover,
 .instagram-feed-wrap a.sb-followBtn-link:hover {
-  transform: translateY(-2px) !important;
-  box-shadow: 0 8px 22px rgba(27, 147, 176, 0.4) !important;
-  filter: brightness(1.08) !important;
-  color: var(--white)!important;
+  background: transparent !important;
+  background-color: transparent !important;
+  border-color: var(--tw-blue) !important;
+  color: var(--tw-blue) !important;
 }
 
 /* Reset inner spans + icons so they inherit the button's text styles cleanly */
