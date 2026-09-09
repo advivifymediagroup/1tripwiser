@@ -5,7 +5,10 @@ Version: 11.0
 Description: This is my custom theme for the website 1tripwiser.
 */
 
-@import url("https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,300;1,9..144,400;1,9..144,600;1,9..144,700&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Saira:wght@400;500;600&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Bebas+Neue&display=swap");
+/* Google Fonts are loaded via a real <link> (mytheme_enqueue_styles(), functions.php)
+   instead of @import — @import forces the browser to fetch and parse this whole
+   stylesheet before it can even start the font CSS request, adding a fully serial
+   round trip to every page load. A <link> loads in parallel with this file. */
 
 /* ── Brand colour tokens — pink + blue only, sampled from the logo mark. (LUXE / LUXURY keep their own gold identity by design — untouched.) ── */
 

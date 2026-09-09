@@ -30,6 +30,9 @@ function mytheme_enqueue_styles() {
     Without this, WordPress falls back to the WP core version (e.g. ?ver=7.0) which never changes, so updated CSS stays cached. */
     $style_path = get_stylesheet_directory() . '/style.css';
     $style_ver  = file_exists( $style_path ) ? filemtime( $style_path ) : '1.0';
+    // Google Fonts as a real <link> (not a CSS @import inside style.css) so it
+    // loads in parallel instead of after style.css finishes downloading.
+    wp_enqueue_style('google-fonts', 'https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,300;1,9..144,400;1,9..144,600;1,9..144,700&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Saira:wght@400;500;600&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Bebas+Neue&display=swap', array(), null);
     wp_enqueue_style('main-style', get_stylesheet_uri(), array(), $style_ver);
     wp_enqueue_style('font-awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css');
     wp_enqueue_style('flaticon-uicons', 'https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css');
@@ -76,6 +79,28 @@ function tw_luxury_enqueue_scripts() {
     wp_enqueue_script( 'tw-luxury', get_template_directory_uri() . '/assets/js/tw-luxury.js', array(), $ver, true );
 }
 add_action( 'wp_enqueue_scripts', 'tw_luxury_enqueue_scripts' );
+
+/* Performance: drop two requests nothing on the site depends on.
+   - Emoji detection JS/CSS: no theme template uses the emoji picker/fallback.
+   - jquery-migrate: only needed for deprecated jQuery APIs (.live(), .die(), etc.),
+     none of which appear anywhere in this theme's JS. */
+function mytheme_disable_unused_assets() {
+    remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
+    remove_action( 'wp_print_styles', 'print_emoji_styles' );
+    remove_action( 'admin_print_scripts', 'print_emoji_detection_script' );
+    remove_action( 'admin_print_styles', 'print_emoji_styles' );
+    remove_filter( 'the_content_feed', 'wp_staticize_emoji' );
+    remove_filter( 'comment_text_rss', 'wp_staticize_emoji' );
+    remove_filter( 'wp_mail', 'wp_staticize_emoji_for_email' );
+}
+add_action( 'init', 'mytheme_disable_unused_assets' );
+
+function mytheme_dequeue_jquery_migrate( $scripts ) {
+    if ( ! is_admin() && isset( $scripts->registered['jquery'] ) ) {
+        $scripts->registered['jquery']->deps = array_diff( $scripts->registered['jquery']->deps, array( 'jquery-migrate' ) );
+    }
+}
+add_action( 'wp_default_scripts', 'mytheme_dequeue_jquery_migrate' );
 
 // ============================================================
 // Hide WordPress admin bar on the frontend (keeps it in wp-admin)
