@@ -7212,8 +7212,8 @@ body.page-template-page-plan-a-trip-php {
   position: absolute;
   top: 12px;
   right: 12px;
-  background: rgba(13, 21, 38, 0.7);
-  color: var(--tw-pink);
+  background: var(--tw-pink);
+  color: var(--white);
   font-size: 0.68rem;
   font-weight: 800;
   letter-spacing: 0.06em;
@@ -7704,14 +7704,55 @@ main.tw-search-page {
   background: var(--tw-navy);
   color: var(--white);
 }
-.tw-blog-grid {
-  display: grid;
-  grid-template-columns: 1.45fr 1fr;
-  grid-template-rows: auto auto;
-  gap: 20px;
+.tw-blog-carousel {
+  position: relative;
 }
-.tw-blog-card--main {
-  grid-row: 1/3;
+.tw-blog-carousel-track {
+  display: flex;
+  gap: 24px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  padding-bottom: 4px;
+  scrollbar-width: none;
+}
+.tw-blog-carousel-track::-webkit-scrollbar {
+  display: none;
+}
+.tw-blog-carousel .tw-blog-card {
+  flex: 0 0 calc((100% - 48px) / 3);
+  scroll-snap-align: start;
+}
+.tw-blog-carousel-btn {
+  position: absolute;
+  top: 130px;
+  z-index: 2;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid var(--tw-border);
+  background: var(--white);
+  color: var(--tw-navy);
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(13, 21, 38, 0.12);
+  transition: background 0.18s, color 0.18s;
+}
+.tw-blog-carousel-btn:hover {
+  background: var(--tw-navy);
+  color: var(--white);
+}
+.tw-blog-carousel-btn--prev {
+  left: -21px;
+}
+.tw-blog-carousel-btn--next {
+  right: -21px;
+}
+@media (max-width: 900px) {
+  .tw-blog-carousel-btn {
+    display: none;
+  }
 }
 .tw-blog-card {
   position: relative;
@@ -7734,12 +7775,7 @@ main.tw-search-page {
   position: relative;
   overflow: hidden;
   flex-shrink: 0;
-}
-.tw-blog-card--main .tw-blog-card-img-wrap {
-  height: 280px;
-}
-.tw-blog-card--side .tw-blog-card-img-wrap {
-  height: 170px;
+  height: 190px;
 }
 .tw-blog-card-img {
   width: 100%;
@@ -7772,7 +7808,7 @@ main.tw-search-page {
   position: absolute;
   top: 14px;
   left: 14px;
-  background: rgba(216, 53, 80, 0.92);
+  background: var(--tw-pink);
   color: var(--white);
   font-size: 0.7rem;
   font-weight: 800;
@@ -7791,14 +7827,13 @@ main.tw-search-page {
 .tw-blog-card-title {
   font-family: var(--heading-font);
   font-weight: 700;
+  font-size: 1.02rem;
   line-height: 1.35;
   margin: 0;
-}
-.tw-blog-card--main .tw-blog-card-title {
-  font-size: 1.22rem;
-}
-.tw-blog-card--side .tw-blog-card-title {
-  font-size: 0.98rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 .tw-blog-card-title a {
   color: var(--tw-navy);
@@ -7813,6 +7848,10 @@ main.tw-search-page {
   color: rgba(13, 21, 38, 0.6);
   line-height: 1.65;
   margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 .tw-blog-card-meta {
   display: flex;
@@ -7873,17 +7912,10 @@ main.tw-search-page {
   text-decoration: none;
 }
 @media (max-width: 768px) {
-  .tw-blog-grid {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto;
+  .tw-blog-carousel .tw-blog-card {
+    flex-basis: 260px;
   }
-  .tw-blog-card--main {
-    grid-row: auto;
-  }
-  .tw-blog-card--main .tw-blog-card-img-wrap {
-    height: 220px;
-  }
-  .tw-blog-card--side .tw-blog-card-img-wrap {
+  .tw-blog-card-img-wrap {
     height: 150px;
   }
   .tw-blog-section {
@@ -8507,8 +8539,6 @@ main.tw-search-page {
   font-size: 0.7rem;
   font-weight: 800;
   letter-spacing: 0.08em;
-  background: rgba(27, 147, 176, 0.85);
-  color: var(--white);
   padding: 3px 10px;
   border-radius: 4px;
 }
@@ -8774,7 +8804,7 @@ table.ba-table tr:hover td {
   font-size: 0.7rem;
   font-weight: 800;
   letter-spacing: 0.12em;
-  background: rgba(27, 147, 176, 0.85);
+  background: var(--tw-pink);
   color: var(--white);
   padding: 3px 13px;
   border-radius: 4px;
@@ -11419,10 +11449,10 @@ object {
   .tw-blog-viewall {
     align-self: flex-start;
   }
-  .tw-blog-card--main .tw-blog-card-img-wrap {
-    height: 190px;
+  .tw-blog-carousel .tw-blog-card {
+    flex-basis: 230px;
   }
-  .tw-blog-card--side .tw-blog-card-img-wrap {
+  .tw-blog-card-img-wrap {
     height: 130px;
   }
 }
@@ -14144,9 +14174,8 @@ section.tribe-hero {
   transform: scale(1.07);
 }
 .ba-card-cat {
-  background: rgba(13, 21, 38, 0.78) !important;
+  background: var(--tw-pink) !important;
   color: var(--white) !important;
-  backdrop-filter: blur(4px);
   font-size: 0.68rem !important;
   font-weight: 800 !important;
   letter-spacing: 0.04em;

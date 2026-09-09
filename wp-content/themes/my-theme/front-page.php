@@ -245,44 +245,61 @@ if ( $tw_hero_video ) {
                 <a href="<?php echo esc_url(home_url('/blog-affiliates/')); ?>" class="tw-blog-viewall">All Stories <span aria-hidden="true">→</span></a>
             </div>
             <?php
-            $tw_blog_q = new WP_Query(['posts_per_page'=>3,'post_status'=>'publish','ignore_sticky_posts'=>true]);
+            $tw_blog_q = new WP_Query(['posts_per_page'=>8,'post_status'=>'publish','ignore_sticky_posts'=>true]);
             if ( $tw_blog_q->have_posts() ) : $tw_blog_posts = $tw_blog_q->posts; wp_reset_postdata(); ?>
-            <div class="tw-blog-grid">
-                <?php foreach ( $tw_blog_posts as $tw_idx => $tw_p ) :
-                    $tw_id       = $tw_p->ID;
-                    $tw_url      = get_permalink($tw_id);
-                    $tw_title    = get_the_title($tw_id);
-                    $tw_date     = get_the_date('M j, Y', $tw_id);
-                    $tw_author   = get_the_author_meta('display_name', $tw_p->post_author);
-                    $tw_avatar   = get_avatar($tw_p->post_author, 28, '', '', ['class'=>'']);
-                    $tw_cats     = get_the_category($tw_id);
-                    $tw_cat_name = $tw_cats ? esc_html($tw_cats[0]->name) : 'Travel';
-                    $tw_words    = str_word_count(strip_tags($tw_p->post_content));
-                    $tw_read     = max(1, round($tw_words / 200)) . ' min read';
-                    $tw_excerpt  = wp_trim_words(get_the_excerpt($tw_id) ?: wp_strip_all_tags($tw_p->post_content), 22, '…');
-                    $tw_thumb    = get_the_post_thumbnail_url($tw_id, $tw_idx === 0 ? 'large' : 'medium_large');
-                    $tw_is_main  = ($tw_idx === 0); ?>
-                <article class="tw-blog-card <?php echo $tw_is_main ? 'tw-blog-card--main' : 'tw-blog-card--side'; ?>">
-                    <a class="tw-blog-card-img-wrap" href="<?php echo esc_url($tw_url); ?>" tabindex="-1" aria-hidden="true">
-                        <?php if ($tw_thumb) : ?>
-                        <img src="<?php echo esc_url($tw_thumb); ?>" alt="" loading="<?php echo $tw_idx === 0 ? 'eager' : 'lazy'; ?>" class="tw-blog-card-img">
-                        <?php else : ?>
-                        <div class="tw-blog-card-img tw-blog-card-img--placeholder"></div>
-                        <?php endif; ?>
-                        <div class="tw-blog-card-overlay"></div>
-                        <span class="tw-blog-card-cat"><?php echo $tw_cat_name; ?></span>
-                    </a>
-                    <div class="tw-blog-card-body">
-                        <h3 class="tw-blog-card-title"><a href="<?php echo esc_url($tw_url); ?>"><?php echo esc_html($tw_title); ?></a></h3>
-                        <?php if ($tw_is_main) : ?><p class="tw-blog-card-excerpt"><?php echo esc_html($tw_excerpt); ?></p><?php endif; ?>
-                        <div class="tw-blog-card-meta">
-                            <div class="tw-blog-card-author"><div class="tw-blog-card-avatar"><?php echo $tw_avatar; ?></div><span><?php echo esc_html($tw_author); ?></span></div>
-                            <div class="tw-blog-card-info"><span class="tw-blog-card-date"><?php echo esc_html($tw_date); ?></span><span class="tw-blog-card-dot" aria-hidden="true">·</span><span class="tw-blog-card-read"><?php echo esc_html($tw_read); ?></span></div>
+            <div class="tw-blog-carousel">
+                <button type="button" class="tw-blog-carousel-btn tw-blog-carousel-btn--prev" aria-label="<?php esc_attr_e('Previous', 'mytheme'); ?>">&#8249;</button>
+                <div class="tw-blog-carousel-track" id="tw-blog-carousel-track">
+                    <?php foreach ( $tw_blog_posts as $tw_idx => $tw_p ) :
+                        $tw_id       = $tw_p->ID;
+                        $tw_url      = get_permalink($tw_id);
+                        $tw_title    = get_the_title($tw_id);
+                        $tw_date     = get_the_date('M j, Y', $tw_id);
+                        $tw_author   = get_the_author_meta('display_name', $tw_p->post_author);
+                        $tw_avatar   = get_avatar($tw_p->post_author, 28, '', '', ['class'=>'']);
+                        $tw_cats     = get_the_category($tw_id);
+                        $tw_cat_name = $tw_cats ? esc_html($tw_cats[0]->name) : 'Travel';
+                        $tw_words    = str_word_count(strip_tags($tw_p->post_content));
+                        $tw_read     = max(1, round($tw_words / 200)) . ' min read';
+                        $tw_excerpt  = wp_trim_words(get_the_excerpt($tw_id) ?: wp_strip_all_tags($tw_p->post_content), 14, '…');
+                        $tw_thumb    = get_the_post_thumbnail_url($tw_id, 'medium_large'); ?>
+                    <article class="tw-blog-card">
+                        <a class="tw-blog-card-img-wrap" href="<?php echo esc_url($tw_url); ?>" tabindex="-1" aria-hidden="true">
+                            <?php if ($tw_thumb) : ?>
+                            <img src="<?php echo esc_url($tw_thumb); ?>" alt="" loading="<?php echo $tw_idx < 2 ? 'eager' : 'lazy'; ?>" class="tw-blog-card-img">
+                            <?php else : ?>
+                            <div class="tw-blog-card-img tw-blog-card-img--placeholder"></div>
+                            <?php endif; ?>
+                            <div class="tw-blog-card-overlay"></div>
+                            <span class="tw-blog-card-cat"><?php echo $tw_cat_name; ?></span>
+                        </a>
+                        <div class="tw-blog-card-body">
+                            <h3 class="tw-blog-card-title"><a href="<?php echo esc_url($tw_url); ?>"><?php echo esc_html($tw_title); ?></a></h3>
+                            <p class="tw-blog-card-excerpt"><?php echo esc_html($tw_excerpt); ?></p>
+                            <div class="tw-blog-card-meta">
+                                <div class="tw-blog-card-author"><div class="tw-blog-card-avatar"><?php echo $tw_avatar; ?></div><span><?php echo esc_html($tw_author); ?></span></div>
+                                <div class="tw-blog-card-info"><span class="tw-blog-card-date"><?php echo esc_html($tw_date); ?></span><span class="tw-blog-card-dot" aria-hidden="true">·</span><span class="tw-blog-card-read"><?php echo esc_html($tw_read); ?></span></div>
+                            </div>
                         </div>
-                    </div>
-                </article>
-                <?php endforeach; ?>
+                    </article>
+                    <?php endforeach; ?>
+                </div>
+                <button type="button" class="tw-blog-carousel-btn tw-blog-carousel-btn--next" aria-label="<?php esc_attr_e('Next', 'mytheme'); ?>">&#8250;</button>
             </div>
+            <script>
+            (function () {
+                var track = document.getElementById('tw-blog-carousel-track');
+                if (!track) return;
+                var prev = track.parentElement.querySelector('.tw-blog-carousel-btn--prev');
+                var next = track.parentElement.querySelector('.tw-blog-carousel-btn--next');
+                function step() {
+                    var card = track.querySelector('.tw-blog-card');
+                    return card ? card.getBoundingClientRect().width + 24 : 300;
+                }
+                prev.addEventListener('click', function () { track.scrollBy({ left: -step(), behavior: 'smooth' }); });
+                next.addEventListener('click', function () { track.scrollBy({ left: step(), behavior: 'smooth' }); });
+            })();
+            </script>
             <?php else : ?>
             <div class="tw-blog-empty"><p>No posts yet — <a href="<?php echo esc_url(home_url('/submit-blog/')); ?>">be the first to write one!</a></p></div>
             <?php endif; ?>
