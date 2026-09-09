@@ -36,8 +36,8 @@ if ( $tw_hero_video ) {
 
             <h1 class="tw-h1">
                 Trips designed around <span class="tw-hero-title-accent">you</span>.<br>
-                <span class="tw-hero-title-quiet">Not around a package.</span>
             </h1>
+            <span class="tw-hero-title-quiet">Not around a package.</span>
 
             <form class="tw-hero-search" role="search" method="get" action="<?php echo esc_url( home_url( '/' ) ); ?>">
                 <div class="tw-hero-search-field">
@@ -49,7 +49,7 @@ if ( $tw_hero_video ) {
 
             <div class="tw-hero-actions">
                 <a href="<?php echo esc_url(mytheme_get_plan_trip_url()); ?>" class="btn-primary">Plan a Trip &mdash; Free</a>
-                <a href="#featured-packages" class="btn-secondary">Explore Packages</a>
+                <a href="#featured-packages" class="btn-secondary-hero">Explore Packages</a>
             </div>
         </div>
 
@@ -262,7 +262,7 @@ if ( $tw_hero_video ) {
                     <div class="tw-blog-kicker">From the Blog</div>
                     <h2 class="tw-h2 tw-h2--lg tw-blog-title">Latest Travel <span class="tw-h2-accent">Stories</span></h2>
                 </div>
-                <a href="<?php echo esc_url(home_url('/blog-affiliates/')); ?>" class="tw-blog-viewall">All Stories <span aria-hidden="true">→</span></a>
+                <a href="<?php echo esc_url(home_url('/blog-affiliates/')); ?>" class="tw-blog-viewall">All Stories</a>
             </div>
             <?php
             $tw_blog_q = new WP_Query(['posts_per_page'=>8,'post_status'=>'publish','ignore_sticky_posts'=>true]);
