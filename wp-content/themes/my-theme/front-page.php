@@ -62,10 +62,31 @@ if ( $tw_hero_video ) {
                         src="https://www.youtube.com/embed/<?php echo esc_attr($tw_yt_id); ?>?autoplay=1&mute=1&loop=1&playlist=<?php echo esc_attr($tw_yt_id); ?>&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&playsinline=1&disablekb=1&fs=0&cc_load_policy=0&color=white"
                         frameborder="0" allow="autoplay; encrypted-media" loading="lazy" title=""></iframe>
                 </div>
-                <?php elseif ( $tw_hero_video ) : ?>
-                <video class="tw-hero-vid" autoplay muted loop playsinline preload="metadata">
-                    <source src="<?php echo esc_url($tw_hero_video); ?>">
-                </video>
+                <?php elseif ( $tw_hero_video && ! wp_is_mobile() ) : ?>
+                <?php /* Deferred load: no autoplay/src in the markup, so the browser never
+                   fetches this (often multi-MB) file until after the page has painted.
+                   Mobile skips it outright — .tw-hero-mobile-img already covers that viewport. */ ?>
+                <video class="tw-hero-vid" muted loop playsinline preload="none" data-src="<?php echo esc_url($tw_hero_video); ?>"></video>
+                <script>
+                (function () {
+                    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+                    var v = document.currentScript.previousElementSibling;
+                    var loaded = false;
+                    function loadVideo() {
+                        if (!v || loaded) return;
+                        loaded = true;
+                        var src = v.getAttribute('data-src');
+                        v.innerHTML = '<source src="' + src + '">';
+                        v.load();
+                        v.play().catch(function () {});
+                    }
+                    if (document.readyState === 'complete') {
+                        setTimeout(loadVideo, 0);
+                    } else {
+                        window.addEventListener('load', function () { setTimeout(loadVideo, 0); });
+                    }
+                })();
+                </script>
                 <?php elseif ( $tw_hero_image ) : ?>
                 <div class="tw-hero-img" style="background-image:url('<?php echo esc_url($tw_hero_image); ?>')"></div>
                 <?php endif; ?>

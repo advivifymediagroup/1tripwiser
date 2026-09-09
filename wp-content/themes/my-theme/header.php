@@ -6,6 +6,8 @@
     <title><?php wp_title('|', true, 'right'); bloginfo('name'); ?></title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="preconnect" href="https://cdn-uicons.flaticon.com" crossorigin>
     <?php wp_head(); ?>
     <!-- Critical overflow prevention — inline so no cache/plugin can block it (v3) -->
     <style id="tw-overflow-fix">
