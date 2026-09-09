@@ -38,7 +38,6 @@ if ( $tw_hero_video ) {
                 Trips designed around <span class="tw-hero-title-accent">you</span>.<br>
                 <span class="tw-hero-title-quiet">Not around a package.</span>
             </h1>
-            <p class="tw-hero-desc">Handcrafted itineraries, priced fairly, ready in 24 hours.</p>
 
             <form class="tw-hero-search" role="search" method="get" action="<?php echo esc_url( home_url( '/' ) ); ?>">
                 <div class="tw-hero-search-field">
@@ -239,7 +238,7 @@ if ( $tw_hero_video ) {
     <section id="featured-posts" class="tw-blog-section">
         <div class="container">
             <div class="tw-blog-header" data-reveal="up">
-                <div>
+                <div class="tw-blog-header-cn">
                     <div class="tw-blog-kicker">From the Blog</div>
                     <h2 class="tw-h2 tw-h2--lg tw-blog-title">Latest Travel <span class="tw-h2-accent">Stories</span></h2>
                 </div>
@@ -319,7 +318,7 @@ if ( $tw_hero_video ) {
             <div class="instagram-feed-heading" data-reveal="up">
                 <span class="tw-ig-kicker">Follow the journey</span>
                 <h2 class="tw-h2 tw-h2--lg">Our <span class="tw-h2-accent">Instagram</span></h2>
-                <a class="tw-ig-handle" href="https://www.instagram.com/1tripwiser/" target="_blank" rel="noopener noreferrer"><i class="fi-rr-camera" aria-hidden="true"></i> @1tripwiser</a>
+                <a class="tw-ig-handle" href="https://www.instagram.com/1tripwiser/" target="_blank" rel="noopener noreferrer"> @1tripwiser</a>
             </div>
             <div class="instagram-feed-wrap">
                 <?php echo do_shortcode('[instagram-feed feed=1]'); ?>

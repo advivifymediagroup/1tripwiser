@@ -35,7 +35,7 @@ $has_trips = $trips_query->have_posts();
                 <a href="<?php echo esc_url( home_url('/') ); ?>">Home</a><span>›</span>
                 <span>Women's Group Trips</span>
             </nav>
-            <span class="tw-womens-kicker"><i class="fi-rr-sparkles" aria-hidden="true"></i> Travel Together · Grow Together</span>
+            <span class="tw-womens-kicker">Travel Together · Grow Together</span>
             <h1 class="tw-h1">Women's <span class="accent-red">Group Trips</span></h1>
             <p class="explore-hero-sub">Safe, curated and empowering travel experiences designed exclusively for women. Join your tribe, explore the world.</p>
         </div>
@@ -112,7 +112,6 @@ $has_trips = $trips_query->have_posts();
                             <?php if ( $price_raw ) : ?>
                             <strong class="tw-womens-trip-price"><?php echo esc_html( function_exists('mytheme_format_rupee_amount') ? mytheme_format_rupee_amount($price_raw) : '₹'.$price_raw ); ?></strong>
                             <?php endif; ?>
-                            <?php if ( $emi ) : ?><small><?php echo esc_html( $emi ); ?>/mo</small><?php endif; ?>
                         </div>
                         <a href="<?php echo esc_url( $book ); ?>" class="btn-primary btn-sm">Book Now</a>
                     </div>
@@ -143,7 +142,7 @@ $has_trips = $trips_query->have_posts();
         if ( ! empty( $testimonials ) ) : ?>
         <div class="tw-womens-testimonials">
             <div class="tw-womens-testi-head">
-                <span class="tw-womens-kicker"><i class="fi-rr-comment" aria-hidden="true"></i> What our travellers say</span>
+                <span class="tw-womens-kicker"> What our travellers say</span>
                 <h2 class="tw-womens-testi-title">Stories from <span>Our Tribe</span></h2>
             </div>
             <div class="tw-womens-testi-grid">
