@@ -4140,10 +4140,11 @@ body.page-template-page-plan-a-trip-php {
 .tw-hero {
   position: relative;
   background-image: url('assets/images/hero-sunset-bg.jpg');
-  background-color: var(--white);
-  background-size: cover;
-  background-position: center;
-  padding: 60px 0 36px;
+  background-color: #f3d9c6;
+  background-size: 130%;
+  background-position: 65% 40%;
+  background-repeat: no-repeat;
+  padding: 60px 0 80px;
   overflow: hidden;
 }
 /* Homepage hero heading only — every other page's .tw-h1 keeps the shared heading font. */
