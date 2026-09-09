@@ -40,8 +40,8 @@ $categories    = get_categories(array('hide_empty' => false, 'orderby' => 'name'
             <h2>Post Submitted!</h2>
             <p id="sb-success-msg">Your post has been submitted and is pending review. We'll publish it within 24–48 hours.</p>
             <div class="sb-success-btns">
-                <a href="<?php echo esc_url(home_url('/blog-affiliates/')); ?>" class="sb-success-btn primary">← Back to Blog</a>
-                <a href="<?php echo esc_url(get_permalink()); ?>" class="sb-success-btn secondary">Submit Another</a>
+                <a href="<?php echo esc_url(home_url('/blog-affiliates/')); ?>" class="btn-primary">← Back to Blog</a>
+                <a href="<?php echo esc_url(get_permalink()); ?>" class="btn-secondary">Submit Another</a>
             </div>
         </div>
 
@@ -65,7 +65,7 @@ $categories    = get_categories(array('hide_empty' => false, 'orderby' => 'name'
             </div>
 
             <div class="sb-field-row">
-                <div class="sb-field" style="margin:0">
+                <div class="sb-field no-margin">
                     <label class="sb-label" for="sb_category">Category</label>
                     <select id="sb_category" name="sb_category" class="sb-select">
                         <option value="">— Select a category —</option>
@@ -75,13 +75,13 @@ $categories    = get_categories(array('hide_empty' => false, 'orderby' => 'name'
                         <option value="new">+ Add new category…</option>
                     </select>
                 </div>
-                <div class="sb-field" style="margin:0" id="sb-new-cat-wrap" style="display:none">
+                <div class="sb-field no-margin" id="sb-new-cat-wrap" style="display:none">
                     <label class="sb-label" for="sb_new_category">New Category Name</label>
                     <input type="text" id="sb_new_category" name="sb_new_category" class="sb-input" placeholder="e.g. Budget Travel">
                 </div>
             </div>
 
-            <div class="sb-field" style="margin-top:18px">
+            <div class="sb-field mt-18">
                 <label class="sb-label" for="sb_excerpt">Short Teaser / Excerpt</label>
                 <textarea id="sb_excerpt" name="sb_excerpt" class="sb-textarea" rows="3"
                           placeholder="A 1–2 sentence hook that tells readers what your post is about…" maxlength="300"></textarea>
@@ -107,7 +107,7 @@ $categories    = get_categories(array('hide_empty' => false, 'orderby' => 'name'
             <hr class="sb-divider">
 
             <!-- ③ Content -->
-            <div class="sb-section-title">③ Post Content <span style="font-size:0.78rem;font-weight:400;text-transform:none;letter-spacing:0">— write your full article here</span></div>
+            <div class="sb-section-title">③ Post Content <span class="sb-section-note">— write your full article here</span></div>
             <div class="sb-field">
                 <textarea id="sb_content" name="sb_content" class="sb-textarea sb-content-area"
                           placeholder="Start writing your travel story… Use blank lines to separate paragraphs. You can use *bold*, _italic_, and ## Heading 2 formatting." required></textarea>
@@ -130,16 +130,16 @@ $categories    = get_categories(array('hide_empty' => false, 'orderby' => 'name'
             <?php if (!$is_logged_in) : ?>
             <div class="sb-section-title">④ About You</div>
             <div class="sb-field-row">
-                <div class="sb-field" style="margin:0">
+                <div class="sb-field no-margin">
                     <label class="sb-label" for="sb_author_name">Your Name <span class="req">*</span></label>
                     <input type="text" id="sb_author_name" name="sb_author_name" class="sb-input"
                            placeholder="Jane Doe" maxlength="80" required>
                 </div>
-                <div class="sb-field" style="margin:0">
+                <div class="sb-field no-margin">
                     <label class="sb-label" for="sb_author_email">Email <span class="req">*</span></label>
                     <input type="email" id="sb_author_email" name="sb_author_email" class="sb-input"
                            placeholder="jane@example.com" required>
-                    <p class="sb-hint" style="margin:0">Not published. Used to notify you when your post goes live.</p>
+                    <p class="sb-hint no-margin">Not published. Used to notify you when your post goes live.</p>
                 </div>
             </div>
             <div class="sb-field">
@@ -152,7 +152,7 @@ $categories    = get_categories(array('hide_empty' => false, 'orderby' => 'name'
 
             <!-- Submit -->
             <div class="sb-submit-row">
-                <button type="submit" class="sb-submit-btn" id="sb-submit-btn">
+                <button type="submit" class="btn-primary btn-lg btn-block" id="sb-submit-btn">
                     <span id="sb-btn-text"><i class="fi-rr-plane" aria-hidden="true"></i> Submit Post</span>
                 </button>
                 <p class="sb-submit-note">
@@ -333,7 +333,7 @@ $categories    = get_categories(array('hide_empty' => false, 'orderby' => 'name'
                 document.getElementById('sb-success-msg').innerHTML = msg;
                 // If published, update the "Back to blog" button
                 if (data.data.status === 'publish') {
-                    var primary = successScr.querySelector('.sb-success-btn.primary');
+                    var primary = successScr.querySelector('.btn-primary');
                     if (primary) primary.href = data.data.url;
                 }
                 // Show success, hide form

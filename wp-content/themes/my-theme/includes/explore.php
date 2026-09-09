@@ -865,7 +865,7 @@ function tw_luxe_showcase( $limit = 3 ) {
             </div>
 
             <div class="tw-luxe-cta">
-                <a href="<?php echo esc_url( $page_url ); ?>" class="tw-luxe-cta-btn">Explore the Collection <i class="fa-solid fa-arrow-right"></i></a>
+                <a href="<?php echo esc_url( $page_url ); ?>" class="tw-luxe-cta-btn">Explore the Collection</a>
             </div>
         </div>
     </section>
@@ -914,8 +914,8 @@ function tw_womens_trips_showcase( $limit = 6 ) {
         <div class="container tw-womens-inner">
 
             <div class="tw-womens-header" data-reveal="up">
-                <div class="tw-womens-kicker"><i class="fi-rr-sparkles" aria-hidden="true"></i> Only for the brave ones</div>
-                <h2 class="tw-womens-title">Women's <span>Group Trips</span></h2>
+                <div class="tw-womens-kicker">Only for the brave ones</div>
+                <h2 class="tw-h2 tw-h2--lg tw-womens-title">Women's <span>Group Trips</span></h2>
                 <p class="tw-womens-sub">Safe. Curated. Empowering. Join a crew of like-minded women and explore the world your way.</p>
             </div>
 
@@ -959,7 +959,7 @@ function tw_womens_trips_showcase( $limit = 6 ) {
             </div>
 
             <div class="tw-womens-cta">
-                <a href="<?php echo esc_url( $page_url ); ?>" class="tw-womens-cta-btn">Explore All Women's Trips <i class="fa-solid fa-arrow-right"></i></a>
+                <a href="<?php echo esc_url( $page_url ); ?>" class="btn-primary">Explore All Women's Trips</a>
             </div>
         </div>
     </section>
@@ -1079,7 +1079,7 @@ function tw_explore_subheader() {
                 </a>
                 <div class="tw-mega tw-mega-events" role="menu">
                     <?php if ( $events ) : ?>
-                    <div class="tw-mega-events-grid">
+                    <div class="tw-mega-events-grid-events">
                         <?php foreach ( $events as $ev ) :
                             $cur = get_queried_object_id() === $ev->ID; ?>
                             <a class="tw-mega-event <?php echo $cur ? 'active' : ''; ?>" href="<?php echo esc_url( get_permalink( $ev->ID ) ); ?>">
@@ -1156,7 +1156,7 @@ function tw_explore_subheader() {
                     <?php else : ?>
                         <div class="tw-mega-empty"><p>The next collection is being composed.</p></div>
                     <?php endif; ?>
-                    <a class="tw-mega-allcta" href="<?php echo esc_url( tw_luxe_page_url() ); ?>">Explore the Collection <i class="fa-solid fa-arrow-right"></i></a>
+                    <a class="tw-mega-allcta" href="<?php echo esc_url( tw_luxe_page_url() ); ?>">Explore the Collection</a>
                 </div>
             </div>
 

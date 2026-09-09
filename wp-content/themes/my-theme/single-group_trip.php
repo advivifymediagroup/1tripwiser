@@ -128,7 +128,7 @@ while ( have_posts() ) :
                 <span><?php the_title(); ?></span>
             </nav>
 
-            <h1 class="explore-hero-title"><?php the_title(); ?></h1>
+            <h1 class="tw-h1"><?php the_title(); ?></h1>
 
             <?php if ( $location || $region ) : ?>
             <p class="explore-hero-sub">
@@ -316,8 +316,8 @@ while ( have_posts() ) :
                         <?php endforeach; ?>
                     </dl>
                     <?php endif; ?>
-                    <a class="dest-rail-btn" href="#group-enquiry"><?php esc_html_e( 'Book Now', 'mytheme' ); ?></a>
-                    <a class="dest-rail-btn dest-rail-btn--ghost" href="<?php echo esc_url( mytheme_get_plan_trip_url() ); ?>"><?php esc_html_e( 'Customise this trip', 'mytheme' ); ?></a>
+                    <a class="btn-primary btn-block" href="#group-enquiry"><?php esc_html_e( 'Book Now', 'mytheme' ); ?></a>
+                    <a class="btn-secondary btn-block" href="<?php echo esc_url( mytheme_get_plan_trip_url() ); ?>"><?php esc_html_e( 'Customise this trip', 'mytheme' ); ?></a>
                 </div>
             </aside>
 

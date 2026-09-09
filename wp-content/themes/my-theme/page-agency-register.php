@@ -20,7 +20,7 @@ $status = isset( $_GET['agency'] ) ? sanitize_key( $_GET['agency'] ) : '';
         <div class="tw-agency-hero-overlay" aria-hidden="true"></div>
         <div class="container tw-agency-hero-inner">
             <span class="tw-agency-hero-kicker">PARTNER WITH US</span>
-            <h1 class="tw-agency-hero-title">Travel Agency <span>Registration</span></h1>
+            <h1 class="tw-h1 tw-agency-hero-title">Travel Agency <span>Registration</span></h1>
             <p class="tw-agency-hero-sub">Join the 1TRIPWISER partner network. Share your details below and our team will get in touch within 48 hours.</p>
             <div class="tw-agency-hero-perks">
                 <span><i class="fi-rr-check" aria-hidden="true"></i> Quality leads</span>
@@ -83,7 +83,7 @@ $status = isset( $_GET['agency'] ) ? sanitize_key( $_GET['agency'] ) : '';
                 </label>
             </div>
 
-            <button type="submit" class="tw-agency-submit">Submit Registration →</button>
+            <button type="submit" class="tw-agency-submit">Submit Registration</button>
         </form>
 
     </div>

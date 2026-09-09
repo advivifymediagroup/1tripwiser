@@ -86,16 +86,16 @@ if ( isset($_GET['updated']) && $_GET['updated'] === '1' ) {
         <div>
             <!-- Notice from redirect -->
             <?php if ($notice === 'success') : ?>
-            <div class="pf-msg success" style="display:block"><i class="fi-rr-check-circle" aria-hidden="true"></i> Profile updated successfully!</div>
+            <div class="pf-msg success is-visible"><i class="fi-rr-check-circle" aria-hidden="true"></i> Profile updated successfully!</div>
             <?php elseif ($notice) : ?>
-            <div class="pf-msg error" style="display:block"><i class="fi-rr-triangle-warning" aria-hidden="true"></i> <?php echo esc_html($notice); ?></div>
+            <div class="pf-msg error is-visible"><i class="fi-rr-triangle-warning" aria-hidden="true"></i> <?php echo esc_html($notice); ?></div>
             <?php endif; ?>
 
             <!-- AJAX messages -->
             <div class="pf-msg" id="pf-msg"></div>
 
             <!-- Personal info -->
-            <div class="pf-card" style="margin-bottom:20px">
+            <div class="pf-card mb-20">
                 <div class="pf-card-head">
                     <span class="pf-card-title"><i class="fi-rr-pencil" aria-hidden="true"></i> Personal Information</span>
                 </div>
@@ -136,7 +136,7 @@ if ( isset($_GET['updated']) && $_GET['updated'] === '1' ) {
                             <p class="pf-hint">Changing your email requires you to confirm the new address.</p>
                         </div>
 
-                        <button type="submit" class="pf-save-btn" id="pf-info-btn">
+                        <button type="submit" class="btn-primary btn-lg btn-block" id="pf-info-btn">
                             <span id="pf-info-btn-text">Save Changes</span>
                         </button>
                     </form>
@@ -180,7 +180,7 @@ if ( isset($_GET['updated']) && $_GET['updated'] === '1' ) {
                             </div>
                         </div>
 
-                        <button type="submit" class="pf-save-btn" id="pf-pw-btn">
+                        <button type="submit" class="btn-primary btn-lg btn-block" id="pf-pw-btn">
                             <span id="pf-pw-btn-text">Update Password</span>
                         </button>
                     </form>
@@ -191,11 +191,11 @@ if ( isset($_GET['updated']) && $_GET['updated'] === '1' ) {
         <!-- RIGHT: Sidebar -->
         <div>
             <!-- Gravatar note -->
-            <div class="pf-card" style="margin-bottom:20px">
+            <div class="pf-card mb-20">
                 <div class="pf-card-head"><span class="pf-card-title"><i class="fi-rr-picture" aria-hidden="true"></i> Profile Photo</span></div>
                 <div class="pf-card-body">
-                    <div style="text-align:center;margin-bottom:16px">
-                        <div style="width:80px;height:80px;border-radius:50%;overflow:hidden;border:3px solid var(--gold);margin:0 auto 12px;display:flex;align-items:center;justify-content:center;background:rgba(216,53,80,0.1);font-size:2rem;">
+                    <div class="pf-avatar-wrap">
+                        <div class="pf-avatar-circle">
                             <?php echo get_avatar($uid, 80, '', '', array('class'=>'')) ?: '<i class="fi-rr-user" aria-hidden="true"></i>'; ?>
                         </div>
                     </div>
@@ -206,9 +206,9 @@ if ( isset($_GET['updated']) && $_GET['updated'] === '1' ) {
             </div>
 
             <!-- Quick info -->
-            <div class="pf-card" style="margin-bottom:20px">
+            <div class="pf-card mb-20">
                 <div class="pf-card-head"><span class="pf-card-title">ℹ Account Details</span></div>
-                <div class="pf-card-body" style="padding-top:8px;padding-bottom:8px">
+                <div class="pf-card-body tight">
                     <div class="pf-info-row">
                         <div class="pf-info-icon"><i class="fi-rr-user" aria-hidden="true"></i></div>
                         <div>
@@ -234,7 +234,7 @@ if ( isset($_GET['updated']) && $_GET['updated'] === '1' ) {
                         <div class="pf-info-icon"><i class="fi-rr-envelope" aria-hidden="true"></i></div>
                         <div>
                             <div class="pf-info-label">Email</div>
-                            <div class="pf-info-val" style="word-break:break-all"><?php echo esc_html($user->user_email); ?></div>
+                            <div class="pf-info-val wrap-all"><?php echo esc_html($user->user_email); ?></div>
                         </div>
                     </div>
                 </div>
@@ -245,9 +245,9 @@ if ( isset($_GET['updated']) && $_GET['updated'] === '1' ) {
                 <div class="pf-card-head">
                     <span class="pf-card-title"><i class="fi-rr-memo" aria-hidden="true"></i> My Posts</span>
                     <a href="<?php echo esc_url(home_url('/submit-blog/')); ?>"
-                       style="font-size:0.78rem;font-weight:800;color:var(--gold);text-decoration:none">+ New Post</a>
+                       class="pf-new-post-link">+ New Post</a>
                 </div>
-                <div class="pf-card-body" style="padding-top:8px;padding-bottom:8px">
+                <div class="pf-card-body tight">
                     <?php if ($my_posts) : ?>
                         <?php foreach ($my_posts as $p) :
                             $thumb = get_the_post_thumbnail_url($p->ID, 'thumbnail');
@@ -261,7 +261,7 @@ if ( isset($_GET['updated']) && $_GET['updated'] === '1' ) {
                                 <i class="fi-rr-plane" aria-hidden="true"></i>
                                 <?php endif; ?>
                             </div>
-                            <div style="flex:1;min-width:0">
+                            <div class="pf-inline-flex-1">
                                 <div class="pf-post-title">
                                     <?php if ($status === 'publish') : ?>
                                     <a href="<?php echo esc_url(get_permalink($p->ID)); ?>"><?php echo esc_html($p->post_title); ?></a>

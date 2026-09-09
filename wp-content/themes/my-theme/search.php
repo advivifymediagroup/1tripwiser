@@ -103,11 +103,11 @@ endif;
             </div>
 
         <?php else : ?>
-            <div class="tribe-empty" style="margin-top:36px;">
+            <div class="tribe-empty mt-36">
                 <div class="tribe-empty-icon"><i class="fi-rr-search" aria-hidden="true"></i></div>
                 <h3>No results for "<?php echo esc_html( $tw_q ); ?>"</h3>
                 <p>Try a destination (Bali, Ladakh), a trip style (Honeymoon, Group), or an event (Oktoberfest).</p>
-                <a class="tribe-btn-primary" href="<?php echo esc_url( mytheme_get_plan_trip_url() ); ?>"><i class="fi-rr-plane" aria-hidden="true"></i> Plan a Trip — Free</a>
+                <a class="btn-primary" href="<?php echo esc_url( mytheme_get_plan_trip_url() ); ?>"><i class="fi-rr-plane" aria-hidden="true"></i> Plan a Trip — Free</a>
             </div>
         <?php endif; ?>
     </div>

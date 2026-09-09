@@ -182,7 +182,7 @@
             }
             wp_nav_menu($walker_args);
             ?>
-            <a class="tw-cta" href="<?php echo esc_url(mytheme_get_plan_trip_url()); ?>">Plan My Trip</a>
+            <a class="btn-primary btn-sm" href="<?php echo esc_url(mytheme_get_plan_trip_url()); ?>">Plan My Trip</a>
 
             <!-- User account nav -->
             <div class="tw-user-nav">
@@ -207,7 +207,7 @@
                 </div>
             <?php else : ?>
                 <a class="tw-auth-link" href="<?php echo esc_url(home_url('/login/')); ?>">Log In</a>
-                <a class="tw-auth-btn" href="<?php echo esc_url(home_url('/register/')); ?>">Sign Up</a>
+                <a class="btn-secondary btn-sm" href="<?php echo esc_url(home_url('/register/')); ?>">Sign Up</a>
             <?php endif; ?>
             </div>
 
@@ -234,8 +234,8 @@
             'fallback_cb'    => 'tw_default_mobile_nav',
         ));
         ?>
-        <a class="tw-cta tw-cta-mobile" href="<?php echo esc_url(mytheme_get_plan_trip_url()); ?>"><i class="fa-solid fa-paper-plane"></i> Plan My Trip</a>
-        <button type="button" class="tw-cta tw-cta-mobile tw-cta-mobile-search" id="tw-search-open-mobile"><i class="fa-solid fa-magnifying-glass"></i> Search the site</button>
+        <a class="btn-primary btn-sm tw-cta-mobile" href="<?php echo esc_url(mytheme_get_plan_trip_url()); ?>"><i class="fa-solid fa-paper-plane"></i> Plan My Trip</a>
+        <button type="button" class="btn-primary btn-sm tw-cta-mobile tw-cta-mobile-search" id="tw-search-open-mobile"><i class="fa-solid fa-magnifying-glass"></i> Search the site</button>
 
         <!-- Mobile auth links -->
         <div class="tw-mobile-auth">

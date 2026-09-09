@@ -22,7 +22,7 @@
                             <div class="post-excerpt">
                                 <?php the_excerpt(); ?>
                             </div>
-                            <a href="<?php the_permalink(); ?>" class="read-more">Read More</a>
+                            <a href="<?php the_permalink(); ?>" class="btn-primary btn-sm">Read More</a>
                         </div>
                     </article>
                 <?php endwhile; ?>

@@ -88,7 +88,7 @@ while ( have_posts() ) :
                 <a href="<?php echo esc_url( $archive ); ?>">Itineraries</a><span>›</span>
                 <span><?php the_title(); ?></span>
             </nav>
-            <h1 class="explore-hero-title"><?php the_title(); ?></h1>
+            <h1 class="tw-h1"><?php the_title(); ?></h1>
             <?php if ( $dest_name || $region ) : ?>
             <p class="explore-hero-sub"><?php echo esc_html( $dest_name ?: '' ); ?><?php if ( $region && $dest_name ) { echo ' · '; } ?><?php if ( $region ) { echo esc_html( $region->name ); } ?></p>
             <?php endif; ?>
@@ -247,8 +247,8 @@ while ( have_posts() ) :
                         <?php endforeach; ?>
                     </dl>
                     <?php endif; ?>
-                    <a class="dest-rail-btn" href="#itinerary-enquiry"><?php esc_html_e( 'Enquire', 'mytheme' ); ?></a>
-                    <a class="dest-rail-btn dest-rail-btn--ghost" href="<?php echo esc_url( mytheme_get_plan_trip_url() ); ?>"><?php esc_html_e( 'Create Your Own Itinerary', 'mytheme' ); ?></a>
+                    <a class="btn-primary btn-block" href="#itinerary-enquiry"><?php esc_html_e( 'Enquire', 'mytheme' ); ?></a>
+                    <a class="btn-secondary btn-block" href="<?php echo esc_url( mytheme_get_plan_trip_url() ); ?>"><?php esc_html_e( 'Create Your Own Itinerary', 'mytheme' ); ?></a>
                 </div>
             </aside>
 

@@ -39,7 +39,7 @@ if ( ! function_exists( 'tw_explore_card' ) ) {
                 <a href="<?php echo esc_url( home_url('/') ); ?>">Home</a><span>›</span><span>Group Trips</span>
             </nav>
             <span class="explore-hero-kicker">Travel together</span>
-            <h1 class="explore-hero-title">Group <span style="color:var(--tw-red)">Trips</span></h1>
+            <h1 class="tw-h1">Group <span class="accent-red">Trips</span></h1>
             <p class="explore-hero-sub">
                 <?php
                 echo $tw_region_term
@@ -64,8 +64,8 @@ if ( ! function_exists( 'tw_explore_card' ) ) {
                 <strong>Looking for Women-Only Group Trips?</strong>
                 <span>We have a dedicated section with safe, curated travel experiences exclusively for women.</span>
             </div>
-            <a class="gt-womens-callout-btn" href="<?php echo esc_url( tw_womens_trips_page_url() ); ?>">
-                Explore Women's Trips →
+            <a class="btn-primary btn-sm" href="<?php echo esc_url( tw_womens_trips_page_url() ); ?>">
+                Explore Women's Trips
             </a>
         </div>
         <?php endif; ?>
@@ -82,7 +82,7 @@ if ( ! function_exists( 'tw_explore_card' ) ) {
                 <div class="tribe-empty-icon"><i class="fi-rr-users" aria-hidden="true"></i></div>
                 <h3>No group trips here yet</h3>
                 <p>We're lining up new group departures. Tell us where you want to go and we'll plan one.</p>
-                <a class="tribe-btn-primary" href="<?php echo esc_url( mytheme_get_plan_trip_url() ); ?>"><i class="fi-rr-plane" aria-hidden="true"></i> Plan a Trip — Free</a>
+                <a class="btn-primary" href="<?php echo esc_url( mytheme_get_plan_trip_url() ); ?>"><i class="fi-rr-plane" aria-hidden="true"></i> Plan a Trip — Free</a>
             </div>
         <?php endif; ?>
     </div>

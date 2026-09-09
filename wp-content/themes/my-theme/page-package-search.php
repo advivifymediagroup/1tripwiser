@@ -124,7 +124,7 @@ $destinations = get_posts(array(
 
         <header class="archive-header travel-archive-header">
             <span>Find your next trip</span>
-            <h1 class="archive-title"><?php the_title(); ?></h1>
+            <h1 class="tw-h1"><?php the_title(); ?></h1>
             <p class="archive-description">Search packages by region, budget, duration, trip type, month, tag, or destination.</p>
         </header>
 

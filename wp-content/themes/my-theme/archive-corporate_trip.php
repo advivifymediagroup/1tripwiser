@@ -19,7 +19,7 @@ $tw_region_term   = $tw_active_region ? get_term_by( 'slug', $tw_active_region, 
                 <a href="<?php echo esc_url( home_url('/') ); ?>">Home</a><span>&rsaquo;</span><span>Corporate Trips</span>
             </nav>
             <span class="explore-hero-kicker">Teams travel better</span>
-            <h1 class="explore-hero-title">Corporate <span style="color:var(--tw-red)">Trips</span></h1>
+            <h1 class="tw-h1">Corporate <span class="accent-red">Trips</span></h1>
             <p class="explore-hero-sub">
                 <?php
                 echo $tw_region_term
@@ -66,7 +66,7 @@ $tw_region_term   = $tw_active_region ? get_term_by( 'slug', $tw_active_region, 
                 <div class="tribe-empty-icon"><i class="fi-rr-briefcase" aria-hidden="true"></i></div>
                 <h3>No corporate trips here yet</h3>
                 <p>Share your team size, destination and goals. We will build the right offsite plan for you.</p>
-                <a class="tribe-btn-primary" href="<?php echo esc_url( mytheme_get_plan_trip_url() ); ?>"><i class="fi-rr-plane" aria-hidden="true"></i> Plan a Corporate Trip</a>
+                <a class="btn-primary" href="<?php echo esc_url( mytheme_get_plan_trip_url() ); ?>"><i class="fi-rr-plane" aria-hidden="true"></i> Plan a Corporate Trip</a>
             </div>
         <?php endif; ?>
     </div>
