@@ -5,7 +5,7 @@ Version: 11.0
 Description: This is my custom theme for the website 1tripwiser.
 */
 
-@import url("https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,300;1,9..144,400;1,9..144,600;1,9..144,700&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Saira:wght@400;500;600&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,300;1,9..144,400;1,9..144,600;1,9..144,700&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Saira:wght@400;500;600&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Bebas+Neue&display=swap");
 
 /* ── Brand colour tokens — pink + blue only, sampled from the logo mark. (LUXE / LUXURY keep their own gold identity by design — untouched.) ── */
 
@@ -15,6 +15,7 @@ Description: This is my custom theme for the website 1tripwiser.
   --body-font: "Poppins", sans-serif;
   --accent-font: "Saira", sans-serif;
   --luxe-font: "Cormorant Garamond", serif;
+  --luxe-hero-font: "Bebas Neue", sans-serif;
   --white:#ffffff;
   --pastel-pink:#fce4ec;
   --tw-pink:#e5127d;
@@ -5460,12 +5461,12 @@ body.page-template-page-plan-a-trip-php {
   background: rgba(var(--luxe-gold), 0.45);
 }
 .tw-luxe-hero-title {
-  font-family: var(--luxe-font);
+  font-family: var(--luxe-hero-font);
   font-size: clamp(4rem, 9vw, 7rem);
   letter-spacing: 0.42em;
   color: rgb(var(--luxe-gold));
   margin: 0 0 30px;
-  font-weight: 500;
+  font-weight: 800;
   padding-left: 0.42em;
 }
 .tw-luxe-hero-sub {
