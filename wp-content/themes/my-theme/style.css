@@ -124,24 +124,7 @@ h6 {
   padding: 0 24px;
 }
 
-.logo a {
-  color: var(--white);
-  text-decoration: none;
-  font-size: 28px;
-  font-weight: bold;
-}
-
-
-.logo img {
-  max-height: 50px;
-}
-
 /* Navigation */
-.main-nav {
-  flex: 1;
-  margin: 0 30px;
-}
-
 .nav-menu {
   list-style: none;
   display: flex;
@@ -282,11 +265,6 @@ h6 {
   transform: rotate(45deg) translate(-5px, -6px);
 }
 
-.social-links a {
-  font-size: 18px;
-  margin-right: 15px;
-}
-
 /* Main Content */
 .main-content {
   /* padding: 50px 0; */
@@ -388,18 +366,7 @@ h6 {
   border-color: var(--tw-pink);
 }
 
-.tag-label {
-  font-weight: bold;
-  margin-right: 10px;
-}
-
 /* Post Navigation */
-.post-navigation {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 40px;
-}
-
 .nav-previous,
 .nav-next {
   flex: 1;
@@ -556,9 +523,6 @@ h6 {
   margin: 0 0 12px;
   font-size: clamp(4rem, 6vw, 5rem);
 }
-.tw-h1--on-dark {
-  color: var(--white);
-}
 .tw-h1--lg {
   font-size: clamp(3rem, 8vw, 5.5rem);
 }
@@ -574,9 +538,6 @@ h6 {
 .tw-h2--lg {
   font-size: clamp(2.2rem, 4.4vw, 2.8rem) !important;
 }
-.tw-h2--on-dark {
-  color: var(--white);
-}
 .accent-red {
   color: var(--tw-pink);
 }
@@ -587,20 +548,13 @@ h6 {
 }
 
 
-.search-results p {
-  font-size: 1.1em;
-  margin-bottom: 30px;
-}
-
 /* No Posts */
-.no-posts,
-.no-results {
+.no-posts {
   text-align: center;
   padding: 50px 0;
 }
 
-.no-posts h2,
-.no-results h2 {
+.no-posts h2 {
   margin-bottom: 20px;
   color: #333;
 }
@@ -716,19 +670,8 @@ h6 {
   margin: 0;
 }
 
-.tag-pill {
-  background: rgba(27, 147, 176, 0.1);
-  border: 1px solid rgba(27, 147, 176, 0.25);
-  color: var(--tw-bodyColor);
-  font-size: 11px;
-  font-weight: 700;
-  padding: 7px 18px;
-  border-radius: 8px;
-}
-
 .section-heading > span,
-.travel-archive-header span,
-.travel-single-header > span {
+.travel-archive-header span {
   color: #000;
   letter-spacing: 3px;
   text-transform: uppercase;
@@ -878,10 +821,6 @@ h6 {
   border-color: var(--tw-pink);
   color: var(--white);
   box-shadow: 0 4px 14px rgba(216, 53, 80, 0.3);
-}
-.tw-filter-pill-icon {
-  font-size: 0.9rem;
-  line-height: 1;
 }
 @media (max-width: 768px) {
   .tw-filter-bar {
@@ -1465,58 +1404,6 @@ h6 {
   margin-right: auto;
 }
 
-.travel-header-image-section {
-  position: relative;
-  display: block;
-  margin-bottom: 28px;
-  overflow: hidden;
-}
-
-/* Image container */
-.travel-hero-image {
-  width: 100%;
-  height: 400px;
-  position: relative;
-}
-
-.travel-hero-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-/* Overlay header */
-.travel-single-header {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 2;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding: 40px;
-
-  color: var(--white);
-  background: linear-gradient(
-    to top,
-    rgba(0, 0, 0, 0.65),
-    rgba(0, 0, 0, 0.1),
-    transparent
-  );
-}
-
-.travel-single-header h1 {
-  margin: 10px 0;
-}
-
-.travel-single-header h1 {
-  max-width: 850px;
-}
-
 .tw-breadcrumbs {
   align-items: center;
   color: var(--tw-muted);
@@ -1539,54 +1426,6 @@ h6 {
 
 .tw-breadcrumb-separator {
   color: #a7b0bd;
-}
-
-.travel-hero-image {
-  margin-bottom: 0;
-}
-
-.travel-hero-image img {
-  border-radius: 0;
-  display: block;
-  max-height: 460px;
-  object-fit: cover;
-  width: 100%;
-}
-
-.travel-detail-grid {
-  display: grid;
-  gap: 16px;
-  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-  padding: 24px 30px 10px;
-}
-
-.travel-detail {
-  background: #f8f9fa;
-  border: 1px solid var(--tw-border);
-  border-radius: 8px;
-  padding: 16px;
-}
-
-.travel-detail span {
-  color: var(--tw-muted);
-  display: block;
-  font-size: 0.82rem;
-  font-weight: 700;
-  margin-bottom: 5px;
-  text-transform: uppercase;
-}
-
-.travel-detail strong {
-  color: var(--tw-navy);
-  display: block;
-  font-size: 1rem;
-}
-
-.travel-cta {
-  align-items: center;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
 }
 
 .tw-package-enquiry,
@@ -2410,10 +2249,6 @@ main.dest-single {
   margin-bottom: 0;
 }
 
-.travel-detail-grid.compact {
-  padding: 0;
-}
-
 .itinerary-timeline {
   position: relative;
 }
@@ -2657,135 +2492,13 @@ main.dest-single {
   margin-top: auto;
 }
 
-.community-section-container {
-  background: linear-gradient(
-    135deg,
-    rgba(213, 55, 79, 0.03),
-    rgba(216, 53, 80, 0.03)
-  );
-  padding: 4rem 32px;
-  border-top: 1px solid var(--tw-bg-soft);
-  border-bottom: 1px solid var(--tw-bg-soft);
-}
-.community-section {
-  border-radius: 8px;
-  text-align: center;
-}
-
-.community-heading span {
-  color: var(--tw-blue);
-  display: inline-block;
-  font-size: 0.9rem;
-  font-weight: 500;
-  letter-spacing: 0;
-  margin-bottom: 10px;
-  text-transform: uppercase;
-}
-
-.community-heading h2 {
-  color: var(--tw-navy);
-  font-size: 2.8rem;
-  line-height: 1;
-  margin-bottom: 16px;
-}
-
-.community-heading p {
-  color: var(--tw-muted);
-  font-size: 1rem;
-  line-height: 1.7;
-  margin: 0 auto 30px;
-  max-width: 720px;
-}
-
-.community-heading .highlight {
-  color: var(--tw-blue) !important;
-  font-size: 2.8rem;
-  font-weight: 500;
-  /* margin-left: 0; */
-  /* line-height: 1; */
-}
-
-.community-stats {
-  display: grid;
-  gap: 16px;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-}
-
-.community-stat {
-  background: #f8fbfc;
-  border: 1px solid #dceff3;
-  border-radius: 8px;
-  padding: 22px 14px;
-}
-
-.community-stat strong {
-  color: var(--tw-blue);
-  display: block;
-  font-size: 1.85rem;
-  line-height: 1;
-  margin-bottom: 8px;
-}
-
-.community-stat span {
-  color: var(--tw-muted);
-  display: block;
-  font-size: 0.9rem;
-  font-weight: 500;
-  text-transform: uppercase;
-}
-
-.instagram-feed-section {
-  background: var(--white);
-  border-bottom: 1px solid var(--tw-bg-soft);
-  padding: 60px 0;
-}
-
-.instagram-feed-heading {
-  text-align: center;
-}
-
-.instagram-feed-heading h2,
-.instagram-feed-heading span {
-  text-align: center;
-}
-
-.instagram-feed-wrap {
-  background: var(--white);
-  border: 1px solid var(--tw-border);
-  border-radius: 8px;
-  box-shadow: 0 10px 30px rgba(13, 21, 38, 0.06);
-  overflow: hidden;
-  padding: 16px;
-}
-
+/* Base .instagram-feed-section/-heading/-wrap rules live in the
+   "INSTAGRAM FEED — brand-matched redesign" block further down, which
+   fully supersedes what used to be here — only this still-standalone
+   rule survives that redesign. */
 .instagram-feed-wrap:empty {
   display: none;
 }
-
-.free-itinerary-copy h2 {
-  color: var(--tw-navy);
-  font-size: 2rem;
-  line-height: 1.15;
-  margin-bottom: 12px;
-  font-family: var(--heading-font);
-  text-align: center;
-}
-
-.free-itinerary-copy p {
-  color: var(--tw-muted);
-  font-size: 1rem;
-  line-height: 1.7;
-  margin: 0;
-  text-align: center;
-  /* max-width: 620px; */
-}
-
-.free-itinerary-copy .highlight {
-  color: var(--tw-pink);
-  font-weight: 700;
-}
-
-
 
 .free-itinerary-link {
   background: var(--tw-pink);
@@ -3102,6 +2815,7 @@ main.dest-single {
   box-shadow: 0 10px 30px rgba(13, 21, 38, 0.08);
   font-family: var(--body-font);
   padding: 0;
+  transition: box-shadow 0.25s ease;
 }
 /* Body offset so fixed nav + subheader don't cover content */
 body {
@@ -3218,21 +2932,6 @@ body.page-template-page-plan-a-trip-php {
 }
 .tw-menu-item {
   margin: 0;
-}
-.instagram-follow {
-  margin-left: 12px;
-}
-/* .tw-f-social is styled for the dark footer (light icon on dark bg) — override for the
-   light header context so the Instagram button is actually visible here. */
-.instagram-follow.tw-f-social a {
-  color: var(--tw-navy);
-  background: rgba(13, 21, 38, 0.05);
-  border-color: rgba(13, 21, 38, 0.14);
-}
-.instagram-follow.tw-f-social a:hover {
-  color: var(--white);
-  background: var(--tw-blue);
-  border-color: var(--tw-blue);
 }
 .tw-nav-link {
   color: rgba(13, 21, 38, 0.9);
@@ -3543,9 +3242,6 @@ body.page-template-page-plan-a-trip-php {
   .tw-user-nav {
     display: none;
   }
-}
-.tw-nav {
-  transition: box-shadow 0.25s ease;
 }
 /* Keep nav height stable on scroll so subheader (top:84px) stays flush — no gap, no width-shift. */
 .tw-nav-scrolled .tw-nav-inner {
@@ -4067,21 +3763,6 @@ body.page-template-page-plan-a-trip-php {
   font-weight: 700;
   text-decoration: none;
 }
-.auth-forgot {
-  text-align: right;
-  margin-top: -12px;
-  margin-bottom: 20px;
-}
-.auth-forgot a {
-  font-size: 0.8rem;
-  font-weight: 700;
-  color: var(--tw-muted);
-  text-decoration: none;
-  transition: color 0.2s;
-}
-.auth-forgot a:hover {
-  color: var(--tw-blue);
-}
 .auth-benefits {
   margin-top: 28px;
   padding: 20px 24px;
@@ -4320,14 +4001,12 @@ body.page-template-page-plan-a-trip-php {
   .tw-hero-float--ml {
     width: 64px;
     height: 64px;
+    top: 38%;
+    left: -18px;
   }
   .tw-hero-float--tr {
     top: -14px;
     right: -10px;
-  }
-  .tw-hero-float--ml {
-    top: 38%;
-    left: -18px;
   }
   .tw-hero-float--br {
     bottom: -12px;
@@ -4369,9 +4048,6 @@ body.page-template-page-plan-a-trip-php {
   }
 }
 
-.tw-hero-kicker {
-  display: none;
-}
 .tw-hero-pill {
   display: inline-flex;
   align-items: center;
@@ -4396,9 +4072,6 @@ body.page-template-page-plan-a-trip-php {
   box-shadow: 0 0 0 3px rgba(229, 18, 125, 0.25);
   animation: tw-pulse 2s ease infinite;
 }
-.tw-hero-tags-prompt {
-  display: none;
-}
 @keyframes tw-pulse {
   0%,
   100% {
@@ -4407,9 +4080,6 @@ body.page-template-page-plan-a-trip-php {
   50% {
     box-shadow: 0 0 0 7px rgba(229, 18, 125, 0.08);
   }
-}
-.tw-hero-title-gold {
-  color: var(--tw-pink);
 }
 .tw-hero-title-accent {
   color: var(--tw-pink);
@@ -4420,19 +4090,6 @@ body.page-template-page-plan-a-trip-php {
   color: var(--tw-navy);
   font-weight: 500;
   font-size: 2.5rem;
-}
-.tw-hero-tagline {
-  display: none;
-}
-.tw-hero-desc {
-  font-family: var(--heading-font);
-  /* font-style: italic; */
-  font-size: 1.08rem;
-  color: var(--tw-navy);
-  line-height: 1.6;
-  max-width: 480px;
-  margin: 0 0 20px;
-  font-weight: 400;
 }
 .tw-hero-actions {
   display: flex;
@@ -8395,44 +8052,6 @@ main.tw-search-page {
   line-height: 1.7;
   margin-bottom: 20px;
 }
-.ba-aff-rows {
-  border-top: 1px solid var(--tw-bg-soft);
-  padding-top: 18px;
-}
-.ba-aff-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 8px 0;
-  border-bottom: 1px solid var(--tw-bg-soft);
-  font-size: 0.84rem;
-}
-.ba-aff-row:last-child {
-  border-bottom: none;
-}
-.ba-aff-row-name {
-  color: var(--tw-bodyColor);
-  font-weight: 700;
-}
-.ba-aff-row-sub {
-  color: var(--tw-muted);
-  font-size: 0.76rem;
-}
-.ba-aff-row-link {
-  font-size: 0.75rem;
-  font-weight: 800;
-  color: var(--tw-blue);
-  border: 1px solid rgba(27, 147, 176, 0.35);
-  border-radius: 5px;
-  padding: 4px 12px;
-  text-decoration: none;
-  transition: background 0.2s, color 0.2s;
-  white-space: nowrap;
-}
-.ba-aff-row-link:hover {
-  background: var(--tw-blue);
-  color: var(--white);
-}
 .ba-section-row {
   display: flex;
   align-items: center;
@@ -8560,37 +8179,6 @@ main.tw-search-page {
   line-height: 1.6;
   margin-bottom: 14px;
   flex: 1;
-}
-.ba-card-aff {
-  border-top: 1px solid var(--tw-bg-soft);
-  padding-top: 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-.ba-card-aff-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 0.8rem;
-}
-.ba-card-aff-name {
-  color: var(--tw-bodyColor);
-  font-weight: 700;
-}
-.ba-card-aff-link {
-  color: var(--tw-blue);
-  font-size: 0.74rem;
-  font-weight: 700;
-  text-decoration: none;
-  border: 1px solid rgba(27, 147, 176, 0.3);
-  border-radius: 4px;
-  padding: 2px 9px;
-  transition: background 0.2s, color 0.2s;
-}
-.ba-card-aff-link:hover {
-  background: var(--tw-blue);
-  color: var(--white);
 }
 .ba-table-wrap {
   background: linear-gradient(
@@ -9744,39 +9332,6 @@ table.ba-table tr:hover td {
   flex-shrink: 0;
   margin-top: 2px;
 }
-.sb-progress {
-  display: flex;
-  gap: 0;
-  margin-bottom: 32px;
-  border: 1px solid var(--tw-border);
-  border-radius: 10px;
-  overflow: hidden;
-}
-.sb-progress-step {
-  flex: 1;
-  padding: 12px 8px;
-  text-align: center;
-  font-size: 0.75rem;
-  font-weight: 800;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: var(--tw-muted);
-  background: #eef2f7;
-  border-right: 1px solid var(--tw-border);
-  transition: background 0.2s, color 0.2s;
-}
-.sb-progress-step:last-child {
-  border-right: none;
-}
-.sb-progress-step.active {
-  background: rgba(27, 147, 176, 0.1);
-  color: var(--tw-blue);
-}
-.sb-progress-step .step-num {
-  display: block;
-  font-size: 1rem;
-  margin-bottom: 2px;
-}
 @media (max-width: 640px) {
   .sb-field-row {
     grid-template-columns: 1fr;
@@ -9851,73 +9406,6 @@ table.ba-table tr:hover td {
   max-width: 700px;
   margin: 0 auto 60px;
   padding: 32px 20px 0;
-}
-.progress-track {
-  display: flex;
-  align-items: center;
-  margin-bottom: 28px;
-}
-.ps {
-  flex: 1;
-  text-align: center;
-  position: relative;
-}
-.ps::after {
-  content: "";
-  position: absolute;
-  top: 17px;
-  left: 50%;
-  right: -50%;
-  height: 2px;
-  background: #ccd7e4;
-  z-index: 0;
-  transition: background 0.4s;
-}
-.ps:last-child::after {
-  display: none;
-}
-.ps.done::after {
-  background: var(--tw-blue);
-}
-.pc {
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  background: #e8eef4;
-  color: var(--tw-muted);
-  font-family: var(--body-font);
-  font-size: 13px;
-  font-weight: 800;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 6px;
-  position: relative;
-  z-index: 1;
-  border: 2px solid #ccd7e4;
-  transition: all 0.3s;
-}
-.ps.active .pc {
-  background: var(--tw-blue);
-  color: var(--white);
-  border-color: var(--tw-blue);
-}
-.ps.done .pc {
-  background: var(--tw-blue);
-  color: var(--white);
-  border-color: var(--tw-blue);
-}
-.ps-lbl {
-  font-family: var(--body-font);
-  font-size: 10px;
-  color: var(--tw-muted);
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-.ps.active .ps-lbl,
-.ps.done .ps-lbl {
-  color: var(--tw-bodyColor);
 }
 .plan-card {
   background: var(--white);
@@ -10113,41 +9601,6 @@ select.fi {
 .btile.sel .bt-name {
   color: var(--tw-pink);
 }
-.sum-box {
-  background: rgba(27, 147, 176, 0.06);
-  border: 1px solid rgba(27, 147, 176, 0.18);
-  border-radius: 12px;
-  padding: 16px;
-  margin: 16px 0;
-}
-.sum-title {
-  font-family: var(--body-font);
-  font-size: 11px;
-  font-weight: 800;
-  color: var(--tw-blue);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 10px;
-}
-.sum-row {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 7px;
-}
-.sum-row:last-child {
-  margin-bottom: 0;
-}
-.sum-k {
-  font-family: var(--body-font);
-  font-size: 12px;
-  color: var(--tw-muted);
-}
-.sum-v {
-  font-family: var(--body-font);
-  font-size: 12px;
-  font-weight: 800;
-  color: var(--tw-navy);
-}
 .plan-nav {
   display: flex;
   justify-content: space-between;
@@ -10211,27 +9664,6 @@ select.fi {
   max-width: 420px;
   margin-left: auto;
   margin-right: auto;
-}
-.wa-launch {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  background: #25d366;
-  color: var(--white);
-  font-family: var(--body-font);
-  font-size: 14px;
-  font-weight: 800;
-  padding: 14px 32px;
-  border-radius: 6px;
-  text-decoration: none;
-  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.35);
-  transition: all 0.3s;
-  margin-bottom: 28px;
-}
-.wa-launch:hover {
-  background: #1da851;
-  transform: translateY(-2px);
-  color: var(--white);
 }
 .succ-stats {
   display: flex;
@@ -11285,21 +10717,12 @@ object {
   }
 }
 @media (max-width: 520px) {
-  .tw-hero-inner {
-    padding: 88px 16px 52px;
-  }
   .tw-hero-pill {
     font-size: 0.68rem;
     padding: 6px 12px;
     letter-spacing: 0.04em;
     text-align: center;
     justify-content: center;
-  }
-  .tw-hero-title {
-    font-size: clamp(2.8rem, 15vw, 4.8rem);
-  }
-  .tw-hero-desc {
-    font-size: 0.96rem;
   }
   .tw-hero-search {
     max-width: 100%;
@@ -11312,12 +10735,6 @@ object {
   }
 }
 @media (max-width: 360px) {
-  .tw-hero-inner {
-    padding: 80px 14px 48px;
-  }
-  .tw-hero-title {
-    font-size: clamp(2.4rem, 18vw, 4rem);
-  }
   .container {
     padding: 0 14px;
   }
@@ -11569,24 +10986,6 @@ object {
   text-transform: uppercase;
   color: #000;
   margin-bottom: 1rem;
-}
-
-.tw-ig-title {
-  font-family: var(--heading-font);
-  font-size: clamp(2rem, 4vw, 3rem);
-  letter-spacing: 0.04em;
-  line-height: 1.35;
-  margin: 0 0 14px;
-  background: linear-gradient(
-    135deg,
-    var(--tw-blue) 0%,
-    var(--tw-pink) 55%,
-    var(--tw-blue) 100%
-  );
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  display: block;
 }
 
 .tw-ig-handle {
@@ -12646,6 +12045,11 @@ section.tribe-hero {
   max-width: 860px;
   padding-top: 28px;
   padding-bottom: 64px;
+}
+/* Wider when paired with .tw-page-layout (adds the right-side Enquire rail)
+   so the discussion column isn't squeezed by the sidebar. */
+.tribe-single-wrap.tw-page-layout {
+  max-width: 1400px;
 }
 .tribe-crumbs {
   font-size: 0.85rem;
@@ -13739,29 +13143,10 @@ section.tribe-hero {
 @media (max-width: 900px) {
   .tw-events-inner {
     grid-template-columns: 1fr;
-    gap: 32px;
+    gap: 36px;
   }
   .tw-events-title {
     font-size: clamp(2.2rem, 8vw, 2.8rem);
-  }
-}
-@media (max-width: 560px) {
-  .tw-events-row-link {
-    grid-template-columns: 32px 1fr auto;
-    gap: 12px;
-  }
-  .tw-events-arrow {
-    display: none;
-  }
-  .tw-events-name {
-    font-size: 1.05rem;
-  }
-}
-
-@media (max-width: 900px) {
-  .tw-events-inner {
-    grid-template-columns: 1fr;
-    gap: 36px;
   }
   .tw-events-desc {
     max-width: none;
@@ -14224,58 +13609,6 @@ section.tribe-hero {
   margin: 0;
 }
 
-/* Discover events — horizontal scroll row */
-.ev-discover-row {
-  display: flex;
-  gap: 16px;
-  overflow-x: auto;
-  padding: 6px 2px 14px;
-  scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
-}
-.ev-discover-row::-webkit-scrollbar {
-  display: none;
-}
-.ev-discover {
-  flex: 0 0 auto;
-  width: 130px;
-  text-decoration: none;
-  text-align: center;
-}
-.ev-discover-media {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 110px;
-  height: 110px;
-  margin: 0 auto 10px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--tw-navy) 0%, #0a3a4a 100%);
-  background-size: cover;
-  background-position: center;
-  border: 3px solid var(--white);
-  box-shadow: 0 8px 22px rgba(13, 21, 38, 0.14);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-.ev-discover:hover .ev-discover-media {
-  transform: translateY(-4px);
-  box-shadow: 0 14px 30px rgba(13, 21, 38, 0.22);
-}
-.ev-discover-icon {
-  font-size: 2.4rem;
-  filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.4));
-}
-.ev-discover-name {
-  display: block;
-  font-size: 0.86rem;
-  font-weight: 800;
-  color: var(--tw-navy);
-  line-height: 1.3;
-}
-.ev-discover:hover .ev-discover-name {
-  color: var(--tw-blue);
-}
-
 /* Event package grid */
 .ev-grid {
   display: grid;
@@ -14456,18 +13789,6 @@ section.tribe-hero {
   width: 100%;
   height: 100%;
   object-fit: cover;
-}
-.ev-row-tag {
-  display: inline-block;
-  font-size: 0.68rem;
-  font-weight: 800;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--tw-blue);
-  background: rgba(27, 147, 176, 0.1);
-  padding: 3px 10px;
-  border-radius: 4px;
-  margin-bottom: 6px;
 }
 .ev-row-title {
   font-family: var(--heading-font);
@@ -14651,82 +13972,6 @@ section.tribe-hero {
   margin-top: 14px;
 }
 
-/* ================================================================
-   SINGLE EVENT & FESTIVAL (tw_event)
-   ================================================================ */
-.ev-single-wrap {
-  max-width: 1040px;
-  padding-top: 28px;
-  padding-bottom: 64px;
-}
-.ev-single-card {
-  display: grid;
-  grid-template-columns: 1fr 320px;
-  grid-template-areas: "media book" "body book";
-  gap: 26px;
-  align-items: start;
-}
-.ev-single-media {
-  grid-area: media;
-  border-radius: 6px;
-  overflow: hidden;
-  border: 1px solid var(--tw-border);
-}
-.ev-single-media img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-.ev-single-body {
-  grid-area: body;
-}
-.ev-single-facts {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 18px;
-}
-.ev-fact {
-  background: var(--white);
-  border: 1px solid var(--tw-border);
-  border-radius: 4px;
-  padding: 8px 16px;
-  font-size: 0.84rem;
-  font-weight: 700;
-  color: var(--tw-navy);
-}
-.ev-fact a {
-  color: var(--tw-blue);
-  text-decoration: none;
-}
-.ev-single-content {
-  color: #2d3b4d;
-  font-size: 1.02rem;
-  line-height: 1.8;
-}
-.ev-single-content p {
-  margin: 0 0 1.2em;
-}
-/* Polished intro/description card on single trip pages */
-.ev-itin-intro {
-  background: var(--white);
-  border: 1px solid var(--tw-border);
-  border-radius: 6px;
-  padding: 24px 28px;
-  box-shadow: 0 4px 18px rgba(13, 21, 38, 0.04);
-}
-.ev-itin-intro p {
-  font-size: 1rem;
-  color: #374151;
-  line-height: 1.8;
-  margin: 0;
-  font-style: normal;
-}
-.ev-single-content a {
-  color: var(--tw-blue);
-}
-
 /* Destination archive card — 2-line excerpt clamp */
 .dest-archive .dest-card-excerpt {
   font-size: 0.9rem;
@@ -14741,71 +13986,6 @@ section.tribe-hero {
   text-overflow: ellipsis;
 }
 
-/* Card wrapper for the WYSIWYG overview (package highlights, etc.) */
-.ev-overview-card {
-  background: var(--white);
-  border: 1px solid var(--tw-border);
-  border-radius: 6px;
-  padding: 8px 28px 22px;
-  box-shadow: 0 4px 18px rgba(13, 21, 38, 0.04);
-  margin-top: 0;
-}
-.ev-overview-card > *:first-child {
-  margin-top: 18px;
-}
-.ev-overview-card > *:last-child {
-  margin-bottom: 0;
-}
-.ev-overview-card h2,
-.ev-overview-card h3,
-.ev-overview-card h4 {
-  margin-top: 18px;
-}
-.ev-overview-card p {
-  font-size: 0.95rem;
-  color: #374151;
-  line-height: 1.75;
-  margin: 0 0 12px;
-}
-/* Sticky booking panel */
-.ev-single-book {
-  grid-area: book;
-  position: sticky;
-  top: 84px;
-  background: var(--white);
-  border: 1px solid var(--tw-border);
-  border-radius: 6px;
-  padding: 24px;
-  box-shadow: 0 12px 36px rgba(13, 21, 38, 0.08);
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-.ev-single-price {
-  text-align: center;
-  padding-bottom: 14px;
-  border-bottom: 1px solid var(--tw-lightBase);
-}
-.ev-single-price span {
-  display: block;
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--tw-muted);
-}
-.ev-single-price strong {
-  font-family: var(--heading-font);
-  font-size: 2.2rem;
-  letter-spacing: 0.03em;
-  color: var(--tw-navy);
-  line-height: 1.1;
-}
-.ev-single-price small {
-  display: block;
-  font-size: 0.78rem;
-  color: var(--tw-muted);
-}
 /* Women's Trips callout on Group Trips archive */
 .gt-womens-callout {
   display: flex;
@@ -14931,13 +14111,23 @@ section.tribe-hero {
   text-decoration: underline;
 }
 
-/* Visa Assistance / Passport Services / Travel Insurance — plain
-   block-editor pages given the site's editorial hero + a readable
-   single column, reusing .ev-content-styled for the heading/list look. */
-.tw-service-wrap {
-  max-width: 820px;
+/* Generic-page layout — article + a sticky right rail (reuses .dest-booking /
+   .dest-rail-card so the "Enquire Now" card matches the one on every other
+   single template). Used by page.php for both the service pages and plain
+   WordPress pages, and by single-forum_topic.php. */
+.tw-page-layout {
+  max-width: 1400px;
   margin: 0 auto;
   padding: 48px 24px 80px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 304px;
+  gap: 44px;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .tw-page-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 .tw-service-content.ev-content-styled {
   margin-top: 0;
@@ -14970,110 +14160,6 @@ section.tribe-hero {
 @media (max-width: 600px) {
   .tw-service-cta {
     padding: 28px 22px;
-  }
-}
-
-/* Trip Details panel (events + group trips single page) */
-.ev-trip-details {
-  background: #f8fafc;
-  border: 1px solid var(--tw-border);
-  border-radius: 6px;
-  padding: 24px 26px;
-  margin-top: 24px;
-}
-.ev-trip-details-title {
-  font-family: var(--heading-font);
-  font-size: 1.3rem;
-  letter-spacing: 0.04em;
-  color: var(--tw-navy);
-  margin: 0 0 18px;
-}
-.ev-trip-details-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 18px 24px;
-}
-.ev-trip-detail-val {
-  word-break: break-word;
-}
-.ev-trip-detail-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-}
-.ev-trip-detail-icon {
-  font-size: 1.2rem;
-  flex-shrink: 0;
-  margin-top: 2px;
-}
-.ev-trip-detail-label {
-  display: block;
-  font-size: 0.7rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--tw-muted);
-  margin-bottom: 3px;
-}
-.ev-trip-detail-val {
-  display: block;
-  font-size: 0.9rem;
-  font-weight: 700;
-  color: var(--tw-navy);
-  line-height: 1.4;
-}
-@media (max-width: 600px) {
-  .ev-trip-details-grid {
-    grid-template-columns: 1fr;
-  }
-}
-/* Group trip detail rows inside booking sidebar */
-.ev-single-detail-list {
-  border-top: 1px solid var(--tw-lightBase);
-  padding-top: 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.ev-single-detail-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 8px;
-}
-.ev-detail-label {
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: var(--tw-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  white-space: nowrap;
-}
-.ev-detail-val {
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: var(--tw-navy);
-  text-align: right;
-}
-@media (max-width: 860px) {
-  .ev-single-card {
-    grid-template-columns: 1fr;
-    grid-template-areas: "media" "book" "body";
-  }
-  .ev-single-book {
-    position: static;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: center;
-  }
-  .ev-single-price {
-    border-bottom: none;
-    border-right: 1px solid var(--tw-lightBase);
-    padding: 0 18px 0 0;
-    text-align: left;
-  }
-  .ev-single-btn {
-    flex: 1;
   }
 }
 
