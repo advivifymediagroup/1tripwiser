@@ -203,10 +203,7 @@ if ($sp_show_comments) {
                         <?php echo esc_html($sp_bio ?: 'Travel writer & explorer sharing honest guides and tips from the road. Every recommendation is tried and tested.'); ?>
                     </p>
                 </div>
-                <div class="dest-rail-card sp-blog-enquiry-rail">
-                    <p><?php esc_html_e('Planning your next trip? Talk to our travel experts and get a personalized itinerary.', 'mytheme'); ?></p>
-                    <button type="button" class="btn-primary btn-block" onclick="window.twOpenLeadPopup && window.twOpenLeadPopup()"><?php esc_html_e('Enquire Now', 'mytheme'); ?></button>
-                </div>
+                <?php mytheme_render_enquiry_popup_card(); ?>
             </aside>
 
         </div>
