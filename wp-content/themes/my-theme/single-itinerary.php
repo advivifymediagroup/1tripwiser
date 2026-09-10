@@ -248,8 +248,9 @@ while ( have_posts() ) :
                     </dl>
                     <?php endif; ?>
                     <a class="btn-primary btn-block" href="#itinerary-enquiry"><?php esc_html_e( 'Enquire', 'mytheme' ); ?></a>
-                    <a class="btn-secondary btn-block" href="<?php echo esc_url( mytheme_get_plan_trip_url() ); ?>"><?php esc_html_e( 'Create Your Own Itinerary', 'mytheme' ); ?></a>
+                    <a class="btn-secondary btn-block" href="<?php echo esc_url( mytheme_get_plan_trip_url() ); ?>"><?php esc_html_e( 'Plan a Trip', 'mytheme' ); ?></a>
                 </div>
+                <?php mytheme_render_enquiry_popup_card(); ?>
             </aside>
 
         </div>

@@ -317,8 +317,9 @@ while ( have_posts() ) :
                     </dl>
                     <?php endif; ?>
                     <a class="btn-primary btn-block" href="#group-enquiry"><?php esc_html_e( 'Book Now', 'mytheme' ); ?></a>
-                    <a class="btn-secondary btn-block" href="<?php echo esc_url( mytheme_get_plan_trip_url() ); ?>"><?php esc_html_e( 'Customise this trip', 'mytheme' ); ?></a>
+                    <a class="btn-secondary btn-block" href="<?php echo esc_url( mytheme_get_plan_trip_url() ); ?>"><?php esc_html_e( 'Plan a Trip', 'mytheme' ); ?></a>
                 </div>
+                <?php mytheme_render_enquiry_popup_card(); ?>
             </aside>
 
         </div>
