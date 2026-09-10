@@ -11,7 +11,7 @@
             </nav>
             <span class="explore-hero-kicker">Wiser Packages</span>
             <h1 class="tw-h1">Travel <span class="accent-red">Packages</span></h1>
-            <p class="explore-hero-sub">Choose a ready-to-book trip, then customize the pace, stays and experiences around your travel style.</p>
+            <p class="explore-hero-sub">Ready-to-book trips, curated end-to-end — pick the one that matches your travel style.</p>
         </div>
     </section>
 

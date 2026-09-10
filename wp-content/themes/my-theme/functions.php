@@ -1833,6 +1833,23 @@ add_action('wp_ajax_mytheme_newsletter_signup', 'mytheme_handle_newsletter_signu
 add_action('wp_ajax_nopriv_mytheme_newsletter_signup', 'mytheme_handle_newsletter_signup');
 
 /**
+ * Reusable right-rail "Enquire Now" card — opens the site-wide lead popup
+ * (tw_lead_popup_widget(), below) instead of embedding its own form, so
+ * every page that doesn't already have a dedicated contextual enquiry form
+ * still gets a CTA. Wrap in a <div class="dest-booking"> (or reuse an
+ * existing one) to get the sticky-rail treatment already used on blog posts.
+ */
+function mytheme_render_enquiry_popup_card( $text = '' ) {
+    $text = $text ?: __( 'Planning your next trip? Talk to our travel experts and get a personalized itinerary.', 'mytheme' );
+    ?>
+    <div class="dest-rail-card sp-blog-enquiry-rail">
+        <p><?php echo esc_html( $text ); ?></p>
+        <button type="button" class="btn-primary btn-block" onclick="window.twOpenLeadPopup && window.twOpenLeadPopup()"><?php esc_html_e( 'Enquire Now', 'mytheme' ); ?></button>
+    </div>
+    <?php
+}
+
+/**
  * Site-wide popup — name/phone/email, then an email-only newsletter step.
  * Auto-opens once per session a few seconds after landing; can also be
  * opened on demand via window.twOpenLeadPopup() (used by the blog

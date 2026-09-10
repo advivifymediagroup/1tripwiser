@@ -25,7 +25,8 @@ while ( have_posts() ) :
     ?>
 
 <main class="main-content tribe-page tribe-single">
-    <div class="container tribe-single-wrap">
+    <div class="container tribe-single-wrap tw-page-layout">
+    <div>
 
         <!-- Breadcrumb -->
         <nav class="tribe-crumbs" aria-label="Breadcrumb">
@@ -137,6 +138,11 @@ while ( have_posts() ) :
         </section>
 
         <a class="tribe-back-link" href="<?php echo esc_url( get_post_type_archive_link( 'forum_topic' ) ); ?>">← Back to all discussions</a>
+    </div>
+
+    <aside class="dest-booking">
+        <?php mytheme_render_enquiry_popup_card(); ?>
+    </aside>
     </div>
 </main>
 

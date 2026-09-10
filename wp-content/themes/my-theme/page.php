@@ -32,16 +32,22 @@ $tw_service_page_slugs = array( 'visa-assistance', 'passport-services', 'travel-
         </div>
     </section>
 
-    <div class="container tw-service-wrap">
-        <article class="tw-service-content ev-content-styled">
-            <?php the_content(); ?>
-        </article>
+    <div class="container tw-page-layout">
+        <div>
+            <article class="tw-service-content ev-content-styled">
+                <?php the_content(); ?>
+            </article>
 
-        <div class="tw-service-cta">
-            <h2><?php esc_html_e( 'Still have questions?', 'mytheme' ); ?></h2>
-            <p><?php esc_html_e( "Our travel experts are ready to help — get in touch and we'll take it from there.", 'mytheme' ); ?></p>
-            <a href="<?php echo esc_url( mytheme_get_plan_trip_url() ); ?>" class="btn-primary"><?php esc_html_e( 'Plan My Trip', 'mytheme' ); ?></a>
+            <div class="tw-service-cta">
+                <h2><?php esc_html_e( 'Still have questions?', 'mytheme' ); ?></h2>
+                <p><?php esc_html_e( "Our travel experts are ready to help — get in touch and we'll take it from there.", 'mytheme' ); ?></p>
+                <a href="<?php echo esc_url( mytheme_get_plan_trip_url() ); ?>" class="btn-primary"><?php esc_html_e( 'Plan My Trip', 'mytheme' ); ?></a>
+            </div>
         </div>
+
+        <aside class="dest-booking">
+            <?php mytheme_render_enquiry_popup_card(); ?>
+        </aside>
     </div>
 
 </main>
@@ -49,25 +55,31 @@ $tw_service_page_slugs = array( 'visa-assistance', 'passport-services', 'travel-
     <?php else : ?>
 
 <main class="main-content">
-    <div class="container">
-        <?php mytheme_breadcrumbs(); ?>
-        <article class="page-content">
-            <h1 class="tw-h1"><?php the_title(); ?></h1>
-            <!-- <div class="page-meta">
-                <span class="date"><?php echo get_the_date(); ?></span>
-                <span class="author">by <?php the_author(); ?></span>
-            </div> -->
-            <div class="content">
-                <?php the_content(); ?>
-            </div>
-            <?php
-            wp_link_pages(array(
-                'before' => '<div class="page-links">' . __('Pages:', 'mytheme'),
-                'after' => '</div>',
-            ));
-            ?>
-            <?php mytheme_render_faq_section(get_the_ID()); ?>
-        </article>
+    <div class="container tw-page-layout">
+        <div>
+            <?php mytheme_breadcrumbs(); ?>
+            <article class="page-content">
+                <h1 class="tw-h1"><?php the_title(); ?></h1>
+                <!-- <div class="page-meta">
+                    <span class="date"><?php echo get_the_date(); ?></span>
+                    <span class="author">by <?php the_author(); ?></span>
+                </div> -->
+                <div class="content">
+                    <?php the_content(); ?>
+                </div>
+                <?php
+                wp_link_pages(array(
+                    'before' => '<div class="page-links">' . __('Pages:', 'mytheme'),
+                    'after' => '</div>',
+                ));
+                ?>
+                <?php mytheme_render_faq_section(get_the_ID()); ?>
+            </article>
+        </div>
+
+        <aside class="dest-booking">
+            <?php mytheme_render_enquiry_popup_card(); ?>
+        </aside>
     </div>
 </main>
 
