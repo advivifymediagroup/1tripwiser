@@ -209,7 +209,7 @@
                 </div>
             <?php else : ?>
                 <a class="tw-auth-link" href="<?php echo esc_url(home_url('/login/')); ?>">Log In</a>
-                <a class="btn-secondary btn-sm" href="<?php echo esc_url(home_url('/register/')); ?>">Sign Up</a>
+                <a class="btn-secondary btn-sm-signup" href="<?php echo esc_url(home_url('/register/')); ?>">Sign Up</a>
             <?php endif; ?>
             </div>
 
