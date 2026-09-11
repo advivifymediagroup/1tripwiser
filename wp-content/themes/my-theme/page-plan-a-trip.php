@@ -205,13 +205,16 @@ $pat_subtitle  = get_option('tw_pat_subtitle', "Tell us your dream destination, 
 
       <div class="plan-nav">
         <span></span>
-        <button class="btn-nx btn-primary" onclick="submitTrip()">
+        <button class="btn-nx btn-primary" id="p-submit-btn" onclick="submitTrip()">
           <i class="fi-rr-check-circle" aria-hidden="true"></i>
           Get My Personalised Itinerary
         </button>
       </div>
       <div class="pat-submit-note">
         No payment required &middot; Delivered to your WhatsApp &amp; email within minutes
+      </div>
+      <div class="pat-submit-error" id="p-submit-error" hidden>
+        Something went wrong sending your details — please try again, or reach us directly on WhatsApp.
       </div>
     </div>
 
@@ -343,38 +346,76 @@ $pat_subtitle  = get_option('tw_pat_subtitle', "Tell us your dream destination, 
       return;
     }
 
-    /* ── Save to WordPress database via AJAX ── */
-    if (typeof twAjax !== 'undefined' && twAjax.url) {
-      var fd = new FormData();
-      fd.append('action',      'submit_trip_inquiry');
-      fd.append('nonce',       twAjax.nonce);
-      fd.append('name',        tripData.name);
-      fd.append('phone',       tripData.phone);
-      fd.append('email',       tripData.email);
-      fd.append('destination', tripData.dest);
-      fd.append('date',        tripData.date);
-      fd.append('duration',    tripData.dur);
-      fd.append('time_pref',   tripData.time);
-      fd.append('trip_type',   tripData.type);
-      fd.append('adults',      tripData.adults);
-      fd.append('children',    tripData.child);
-      fd.append('budget',      tripData.budget);
-      fd.append('departing',   tripData.from);
-      fd.append('notes',       tripData.notes);
+    var btn = document.getElementById('p-submit-btn');
+    var errBox = document.getElementById('p-submit-error');
+    if (errBox) errBox.hidden = true;
 
-      fetch(twAjax.url, { method: 'POST', body: fd })
-        .catch(function (err) { console.warn('1TW: inquiry save failed', err); });
+    function showSuccess() {
+      document.getElementById('pstep-form').classList.remove('active');
+      document.getElementById('pstep-success').classList.add('active');
+      document.getElementById('succ-phone').textContent = tripData.phone || 'the number you provided';
+      document.getElementById('succ-email').textContent = tripData.email || 'the email you provided';
+      document.querySelector('.plan-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
-    /* ── Show success screen ── */
-    document.getElementById('pstep-form').classList.remove('active');
-    document.getElementById('pstep-success').classList.add('active');
+    function showError() {
+      if (btn) { btn.disabled = false; btn.classList.remove('is-loading'); }
+      if (errBox) errBox.hidden = false;
+    }
 
-    /* Confirm back the contact details their itinerary will be sent to */
-    document.getElementById('succ-phone').textContent = tripData.phone || 'the number you provided';
-    document.getElementById('succ-email').textContent = tripData.email || 'the email you provided';
+    /* ── Save to WordPress database via AJAX ── */
+    if (typeof twAjax !== 'undefined' && twAjax.url) {
+      if (btn) { btn.disabled = true; btn.classList.add('is-loading'); }
 
-    document.querySelector('.plan-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      function doSubmit(nonce) {
+        var fd = new FormData();
+        fd.append('action',      'submit_trip_inquiry');
+        fd.append('nonce',       nonce);
+        fd.append('name',        tripData.name);
+        fd.append('phone',       tripData.phone);
+        fd.append('email',       tripData.email);
+        fd.append('destination', tripData.dest);
+        fd.append('date',        tripData.date);
+        fd.append('duration',    tripData.dur);
+        fd.append('time_pref',   tripData.time);
+        fd.append('trip_type',   tripData.type);
+        fd.append('adults',      tripData.adults);
+        fd.append('children',    tripData.child);
+        fd.append('budget',      tripData.budget);
+        fd.append('departing',   tripData.from);
+        fd.append('notes',       tripData.notes);
+
+        return fetch(twAjax.url, { method: 'POST', body: fd, credentials: 'same-origin' })
+          .then(function (res) { return res.json(); })
+          .then(function (json) {
+            if (json && json.success) {
+              showSuccess();
+            } else {
+              console.warn('1TW: inquiry save rejected', json);
+              showError();
+            }
+          });
+      }
+
+      /* Fetch a fresh nonce first — admin-ajax.php is never page-cached,
+         so this works even if the page itself was served from a stale
+         cache with an expired nonce baked in. */
+      var nonceFd = new FormData();
+      nonceFd.append('action', 'mytheme_get_fresh_trip_inquiry_nonce');
+      fetch(twAjax.url, { method: 'POST', body: nonceFd, credentials: 'same-origin' })
+        .then(function (res) { return res.json(); })
+        .then(function (json) {
+          var freshNonce = (json && json.success && json.data && json.data.nonce) ? json.data.nonce : twAjax.nonce;
+          return doSubmit(freshNonce);
+        })
+        .catch(function (err) {
+          console.warn('1TW: inquiry save failed', err);
+          showError();
+        });
+    } else {
+      /* twAjax never loaded (script blocked/failed) — nothing to submit to */
+      showError();
+    }
   };
 
   window.resetForm = function () {
