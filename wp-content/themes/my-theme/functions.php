@@ -4846,6 +4846,20 @@ function mytheme_submit_trip_inquiry() {
 add_action('wp_ajax_submit_trip_inquiry',        'mytheme_submit_trip_inquiry');
 add_action('wp_ajax_nopriv_submit_trip_inquiry', 'mytheme_submit_trip_inquiry');
 
+/* The Plan a Trip nonce is embedded in the page HTML at render time via
+ * wp_localize_script(). If that HTML is served from a full-page cache (this
+ * site runs LiteSpeed + an upstream CDN), the embedded nonce can go stale
+ * while the cached page itself keeps being served — the AJAX call then
+ * fails silently (check_ajax_referer() -> wp_die(-1), a 200 response the
+ * JS doesn't treat as an error). admin-ajax.php requests are never
+ * page-cached, so fetching a fresh nonce here right before submitting
+ * sidesteps that regardless of how old the surrounding page is. */
+function mytheme_get_fresh_trip_inquiry_nonce() {
+    wp_send_json_success(array('nonce' => wp_create_nonce('tw_trip_inquiry_nonce')));
+}
+add_action('wp_ajax_mytheme_get_fresh_trip_inquiry_nonce',        'mytheme_get_fresh_trip_inquiry_nonce');
+add_action('wp_ajax_nopriv_mytheme_get_fresh_trip_inquiry_nonce', 'mytheme_get_fresh_trip_inquiry_nonce');
+
 // ============================================================
 // META BOX: Affiliate links on individual Blog Posts
 // ============================================================
