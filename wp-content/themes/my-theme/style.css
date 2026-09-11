@@ -10380,7 +10380,9 @@ select.fi {
 #tw-ig-widget.tw-social-hidden,
 #tw-social-toggle.tw-social-hidden,
 #tw-fb-widget.tw-social-hidden,
-#tw-li-widget.tw-social-hidden {
+#tw-li-widget.tw-social-hidden,
+#tw-tw-widget.tw-social-hidden,
+#tw-pin-widget.tw-social-hidden {
   opacity: 0 !important;
   transform: translateY(8px) !important;
   pointer-events: none !important;
@@ -10632,6 +10634,151 @@ select.fi {
   }
   #tw-li-widget.has-wa {
     bottom: 304px;
+  }
+}
+
+/* ── Floating "Follow us on X" button — hidden by default, revealed
+   via the arrow toggle alongside Facebook/LinkedIn; stacks above LinkedIn
+   when expanded. ── */
+#tw-tw-widget {
+  position: fixed;
+  bottom: 320px;
+  right: 24px;
+  z-index: 9998;
+  opacity: 0;
+  transform: translateY(10px) scale(0.85);
+  pointer-events: none;
+  transition: opacity 0.22s ease, transform 0.22s ease;
+  font-family: var(--body-font);
+}
+#tw-tw-widget.tw-social-expanded {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+#tw-tw-widget.has-wa {
+  bottom: 394px;
+}
+.tw-tw-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  overflow: hidden;
+  height: 60px;
+  width: 60px;
+  padding: 0 16px;
+  border-radius: 30px;
+  background: #000000;
+  color: var(--white);
+  text-decoration: none;
+  font-weight: 800;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
+  transition: width 0.28s ease, gap 0.28s ease, box-shadow 0.25s,
+    transform 0.25s;
+}
+.tw-tw-btn i {
+  font-size: 1.5rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.tw-tw-btn-label {
+  max-width: 0;
+  opacity: 0;
+  transition: max-width 0.28s ease, opacity 0.2s ease;
+}
+.tw-tw-btn:hover {
+  width: 172px;
+  gap: 10px;
+  color: var(--white);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.55);
+  transform: translateY(-2px);
+}
+.tw-tw-btn:hover .tw-tw-btn-label {
+  max-width: 120px;
+  opacity: 1;
+}
+@media (max-width: 400px) {
+  #tw-tw-widget {
+    bottom: 304px;
+    right: 16px;
+  }
+  #tw-tw-widget.has-wa {
+    bottom: 376px;
+  }
+}
+
+/* ── Floating "Follow us on Pinterest" button — hidden by default, revealed
+   via the arrow toggle; stacks above X/Twitter when expanded. ── */
+#tw-pin-widget {
+  position: fixed;
+  bottom: 394px;
+  right: 24px;
+  z-index: 9998;
+  opacity: 0;
+  transform: translateY(10px) scale(0.85);
+  pointer-events: none;
+  transition: opacity 0.22s ease, transform 0.22s ease;
+  font-family: var(--body-font);
+}
+#tw-pin-widget.tw-social-expanded {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+#tw-pin-widget.has-wa {
+  bottom: 468px;
+}
+.tw-pin-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  overflow: hidden;
+  height: 60px;
+  width: 60px;
+  padding: 0 16px;
+  border-radius: 30px;
+  background: #e60023;
+  color: var(--white);
+  text-decoration: none;
+  font-weight: 800;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  box-shadow: 0 8px 28px rgba(230, 0, 35, 0.45);
+  transition: width 0.28s ease, gap 0.28s ease, box-shadow 0.25s,
+    transform 0.25s;
+}
+.tw-pin-btn i {
+  font-size: 1.5rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.tw-pin-btn-label {
+  max-width: 0;
+  opacity: 0;
+  transition: max-width 0.28s ease, opacity 0.2s ease;
+}
+.tw-pin-btn:hover {
+  width: 172px;
+  gap: 10px;
+  color: var(--white);
+  box-shadow: 0 12px 36px rgba(230, 0, 35, 0.55);
+  transform: translateY(-2px);
+}
+.tw-pin-btn:hover .tw-pin-btn-label {
+  max-width: 120px;
+  opacity: 1;
+}
+@media (max-width: 400px) {
+  #tw-pin-widget {
+    bottom: 376px;
+    right: 16px;
+  }
+  #tw-pin-widget.has-wa {
+    bottom: 448px;
   }
 }
 

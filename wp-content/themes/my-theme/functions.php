@@ -3765,7 +3765,7 @@ function tw_whatsapp_widget() {
             if (badge)  badge.style.display  = 'none';
             if (iconO)  iconO.style.display  = 'none';
             if (iconC)  iconC.style.display  = '';
-            ['tw-ig-widget', 'tw-social-toggle', 'tw-fb-widget', 'tw-li-widget'].forEach(function (id) {
+            ['tw-ig-widget', 'tw-social-toggle', 'tw-fb-widget', 'tw-li-widget', 'tw-tw-widget', 'tw-pin-widget'].forEach(function (id) {
                 var w = document.getElementById(id);
                 if (w) w.classList.add('tw-social-hidden');
             });
@@ -3775,7 +3775,7 @@ function tw_whatsapp_widget() {
             btn.setAttribute('aria-expanded','false');
             if (iconO) iconO.style.display = '';
             if (iconC) iconC.style.display = 'none';
-            ['tw-ig-widget', 'tw-social-toggle', 'tw-fb-widget', 'tw-li-widget'].forEach(function (id) {
+            ['tw-ig-widget', 'tw-social-toggle', 'tw-fb-widget', 'tw-li-widget', 'tw-tw-widget', 'tw-pin-widget'].forEach(function (id) {
                 var w = document.getElementById(id);
                 if (w) w.classList.remove('tw-social-hidden');
             });
@@ -3866,15 +3866,60 @@ function tw_linkedin_float_button() {
 add_action('wp_footer', 'tw_linkedin_float_button');
 
 // ============================================================
-// FLOATING SOCIAL TOGGLE — arrow that expands/collapses Facebook +
-// LinkedIn. Instagram stays visible on its own; only the "extra"
-// buttons hide behind this so the corner doesn't get crowded.
+// FLOATING TWITTER / X FOLLOW BUTTON
+// Stacks just above the LinkedIn button in the bottom-right corner.
+// ============================================================
+function tw_twitter_float_button() {
+    if ( is_admin() ) { return; }
+    $tw_url = get_option( 'tw_twitter_url', 'https://x.com/1Tripwiser' );
+    if ( ! $tw_url ) { return; }
+    $wa_active = (bool) get_option( 'tw_wa_widget_number', get_option( 'tw_pat_whatsapp', '' ) );
+    ?>
+    <div id="tw-tw-widget" class="<?php echo $wa_active ? 'has-wa' : ''; ?>">
+        <a class="tw-tw-btn" href="<?php echo esc_url( $tw_url ); ?>" target="_blank" rel="noopener"
+           aria-label="<?php esc_attr_e( 'Follow us on X (Twitter)', 'mytheme' ); ?>">
+            <i class="fab fa-x-twitter" aria-hidden="true"></i>
+            <span class="tw-tw-btn-label"><?php esc_html_e( 'Follow us', 'mytheme' ); ?></span>
+        </a>
+    </div>
+    <?php
+}
+add_action('wp_footer', 'tw_twitter_float_button');
+
+// ============================================================
+// FLOATING PINTEREST FOLLOW BUTTON
+// Stacks just above the Twitter/X button in the bottom-right corner.
+// ============================================================
+function tw_pinterest_float_button() {
+    if ( is_admin() ) { return; }
+    $pin_url = get_option( 'tw_pinterest_url', 'https://in.pinterest.com/1tripwiser/' );
+    if ( ! $pin_url ) { return; }
+    $wa_active = (bool) get_option( 'tw_wa_widget_number', get_option( 'tw_pat_whatsapp', '' ) );
+    ?>
+    <div id="tw-pin-widget" class="<?php echo $wa_active ? 'has-wa' : ''; ?>">
+        <a class="tw-pin-btn" href="<?php echo esc_url( $pin_url ); ?>" target="_blank" rel="noopener"
+           aria-label="<?php esc_attr_e( 'Follow us on Pinterest', 'mytheme' ); ?>">
+            <i class="fab fa-pinterest-p" aria-hidden="true"></i>
+            <span class="tw-pin-btn-label"><?php esc_html_e( 'Follow us', 'mytheme' ); ?></span>
+        </a>
+    </div>
+    <?php
+}
+add_action('wp_footer', 'tw_pinterest_float_button');
+
+// ============================================================
+// FLOATING SOCIAL TOGGLE — arrow that expands/collapses Facebook,
+// LinkedIn, X and Pinterest. Instagram stays visible on its own; only
+// the "extra" buttons hide behind this so the corner doesn't get
+// crowded.
 // ============================================================
 function tw_social_toggle_button() {
     if ( is_admin() ) { return; }
-    $fb_url = get_option( 'tw_facebook_url', 'https://www.facebook.com/profile.php?id=100067013363504' );
-    $li_url = get_option( 'tw_linkedin_url', 'https://www.linkedin.com/company/1tripwiser/' );
-    if ( ! $fb_url && ! $li_url ) { return; }
+    $fb_url  = get_option( 'tw_facebook_url', 'https://www.facebook.com/profile.php?id=100067013363504' );
+    $li_url  = get_option( 'tw_linkedin_url', 'https://www.linkedin.com/company/1tripwiser/' );
+    $tw_url  = get_option( 'tw_twitter_url', 'https://x.com/1Tripwiser' );
+    $pin_url = get_option( 'tw_pinterest_url', 'https://in.pinterest.com/1tripwiser/' );
+    if ( ! $fb_url && ! $li_url && ! $tw_url && ! $pin_url ) { return; }
     $wa_active = (bool) get_option( 'tw_wa_widget_number', get_option( 'tw_pat_whatsapp', '' ) );
     ?>
     <div id="tw-social-toggle" class="<?php echo $wa_active ? 'has-wa' : ''; ?>">
@@ -3887,7 +3932,7 @@ function tw_social_toggle_button() {
     (function () {
         var btn = document.getElementById('tw-social-toggle-btn');
         if (!btn) return;
-        var targets = ['tw-fb-widget', 'tw-li-widget'];
+        var targets = ['tw-fb-widget', 'tw-li-widget', 'tw-tw-widget', 'tw-pin-widget'];
         btn.addEventListener('click', function () {
             var expanding = btn.getAttribute('aria-expanded') !== 'true';
             btn.setAttribute('aria-expanded', expanding ? 'true' : 'false');
