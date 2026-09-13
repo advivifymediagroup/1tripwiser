@@ -528,7 +528,7 @@ h6 {
     line-height: 0.95;
     color: var(--tw-navy);
     margin: 0;
-    font-size: clamp(4rem, 6vw, 5rem);
+    font-size: clamp(2.4rem, 7vw, 5rem);
 }
 .tw-hero-title-quiet {
     color: var(--tw-navy);
@@ -3823,7 +3823,7 @@ body.page-template-page-plan-a-trip-php {
   position: relative;
   background-image: url('assets/images/hero-sunset-bg.jpg');
   background-color: #f3d9c6;
-  background-size: 120%;
+  background-size: cover;
   background-position: 65% 40%;
   background-repeat: no-repeat;
   padding: 60px 0 80px;
