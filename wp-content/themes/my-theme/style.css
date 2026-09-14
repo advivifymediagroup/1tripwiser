@@ -2869,7 +2869,7 @@ body.page-template-page-plan-a-trip-php {
 }
 /* Logo-only header: hide the wordmark, let the mark itself do the work. */
 .tw-custom-logo {
-  max-height: 85px;
+  max-height: 60px;
   width: auto;
   display: block;
   object-fit: contain;
@@ -2919,7 +2919,7 @@ body.page-template-page-plan-a-trip-php {
     height: 64px;
   }
   .tw-custom-logo {
-    max-height: 48px;
+    max-height: 42px;
   }
   .tw-logo-ring {
     width: 48px;
