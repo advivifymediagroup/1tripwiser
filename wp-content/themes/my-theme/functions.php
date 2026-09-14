@@ -9,21 +9,10 @@ require_once get_template_directory() . '/includes/explore.php';
 /* ── Demo content seeder (Tools → Demo Content) for leadership walkthroughs ── */
 require_once get_template_directory() . '/includes/demo-seed.php';
 
-function load_css(){
-    wp_register_style('bootstrap', get_template_directory_uri() . '/css/bootstrap.min.css', array(), false, 'all');
-    wp_enqueue_style('bootstrap');
-}
-
-add_action('wp_enqueue_scripts', 'load_css');
-
-
-function load_js(){
-    wp_enqueue_script('jquery');
-    wp_register_script('bootstrap', get_template_directory_uri() . '/js/bootstrap.min.js', array('jquery'), false, true);
-    wp_enqueue_script('bootstrap');
-}
-
-add_action('wp_enqueue_scripts', 'load_js');
+/* Bootstrap CSS/JS removed for performance — confirmed zero usage anywhere in the
+   theme (no row, col, or container-fluid grid classes, no Bootstrap JS plugin calls
+   like modal, carousel, or collapse). It was 145KB of render-blocking CSS + 49KB
+   of JS loaded on every single page for nothing. */
 
 function mytheme_enqueue_styles() {
     /* Use filemtime() as the version string so the browser cache busts EVERY time style.css is modified. 
