@@ -143,10 +143,17 @@
         <a class="tw-brand" href="<?php echo esc_url(home_url('/')); ?>" aria-label="<?php bloginfo('name'); ?> Home">
             <?php if ( has_custom_logo() ) :
                 $tw_logo_id = get_theme_mod('custom_logo');
-                echo wp_get_attachment_image( $tw_logo_id, 'full', false, array(
+                /* Logo displays at max 85px tall (see .tw-custom-logo in style.css) but
+                   was requested at 'full' size — on the live site that's a 2560x2560
+                   original, so every page load was pulling a multi-hundred-KB image for
+                   an 85px-tall logo. Request a size close to actual display dimensions
+                   (with headroom for retina) so WordPress serves a properly small
+                   intermediate image instead. */
+                echo wp_get_attachment_image( $tw_logo_id, array( 340, 170 ), false, array(
                     'class'   => 'tw-custom-logo',
                     'loading' => 'eager',
                     'alt'     => '',
+                    'sizes'   => '170px',
                 ) );
             else : ?>
             <div class="tw-logo-ring">
