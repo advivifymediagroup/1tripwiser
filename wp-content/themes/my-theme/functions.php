@@ -1907,7 +1907,7 @@ function tw_lead_popup_widget() {
 
         window.twOpenLeadPopup = openPopup;
 
-        closeBtn.addEventListener('click', showNewsletterStep);
+        closeBtn.addEventListener('click', closePopup);
         skipBtn.addEventListener('click', closePopup);
         overlay.addEventListener('click', function (e) { if (e.target === overlay) closePopup(); });
         document.addEventListener('keydown', function (e) {
