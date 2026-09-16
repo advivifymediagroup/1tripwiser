@@ -293,23 +293,6 @@ function mytheme_register_travel_content() {
 }
 add_action('init', 'mytheme_register_travel_content');
 
-/* Seed the 'trip_style' taxonomy with the terms the package filter/search rely on
-   (slugs must match mytheme_trip_style_filter_slugs()). wp_insert_term() is a
-   no-op if the term already exists, so this is safe to run on every 'init'. */
-function mytheme_seed_trip_style_terms() {
-    $terms = array(
-        'honeymoon'   => 'Honeymoon',
-        'family-trip' => 'Family Trip',
-        'solo-trip'   => 'Solo Trip',
-    );
-    foreach ( $terms as $slug => $name ) {
-        if ( ! term_exists( $slug, 'trip_style' ) ) {
-            wp_insert_term( $name, 'trip_style', array( 'slug' => $slug ) );
-        }
-    }
-}
-add_action('init', 'mytheme_seed_trip_style_terms', 11);
-
 function mytheme_use_classic_editor_for_travel_content($use_block_editor, $post_type) {
     if (in_array($post_type, array('destination', 'itinerary', 'travel_package', 'corporate_trip'), true)) {
         return false;
@@ -2181,23 +2164,33 @@ function tw_ajax_filter_section() {
 }
 
 /**
- * Trip-style filters (Honeymoon, Family Trip, Solo Trip) all map to slugs in the
- * 'trip_style' taxonomy — one place to list them so the homepage AJAX filter, the
- * packages archive, and search all agree on the same slugs.
+ * Trip-style filters (Honeymoon, Family Trip, Solo Trip) map to the values of the
+ * existing 'package_trip_type' field (the "Group or Single" dropdown on the Edit
+ * Package screen) — packages are already tagged through that field, so filtering
+ * and search read the same field instead of a separate, empty taxonomy.
  */
-function mytheme_trip_style_filter_slugs() {
-    return array( 'honeymoon', 'family-trip', 'solo-trip' );
+function mytheme_trip_style_filter_map() {
+    return array(
+        'honeymoon'   => 'Honeymoon',
+        'family-trip' => 'Family Trip',
+        'solo-trip'   => 'Single Traveller',
+    );
 }
 
-function mytheme_trip_style_tax_query( $filter ) {
-    if ( ! in_array( $filter, mytheme_trip_style_filter_slugs(), true ) ) {
+function mytheme_trip_style_filter_slugs() {
+    return array_keys( mytheme_trip_style_filter_map() );
+}
+
+function mytheme_trip_style_meta_query( $filter ) {
+    $map = mytheme_trip_style_filter_map();
+    if ( ! isset( $map[ $filter ] ) ) {
         return array();
     }
     return array(
         array(
-            'taxonomy' => 'trip_style',
-            'field'    => 'slug',
-            'terms'    => $filter,
+            'key'     => 'package_trip_type',
+            'value'   => $map[ $filter ],
+            'compare' => '=',
         ),
     );
 }
@@ -2210,9 +2203,9 @@ function mytheme_trip_style_tax_query( $filter ) {
 function mytheme_build_travel_filter_query_args( $post_type, $filter ) {
     if ( $filter === 'all' ) { return array(); }
 
-    $style_tax_query = mytheme_trip_style_tax_query( $filter );
-    if ( ! empty( $style_tax_query ) ) {
-        return array( 'tax_query' => $style_tax_query );
+    $style_meta_query = mytheme_trip_style_meta_query( $filter );
+    if ( ! empty( $style_meta_query ) ) {
+        return array( 'meta_query' => $style_meta_query );
     }
 
     // Region → taxonomy query (works for seeded demo + real posts tagged via region selector)
@@ -2508,19 +2501,11 @@ function mytheme_apply_travel_archive_filters($query) {
 
     if ($query->is_post_type_archive('travel_package')) {
         $filter = mytheme_get_active_travel_filter('package_filter', 'travel_package');
-        $style_tax_query = mytheme_trip_style_tax_query( $filter );
+        $style_meta_query = mytheme_trip_style_meta_query( $filter );
+        $meta_query = ! empty( $style_meta_query ) ? $style_meta_query : mytheme_build_travel_filter_meta_query('travel_package', $filter);
 
-        if ( ! empty( $style_tax_query ) ) {
-            // Merge (don't overwrite) so this combines with the region tax_query
-            // that tw_explore_archive_filter() may already have set.
-            $existing = $query->get( 'tax_query' );
-            $query->set( 'tax_query', array_merge( is_array( $existing ) ? $existing : array(), $style_tax_query ) );
-        } else {
-            $meta_query = mytheme_build_travel_filter_meta_query('travel_package', $filter);
-
-            if (!empty($meta_query)) {
-                $query->set('meta_query', $meta_query);
-            }
+        if (!empty($meta_query)) {
+            $query->set('meta_query', $meta_query);
         }
     }
 
