@@ -694,10 +694,11 @@ add_action( 'pre_get_posts', 'tw_explore_search_query' );
 
 /* Trip-style search: "honeymoon", "family trip", "solo trip" etc. often don't
    appear in a package's title/content, so plain text search misses them even
-   though the package is tagged with that trip_style term. Flag a matching
-   search here; tw_explore_search_trip_style_sql() below widens the actual SQL
-   with an OR so those tagged posts surface alongside normal text matches
-   (slugs must match mytheme_trip_style_filter_slugs() in functions.php). */
+   though the package is tagged via the 'package_trip_type' field (the "Group or
+   Single" dropdown on the Edit Package screen). Flag a matching search here;
+   tw_explore_search_trip_style_sql() below widens the actual SQL with an OR so
+   those tagged posts surface alongside normal text matches (values must match
+   mytheme_trip_style_filter_map() in functions.php). */
 function tw_explore_search_trip_style( $q ) {
     if ( is_admin() || ! $q->is_main_query() || ! $q->is_search() ) { return; }
 
@@ -706,17 +707,17 @@ function tw_explore_search_trip_style( $q ) {
 
     $needle = mb_strtolower( $search );
     $keyword_map = array(
-        'honeymoon'   => 'honeymoon',
-        'family trip' => 'family-trip',
-        'family'      => 'family-trip',
-        'solo trip'   => 'solo-trip',
-        'solo travel' => 'solo-trip',
-        'solo'        => 'solo-trip',
+        'honeymoon'    => 'Honeymoon',
+        'family trip'  => 'Family Trip',
+        'family'       => 'Family Trip',
+        'solo trip'    => 'Single Traveller',
+        'solo travel'  => 'Single Traveller',
+        'solo'         => 'Single Traveller',
     );
 
-    foreach ( $keyword_map as $keyword => $slug ) {
+    foreach ( $keyword_map as $keyword => $trip_type_value ) {
         if ( strpos( $needle, $keyword ) !== false ) {
-            $q->set( 'tw_trip_style_search_slug', $slug );
+            $q->set( 'tw_trip_style_search_value', $trip_type_value );
             return;
         }
     }
@@ -726,27 +727,23 @@ add_action( 'pre_get_posts', 'tw_explore_search_trip_style' );
 function tw_explore_search_trip_style_sql( $search, $q ) {
     if ( is_admin() || ! $q->is_main_query() || ! $q->is_search() ) { return $search; }
 
-    $slug = $q->get( 'tw_trip_style_search_slug' );
-    if ( ! $slug ) { return $search; }
-
-    $term = get_term_by( 'slug', $slug, 'trip_style' );
-    if ( ! $term ) { return $search; }
+    $trip_type_value = $q->get( 'tw_trip_style_search_value' );
+    if ( ! $trip_type_value ) { return $search; }
 
     global $wpdb;
-    $tax_match = $wpdb->prepare(
-        "{$wpdb->posts}.ID IN ( SELECT tr.object_id FROM {$wpdb->term_relationships} tr
-            INNER JOIN {$wpdb->term_taxonomy} tt ON tr.term_taxonomy_id = tt.term_taxonomy_id
-            WHERE tt.taxonomy = 'trip_style' AND tt.term_id = %d )",
-        $term->term_id
+    $meta_match = $wpdb->prepare(
+        "{$wpdb->posts}.ID IN ( SELECT pm.post_id FROM {$wpdb->postmeta} pm
+            WHERE pm.meta_key = 'package_trip_type' AND pm.meta_value = %s )",
+        $trip_type_value
     );
 
     if ( $search === '' ) {
-        return " AND ({$tax_match})";
+        return " AND ({$meta_match})";
     }
 
-    // $search is WP core's own " AND (...)" fragment — OR the tax match into it.
+    // $search is WP core's own " AND (...)" fragment — OR the meta match into it.
     $inner = preg_replace( '/^\s*AND\s*\((.*)\)\s*$/s', '$1', $search );
-    return " AND ( ({$inner}) OR ({$tax_match}) )";
+    return " AND ( ({$inner}) OR ({$meta_match}) )";
 }
 add_filter( 'posts_search', 'tw_explore_search_trip_style_sql', 10, 2 );
 
