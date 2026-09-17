@@ -34,7 +34,7 @@ if ( $tw_hero_video ) {
                 India's Most Trusted Travel Community <span class="tw-hero-pill-dot"></span> 300K+ on Instagram
             </div>
 
-            <h1 class="tw-h1">
+            <h1 class="tw-h1-home">
                 Trips designed around <span class="tw-hero-title-accent">you</span>.<br>
             </h1>
             <span class="tw-hero-title-quiet">Not around a package.</span>

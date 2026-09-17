@@ -522,13 +522,21 @@ h6 {
 /* ── Canonical site headings — the ONLY two heading classes for hero/section
    titles (LUXE, the Instagram gradient title, and dark-photo hero mechanics
    are deliberately separate systems — see their own rules). ── */
-.tw-h1 {
+.tw-h1-home {
     font-weight: 600;
     letter-spacing: -.02em;
     line-height: 0.95;
     color: var(--tw-navy);
     margin: 0;
     font-size: clamp(2.4rem, 7vw, 5rem);
+}
+.tw-h1 {
+    font-weight: 600;
+    letter-spacing: -.02em;
+    line-height: 1.5;
+    color: var(--tw-navy);
+    margin: 0;
+    font-size: clamp(2.4rem, 5vw, 3.5rem);
 }
 .tw-hero-title-quiet {
     color: var(--tw-navy);
