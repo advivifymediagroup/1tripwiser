@@ -92,7 +92,7 @@ $pat_subtitle  = get_option('tw_pat_subtitle', "Tell us your dream destination, 
       <hr class="step-divider">
 
       <div class="ps-title">WHEN ARE YOU TRAVELLING?</div>
-      <div class="ps-sub">Pick your dates and preferred time of travel</div>
+      <div class="ps-sub">Pick your dates and trip duration</div>
 
       <div class="fr">
         <div class="fg no-mb">
@@ -108,25 +108,6 @@ $pat_subtitle  = get_option('tw_pat_subtitle', "Tell us your dream destination, 
             <option>11–14 nights</option>
             <option>15+ nights</option>
           </select>
-        </div>
-      </div>
-
-      <span class="sec-label">Preferred Time of Travel</span>
-      <div class="tile-g3" id="time-grid">
-        <div class="ttile sel" data-v="Morning">
-          <div class="ttile-em"><i class="fi-rr-sunrise" aria-hidden="true"></i></div>
-          <div class="ttile-n">Morning</div>
-          <div class="ttile-s">6am – 12pm</div>
-        </div>
-        <div class="ttile" data-v="Afternoon">
-          <div class="ttile-em"><i class="fi-rr-sun" aria-hidden="true"></i></div>
-          <div class="ttile-n">Afternoon</div>
-          <div class="ttile-s">12pm – 6pm</div>
-        </div>
-        <div class="ttile" data-v="Evening">
-          <div class="ttile-em"><i class="fi-rr-moon" aria-hidden="true"></i></div>
-          <div class="ttile-n">Evening</div>
-          <div class="ttile-s">6pm – midnight</div>
         </div>
       </div>
 
@@ -173,24 +154,33 @@ $pat_subtitle  = get_option('tw_pat_subtitle', "Tell us your dream destination, 
       <hr class="step-divider">
 
       <div class="ps-title">YOUR BUDGET</div>
-      <div class="ps-sub">Per person · We only show options in your range</div>
+      <div class="ps-sub">Pick the tier that fits you best</div>
 
-      <div class="tile-g2" id="budget-grid">
-        <div class="btile" data-v="Budget — Under ₹25,000">
+      <div class="tile-g3" id="budget-grid">
+        <div class="btile sel" data-v="Budget">
           <div class="bt-name"><i class="fi-rr-backpack" aria-hidden="true"></i> Budget</div>
-          <div class="bt-range">Under ₹25,000 / person</div>
         </div>
-        <div class="btile sel" data-v="Mid-range — ₹25K–₹60K">
-          <div class="bt-name"><i class="fi-rr-star" aria-hidden="true"></i> Mid-range</div>
-          <div class="bt-range">₹25,000–₹60,000 / person</div>
-        </div>
-        <div class="btile" data-v="Premium — ₹60K–₹1.5L">
+        <div class="btile" data-v="Premium">
           <div class="bt-name"><i class="fi-rr-gem" aria-hidden="true"></i> Premium</div>
-          <div class="bt-range">₹60,000–₹1,50,000 / person</div>
         </div>
-        <div class="btile" data-v="Luxury — Above ₹1.5L">
+        <div class="btile" data-v="Luxury">
           <div class="bt-name"><i class="fi-rr-crown" aria-hidden="true"></i> Luxury</div>
-          <div class="bt-range">Above ₹1,50,000 / person</div>
+        </div>
+      </div>
+
+      <span class="sec-label mt-20">Your Preferred Star</span>
+      <div class="tile-g2" id="star-grid">
+        <div class="btile sel" data-v="1-3 Star">
+          <div class="bt-name"><i class="fi-rr-star" aria-hidden="true"></i> 1-3 Star</div>
+        </div>
+        <div class="btile" data-v="4 Star">
+          <div class="bt-name"><i class="fi-rr-star" aria-hidden="true"></i> 4 Star</div>
+        </div>
+        <div class="btile" data-v="5 Star">
+          <div class="bt-name"><i class="fi-rr-star" aria-hidden="true"></i> 5 Star</div>
+        </div>
+        <div class="btile" data-v="7 Star">
+          <div class="bt-name"><i class="fi-rr-star" aria-hidden="true"></i> 7 Star</div>
         </div>
       </div>
 
@@ -255,12 +245,12 @@ $pat_subtitle  = get_option('tw_pat_subtitle', "Tell us your dream destination, 
   var tripData = {
     dest:   'Bali',
     date:   '',
-    time:   'Morning',
     dur:    '8–10 nights',
     type:   'Leisure',
     adults: '2',
     child:  'None',
-    budget: 'Mid-range — ₹25K–₹60K',
+    budget: 'Budget',
+    star:   '1-3 Star',
     from:   '',
     name:   '',
     phone:  '',
@@ -281,7 +271,7 @@ $pat_subtitle  = get_option('tw_pat_subtitle', "Tell us your dream destination, 
     });
   }
 
-  ['dest-grid', 'time-grid', 'type-grid', 'budget-grid'].forEach(initTiles);
+  ['dest-grid', 'type-grid', 'budget-grid', 'star-grid'].forEach(initTiles);
 
   function collectData() {
     var customDest = document.getElementById('custom-dest');
@@ -296,7 +286,6 @@ $pat_subtitle  = get_option('tw_pat_subtitle', "Tell us your dream destination, 
     var dur = document.getElementById('p-dur');
     var adults = document.getElementById('p-adults');
     var child = document.getElementById('p-child');
-    var selTime = document.querySelector('#time-grid .ttile.sel');
     var selType = document.querySelector('#type-grid .ptile.sel');
 
     if (d && d.value) {
@@ -314,10 +303,10 @@ $pat_subtitle  = get_option('tw_pat_subtitle', "Tell us your dream destination, 
     if (dur)    tripData.dur    = dur.value;
     if (adults) tripData.adults = adults.value;
     if (child)  tripData.child  = child.value;
-    if (selTime) tripData.time  = selTime.dataset.v;
     if (selType) tripData.type  = selType.dataset.v;
 
     var selBudget = document.querySelector('#budget-grid .btile.sel');
+    var selStar = document.querySelector('#star-grid .btile.sel');
     var fromEl  = document.getElementById('p-from');
     var nameEl  = document.getElementById('p-name');
     var phoneEl = document.getElementById('p-phone');
@@ -325,6 +314,7 @@ $pat_subtitle  = get_option('tw_pat_subtitle', "Tell us your dream destination, 
     var notesEl = document.getElementById('p-notes');
 
     if (selBudget) tripData.budget = selBudget.dataset.v;
+    if (selStar) tripData.star = selStar.dataset.v;
     if (fromEl)  tripData.from  = fromEl.value.trim() || 'Not specified';
     if (nameEl)  tripData.name  = nameEl.value.trim() || 'Traveler';
     if (phoneEl) tripData.phone = phoneEl.value.trim();
@@ -377,11 +367,11 @@ $pat_subtitle  = get_option('tw_pat_subtitle', "Tell us your dream destination, 
         fd.append('destination', tripData.dest);
         fd.append('date',        tripData.date);
         fd.append('duration',    tripData.dur);
-        fd.append('time_pref',   tripData.time);
         fd.append('trip_type',   tripData.type);
         fd.append('adults',      tripData.adults);
         fd.append('children',    tripData.child);
         fd.append('budget',      tripData.budget);
+        fd.append('preferred_star', tripData.star);
         fd.append('departing',   tripData.from);
         fd.append('notes',       tripData.notes);
 

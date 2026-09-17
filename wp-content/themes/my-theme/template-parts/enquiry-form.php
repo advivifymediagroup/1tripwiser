@@ -45,10 +45,9 @@ $tw_enq_submit  = isset( $args['submit_label'] ) ? $args['submit_label'] : __( '
             <label><span><?php esc_html_e( 'Budget', 'mytheme' ); ?></span>
                 <select name="budget">
                     <option value=""><?php esc_html_e( 'Select budget range', 'mytheme' ); ?></option>
-                    <option><?php esc_html_e( 'Budget - Under Rs. 25,000', 'mytheme' ); ?></option>
-                    <option><?php esc_html_e( 'Mid-range - Rs. 25K–Rs. 60K', 'mytheme' ); ?></option>
-                    <option><?php esc_html_e( 'Premium - Rs. 60K–Rs. 1.5L', 'mytheme' ); ?></option>
-                    <option><?php esc_html_e( 'Luxury - Above Rs. 1.5L', 'mytheme' ); ?></option>
+                    <option><?php esc_html_e( 'Budget', 'mytheme' ); ?></option>
+                    <option><?php esc_html_e( 'Premium', 'mytheme' ); ?></option>
+                    <option><?php esc_html_e( 'Luxury', 'mytheme' ); ?></option>
                 </select>
             </label>
             <label class="tw-form-full"><span><?php esc_html_e( 'Message', 'mytheme' ); ?></span>
