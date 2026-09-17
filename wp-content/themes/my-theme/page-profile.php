@@ -34,6 +34,10 @@ $my_posts = get_posts(array(
     'order'          => 'DESC',
 ));
 
+// Author access request state
+$has_author_access = (bool) array_intersect( array( 'author', 'editor', 'administrator' ), (array) $user->roles );
+$author_requested_at = get_user_meta( $uid, 'tw_author_access_requested', true );
+
 // Profile update message from URL
 $notice = '';
 if ( isset($_GET['updated']) && $_GET['updated'] === '1' ) {
@@ -240,6 +244,24 @@ if ( isset($_GET['updated']) && $_GET['updated'] === '1' ) {
                 </div>
             </div>
 
+            <?php if ( ! $has_author_access ) : ?>
+            <!-- Author access request -->
+            <div class="pf-card mb-20">
+                <div class="pf-card-head"><span class="pf-card-title"><i class="fi-rr-edit-alt" aria-hidden="true"></i> Author Access</span></div>
+                <div class="pf-card-body">
+                    <?php if ( $author_requested_at ) : ?>
+                        <p class="pf-hint">Request sent — we'll review it and follow up by email.</p>
+                    <?php else : ?>
+                        <p class="pf-hint">Every account starts as a Traveller. Posts you submit go through a quick review before they go live. If you write regularly, you can request author access to publish directly.</p>
+                        <div class="pf-msg" id="pf-author-msg"></div>
+                        <button type="button" class="btn-secondary btn-block" id="pf-author-btn">
+                            <span id="pf-author-btn-text">Request Author Access</span>
+                        </button>
+                    <?php endif; ?>
+                </div>
+            </div>
+            <?php endif; ?>
+
             <!-- My posts -->
             <div class="pf-card">
                 <div class="pf-card-head">
@@ -301,6 +323,40 @@ if ( isset($_GET['updated']) && $_GET['updated'] === '1' ) {
     });
 
     var ajaxUrl = <?php echo json_encode(admin_url('admin-ajax.php')); ?>;
+
+    /* ── Author access request ── */
+    var authorBtn = document.getElementById('pf-author-btn');
+    if ( authorBtn ) {
+        var authorBtnT = document.getElementById('pf-author-btn-text');
+        var authorMsg  = document.getElementById('pf-author-msg');
+
+        authorBtn.addEventListener('click', function () {
+            authorBtnT.textContent = 'Sending…';
+            authorBtn.disabled     = true;
+
+            var fd = new FormData();
+            fd.append('action', 'tw_request_author_access');
+            fd.append('tw_author_request_nonce', <?php echo json_encode( wp_create_nonce( 'tw_request_author_access' ) ); ?>);
+
+            fetch(ajaxUrl, { method:'POST', body:fd, credentials:'same-origin' })
+                .then(function (r) { return r.json(); })
+                .then(function (data) {
+                    if (data.success) {
+                        show(authorMsg, data.data.message, 'success');
+                        authorBtnT.textContent = 'Request Sent';
+                    } else {
+                        show(authorMsg, (data.data || 'Something went wrong.'), 'error');
+                        authorBtnT.textContent = 'Request Author Access';
+                        authorBtn.disabled     = false;
+                    }
+                })
+                .catch(function () {
+                    show(authorMsg, 'Network error. Please try again.', 'error');
+                    authorBtnT.textContent = 'Request Author Access';
+                    authorBtn.disabled     = false;
+                });
+        });
+    }
 
     /* ── Profile info form ── */
     var infoForm = document.getElementById('pf-info-form');

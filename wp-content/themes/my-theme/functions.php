@@ -186,7 +186,10 @@ function tw_ajax_register() {
         'first_name'   => $fname,
         'last_name'    => $lname,
         'display_name' => trim( $fname . ' ' . $lname ) ?: $username,
-        'role'         => 'author', // can publish their own posts
+        'role'         => 'subscriber', // everyone signs up as a subscriber; blog posts from
+                                         // non-authors already go to 'pending' review (see
+                                         // tw_handle_blog_submission()) — author access is
+                                         // granted manually via tw_request_author_access().
     ) );
 
     // Auto-login
@@ -5224,6 +5227,44 @@ function tw_update_profile_password() {
     wp_send_json_success( array( 'message' => 'Password updated successfully.' ) );
 }
 add_action( 'wp_ajax_tw_update_profile_password', 'tw_update_profile_password' );
+
+// ============================================================
+// AJAX: Request author access
+// Subscribers sign up with the 'subscriber' role only (see tw_ajax_register()).
+// This lets them ask to be promoted so they can publish directly instead of
+// every post going through pending review — an admin approves it manually
+// from Users in wp-admin, same as any other role change.
+// ============================================================
+function tw_request_author_access() {
+    if ( ! is_user_logged_in() ) {
+        wp_send_json_error( 'You must be logged in.' );
+    }
+    if ( ! isset( $_POST['tw_author_request_nonce'] ) ||
+         ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['tw_author_request_nonce'] ) ), 'tw_request_author_access' ) ) {
+        wp_send_json_error( 'Security check failed.' );
+    }
+
+    $user = wp_get_current_user();
+
+    if ( array_intersect( array( 'author', 'editor', 'administrator' ), (array) $user->roles ) ) {
+        wp_send_json_error( 'You already have author access.' );
+    }
+
+    if ( get_user_meta( $user->ID, 'tw_author_access_requested', true ) ) {
+        wp_send_json_error( 'You\'ve already requested access — we\'ll be in touch soon.' );
+    }
+
+    update_user_meta( $user->ID, 'tw_author_access_requested', current_time( 'mysql' ) );
+
+    $admin_email = get_option( 'admin_email' );
+    $subject     = '[1TripWiser] Author access requested: ' . $user->user_login;
+    $body        = $user->display_name . " (@" . $user->user_login . ", " . $user->user_email . ") has requested author access to publish blog posts directly.\n\n";
+    $body       .= 'Review & approve: ' . admin_url( 'user-edit.php?user_id=' . $user->ID ) . "\n";
+    wp_mail( $admin_email, $subject, $body );
+
+    wp_send_json_success( array( 'message' => 'Request sent! We\'ll review it and follow up by email.' ) );
+}
+add_action( 'wp_ajax_tw_request_author_access', 'tw_request_author_access' );
 
 // ============================================================
 // Auto-create required frontend pages on theme activation
