@@ -3216,7 +3216,7 @@ function mytheme_export_trip_inquiries() {
         'order'          => 'DESC',
     ) );
 
-    $headers = array( '#', 'Name', 'Phone', 'Email', 'Destination', 'Travel Date', 'Duration', 'Budget', 'Adults', 'Children', 'Trip Type', 'Submitted' );
+    $headers = array( '#', 'Name', 'Phone', 'Email', 'Destination', 'Travel Date', 'Duration', 'Budget', 'Preferred Star', 'Adults', 'Children', 'Trip Type', 'Submitted' );
     $rows    = array();
     $i       = 1;
     foreach ( $all as $p ) {
@@ -3229,6 +3229,7 @@ function mytheme_export_trip_inquiries() {
             get_post_meta( $p->ID, '_ti_date',        true ),
             get_post_meta( $p->ID, '_ti_duration',    true ),
             get_post_meta( $p->ID, '_ti_budget',      true ),
+            get_post_meta( $p->ID, '_ti_preferred_star', true ),
             get_post_meta( $p->ID, '_ti_adults',      true ),
             get_post_meta( $p->ID, '_ti_children',    true ),
             get_post_meta( $p->ID, '_ti_trip_type',   true ),
@@ -3467,6 +3468,7 @@ function mytheme_render_inquiries_page() {
                     <th><?php esc_html_e('Travel Date', 'mytheme'); ?></th>
                     <th><?php esc_html_e('Duration', 'mytheme'); ?></th>
                     <th><?php esc_html_e('Budget', 'mytheme'); ?></th>
+                    <th><?php esc_html_e('Preferred Star', 'mytheme'); ?></th>
                     <th><?php esc_html_e('Adults', 'mytheme'); ?></th>
                     <th><?php esc_html_e('Children', 'mytheme'); ?></th>
                     <th><?php esc_html_e('Trip Type', 'mytheme'); ?></th>
@@ -3500,6 +3502,7 @@ function mytheme_render_inquiries_page() {
                         <td><?php echo esc_html(get_post_meta($id, '_ti_date', true)); ?></td>
                         <td><?php echo esc_html(get_post_meta($id, '_ti_duration', true)); ?></td>
                         <td><?php echo esc_html(get_post_meta($id, '_ti_budget', true)); ?></td>
+                        <td><?php echo esc_html(get_post_meta($id, '_ti_preferred_star', true)); ?></td>
                         <td><?php echo esc_html(get_post_meta($id, '_ti_adults', true)); ?></td>
                         <td><?php echo esc_html(get_post_meta($id, '_ti_children', true)); ?></td>
                         <td><?php echo esc_html(get_post_meta($id, '_ti_trip_type', true)); ?></td>
@@ -3508,7 +3511,7 @@ function mytheme_render_inquiries_page() {
                 <?php endwhile;
                 wp_reset_postdata();
             else : ?>
-                <tr><td colspan="13" style="text-align:center;padding:24px;color:#666;"><?php esc_html_e('No inquiries yet. Form submissions will appear here.', 'mytheme'); ?></td></tr>
+                <tr><td colspan="14" style="text-align:center;padding:24px;color:#666;"><?php esc_html_e('No inquiries yet. Form submissions will appear here.', 'mytheme'); ?></td></tr>
             <?php endif; ?>
             </tbody>
         </table>
@@ -4548,7 +4551,7 @@ function tw_render_plan_trip_settings_page() {
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheets()[0];
   var data = JSON.parse(e.postData.contents);
 
-  var headers = ['Timestamp', 'Name', 'Phone', 'Email', 'Destination', 'Travel Date', 'Duration', 'Time Preference', 'Trip Type', 'Adults', 'Children', 'Budget', 'Departing From', 'Notes'];
+  var headers = ['Timestamp', 'Name', 'Phone', 'Email', 'Destination', 'Travel Date', 'Duration', 'Trip Type', 'Adults', 'Children', 'Budget', 'Preferred Star', 'Departing From', 'Notes'];
   if (sheet.getLastRow() === 0) {
     sheet.appendRow(headers);
   }
@@ -4561,11 +4564,11 @@ function tw_render_plan_trip_settings_page() {
     data.destination || '',
     data.date || '',
     data.duration || '',
-    data.time_pref || '',
     data.trip_type || '',
     data.adults || '',
     data.children || '',
     data.budget || '',
+    data.preferred_star || '',
     data.departing || '',
     data.notes || ''
   ]);
@@ -4839,11 +4842,11 @@ function mytheme_submit_trip_inquiry() {
     $destination = isset($_POST['destination']) ? sanitize_text_field(wp_unslash($_POST['destination'])) : '';
     $date        = isset($_POST['date'])        ? sanitize_text_field(wp_unslash($_POST['date']))        : '';
     $duration    = isset($_POST['duration'])    ? sanitize_text_field(wp_unslash($_POST['duration']))    : '';
-    $time_pref   = isset($_POST['time_pref'])   ? sanitize_text_field(wp_unslash($_POST['time_pref']))   : '';
     $trip_type   = isset($_POST['trip_type'])   ? sanitize_text_field(wp_unslash($_POST['trip_type']))   : '';
     $adults      = isset($_POST['adults'])      ? absint($_POST['adults'])                               : 1;
     $children    = isset($_POST['children'])    ? absint($_POST['children'])                             : 0;
     $budget      = isset($_POST['budget'])      ? sanitize_text_field(wp_unslash($_POST['budget']))      : '';
+    $preferred_star = isset($_POST['preferred_star']) ? sanitize_text_field(wp_unslash($_POST['preferred_star'])) : '';
     $departing   = isset($_POST['departing'])   ? sanitize_text_field(wp_unslash($_POST['departing']))   : '';
     $notes       = isset($_POST['notes'])       ? sanitize_textarea_field(wp_unslash($_POST['notes']))   : '';
 
@@ -4870,11 +4873,11 @@ function mytheme_submit_trip_inquiry() {
         '_ti_destination' => $destination,
         '_ti_date'        => $date,
         '_ti_duration'    => $duration,
-        '_ti_time_pref'   => $time_pref,
         '_ti_trip_type'   => $trip_type,
         '_ti_adults'      => $adults,
         '_ti_children'    => $children,
         '_ti_budget'      => $budget,
+        '_ti_preferred_star' => $preferred_star,
         '_ti_departing'   => $departing,
         '_ti_notes'       => $notes,
     );
@@ -4894,11 +4897,11 @@ function mytheme_submit_trip_inquiry() {
         'destination' => $destination,
         'date'        => $date,
         'duration'    => $duration,
-        'time_pref'   => $time_pref,
         'trip_type'   => $trip_type,
         'adults'      => $adults,
         'children'    => $children,
         'budget'      => $budget,
+        'preferred_star' => $preferred_star,
         'departing'   => $departing,
         'notes'       => $notes,
     ));
@@ -4912,11 +4915,11 @@ function mytheme_submit_trip_inquiry() {
         'Destination: ' . $destination,
         'Departure Date: ' . $date,
         'Duration: ' . $duration,
-        'Preferred Time: ' . $time_pref,
         'Trip Type: ' . $trip_type,
         'Adults: ' . $adults,
         'Children: ' . $children,
         'Budget: ' . $budget,
+        'Preferred Star: ' . $preferred_star,
         'Departing From: ' . $departing,
         $notes ? "Special Requests:\n" . $notes : '',
     ), function ($line) { return $line !== ''; }));
