@@ -14319,7 +14319,10 @@ body.page-template-page-app-coming-soon-php {
   position: relative;
   overflow: hidden;
   box-sizing: border-box;
-  padding: 118px 24px 70px;
+  /* The fixed header is two stacked bars (.tw-nav + .tw-sub) totalling
+     132px — matches the sitewide body{padding-top:132px} this template
+     overrides to 0, plus a 20px gap so content doesn't hug the nav. */
+  padding: 152px 24px 70px;
   background: radial-gradient(900px 620px at 63% 46%, #101726 0%, #080b14 58%, #04050a 100%);
 }
 .app2-constellation {
@@ -14328,6 +14331,29 @@ body.page-template-page-app-coming-soon-php {
   width: 100%;
   height: 100%;
   z-index: 0;
+}
+@keyframes app2-twinkle {
+  0%, 100% { opacity: 0.35; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.25); }
+}
+.app2-star {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: app2-twinkle 3.6s ease-in-out infinite;
+}
+@keyframes app2-flow {
+  to { stroke-dashoffset: -32; }
+}
+.app2-flow-line path {
+  stroke-dasharray: 4 8;
+  animation: app2-flow 2.6s linear infinite;
+}
+.app2-flow-line--b path {
+  animation-direction: reverse;
+  animation-duration: 3.2s;
+}
+@media (prefers-reduced-motion: reduce) {
+  .app2-star, .app2-flow-line path { animation: none; }
 }
 .app2-hero-inner {
   position: relative;
@@ -14482,6 +14508,30 @@ body.page-template-page-app-coming-soon-php {
   margin-bottom: 20px;
   white-space: nowrap;
 }
+/* Gentle orbit — a small elliptical drift around each badge's resting spot,
+   so they read as floating/revolving near the phone rather than static. */
+@keyframes app2-orbit-a {
+  0%   { transform: translate(0, 0); }
+  25%  { transform: translate(11px, -15px); }
+  50%  { transform: translate(0, -24px); }
+  75%  { transform: translate(-11px, -15px); }
+  100% { transform: translate(0, 0); }
+}
+@keyframes app2-orbit-b {
+  0%   { transform: translate(0, 0); }
+  25%  { transform: translate(-9px, 10px); }
+  50%  { transform: translate(0, 17px); }
+  75%  { transform: translate(9px, 10px); }
+  100% { transform: translate(0, 0); }
+}
+@media (min-width: 1024px) {
+  .app2-wisecoins {
+    animation: app2-orbit-a 7.5s ease-in-out infinite;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .app2-wisecoins { animation: none; }
+}
 .app2-wisecoins-icon {
   width: 20px;
   height: 20px;
@@ -14524,6 +14574,10 @@ body.page-template-page-app-coming-soon-php {
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.82);
   white-space: nowrap;
+  animation: app2-orbit-b 8.5s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .app2-phone-badge { animation: none; }
 }
 
 .app2-phone {
@@ -15313,7 +15367,7 @@ body.page-template-page-app-coming-soon-php {
 }
 
 @media (max-width: 600px) {
-  .app2-hero { padding: 118px 18px 56px; }
+  .app2-hero { padding: 132px 18px 56px; }
   .app2-features { padding: 56px 18px 64px; }
   .app2-cta { padding: 56px 18px; }
 }

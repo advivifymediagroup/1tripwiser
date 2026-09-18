@@ -23,28 +23,28 @@ get_header();
             <path d="M790 700 L992 448"></path>
             <path d="M1160 520 L1290 620"></path>
         </g>
-        <g stroke="rgba(45,212,191,0.22)" stroke-width="1" fill="none">
+        <g class="app2-flow-line" stroke="rgba(45,212,191,0.4)" stroke-width="1" fill="none">
             <path d="M248 150 L540 196"></path>
             <path d="M992 448 L1160 520"></path>
         </g>
-        <g stroke="rgba(236,11,122,0.22)" stroke-width="1" fill="none">
+        <g class="app2-flow-line app2-flow-line--b" stroke="rgba(236,11,122,0.4)" stroke-width="1" fill="none">
             <path d="M486 262 L330 520"></path>
             <path d="M930 668 L992 448"></path>
         </g>
-        <circle cx="248" cy="150" r="3" fill="#2DD4BF"></circle>
-        <circle cx="540" cy="196" r="3.2" fill="#2DD4BF"></circle>
-        <circle cx="486" cy="262" r="3.2" fill="#EC0B7A"></circle>
-        <circle cx="660" cy="120" r="2.4" fill="rgba(255,255,255,0.55)"></circle>
-        <circle cx="748" cy="296" r="3" fill="rgba(255,255,255,0.7)"></circle>
-        <circle cx="330" cy="520" r="2.6" fill="rgba(255,255,255,0.5)"></circle>
-        <circle cx="560" cy="585" r="2.6" fill="rgba(255,255,255,0.5)"></circle>
-        <circle cx="790" cy="700" r="3" fill="rgba(255,255,255,0.7)"></circle>
-        <circle cx="992" cy="448" r="3.4" fill="#2DD4BF"></circle>
-        <circle cx="930" cy="668" r="3.2" fill="#EC0B7A"></circle>
-        <circle cx="948" cy="690" r="3" fill="#E9A23B"></circle>
-        <circle cx="1160" cy="520" r="2.6" fill="rgba(255,255,255,0.45)"></circle>
-        <circle cx="1290" cy="300" r="2.4" fill="rgba(255,255,255,0.4)"></circle>
-        <circle cx="120" cy="430" r="2.4" fill="rgba(255,255,255,0.4)"></circle>
+        <circle class="app2-star" style="animation-delay:0s"    cx="248"  cy="150" r="3"   fill="#2DD4BF"></circle>
+        <circle class="app2-star" style="animation-delay:0.6s"  cx="540"  cy="196" r="3.2" fill="#2DD4BF"></circle>
+        <circle class="app2-star" style="animation-delay:1.2s"  cx="486"  cy="262" r="3.2" fill="#EC0B7A"></circle>
+        <circle class="app2-star" style="animation-delay:1.8s"  cx="660"  cy="120" r="2.4" fill="rgba(255,255,255,0.55)"></circle>
+        <circle class="app2-star" style="animation-delay:2.4s"  cx="748"  cy="296" r="3"   fill="rgba(255,255,255,0.7)"></circle>
+        <circle class="app2-star" style="animation-delay:0.3s"  cx="330"  cy="520" r="2.6" fill="rgba(255,255,255,0.5)"></circle>
+        <circle class="app2-star" style="animation-delay:0.9s"  cx="560"  cy="585" r="2.6" fill="rgba(255,255,255,0.5)"></circle>
+        <circle class="app2-star" style="animation-delay:1.5s"  cx="790"  cy="700" r="3"   fill="rgba(255,255,255,0.7)"></circle>
+        <circle class="app2-star" style="animation-delay:2.1s"  cx="992"  cy="448" r="3.4" fill="#2DD4BF"></circle>
+        <circle class="app2-star" style="animation-delay:2.7s"  cx="930"  cy="668" r="3.2" fill="#EC0B7A"></circle>
+        <circle class="app2-star" style="animation-delay:0.15s" cx="948"  cy="690" r="3"   fill="#E9A23B"></circle>
+        <circle class="app2-star" style="animation-delay:1.05s" cx="1160" cy="520" r="2.6" fill="rgba(255,255,255,0.45)"></circle>
+        <circle class="app2-star" style="animation-delay:1.95s" cx="1290" cy="300" r="2.4" fill="rgba(255,255,255,0.4)"></circle>
+        <circle class="app2-star" style="animation-delay:2.55s" cx="120"  cy="430" r="2.4" fill="rgba(255,255,255,0.4)"></circle>
     </svg>
 
     <div class="app2-hero-inner">
