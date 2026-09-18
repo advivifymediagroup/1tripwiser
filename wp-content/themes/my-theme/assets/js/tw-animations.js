@@ -10,21 +10,9 @@
  * - Nav scroll shrink
  * - User dropdown
  * - Floating labels on auth inputs
- * - Page loader
  */
 (function () {
     'use strict';
-
-    /* ═══════════════════════════════════════════════════════════════
-       1. PAGE LOADER
-    ═══════════════════════════════════════════════════════════════ */
-    var loader = document.getElementById('tw-page-loader');
-    if (loader) {
-        window.addEventListener('load', function () {
-            loader.classList.add('tw-loader-done');
-            setTimeout(function () { loader.remove(); }, 600);
-        });
-    }
 
     /* ═══════════════════════════════════════════════════════════════
        3. SCROLL REVEAL — [data-reveal] attribute system
