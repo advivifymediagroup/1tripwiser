@@ -14476,13 +14476,6 @@ body.page-template-page-app-coming-soon-php {
   margin-bottom: 22px;
   box-shadow: 0 14px 30px rgba(0, 0, 0, 0.35);
 }
-@media (min-width: 960px) {
-  .app-wisecoins-badge {
-    align-self: flex-start;
-    margin-left: -30px;
-    margin-bottom: -8px;
-  }
-}
 .app-wisecoins-badge i {
   color: #f2c14e;
 }
