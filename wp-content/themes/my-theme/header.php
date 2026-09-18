@@ -126,12 +126,6 @@
     </div>
 </div>
 
-<!-- ===== PAGE LOADER ===== -->
-<div id="tw-page-loader" role="status" aria-label="Loading">
-    <div class="tw-loader-logo"><span>1</span>TRIPWISER</div>
-    <div class="tw-loader-bar"></div>
-</div>
-
 <!-- ===== SITE WRAP — overflow-x clip so nothing bleeds past viewport ===== -->
 <div id="tw-site-wrap">
 
