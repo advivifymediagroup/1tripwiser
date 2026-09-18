@@ -14517,13 +14517,6 @@ body.page-template-page-app-coming-soon-php {
   75%  { transform: translate(-11px, -15px); }
   100% { transform: translate(0, 0); }
 }
-@keyframes app2-orbit-b {
-  0%   { transform: translate(0, 0); }
-  25%  { transform: translate(-9px, 10px); }
-  50%  { transform: translate(0, 17px); }
-  75%  { transform: translate(9px, 10px); }
-  100% { transform: translate(0, 0); }
-}
 @media (min-width: 1024px) {
   .app2-wisecoins {
     animation: app2-orbit-a 7.5s ease-in-out infinite;
@@ -14574,10 +14567,6 @@ body.page-template-page-app-coming-soon-php {
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.82);
   white-space: nowrap;
-  animation: app2-orbit-b 8.5s ease-in-out infinite;
-}
-@media (prefers-reduced-motion: reduce) {
-  .app2-phone-badge { animation: none; }
 }
 
 .app2-phone {
@@ -15370,6 +15359,12 @@ body.page-template-page-app-coming-soon-php {
   .app2-hero { padding: 132px 18px 56px; }
   .app2-features { padding: 56px 18px 64px; }
   .app2-cta { padding: 56px 18px; }
+  .app2-phone-col { padding-top: 32px; }
+  .app2-phone-badge {
+    top: 0;
+    right: 50%;
+    transform: translateX(50%);
+  }
 }
 
 /* ================================================================
