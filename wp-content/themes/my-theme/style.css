@@ -14300,7 +14300,7 @@ body.page-template-page-app-coming-soon-php {
   position: relative;
   overflow: hidden;
   box-sizing: border-box;
-  padding: 128px 24px 90px;
+  padding: 118px 24px 70px;
   background:
     radial-gradient(900px 600px at 15% 10%, rgba(229, 18, 125, 0.16), transparent 55%),
     radial-gradient(700px 500px at 90% 20%, rgba(27, 147, 176, 0.14), transparent 55%),
@@ -14475,6 +14475,16 @@ body.page-template-page-app-coming-soon-php {
   border-radius: 999px;
   margin-bottom: 22px;
   box-shadow: 0 14px 30px rgba(0, 0, 0, 0.35);
+  white-space: nowrap;
+}
+@media (min-width: 960px) {
+  .app-wisecoins-badge {
+    position: absolute;
+    right: calc(100% + 24px);
+    top: 30px;
+    margin-bottom: 0;
+    z-index: 3;
+  }
 }
 .app-wisecoins-badge i {
   color: #f2c14e;
