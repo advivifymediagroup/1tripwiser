@@ -3875,7 +3875,7 @@ body.page-template-page-plan-a-trip-php {
 }
 .tw-hero-float--tr {
   top: -24px;
-  right: -16px;
+  right: 12px;
   animation: tw-float-pop-tr 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) 0.5s both,
     tw-float-bob-tr 5.5s ease-in-out 1.15s infinite;
 }
@@ -3972,7 +3972,7 @@ body.page-template-page-plan-a-trip-php {
   }
   .tw-hero-float--tr {
     top: -14px;
-    right: -10px;
+    right: 8px;
   }
   .tw-hero-float--br {
     bottom: -12px;
