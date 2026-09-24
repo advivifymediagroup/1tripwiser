@@ -10,8 +10,9 @@
             <p class="tw-f-desc">India's most trusted travel community — curating unforgettable group trips, honest guides and custom packages.</p>
             <div class="tw-f-social">
                 <a href="https://www.instagram.com/1tripwiser/" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                <a href="https://www.youtube.com/1tripwiser"   target="_blank" rel="noopener" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
-                <a href="https://www.facebook.com/1tripwiser/" target="_blank" rel="noopener" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://www.youtube.com/@1tripwiser988" target="_blank" rel="noopener" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                <a href="https://www.facebook.com/profile.php?id=100067013363504" target="_blank" rel="noopener" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://www.linkedin.com/company/1tripwiser/" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
                 <a href="https://x.com/1Tripwiser"              target="_blank" rel="noopener" aria-label="Twitter / X"><i class="fab fa-x-twitter"></i></a>
                 <a href="https://in.pinterest.com/1tripwiser/"  target="_blank" rel="noopener" aria-label="Pinterest"><i class="fab fa-pinterest"></i></a>
             </div>
