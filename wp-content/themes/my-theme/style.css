@@ -542,10 +542,32 @@ h6 {
     color: var(--tw-navy);
     font-family: var(--heading-font);
     font-weight: 500;
-    font-size: 2.25rem;
+    font-size: 2rem;
     font-style: italic;
     display: inline-block;
     margin: 11px 0 13px;
+    overflow: hidden;
+    white-space: nowrap;
+    vertical-align: bottom;
+    border-right: 0.1em solid currentColor;
+    width: 13em;
+    animation: tw-typewriter 7s steps(29, end) infinite,
+        tw-caret 0.75s step-end infinite;
+}
+@keyframes tw-typewriter {
+    0%, 8% { width: 0; }
+    50%, 68% { width: 13em; }
+    97%, 100% { width: 0; }
+}
+@keyframes tw-caret {
+    50% { border-color: transparent; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .tw-hero-title-quiet {
+        animation: none;
+        width: 13em;
+        border-right: none;
+    }
 }
 .tw-h1--lg {
   font-size: clamp(3rem, 8vw, 5.5rem);
