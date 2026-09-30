@@ -37,7 +37,7 @@ if ( $tw_hero_video ) {
             <h1 class="tw-h1-home">
                 Trips designed around <span class="tw-hero-title-accent">you</span>.<br>
             </h1>
-            <span class="tw-hero-title-quiet">Not around a package.</span>
+            <span class="tw-hero-title-quiet">Wiser Trips. Better Memories.</span>
 
             <form class="tw-hero-search" role="search" method="get" action="<?php echo esc_url( home_url( '/' ) ); ?>">
                 <div class="tw-hero-search-field">
