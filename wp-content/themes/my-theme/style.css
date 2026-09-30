@@ -550,14 +550,14 @@ h6 {
     white-space: nowrap;
     vertical-align: bottom;
     border-right: 0.1em solid currentColor;
-    width: 30ch;
-    animation: tw-typewriter 6s steps(30, end) infinite,
+    width: 13em;
+    animation: tw-typewriter 7s steps(29, end) infinite,
         tw-caret 0.75s step-end infinite;
 }
 @keyframes tw-typewriter {
     0%, 8% { width: 0; }
-    45%, 65% { width: 30ch; }
-    95%, 100% { width: 0; }
+    50%, 68% { width: 13em; }
+    97%, 100% { width: 0; }
 }
 @keyframes tw-caret {
     50% { border-color: transparent; }
@@ -565,7 +565,7 @@ h6 {
 @media (prefers-reduced-motion: reduce) {
     .tw-hero-title-quiet {
         animation: none;
-        width: 30ch;
+        width: 13em;
         border-right: none;
     }
 }
