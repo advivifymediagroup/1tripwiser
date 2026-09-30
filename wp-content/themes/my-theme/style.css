@@ -543,7 +543,6 @@ h6 {
     font-family: var(--heading-font);
     font-weight: 500;
     font-size: 2rem;
-    font-style: italic;
     display: inline-block;
     margin: 11px 0 13px;
     overflow: hidden;
