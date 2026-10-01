@@ -3318,6 +3318,12 @@ body.page-template-page-plan-a-trip-php {
   grid-template-columns: 2fr 1fr 1fr 1fr;
   gap: 40px;
 }
+.tw-f-brand-logo {
+  display: block;
+  height: 56px;
+  width: auto;
+  margin-bottom: 10px;
+}
 .tw-f-brand-name {
   font-family: var(--accent-font);
   font-size: 1.6rem;
