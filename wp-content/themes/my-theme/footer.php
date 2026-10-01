@@ -6,7 +6,6 @@
         <!-- Col 1: Brand + Social -->
         <div>
             <img class="tw-f-brand-logo" src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/footer-logo.png' ); ?>" alt="1TripWiser" width="92" height="78" loading="lazy">
-            <div class="tw-f-brand-name"><span class="tw-gold">1</span>TRIPWISER</div>
             <div class="tw-f-brand-tag">Wiser Trips · Better Memories</div>
             <p class="tw-f-desc">India's most trusted travel community — curating unforgettable group trips, honest guides and custom packages.</p>
             <div class="tw-f-social">
