@@ -9,6 +9,9 @@ require_once get_template_directory() . '/includes/explore.php';
 /* ── Demo content seeder (Tools → Demo Content) for leadership walkthroughs ── */
 require_once get_template_directory() . '/includes/demo-seed.php';
 
+/* ── Customer emails: welcome + query confirmation (HTML templates in /emails) ── */
+require_once get_template_directory() . '/includes/mailers.php';
+
 /* Bootstrap CSS/JS removed for performance — confirmed zero usage anywhere in the
    theme (no row, col, or container-fluid grid classes, no Bootstrap JS plugin calls
    like modal, carousel, or collapse). It was 145KB of render-blocking CSS + 49KB
@@ -196,8 +199,8 @@ function tw_ajax_register() {
     wp_set_current_user( $user_id );
     wp_set_auth_cookie( $user_id, false, is_ssl() );
 
-    // Welcome email
-    wp_new_user_notification( $user_id, null, 'user' );
+    // Welcome email (always sent on signup, even if the address was welcomed via the popup)
+    tw_send_welcome_email( $email, $fname, false );
 
     wp_send_json_success( array( 'redirect' => home_url('/') ) );
 }
@@ -1680,6 +1683,20 @@ function mytheme_save_enquiry($enquiry_type, $ref_id, $ref_title, $ref_url, $fie
         $data['email'] ? ('Reply-To: ' . $data['name'] . ' <' . $data['email'] . '>') : '',
     ));
 
+    if (is_email($data['email'])) {
+        if ($enquiry_type === 'popup') {
+            tw_send_welcome_email($data['email'], $data['name']);
+        } else {
+            tw_send_query_confirmation($data['email'], $data['name'], $enquiry_id, array(
+                'destination'  => $ref_title,
+                'travel_dates' => $data['travel_date'],
+                'travellers'   => tw_format_travellers($data['adults']),
+                'budget'       => $data['budget'],
+                'phone'        => $data['phone'],
+            ));
+        }
+    }
+
     return $enquiry_id;
 }
 
@@ -1819,6 +1836,7 @@ function mytheme_handle_newsletter_signup() {
     }
 
     mytheme_save_newsletter_signup($email);
+    tw_send_welcome_email($email);
     wp_send_json_success(array('message' => __('Subscribed! Watch your inbox for travel deals.', 'mytheme')));
 }
 add_action('wp_ajax_mytheme_newsletter_signup', 'mytheme_handle_newsletter_signup');
@@ -4927,6 +4945,16 @@ function mytheme_submit_trip_inquiry() {
     wp_mail('1tripwiser@gmail.com', sprintf('New Plan A Trip Enquiry — %s', $name), $trip_mail_body, array(
         $email ? ('Reply-To: ' . $name . ' <' . $email . '>') : '',
     ));
+
+    if (is_email($email)) {
+        tw_send_query_confirmation($email, $name, $post_id, array(
+            'destination'  => $destination,
+            'travel_dates' => $date,
+            'travellers'   => tw_format_travellers($adults, $children),
+            'budget'       => $budget,
+            'phone'        => $phone,
+        ));
+    }
 
     wp_send_json_success(array('message' => 'Inquiry saved successfully.', 'id' => $post_id));
 }
