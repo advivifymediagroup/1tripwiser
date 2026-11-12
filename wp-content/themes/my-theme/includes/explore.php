@@ -884,7 +884,7 @@ function tw_luxe_showcase( $limit = 3 ) {
         <div class="container tw-luxe-inner">
 
             <div class="tw-luxe-header" data-reveal="up">
-                <span class="tw-luxe-kicker">By Invitation</span>
+                <span class="tw-luxe-kicker">By Invitation into EXCLUSIVE TRAVEL EXPERIENCES</span>
                 <h2 class="tw-luxe-title">LUXE</h2>
                 <p class="tw-luxe-sub">A quieter way to travel. Private villas, crewed yachts, light jets and tables at restaurants without phone numbers — for those who prefer to travel privately.</p>
             </div>
@@ -969,7 +969,7 @@ function tw_womens_trips_showcase( $limit = 6 ) {
         <div class="container tw-womens-inner">
 
             <div class="tw-womens-header" data-reveal="up">
-                <div class="tw-womens-kicker">Only for the brave ones</div>
+                <div class="tw-womens-kicker">Only for the brave ones <span class="tw-kicker-line">TRAVEL TOGETHER. EXPLORE TOGETHER.</span></div>
                 <h2 class="tw-h2 tw-h2--lg tw-womens-title">Women's <span>Group Trips</span></h2>
                 <p class="tw-womens-sub">Safe. Curated. Empowering. Join a crew of like-minded women and explore the world your way.</p>
             </div>
@@ -1268,7 +1268,7 @@ function tw_explore_events_showcase( $limit = 5 ) {
 
             <div class="tw-events-intro" data-reveal="up">
                 <span class="tw-events-kicker">Plan Around The Moment</span>
-                <h2 class="tw-events-title">Events &amp;<br><em>festivals</em>.</h2>
+                <h2 class="tw-events-title">Events &amp; <em>Festivals</em> &ndash; Your Next Travel Experience</h2>
                 <p class="tw-events-desc">Some trips deserve a date on the calendar &mdash; festivals, races and stages where we handle tickets, flights, hotels and transfers.</p>
             </div>
 

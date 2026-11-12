@@ -35,7 +35,7 @@ if ( $tw_hero_video ) {
             </div>
 
             <h1 class="tw-h1-home">
-                Trips designed around <span class="tw-hero-title-accent">you</span>.<br>
+                Travel Packages Designed Around <span class="tw-hero-title-accent">You</span>.<br>
             </h1>
             <span class="tw-hero-title-quiet">Wiser Trips. Better Memories.</span>
 
@@ -188,7 +188,7 @@ if ( $tw_hero_video ) {
         <div class="container">
             <div class="section-heading" data-reveal="up">
                 <span>CURATED BY OUR EXPERTS</span>
-                <h2 class="tw-h2 tw-h2--lg">Exquisite <span class="tw-h2-accent">Itineraries</span></h2>
+                <h2 class="tw-h2 tw-h2--lg">Explore Our Handpicked Travel <span class="tw-h2-accent">Itineraries</span></h2>
             </div>
             <div class="posts-grid tw-ajax-grid" id="tw-cards-itineraries">
                 <?php
@@ -222,7 +222,7 @@ if ( $tw_hero_video ) {
     <section class="visa-services-section">
         <div class="container">
             <div class="section-heading visa-services-heading" data-reveal="up">
-                <span class="section-subtitle">Travel made simple</span>
+                <span class="section-subtitle">Travel made simple for a Smoother Journey</span>
                 <h2 class="tw-h2 tw-h2--lg section-title">Trip <span class="tw-h2-accent">Services</span></h2>
             </div>
             <div class="visa-services-grid">
@@ -259,7 +259,7 @@ if ( $tw_hero_video ) {
         <div class="container">
             <div class="tw-blog-header" data-reveal="up">
                 <div class="tw-blog-header-cn">
-                    <div class="tw-blog-kicker">From the Blog</div>
+                    <div class="tw-blog-kicker">TRAVEL INSPIRATION &amp; GUIDES</div>
                     <h2 class="tw-h2 tw-h2--lg tw-blog-title">Latest Travel <span class="tw-h2-accent">Stories</span></h2>
                 </div>
                 <a href="<?php echo esc_url(home_url('/blog-affiliates/')); ?>" class="tw-blog-viewall">All Stories</a>
@@ -334,7 +334,7 @@ if ( $tw_hero_video ) {
         <div class="container">
             <div class="tw-community-inner">
                 <div class="tw-community-copy" data-reveal="left">
-                    <span class="tw-community-kicker">Join Our Community</span>
+                    <span class="tw-community-kicker">Join Our Community <span class="tw-kicker-line">CONNECT WITH FELLOW TRAVELLERS</span></span>
                     <h2 class="tw-h2 tw-h2--lg tw-community-title"><span class="tw-community-title-num">1</span>TripWiser <span class="tw-h2-accent">Tribe</span></h2>
                     <p>Connect, share, and grow with 300K+ travel enthusiasts. Ask questions, share tips, and get inspired by real travelers.</p>
                     <a href="<?php echo esc_url( post_type_exists('forum_topic') ? get_post_type_archive_link('forum_topic') : mytheme_get_plan_trip_url() ); ?>" class="btn-primary">Enter the Tribe</a>

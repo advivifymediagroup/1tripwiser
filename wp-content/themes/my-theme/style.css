@@ -4291,6 +4291,11 @@ body.page-template-page-plan-a-trip-php {
   padding: 5px 18px;
   margin-bottom: 16px;
 }
+.tw-kicker-line {
+  display: block;
+  margin-top: 4px;
+  text-wrap: balance;
+}
 .tw-womens-title {
   margin: 0 0 12px;
 }
