@@ -2612,6 +2612,24 @@ function mytheme_theme_support() {
 add_action('after_setup_theme', 'mytheme_theme_support');
 
 // ============================================================
+// SEO — a single <title> (WordPress prints it via title-tag support; the
+// hard-coded copy that used to sit in header.php made every page have two)
+// plus the homepage meta title and description.
+// ============================================================
+add_filter('document_title_separator', function () { return '|'; });
+
+add_filter('pre_get_document_title', function ($title) {
+    // Core echoes a pre_get_document_title value unescaped, so escape the "&" here.
+    return is_front_page() ? esc_html('Travel Packages & Holiday Packages | 1TripWiser') : $title;
+});
+
+add_action('wp_head', function () {
+    if (is_front_page()) {
+        echo '<meta name="description" content="' . esc_attr('Explore travel packages across India and international destinations with 1TripWiser. Discover curated trips, personalised itineraries and memorable holiday experiences.') . '">' . "\n";
+    }
+}, 1);
+
+// ============================================================
 // AFFILIATE LINKS — Custom Post Type
 // ============================================================
 function mytheme_register_affiliate_cpt() {
